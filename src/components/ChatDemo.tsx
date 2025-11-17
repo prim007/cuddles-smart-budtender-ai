@@ -87,7 +87,7 @@ const ChatDemo = () => {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex gap-3 ${
+                className={`flex gap-3 animate-fade-in ${
                   message.role === "user" ? "flex-row-reverse" : "flex-row"
                 }`}
               >
