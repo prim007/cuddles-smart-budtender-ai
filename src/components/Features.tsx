@@ -51,7 +51,8 @@ const Features = () => {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="p-8 bg-gradient-card border-border hover:shadow-elevated transition-all duration-300 hover:-translate-y-1"
+              className="p-8 bg-gradient-card border-border hover:shadow-elevated transition-all duration-300 hover:-translate-y-2 hover:scale-105 animate-fade-in-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
                 <feature.icon className="w-7 h-7 text-primary" />

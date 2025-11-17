@@ -11,9 +11,9 @@ const InvestorCTA = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <Card className="max-w-4xl mx-auto p-12 bg-white/95 backdrop-blur-sm border-0 shadow-elevated">
+        <Card className="max-w-4xl mx-auto p-12 bg-white/95 backdrop-blur-sm border-0 shadow-elevated animate-scale-in">
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-hero flex items-center justify-center shadow-glow">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-hero flex items-center justify-center shadow-glow animate-pulse-glow">
               <Rocket className="w-8 h-8 text-white" />
             </div>
             
@@ -30,18 +30,18 @@ const InvestorCTA = () => {
                 { label: 'Market Size', value: '$33B+' },
                 { label: 'Projected Growth', value: '25% CAGR' },
                 { label: 'Target Retailers', value: '5,000+' },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
+              ].map((stat, index) => (
+                <div key={stat.label} className="text-center animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div className="text-3xl font-bold text-primary mb-1 hover:scale-110 transition-transform duration-300">{stat.value}</div>
                   <div className="text-muted-foreground">{stat.label}</div>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <Button
                 size="lg"
-                className="bg-gradient-hero text-white shadow-glow hover:opacity-90 text-lg px-8 py-6 h-auto"
+                className="bg-gradient-hero text-white shadow-glow hover:opacity-90 hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto"
               >
                 <Mail className="w-5 h-5 mr-2" />
                 Request Investment Deck
@@ -49,7 +49,7 @@ const InvestorCTA = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-white text-lg px-8 py-6 h-auto"
+                className="border-primary text-primary hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto"
               >
                 Schedule Demo
               </Button>

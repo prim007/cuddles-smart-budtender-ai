@@ -40,8 +40,8 @@ const HowItWorks = () => {
                   <div className="hidden md:block absolute top-20 left-[60%] w-full h-0.5 bg-gradient-to-r from-primary to-accent" />
                 )}
 
-                <div className="relative z-10 text-center">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-hero shadow-glow flex items-center justify-center">
+                <div className="relative z-10 text-center animate-fade-in-up" style={{ animationDelay: `${index * 0.2}s` }}>
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-hero shadow-glow flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
                     <step.icon className="w-10 h-10 text-white" />
                   </div>
                   <div className="text-sm font-bold text-primary mb-3">
