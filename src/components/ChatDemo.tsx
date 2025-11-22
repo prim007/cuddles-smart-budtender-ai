@@ -2,13 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Send, Bot, User } from "lucide-react";
+import { Send, Bot, User, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+  redirectUrl?: string;
 }
 
 const ChatDemo = () => {
@@ -46,9 +47,20 @@ const ChatDemo = () => {
 
       if (error) throw error;
 
+      // Parse response for redirect URL
+      let responseContent = data.response;
+      let redirectUrl: string | undefined;
+      
+      const redirectMatch = responseContent.match(/\[REDIRECT:(https?:\/\/[^\]]+)\]/);
+      if (redirectMatch) {
+        redirectUrl = redirectMatch[1];
+        responseContent = responseContent.replace(/\[REDIRECT:[^\]]+\]/, '').trim();
+      }
+
       const assistantMessage: Message = {
         role: "assistant",
-        content: data.response,
+        content: responseContent,
+        redirectUrl,
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error: any) {
@@ -112,6 +124,15 @@ const ChatDemo = () => {
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{message.content}</p>
+                  {message.redirectUrl && (
+                    <Button
+                      className="mt-3 w-full bg-rust-primary hover:bg-rust-glow text-white"
+                      onClick={() => window.open(message.redirectUrl, '_blank')}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Visit Tripple4 to Purchase
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
