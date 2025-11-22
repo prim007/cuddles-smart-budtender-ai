@@ -48,6 +48,12 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        rust: {
+          primary: "hsl(var(--rust-primary))",
+          glow: "hsl(var(--rust-glow))",
+          dark: "hsl(var(--rust-dark))",
+          light: "hsl(var(--rust-light))",
+        },
       },
       backgroundImage: {
         'gradient-hero': 'var(--gradient-hero)',
