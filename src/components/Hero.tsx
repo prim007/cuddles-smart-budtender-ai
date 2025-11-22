@@ -9,24 +9,25 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated rusty metallic background elements */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-rust-glow rounded-full blur-3xl animate-pulse-glow" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-rust-dark rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-rust-primary rounded-full blur-3xl animate-float" style={{ animationDelay: '0.5s' }} />
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-hippie-purple rounded-full blur-3xl animate-pulse-glow" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-hippie-orange rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-hippie-green rounded-full blur-3xl animate-float" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-hippie-pink rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8 border border-white/20 animate-fade-in">
-            <Sparkles className="w-4 h-4 text-white animate-pulse" />
-            <span className="text-white text-sm font-medium">AI-Powered Cannabis Retail Innovation</span>
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8 border-2 border-hippie-pink/50 animate-fade-in shadow-glow">
+            <Sparkles className="w-4 h-4 text-hippie-yellow animate-pulse" />
+            <span className="text-white text-sm font-bubble font-semibold">✌️ Peace, Love & Cannabis ✌️</span>
           </div>
 
           {/* Main heading */}
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <h1 className="text-5xl md:text-7xl font-groovy text-white mb-6 leading-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             Meet
-            <span className="block bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
               Cuddles
             </span>
           </h1>
@@ -41,15 +42,15 @@ const Hero = () => {
             <Button
               size="lg"
               onClick={scrollToDemo}
-              className="bg-white text-primary hover:bg-white/90 shadow-glow text-lg px-8 py-6 h-auto"
+              className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white hover:shadow-glow font-retro text-lg px-8 py-6 h-auto border-2 border-white/30"
             >
               <Bot className="w-5 h-5 mr-2" />
-              Try Live Demo
+              Try Cuddles
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20 text-lg px-8 py-6 h-auto"
+              className="bg-white/10 backdrop-blur-sm text-white border-2 border-hippie-yellow hover:bg-hippie-yellow/20 hover:border-hippie-orange font-retro text-lg px-8 py-6 h-auto"
             >
               View Investment Deck
             </Button>

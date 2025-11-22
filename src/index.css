@@ -2,18 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Rusty metallic background for entire app */
+/* Groovy hippie background with psychedelic vibes */
 body {
   background: linear-gradient(135deg, 
-    hsl(25, 45%, 25%) 0%, 
-    hsl(20, 35%, 20%) 25%,
-    hsl(15, 40%, 18%) 50%,
-    hsl(20, 38%, 22%) 75%,
-    hsl(25, 42%, 26%) 100%
+    hsl(280, 60%, 30%) 0%, 
+    hsl(330, 55%, 35%) 15%,
+    hsl(25, 65%, 40%) 30%,
+    hsl(45, 70%, 50%) 45%,
+    hsl(160, 60%, 35%) 60%,
+    hsl(200, 65%, 40%) 75%,
+    hsl(280, 60%, 30%) 100%
   );
   background-attachment: fixed;
   position: relative;
   min-height: 100vh;
+  animation: groovy-shift 20s ease infinite;
+}
+
+@keyframes groovy-shift {
+  0%, 100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(15deg);
+  }
 }
 
 body::before {
@@ -24,11 +36,25 @@ body::before {
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(160, 82, 45, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(101, 67, 33, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 20% 30%, rgba(255, 100, 200, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 200, 50, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(100, 255, 150, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 60% 20%, rgba(150, 100, 255, 0.2) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
+  animation: float-around 30s ease-in-out infinite;
+}
+
+@keyframes float-around {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(20px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
 }
 
 body::after {
@@ -39,19 +65,12 @@ body::after {
   right: 0;
   bottom: 0;
   background-image: 
-    repeating-linear-gradient(
-      90deg,
+    repeating-radial-gradient(
+      circle at 50% 50%,
       transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.03) 2px,
-      rgba(0, 0, 0, 0.03) 4px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.03) 2px,
-      rgba(0, 0, 0, 0.03) 4px
+      transparent 10px,
+      rgba(255, 255, 255, 0.02) 10px,
+      rgba(255, 255, 255, 0.02) 20px
     );
   pointer-events: none;
   z-index: -1;
@@ -63,57 +82,59 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Base colors - Cannabis wellness theme */
-    --background: 160 15% 97%;
-    --foreground: 160 20% 15%;
+    /* Base colors - Groovy hippie theme */
+    --background: 45 85% 95%;
+    --foreground: 280 50% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 160 20% 15%;
+    --card: 45 90% 98%;
+    --card-foreground: 280 50% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 160 20% 15%;
+    --popover: 45 90% 98%;
+    --popover-foreground: 280 50% 15%;
 
-    /* Primary - Deep emerald green */
-    --primary: 160 45% 35%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 160 50% 45%;
+    /* Primary - Vibrant purple */
+    --primary: 280 60% 45%;
+    --primary-foreground: 45 100% 98%;
+    --primary-glow: 280 70% 60%;
 
-    /* Secondary - Sage green */
-    --secondary: 150 20% 85%;
-    --secondary-foreground: 160 30% 25%;
+    /* Secondary - Groovy orange */
+    --secondary: 25 85% 55%;
+    --secondary-foreground: 280 50% 15%;
 
-    /* Muted - Soft earth tones */
-    --muted: 150 15% 90%;
-    --muted-foreground: 160 15% 45%;
+    /* Muted - Soft peachy tones */
+    --muted: 40 60% 85%;
+    --muted-foreground: 280 40% 45%;
 
-    /* Accent - Vibrant green */
-    --accent: 140 55% 50%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent - Electric green */
+    --accent: 160 70% 50%;
+    --accent-foreground: 280 50% 15%;
 
-    /* Rusty metallic colors */
-    --rust-primary: 25 45% 25%;
-    --rust-glow: 20 50% 40%;
-    --rust-dark: 15 40% 18%;
-    --rust-light: 30 35% 50%;
+    /* Hippie colors */
+    --hippie-pink: 330 80% 60%;
+    --hippie-orange: 25 90% 60%;
+    --hippie-yellow: 45 95% 65%;
+    --hippie-green: 160 70% 55%;
+    --hippie-blue: 200 80% 60%;
+    --hippie-purple: 280 75% 60%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 150 15% 88%;
-    --input: 150 15% 88%;
-    --ring: 160 45% 35%;
+    --border: 40 50% 80%;
+    --input: 40 50% 80%;
+    --ring: 280 60% 45%;
 
-    --radius: 0.75rem;
+    --radius: 1.5rem;
 
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(25 45% 25%) 0%, hsl(20 35% 20%) 50%, hsl(25 42% 26%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100% / 0.9) 0%, hsl(30 20% 95% / 0.9) 100%);
-    --gradient-accent: linear-gradient(90deg, hsl(20 50% 40%) 0%, hsl(25 45% 35%) 100%);
+    /* Gradients - Psychedelic vibes */
+    --gradient-hero: linear-gradient(135deg, hsl(280 60% 45%) 0%, hsl(330 70% 50%) 25%, hsl(25 85% 55%) 50%, hsl(45 90% 60%) 75%, hsl(160 70% 50%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(45 90% 98% / 0.95) 0%, hsl(330 60% 95% / 0.95) 100%);
+    --gradient-accent: linear-gradient(90deg, hsl(280 70% 60%) 0%, hsl(160 75% 55%) 50%, hsl(45 90% 60%) 100%);
 
-    /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(25 45% 25% / 0.2);
-    --shadow-glow: 0 0 40px hsl(20 50% 40% / 0.3);
-    --shadow-elevated: 0 10px 40px -10px hsl(25 45% 25% / 0.25);
+    /* Shadows - Glowing psychedelic */
+    --shadow-soft: 0 4px 20px -4px hsl(280 60% 45% / 0.3);
+    --shadow-glow: 0 0 40px hsl(330 70% 50% / 0.4), 0 0 80px hsl(45 90% 60% / 0.2);
+    --shadow-elevated: 0 10px 40px -10px hsl(280 60% 45% / 0.35);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -121,43 +142,45 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 20 35% 12%;
-    --foreground: 30 20% 95%;
+    --background: 280 50% 10%;
+    --foreground: 45 90% 95%;
 
-    --card: 20 30% 16%;
-    --card-foreground: 30 20% 95%;
+    --card: 280 45% 14%;
+    --card-foreground: 45 90% 95%;
 
-    --popover: 20 30% 16%;
-    --popover-foreground: 30 20% 95%;
+    --popover: 280 45% 14%;
+    --popover-foreground: 45 90% 95%;
 
-    --primary: 25 45% 40%;
-    --primary-foreground: 30 20% 98%;
-    --primary-glow: 20 50% 50%;
+    --primary: 280 70% 55%;
+    --primary-foreground: 280 50% 10%;
+    --primary-glow: 280 80% 70%;
 
-    --secondary: 20 25% 25%;
-    --secondary-foreground: 30 20% 90%;
+    --secondary: 25 80% 50%;
+    --secondary-foreground: 280 50% 10%;
 
-    --muted: 20 20% 22%;
-    --muted-foreground: 30 15% 60%;
+    --muted: 280 30% 20%;
+    --muted-foreground: 45 60% 65%;
 
-    --accent: 20 50% 45%;
-    --accent-foreground: 30 20% 98%;
+    --accent: 160 75% 55%;
+    --accent-foreground: 280 50% 10%;
 
-    --rust-primary: 25 45% 35%;
-    --rust-glow: 20 50% 50%;
-    --rust-dark: 15 40% 25%;
-    --rust-light: 30 35% 60%;
+    --hippie-pink: 330 85% 65%;
+    --hippie-orange: 25 95% 65%;
+    --hippie-yellow: 45 100% 70%;
+    --hippie-green: 160 75% 60%;
+    --hippie-blue: 200 85% 65%;
+    --hippie-purple: 280 80% 65%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 30 20% 95%;
+    --destructive-foreground: 45 90% 95%;
 
-    --border: 20 20% 25%;
-    --input: 20 20% 25%;
-    --ring: 25 45% 40%;
+    --border: 280 30% 25%;
+    --input: 280 30% 25%;
+    --ring: 280 70% 55%;
 
-    --shadow-soft: 0 4px 20px -4px hsl(25 45% 35% / 0.3);
-    --shadow-glow: 0 0 40px hsl(20 50% 50% / 0.4);
-    --shadow-elevated: 0 10px 40px -10px hsl(25 45% 35% / 0.35);
+    --shadow-soft: 0 4px 20px -4px hsl(280 70% 55% / 0.4);
+    --shadow-glow: 0 0 40px hsl(330 80% 60% / 0.5), 0 0 80px hsl(45 95% 65% / 0.3);
+    --shadow-elevated: 0 10px 40px -10px hsl(280 70% 55% / 0.45);
   }
 }
 

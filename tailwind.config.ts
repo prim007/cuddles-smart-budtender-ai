@@ -13,6 +13,11 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        'groovy': ['Pacifico', 'cursive'],
+        'retro': ['Righteous', 'sans-serif'],
+        'bubble': ['Fredoka', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -48,11 +53,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        rust: {
-          primary: "hsl(var(--rust-primary))",
-          glow: "hsl(var(--rust-glow))",
-          dark: "hsl(var(--rust-dark))",
-          light: "hsl(var(--rust-light))",
+        hippie: {
+          pink: "hsl(var(--hippie-pink))",
+          orange: "hsl(var(--hippie-orange))",
+          yellow: "hsl(var(--hippie-yellow))",
+          green: "hsl(var(--hippie-green))",
+          blue: "hsl(var(--hippie-blue))",
+          purple: "hsl(var(--hippie-purple))",
         },
       },
       backgroundImage: {
