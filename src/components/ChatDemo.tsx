@@ -126,7 +126,7 @@ const ChatDemo = () => {
                   <p className="whitespace-pre-wrap">{message.content}</p>
                   {message.redirectUrl && (
                     <Button
-                      className="mt-3 w-full bg-rust-primary hover:bg-rust-glow text-white"
+                      className="mt-3 w-full bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange hover:shadow-glow text-white font-retro"
                       onClick={() => window.open(message.redirectUrl, '_blank')}
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
