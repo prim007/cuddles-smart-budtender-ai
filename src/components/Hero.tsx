@@ -27,9 +27,9 @@ const Hero = () => {
 
           {/* Main heading */}
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            Meet the
+            Meet
             <span className="block bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">
-              Smart Budtender
+              Cuddles
             </span>
           </h1>
 

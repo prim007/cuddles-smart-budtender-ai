@@ -15,7 +15,7 @@ const ChatDemo = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm your Smart Budtender. Tell me what effects you're looking for (like relaxation, creativity, or pain relief), your experience level, and any flavor preferences. I'll recommend the perfect products for you!",
+      content: "Hi! I'm Cuddles. Tell me what effects you're looking for (like relaxation, creativity, or pain relief), your experience level, and any flavor preferences. I'll recommend the perfect products for you!",
     },
   ]);
   const [input, setInput] = useState("");
