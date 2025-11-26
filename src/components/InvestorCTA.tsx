@@ -49,13 +49,15 @@ const InvestorCTA = () => {
                   View Investment Deck
                 </Button>
               </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto"
-              >
-                Schedule Demo
-              </Button>
+              <Link to="/schedule-demo">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto w-full"
+                >
+                  Schedule Demo
+                </Button>
+              </Link>
             </div>
           </div>
         </Card>

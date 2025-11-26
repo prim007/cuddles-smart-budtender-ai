@@ -280,14 +280,14 @@ const InvestmentDeck = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white text-lg px-8 py-6 h-auto">
-                <Mail className="w-5 h-5 mr-2" />
-                Request Full Deck
+              <Mail className="w-5 h-5 mr-2" />
+              Request Full Deck
+            </Button>
+            <Link to="/schedule-demo">
+              <Button variant="outline" className="bg-white/10 backdrop-blur-sm text-foreground border-2 border-hippie-yellow hover:bg-hippie-yellow/20 text-lg px-8 py-6 h-auto w-full">
+                Schedule Demo
               </Button>
-              <Link to="/">
-                <Button variant="outline" className="bg-white/10 backdrop-blur-sm text-foreground border-2 border-hippie-yellow hover:bg-hippie-yellow/20 text-lg px-8 py-6 h-auto w-full">
-                  Try Cuddles Demo
-                </Button>
-              </Link>
+            </Link>
             </div>
           </Card>
         </div>
