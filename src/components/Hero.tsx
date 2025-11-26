@@ -2,8 +2,16 @@ import { Button } from "@/components/ui/button";
 import { Bot, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
+import { useState, useEffect } from "react";
+import { processCuddlesImage } from "@/utils/processImage";
 
 const Hero = () => {
+  const [processedImage, setProcessedImage] = useState<string>(cuddlesImage);
+
+  useEffect(() => {
+    processCuddlesImage().then(setProcessedImage);
+  }, []);
+
   const scrollToDemo = () => {
     document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -22,7 +30,7 @@ const Hero = () => {
         {/* Animated Cuddles character */}
         <div className="absolute left-8 top-1/4 w-32 h-32 md:w-48 md:h-48 animate-gentle-float z-20 hidden md:block">
           <img 
-            src={cuddlesImage} 
+            src={processedImage} 
             alt="Cuddles mascot" 
             className="w-full h-full object-contain drop-shadow-2xl"
           />

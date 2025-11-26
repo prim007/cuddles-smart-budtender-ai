@@ -6,6 +6,7 @@ import { Send, User, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
+import { processCuddlesImage } from "@/utils/processImage";
 
 interface Message {
   role: "user" | "assistant";
@@ -22,8 +23,13 @@ const ChatDemo = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [processedImage, setProcessedImage] = useState<string>(cuddlesImage);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    processCuddlesImage().then(setProcessedImage);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -115,7 +121,7 @@ const ChatDemo = () => {
                     <User className="w-5 h-5 text-primary-foreground" />
                   ) : (
                     <img 
-                      src={cuddlesImage} 
+                      src={processedImage} 
                       alt="Cuddles" 
                       className="w-full h-full object-cover"
                     />
@@ -145,7 +151,7 @@ const ChatDemo = () => {
               <div className="flex gap-3">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-hippie-green to-hippie-yellow">
                   <img 
-                    src={cuddlesImage} 
+                    src={processedImage} 
                     alt="Cuddles" 
                     className="w-full h-full object-cover"
                   />
