@@ -15,6 +15,7 @@ import { z } from "zod";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
@@ -80,17 +81,40 @@ const ScheduleDemo = () => {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    console.log("Demo scheduled:", data);
-    
-    toast({
-      title: "Demo Scheduled! ✨",
-      description: "We'll reach out within 24 hours to confirm your demo time.",
-    });
-    
-    setIsSubmitting(false);
+    try {
+      const { error } = await supabase
+        .from('demo_requests')
+        .insert({
+          name: data.name,
+          email: data.email,
+          company: data.company,
+          phone: data.phone,
+          store_count: data.dispensaryCount,
+          current_systems: data.currentPOS,
+          preferred_date: data.preferredDate?.toISOString().split('T')[0],
+          message: data.message,
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Demo Scheduled! ✨",
+        description: "We'll reach out within 24 hours to confirm your demo time.",
+      });
+
+      // Reset form and date
+      setDate(undefined);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error submitting demo request:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error scheduling your demo. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
