@@ -28,7 +28,7 @@ const InvestorCTA = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-3xl mx-auto">
               {[
-                { label: 'Market Size', value: '$33B+' },
+                { label: 'Market Size', value: 'R590B+' },
                 { label: 'Projected Growth', value: '25% CAGR' },
                 { label: 'Target Retailers', value: '5,000+' },
               ].map((stat, index) => (
