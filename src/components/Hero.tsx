@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Bot, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   const scrollToDemo = () => {
@@ -47,13 +48,15 @@ const Hero = () => {
               <Bot className="w-5 h-5 mr-2" />
               Try Cuddles
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="bg-white/10 backdrop-blur-sm text-white border-2 border-hippie-yellow hover:bg-hippie-yellow/20 hover:border-hippie-orange font-retro text-lg px-8 py-6 h-auto"
-            >
-              View Investment Deck
-            </Button>
+            <Link to="/investment-deck">
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-white/10 backdrop-blur-sm text-white border-2 border-hippie-yellow hover:bg-hippie-yellow/20 hover:border-hippie-orange font-retro text-lg px-8 py-6 h-auto"
+              >
+                View Investment Deck
+              </Button>
+            </Link>
           </div>
 
           {/* Stats */}
