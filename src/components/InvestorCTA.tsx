@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Rocket, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const InvestorCTA = () => {
   return (
@@ -39,13 +40,15 @@ const InvestorCTA = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <Button
-                size="lg"
-                className="bg-gradient-hero text-white shadow-glow hover:opacity-90 hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto"
-              >
-                <Mail className="w-5 h-5 mr-2" />
-                Request Investment Deck
-              </Button>
+              <Link to="/investment-deck">
+                <Button
+                  size="lg"
+                  className="bg-gradient-hero text-white shadow-glow hover:opacity-90 hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto w-full"
+                >
+                  <Mail className="w-5 h-5 mr-2" />
+                  View Investment Deck
+                </Button>
+              </Link>
               <Button
                 size="lg"
                 variant="outline"
