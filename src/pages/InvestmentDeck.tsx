@@ -54,8 +54,9 @@ const InvestmentDeck = () => {
             
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-purple/10 to-hippie-pink/10">
-                <div className="text-4xl font-bold text-hippie-purple mb-2">$33B+</div>
+                <div className="text-4xl font-bold text-hippie-purple mb-2">R590B+</div>
                 <div className="text-foreground/80">US Cannabis Market Size (2024)</div>
+                <div className="text-sm text-muted-foreground mt-1">($33 billion USD)</div>
               </div>
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-orange/10 to-hippie-yellow/10">
                 <div className="text-4xl font-bold text-hippie-orange mb-2">25%</div>
@@ -65,6 +66,14 @@ const InvestmentDeck = () => {
                 <div className="text-4xl font-bold text-hippie-green mb-2">5,000+</div>
                 <div className="text-foreground/80">Target Dispensaries</div>
               </div>
+            </div>
+            
+            <div className="text-center">
+              <Link to="/international-market">
+                <Button variant="link" className="text-hippie-purple hover:text-hippie-pink">
+                  View Global Market Analysis →
+                </Button>
+              </Link>
             </div>
             
             <p className="text-lg text-foreground/80 leading-relaxed">
@@ -151,7 +160,8 @@ const InvestmentDeck = () => {
               <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-purple/10 to-hippie-pink/10">
                 <h3 className="text-xl font-bubble font-bold text-hippie-purple mb-3">SaaS Subscription</h3>
                 <p className="text-foreground/80 mb-2">Monthly recurring revenue per dispensary location</p>
-                <div className="text-2xl font-bold text-foreground">$299-$999/mo</div>
+                <div className="text-2xl font-bold text-foreground">R5,300-R17,800/mo</div>
+                <div className="text-sm text-muted-foreground mt-1">($299-$999 USD)</div>
               </div>
               
               <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-orange/10 to-hippie-yellow/10">
