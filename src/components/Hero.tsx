@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Bot, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import cuddlesImage from "@/assets/cuddles.png";
 
 const Hero = () => {
   const scrollToDemo = () => {
@@ -18,6 +19,15 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
+        {/* Animated Cuddles character */}
+        <div className="absolute left-8 top-1/4 w-32 h-32 md:w-48 md:h-48 animate-gentle-float z-20 hidden md:block">
+          <img 
+            src={cuddlesImage} 
+            alt="Cuddles mascot" 
+            className="w-full h-full object-contain drop-shadow-2xl"
+          />
+        </div>
+        
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8 border-2 border-hippie-pink/50 animate-fade-in shadow-glow">

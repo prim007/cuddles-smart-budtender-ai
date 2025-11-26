@@ -2,9 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Send, Bot, User, ExternalLink } from "lucide-react";
+import { Send, User, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import cuddlesImage from "@/assets/cuddles.png";
 
 interface Message {
   role: "user" | "assistant";
@@ -104,16 +105,20 @@ const ChatDemo = () => {
                 }`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${
                     message.role === "user"
                       ? "bg-primary"
-                      : "bg-accent"
+                      : "bg-gradient-to-br from-hippie-green to-hippie-yellow"
                   }`}
                 >
                   {message.role === "user" ? (
                     <User className="w-5 h-5 text-primary-foreground" />
                   ) : (
-                    <Bot className="w-5 h-5 text-accent-foreground" />
+                    <img 
+                      src={cuddlesImage} 
+                      alt="Cuddles" 
+                      className="w-full h-full object-cover"
+                    />
                   )}
                 </div>
                 <div
@@ -138,8 +143,12 @@ const ChatDemo = () => {
             ))}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-accent">
-                  <Bot className="w-5 h-5 text-accent-foreground" />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-hippie-green to-hippie-yellow">
+                  <img 
+                    src={cuddlesImage} 
+                    alt="Cuddles" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="px-4 py-3 rounded-2xl bg-muted">
                   <div className="flex gap-1">
