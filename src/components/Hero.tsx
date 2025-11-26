@@ -26,15 +26,17 @@ const Hero = () => {
         <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-hippie-pink rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
       </div>
 
+      {/* Animated Cuddles character - floating in background */}
+      <div className="absolute left-8 top-1/4 w-48 h-48 md:w-64 md:h-64 animate-gentle-float z-5 hidden md:block opacity-40 blur-[0.5px]" 
+           style={{ transform: 'perspective(1000px) rotateY(-15deg) translateZ(-50px)' }}>
+        <img 
+          src={processedImage} 
+          alt="Cuddles mascot" 
+          className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(168,85,247,0.4)]"
+        />
+      </div>
+
       <div className="container mx-auto px-4 relative z-10">
-        {/* Animated Cuddles character */}
-        <div className="absolute left-8 top-1/4 w-32 h-32 md:w-48 md:h-48 animate-gentle-float z-20 hidden md:block">
-          <img 
-            src={processedImage} 
-            alt="Cuddles mascot" 
-            className="w-full h-full object-contain drop-shadow-2xl"
-          />
-        </div>
         
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
