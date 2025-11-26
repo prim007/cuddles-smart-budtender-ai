@@ -2,10 +2,29 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, TrendingUp, Users, Target, Zap, DollarSign, Award, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "@/components/SEO";
 
 const InvestmentDeck = () => {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "PresentationDigitalDocument",
+    "name": "Cuddles Investment Deck",
+    "description": "Revolutionizing Cannabis Retail with AI-Powered Recommendations. R590B+ market opportunity.",
+    "author": {
+      "@type": "Organization",
+      "name": "Cuddles"
+    }
+  };
+
   return (
     <div className="min-h-screen pb-20">
+      <SEO 
+        title="Investment Deck - Cuddles"
+        description="Revolutionizing Cannabis Retail with AI-Powered Recommendations. R590B+ US Cannabis Market, 25% CAGR projected growth. View our investment deck."
+        url="/investment-deck"
+        type="article"
+        structuredData={structuredData}
+      />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
         <div className="container mx-auto px-4 py-4">

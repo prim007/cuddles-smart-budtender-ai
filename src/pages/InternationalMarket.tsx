@@ -2,10 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Globe, TrendingUp, MapPin, Users, DollarSign, Award } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "@/components/SEO";
 
 const InternationalMarket = () => {
   return (
     <div className="min-h-screen pb-20">
+      <SEO 
+        title="Global Cannabis Market Analysis - Cuddles"
+        description="The global cannabis market exceeds R910B and is growing rapidly. Explore international market opportunities for Cuddles AI-powered cannabis recommendations."
+        url="/international-market"
+        type="article"
+      />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
         <div className="container mx-auto px-4 py-4">
