@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
@@ -119,6 +120,11 @@ const ScheduleDemo = () => {
 
   return (
     <div className="min-h-screen pb-20">
+      <SEO 
+        title="Schedule a Demo - Cuddles"
+        description="Schedule a personalized demo of Cuddles AI-powered cannabis recommendation platform. See how we can transform your dispensary's customer experience."
+        url="/schedule-demo"
+      />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
         <div className="container mx-auto px-4 py-4">
