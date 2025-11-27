@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_conversations: {
+        Row: {
+          assistant_message: string
+          created_at: string
+          id: string
+          redirect_url: string | null
+          session_id: string
+          user_message: string
+          user_metadata: Json | null
+        }
+        Insert: {
+          assistant_message: string
+          created_at?: string
+          id?: string
+          redirect_url?: string | null
+          session_id: string
+          user_message: string
+          user_metadata?: Json | null
+        }
+        Update: {
+          assistant_message?: string
+          created_at?: string
+          id?: string
+          redirect_url?: string | null
+          session_id?: string
+          user_message?: string
+          user_metadata?: Json | null
+        }
+        Relationships: []
+      }
       demo_requests: {
         Row: {
           company: string
