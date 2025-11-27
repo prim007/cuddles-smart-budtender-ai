@@ -8,6 +8,9 @@ import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
 import { processCuddlesImage } from "@/utils/processImage";
 
+// Generate a unique session ID for this chat session
+const generateSessionId = () => crypto.randomUUID();
+
 interface Message {
   role: "user" | "assistant";
   content: string;
@@ -24,6 +27,7 @@ const ChatDemo = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [processedImage, setProcessedImage] = useState<string>(cuddlesImage);
+  const [sessionId] = useState<string>(generateSessionId()); // Unique session ID for this chat
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -70,6 +74,23 @@ const ChatDemo = () => {
         redirectUrl,
       };
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Save conversation to database
+      try {
+        await supabase.from('chat_conversations').insert({
+          session_id: sessionId,
+          user_message: userMessage.content,
+          assistant_message: responseContent,
+          redirect_url: redirectUrl || null,
+          user_metadata: {
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+          }
+        });
+      } catch (dbError) {
+        console.error('Error saving conversation:', dbError);
+        // Don't show error to user, just log it
+      }
     } catch (error: any) {
       console.error("Error:", error);
       toast({

@@ -9,6 +9,7 @@ import InvestmentDeck from "./pages/InvestmentDeck";
 import ScheduleDemo from "./pages/ScheduleDemo";
 import Analytics from "./pages/Analytics";
 import DemoRequests from "./pages/DemoRequests";
+import ChatConversations from "./pages/ChatConversations";
 import InternationalMarket from "./pages/InternationalMarket";
 import NotFound from "./pages/NotFound";
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/schedule-demo" element={<ScheduleDemo />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/demo-requests" element={<DemoRequests />} />
+          <Route path="/chat-conversations" element={<ChatConversations />} />
           <Route path="/international-market" element={<InternationalMarket />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
