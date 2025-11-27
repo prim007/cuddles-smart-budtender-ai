@@ -257,43 +257,6 @@ const InvestmentDeck = () => {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <Card className="p-8 md:p-12 bg-card/50 backdrop-blur-sm border-hippie-blue/30">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-blue to-hippie-purple flex items-center justify-center">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">The Team</h2>
-            </div>
-            
-            <p className="text-lg text-foreground/80 leading-relaxed mb-6">
-              Our diverse team combines deep expertise in AI/ML, cannabis retail operations, and consumer technology. 
-              We're backed by experienced advisors from leading dispensaries and technology companies.
-            </p>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center p-6">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-hippie-purple to-hippie-pink" />
-                <h3 className="font-bubble font-bold text-foreground mb-1">CEO & Co-Founder</h3>
-                <p className="text-sm text-foreground/70">15+ years in retail tech</p>
-              </div>
-              <div className="text-center p-6">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-hippie-orange to-hippie-yellow" />
-                <h3 className="font-bubble font-bold text-foreground mb-1">CTO & Co-Founder</h3>
-                <p className="text-sm text-foreground/70">AI/ML expert, ex-FAANG</p>
-              </div>
-              <div className="text-center p-6">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-hippie-green to-hippie-blue" />
-                <h3 className="font-bubble font-bold text-foreground mb-1">Head of Operations</h3>
-                <p className="text-sm text-foreground/70">Cannabis industry veteran</p>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </section>
-
       {/* Investment Ask */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
