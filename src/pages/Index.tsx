@@ -4,6 +4,7 @@ import HowItWorks from "@/components/HowItWorks";
 import ChatDemo from "@/components/ChatDemo";
 import InvestorCTA from "@/components/InvestorCTA";
 import SEO from "@/components/SEO";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <HowItWorks />
       <ChatDemo />
       <InvestorCTA />
+      <Footer />
     </div>
   );
 };
