@@ -28,17 +28,7 @@ const Hero = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Admin Navigation */}
-        <div className="absolute top-4 right-4 flex gap-2">
-          <Link to="/chat-conversations">
-            <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10">
-              Chat History
-            </Button>
-          </Link>
-          <Link to="/demo-requests">
-            <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10">
-              Demo Requests
-            </Button>
-          </Link>
+        <div className="absolute top-4 right-4">
           <Link to="/analytics">
             <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10">
               Analytics
