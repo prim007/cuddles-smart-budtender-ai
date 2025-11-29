@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">cuddles-smart-budtender-ai</string>
+    <string name="title_activity_main">cuddles-smart-budtender-ai</string>
+    <string name="package_name">com.lovable.cuddles</string>
+    <string name="custom_url_scheme">com.lovable.cuddles</string>
+</resources>
