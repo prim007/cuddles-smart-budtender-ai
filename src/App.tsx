@@ -12,6 +12,7 @@ import DemoRequests from "./pages/DemoRequests";
 import ChatConversations from "./pages/ChatConversations";
 import InternationalMarket from "./pages/InternationalMarket";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Install from "./pages/Install";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/chat-conversations" element={<ChatConversations />} />
           <Route path="/international-market" element={<InternationalMarket />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/install" element={<Install />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
