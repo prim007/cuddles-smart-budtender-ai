@@ -1,0 +1,75 @@
+import { Button } from "@/components/ui/button";
+import { Mic, MicOff, Loader2 } from "lucide-react";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+
+interface VoiceInputButtonProps {
+  onTranscript: (text: string) => void;
+  disabled?: boolean;
+  className?: string;
+}
+
+const VoiceInputButton = ({ onTranscript, disabled, className }: VoiceInputButtonProps) => {
+  const { t, language } = useLanguage();
+  const { toast } = useToast();
+
+  const { isListening, isSupported, startListening, stopListening } = useVoiceInput({
+    language,
+    onResult: (transcript) => {
+      onTranscript(transcript);
+      stopListening();
+    },
+    onError: (error) => {
+      toast({
+        title: t.error,
+        description: error,
+        variant: "destructive",
+      });
+    },
+  });
+
+  if (!isSupported) {
+    return null;
+  }
+
+  const handleClick = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
+  return (
+    <Button
+      type="button"
+      variant={isListening ? "destructive" : "outline"}
+      size="icon"
+      onClick={handleClick}
+      disabled={disabled}
+      className={cn(
+        "relative transition-all",
+        isListening && "animate-pulse",
+        className
+      )}
+      title={isListening ? t.listening : t.tapToSpeak}
+      aria-label={isListening ? t.listening : t.voiceInput}
+    >
+      {isListening ? (
+        <>
+          <MicOff className="h-4 w-4" />
+          <span className="absolute -top-1 -right-1 flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
+          </span>
+        </>
+      ) : (
+        <Mic className="h-4 w-4" />
+      )}
+    </Button>
+  );
+};
+
+export default VoiceInputButton;

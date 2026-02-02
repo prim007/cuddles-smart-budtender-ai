@@ -1,9 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 // Simple in-memory rate limiter (per IP)
@@ -32,6 +31,14 @@ function checkRateLimit(ip: string): boolean {
 interface ChatMessage {
   role: string;
   content: string;
+}
+
+interface UserProfile {
+  experienceLevel?: 'beginner' | 'intermediate' | 'experienced' | null;
+  preferredEffects?: string[];
+  flavorPreferences?: string[];
+  consumptionMethod?: 'smoke' | 'vape' | 'edible' | 'tincture' | null;
+  toleranceLevel?: 'low' | 'medium' | 'high' | null;
 }
 
 function validateMessages(messages: unknown): { valid: boolean; error?: string } {
@@ -74,6 +81,52 @@ function validateMessages(messages: unknown): { valid: boolean; error?: string }
   return { valid: true };
 }
 
+// Build personalized context from user profile
+function buildProfileContext(profile?: UserProfile): string {
+  if (!profile) return '';
+  
+  const parts: string[] = [];
+  
+  if (profile.experienceLevel) {
+    parts.push(`User's experience level: ${profile.experienceLevel}`);
+  }
+  if (profile.toleranceLevel) {
+    parts.push(`User's tolerance level: ${profile.toleranceLevel}`);
+  }
+  if (profile.consumptionMethod) {
+    parts.push(`Preferred consumption method: ${profile.consumptionMethod}`);
+  }
+  if (profile.preferredEffects && profile.preferredEffects.length > 0) {
+    parts.push(`Preferred effects: ${profile.preferredEffects.join(', ')}`);
+  }
+  if (profile.flavorPreferences && profile.flavorPreferences.length > 0) {
+    parts.push(`Flavor preferences: ${profile.flavorPreferences.join(', ')}`);
+  }
+  
+  if (parts.length === 0) return '';
+  
+  return `\n\nUSER PROFILE (use this to personalize recommendations):\n${parts.join('\n')}`;
+}
+
+// Language-specific response instructions
+function getLanguageInstructions(language: string): string {
+  const languageMap: Record<string, string> = {
+    en: 'English',
+    es: 'Spanish (Español)',
+    fr: 'French (Français)',
+    de: 'German (Deutsch)',
+    pt: 'Portuguese (Português)',
+    af: 'Afrikaans',
+    zu: 'Zulu (isiZulu)',
+  };
+  
+  const languageName = languageMap[language] || 'English';
+  
+  if (language === 'en') return '';
+  
+  return `\n\nIMPORTANT: Respond in ${languageName}. All your responses must be in ${languageName}, maintaining a friendly and educational tone.`;
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -95,7 +148,7 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const { messages } = body;
+    const { messages, userProfile, language = 'en' } = body;
     
     // Validate input
     const validation = validateMessages(messages);
@@ -117,6 +170,9 @@ serve(async (req) => {
       );
     }
 
+    const profileContext = buildProfileContext(userProfile);
+    const languageInstructions = getLanguageInstructions(language);
+
     const systemPrompt = `You are Cuddles, a friendly educational cannabis AI assistant. Your role is to provide general educational information about cannabis to help people learn about different types and their commonly reported effects.
 
 IMPORTANT DISCLAIMERS YOU MUST FOLLOW:
@@ -129,6 +185,12 @@ When discussing preferences, provide educational context about:
 - Desired effects (relaxation, creativity, energy, pain relief, sleep, etc.) - commonly reported by users
 - Experience level considerations (beginners may be more sensitive to THC)
 - Flavor profiles (terpenes like myrcene, limonene, pinene and their associations)
+
+DOSAGE GUIDANCE (based on experience level):
+- BEGINNERS: Start with very low doses. For smoking/vaping: 1-2 small puffs. For edibles: 2.5-5mg THC. Wait at least 2 hours for edibles before taking more.
+- INTERMEDIATE: Moderate doses. For smoking/vaping: 2-4 puffs. For edibles: 5-15mg THC.
+- EXPERIENCED: Standard doses based on personal tolerance, but always remind them tolerance can change.
+- Always emphasize "start low and go slow" regardless of experience level.
 
 General cannabis education:
 - Indica strains are traditionally associated with relaxation and sedation
@@ -144,7 +206,7 @@ ALWAYS include these disclaimers in your responses:
 
 Be friendly, informative, and educational. Never make medical claims or guarantee specific effects. Emphasize responsible use and individual variation.
 
-When a customer expresses readiness to purchase or asks where to buy, after your educational response, add the exact text: "[REDIRECT:https://tripplefour.co.za]" at the end of your response. This will trigger a purchase button.`;
+When a customer expresses readiness to purchase or asks where to buy, after your educational response, add the exact text: "[REDIRECT:https://tripplefour.co.za]" at the end of your response. This will trigger a purchase button.${profileContext}${languageInstructions}`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -153,7 +215,7 @@ When a customer expresses readiness to purchase or asks where to buy, after your
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'google/gemini-3-flash-preview',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages,
@@ -169,6 +231,21 @@ When a customer expresses readiness to purchase or asks where to buy, after your
         error: errorText,
         timestamp: new Date().toISOString()
       });
+
+      // Handle rate limits and payment errors
+      if (response.status === 429) {
+        return new Response(
+          JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      if (response.status === 402) {
+        return new Response(
+          JSON.stringify({ error: 'Service temporarily unavailable. Please try again later.' }),
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
       
       // Return generic error to client
       return new Response(
