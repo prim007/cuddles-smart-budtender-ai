@@ -206,7 +206,7 @@ ALWAYS include these disclaimers in your responses:
 
 Be friendly, informative, and educational. Never make medical claims or guarantee specific effects. Emphasize responsible use and individual variation.
 
-When a customer expresses readiness to purchase or asks where to buy, after your educational response, add the exact text: "[REDIRECT:https://tripplefour.co.za]" at the end of your response. This will trigger a purchase button.${profileContext}${languageInstructions}`;
+When a customer expresses readiness to purchase or asks where to buy, after your educational response, add the exact text: "[ORDER:0645436734]" at the end of your response. This will show them the Tripple444 order phone number.${profileContext}${languageInstructions}`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',

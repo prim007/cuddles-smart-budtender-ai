@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MessageSquare, RefreshCw, Calendar, ExternalLink } from "lucide-react";
+import { ArrowLeft, MessageSquare, RefreshCw, Calendar, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { isValidHttpUrl } from "@/utils/urlValidation";
+
 import {
   Dialog,
   DialogContent,
@@ -176,7 +176,7 @@ const ChatConversations = () => {
           <Card className="p-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-hippie-orange/20 rounded-lg">
-                <ExternalLink className="w-6 h-6 text-hippie-orange" />
+                <Phone className="w-6 h-6 text-hippie-orange" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">
@@ -276,16 +276,14 @@ const ChatConversations = () => {
                                     <div className="bg-muted text-foreground px-4 py-3 rounded-2xl max-w-[80%]">
                                       <p className="text-sm font-medium mb-1 text-hippie-purple">Cuddles</p>
                                       <p className="whitespace-pre-wrap">{message.assistant_message}</p>
-                                      {message.redirect_url && isValidHttpUrl(message.redirect_url) && (
+                                      {message.redirect_url && message.redirect_url.startsWith('tel:') && (
                                         <div className="mt-3 pt-3 border-t border-border">
                                           <a 
                                             href={message.redirect_url} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
                                             className="text-sm text-hippie-purple hover:underline flex items-center gap-1"
                                           >
-                                            <ExternalLink className="w-3 h-3" />
-                                            Purchase Link Shown
+                                            <Phone className="w-3 h-3" />
+                                            Order Phone: {message.redirect_url.replace('tel:', '')}
                                           </a>
                                         </div>
                                       )}
