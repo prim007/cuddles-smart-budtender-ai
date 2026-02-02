@@ -6,6 +6,7 @@ import InvestorCTA from "@/components/InvestorCTA";
 import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
+import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
         url="/"
       />
       <ThemeToggle />
+      <OnboardingFlow />
       <Hero />
       <Features />
       <HowItWorks />
