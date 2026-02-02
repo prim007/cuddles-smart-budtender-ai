@@ -27,8 +27,17 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Admin Navigation */}
-        <div className="absolute top-4 right-4">
+        {/* Navigation */}
+        <div className="absolute top-4 right-4 flex items-center gap-2">
+          <a
+            href="https://tripplefourmarketplace.lovable.app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10">
+              Marketplace
+            </Button>
+          </a>
           <Link to="/analytics">
             <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10">
               Analytics
