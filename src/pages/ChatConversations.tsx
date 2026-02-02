@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { isValidHttpUrl } from "@/utils/urlValidation";
 import {
   Dialog,
   DialogContent,
@@ -275,7 +276,7 @@ const ChatConversations = () => {
                                     <div className="bg-muted text-foreground px-4 py-3 rounded-2xl max-w-[80%]">
                                       <p className="text-sm font-medium mb-1 text-hippie-purple">Cuddles</p>
                                       <p className="whitespace-pre-wrap">{message.assistant_message}</p>
-                                      {message.redirect_url && (
+                                      {message.redirect_url && isValidHttpUrl(message.redirect_url) && (
                                         <div className="mt-3 pt-3 border-t border-border">
                                           <a 
                                             href={message.redirect_url} 
