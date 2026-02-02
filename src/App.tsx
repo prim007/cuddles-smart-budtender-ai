@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,17 +10,26 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { UserProfileProvider } from "@/contexts/UserProfileContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
-import InvestmentDeck from "./pages/InvestmentDeck";
-import ScheduleDemo from "./pages/ScheduleDemo";
-import Analytics from "./pages/Analytics";
-import AnalyticsDashboard from "./pages/AnalyticsDashboard";
-import DemoRequests from "./pages/DemoRequests";
-import ChatConversations from "./pages/ChatConversations";
-import InternationalMarket from "./pages/InternationalMarket";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Install from "./pages/Install";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+
+// Lazy load pages with heavy dependencies (recharts, etc.)
+const InvestmentDeck = lazy(() => import("./pages/InvestmentDeck"));
+const ScheduleDemo = lazy(() => import("./pages/ScheduleDemo"));
+const Analytics = lazy(() => import("./pages/Analytics"));
+const AnalyticsDashboard = lazy(() => import("./pages/AnalyticsDashboard"));
+const DemoRequests = lazy(() => import("./pages/DemoRequests"));
+const ChatConversations = lazy(() => import("./pages/ChatConversations"));
+const InternationalMarket = lazy(() => import("./pages/InternationalMarket"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const Install = lazy(() => import("./pages/Install"));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="animate-pulse text-muted-foreground">Loading...</div>
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -36,14 +46,14 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/investment-deck" element={<InvestmentDeck />} />
-                <Route path="/schedule-demo" element={<ScheduleDemo />} />
-                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/investment-deck" element={<Suspense fallback={<PageLoader />}><InvestmentDeck /></Suspense>} />
+                <Route path="/schedule-demo" element={<Suspense fallback={<PageLoader />}><ScheduleDemo /></Suspense>} />
+                <Route path="/analytics" element={<Suspense fallback={<PageLoader />}><Analytics /></Suspense>} />
                 <Route
                   path="/analytics-dashboard"
                   element={
                     <ProtectedRoute requireAdmin>
-                      <AnalyticsDashboard />
+                      <Suspense fallback={<PageLoader />}><AnalyticsDashboard /></Suspense>
                     </ProtectedRoute>
                   }
                 />
@@ -51,7 +61,7 @@ const App = () => (
                   path="/demo-requests"
                   element={
                     <ProtectedRoute requireAdmin>
-                      <DemoRequests />
+                      <Suspense fallback={<PageLoader />}><DemoRequests /></Suspense>
                     </ProtectedRoute>
                   }
                 />
@@ -59,13 +69,13 @@ const App = () => (
                   path="/chat-conversations"
                   element={
                     <ProtectedRoute requireAdmin>
-                      <ChatConversations />
+                      <Suspense fallback={<PageLoader />}><ChatConversations /></Suspense>
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/international-market" element={<InternationalMarket />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/install" element={<Install />} />
+                <Route path="/international-market" element={<Suspense fallback={<PageLoader />}><InternationalMarket /></Suspense>} />
+                <Route path="/privacy-policy" element={<Suspense fallback={<PageLoader />}><PrivacyPolicy /></Suspense>} />
+                <Route path="/install" element={<Suspense fallback={<PageLoader />}><Install /></Suspense>} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
