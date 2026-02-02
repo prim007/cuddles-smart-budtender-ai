@@ -82,12 +82,36 @@ const EmailCapture = ({ variant = "inline", onClose }: EmailCaptureProps) => {
         </Button>
         
         {isSubmitted ? (
-          <div className="text-center py-4">
-            <div className="w-12 h-12 rounded-full bg-hippie-green/20 flex items-center justify-center mx-auto mb-3">
-              <Check className="h-6 w-6 text-hippie-green" />
+          <div className="py-3">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-full bg-hippie-green/20 flex items-center justify-center">
+                <Check className="h-4 w-4 text-hippie-green" />
+              </div>
+              <div>
+                <h3 className="font-bold text-foreground text-sm">You're in! ✌️</h3>
+                <p className="text-xs text-muted-foreground">Check your inbox soon</p>
+              </div>
             </div>
-            <h3 className="font-bold text-foreground">You're in! ✌️</h3>
-            <p className="text-sm text-muted-foreground mt-1">Check your inbox for a welcome surprise</p>
+            <div className="border-t border-border/50 pt-3 mt-2">
+              <p className="text-xs font-medium text-muted-foreground mb-2">🌿 Latest Cannabis News</p>
+              <ul className="space-y-1.5 text-xs">
+                <li className="text-foreground/80 hover:text-foreground transition-colors">
+                  <a href="https://www.leafly.com/news" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+                    <span className="text-hippie-green">→</span> New strains hitting dispensaries in 2026
+                  </a>
+                </li>
+                <li className="text-foreground/80 hover:text-foreground transition-colors">
+                  <a href="https://www.cannabisbusinesstimes.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+                    <span className="text-hippie-green">→</span> AI transforms cannabis retail experience
+                  </a>
+                </li>
+                <li className="text-foreground/80 hover:text-foreground transition-colors">
+                  <a href="https://www.mjbizdaily.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+                    <span className="text-hippie-green">→</span> Medical cannabis research breakthroughs
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         ) : (
           <>
@@ -129,9 +153,35 @@ const EmailCapture = ({ variant = "inline", onClose }: EmailCaptureProps) => {
   return (
     <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-hippie-purple/10 via-hippie-pink/10 to-hippie-orange/10 border border-border/50">
       {isSubmitted ? (
-        <div className="text-center">
-          <Check className="h-8 w-8 text-hippie-green mx-auto mb-2" />
-          <p className="font-medium text-foreground">Thanks for subscribing! ✌️</p>
+        <div className="space-y-4">
+          <div className="text-center">
+            <Check className="h-8 w-8 text-hippie-green mx-auto mb-2" />
+            <p className="font-medium text-foreground">Thanks for subscribing! ✌️</p>
+            <p className="text-sm text-muted-foreground mt-1">Welcome to the Cuddles community</p>
+          </div>
+          <div className="border-t border-border/50 pt-4">
+            <p className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-hippie-purple" />
+              Latest Cannabis News
+            </p>
+            <ul className="space-y-2 text-sm">
+              <li className="text-muted-foreground hover:text-foreground transition-colors">
+                <a href="https://www.leafly.com/news" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <span className="text-hippie-green font-bold">→</span> New strains hitting dispensaries in 2026
+                </a>
+              </li>
+              <li className="text-muted-foreground hover:text-foreground transition-colors">
+                <a href="https://www.cannabisbusinesstimes.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <span className="text-hippie-green font-bold">→</span> AI transforms cannabis retail experience
+                </a>
+              </li>
+              <li className="text-muted-foreground hover:text-foreground transition-colors">
+                <a href="https://www.mjbizdaily.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <span className="text-hippie-green font-bold">→</span> Medical cannabis research breakthroughs
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       ) : (
         <>
