@@ -48,6 +48,11 @@ interface LanguageStrings {
   listening: string;
   tapToSpeak: string;
   
+  // Image & Dispensary (Phase 3)
+  productScanner: string;
+  analyzeProduct: string;
+  findDispensaries: string;
+  
   // General
   loading: string;
   error: string;
@@ -95,6 +100,9 @@ const translations: Record<SupportedLanguage, LanguageStrings> = {
     voiceInput: "Voice Input",
     listening: "Listening...",
     tapToSpeak: "Tap to speak",
+    productScanner: "Product Scanner",
+    analyzeProduct: "Analyze Product",
+    findDispensaries: "Find Dispensaries",
     loading: "Loading...",
     error: "Error",
     tryAgain: "Try Again",
@@ -137,6 +145,9 @@ const translations: Record<SupportedLanguage, LanguageStrings> = {
     voiceInput: "Entrada de Voz",
     listening: "Escuchando...",
     tapToSpeak: "Toca para hablar",
+    productScanner: "Escáner de Productos",
+    analyzeProduct: "Analizar Producto",
+    findDispensaries: "Buscar Dispensarios",
     loading: "Cargando...",
     error: "Error",
     tryAgain: "Intentar de Nuevo",
@@ -179,6 +190,9 @@ const translations: Record<SupportedLanguage, LanguageStrings> = {
     voiceInput: "Entrée Vocale",
     listening: "Écoute...",
     tapToSpeak: "Appuyez pour parler",
+    productScanner: "Scanner de Produits",
+    analyzeProduct: "Analyser le Produit",
+    findDispensaries: "Trouver des Dispensaires",
     loading: "Chargement...",
     error: "Erreur",
     tryAgain: "Réessayer",
@@ -221,6 +235,9 @@ const translations: Record<SupportedLanguage, LanguageStrings> = {
     voiceInput: "Spracheingabe",
     listening: "Höre zu...",
     tapToSpeak: "Tippen zum Sprechen",
+    productScanner: "Produktscanner",
+    analyzeProduct: "Produkt Analysieren",
+    findDispensaries: "Apotheken Finden",
     loading: "Laden...",
     error: "Fehler",
     tryAgain: "Erneut Versuchen",
@@ -263,6 +280,9 @@ const translations: Record<SupportedLanguage, LanguageStrings> = {
     voiceInput: "Entrada de Voz",
     listening: "Ouvindo...",
     tapToSpeak: "Toque para falar",
+    productScanner: "Scanner de Produtos",
+    analyzeProduct: "Analisar Produto",
+    findDispensaries: "Encontrar Dispensários",
     loading: "Carregando...",
     error: "Erro",
     tryAgain: "Tentar Novamente",
@@ -305,6 +325,9 @@ const translations: Record<SupportedLanguage, LanguageStrings> = {
     voiceInput: "Stem Invoer",
     listening: "Luister...",
     tapToSpeak: "Tik om te praat",
+    productScanner: "Produk Skandeerder",
+    analyzeProduct: "Analiseer Produk",
+    findDispensaries: "Vind Apteke",
     loading: "Laai...",
     error: "Fout",
     tryAgain: "Probeer Weer",
@@ -347,6 +370,9 @@ const translations: Record<SupportedLanguage, LanguageStrings> = {
     voiceInput: "Ukungena Kwezwi",
     listening: "Ilalele...",
     tapToSpeak: "Thepha ukukhuluma",
+    productScanner: "Umshini Wokuhlola",
+    analyzeProduct: "Hlaziya Umkhiqizo",
+    findDispensaries: "Thola Izitolo",
     loading: "Iyalayisha...",
     error: "Iphutha",
     tryAgain: "Zama Futhi",

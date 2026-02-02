@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import InvestmentDeck from "./pages/InvestmentDeck";
 import ScheduleDemo from "./pages/ScheduleDemo";
 import Analytics from "./pages/Analytics";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import DemoRequests from "./pages/DemoRequests";
 import ChatConversations from "./pages/ChatConversations";
 import InternationalMarket from "./pages/InternationalMarket";
@@ -38,6 +39,14 @@ const App = () => (
                 <Route path="/investment-deck" element={<InvestmentDeck />} />
                 <Route path="/schedule-demo" element={<ScheduleDemo />} />
                 <Route path="/analytics" element={<Analytics />} />
+                <Route
+                  path="/analytics-dashboard"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <AnalyticsDashboard />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route
                   path="/demo-requests"
                   element={
