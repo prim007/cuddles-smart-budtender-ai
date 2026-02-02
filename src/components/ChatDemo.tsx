@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
 import { processCuddlesImage } from "@/utils/processImage";
+import { isValidHttpUrl } from "@/utils/urlValidation";
 import QuickPrompts from "./QuickPrompts";
 import ConversationHistory, { saveSession } from "./ConversationHistory";
 import EmailCapture from "./EmailCapture";
@@ -266,7 +267,7 @@ const ChatDemo = () => {
                   <div className="prose prose-sm dark:prose-invert max-w-none">
                     <ReactMarkdown>{message.content}</ReactMarkdown>
                   </div>
-                  {message.redirectUrl && (
+                  {message.redirectUrl && isValidHttpUrl(message.redirectUrl) && (
                     <Button
                       className="mt-3 w-full bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange hover:shadow-glow text-white font-retro"
                       onClick={() => window.open(message.redirectUrl, '_blank')}
