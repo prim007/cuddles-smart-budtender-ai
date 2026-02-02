@@ -82,9 +82,8 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
     // Check if onboarding was completed
     const completed = localStorage.getItem(ONBOARDING_COMPLETE_KEY);
     if (!completed) {
-      // Show after a short delay for better UX
-      const timer = setTimeout(() => setIsOpen(true), 1000);
-      return () => clearTimeout(timer);
+      // Show immediately on first visit
+      setIsOpen(true);
     }
   }, [forceOpen]);
 
