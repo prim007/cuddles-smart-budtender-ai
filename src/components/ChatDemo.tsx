@@ -8,8 +8,15 @@ import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
 import { processCuddlesImage } from "@/utils/processImage";
 import QuickPrompts from "./QuickPrompts";
-import ConversationHistory, { saveSession, getSessionMessages } from "./ConversationHistory";
+import ConversationHistory, { saveSession } from "./ConversationHistory";
 import EmailCapture from "./EmailCapture";
+import VoiceInputButton from "./VoiceInputButton";
+import LanguageSelector from "./LanguageSelector";
+import UserProfilePanel from "./UserProfilePanel";
+import DosageCalculator from "./DosageCalculator";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useUserProfile } from "@/contexts/UserProfileContext";
+import ReactMarkdown from "react-markdown";
 
 const generateSessionId = () => crypto.randomUUID();
 
@@ -19,12 +26,15 @@ interface Message {
   redirectUrl?: string;
 }
 
-const INITIAL_MESSAGE: Message = {
-  role: "assistant",
-  content: "Hi! I'm Cuddles. Tell me what effects you're looking for (like relaxation, creativity, or pain relief), your experience level, and any flavor preferences. I'll recommend the perfect products for you!",
-};
-
 const ChatDemo = () => {
+  const { t, language } = useLanguage();
+  const { profile, getProfileSummary } = useUserProfile();
+  
+  const INITIAL_MESSAGE: Message = {
+    role: "assistant",
+    content: t.initialMessage,
+  };
+
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +48,16 @@ const ChatDemo = () => {
   useEffect(() => {
     processCuddlesImage().then(setProcessedImage);
   }, []);
+
+  // Update initial message when language changes
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0].role === "assistant") {
+        return [{ ...prev[0], content: t.initialMessage }];
+      }
+      return prev;
+    });
+  }, [t.initialMessage]);
 
   // Save session whenever messages change
   useEffect(() => {
@@ -72,7 +92,7 @@ const ChatDemo = () => {
 
   const handleNewChat = () => {
     setSessionId(generateSessionId());
-    setMessages([INITIAL_MESSAGE]);
+    setMessages([{ role: "assistant", content: t.initialMessage }]);
     setMessageCount(0);
   };
 
@@ -88,7 +108,17 @@ const ChatDemo = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke("smart-budtender", {
-        body: { messages: [...messages, userMessage] },
+        body: { 
+          messages: [...messages, userMessage],
+          userProfile: {
+            experienceLevel: profile.experienceLevel,
+            toleranceLevel: profile.toleranceLevel,
+            consumptionMethod: profile.consumptionMethod,
+            preferredEffects: profile.preferredEffects,
+            flavorPreferences: profile.flavorPreferences,
+          },
+          language,
+        },
       });
 
       if (error) throw error;
@@ -118,6 +148,8 @@ const ChatDemo = () => {
           user_metadata: {
             timestamp: new Date().toISOString(),
             userAgent: navigator.userAgent,
+            language,
+            profileSummary: getProfileSummary(),
           }
         });
       } catch (dbError) {
@@ -126,7 +158,7 @@ const ChatDemo = () => {
     } catch (error: any) {
       console.error("Error:", error);
       toast({
-        title: "Error",
+        title: t.error,
         description: error.message || "Failed to get response. Please try again.",
         variant: "destructive",
       });
@@ -147,12 +179,16 @@ const ChatDemo = () => {
     localStorage.setItem("cuddles-email-dismissed", "true");
   };
 
+  const handleVoiceTranscript = (transcript: string) => {
+    setInput(transcript);
+  };
+
   return (
     <section id="demo" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Try It Yourself
+            {t.chatTitle}
           </h2>
           <p className="text-xl text-muted-foreground">
             Experience the power of AI-driven recommendations in real-time
@@ -172,14 +208,19 @@ const ChatDemo = () => {
                 size="icon"
                 onClick={handleNewChat}
                 className="bg-card/80 backdrop-blur-sm border-border hover:bg-accent"
-                aria-label="Start new chat"
+                aria-label={t.newChat}
               >
                 <Plus className="h-5 w-5" />
               </Button>
             </div>
-            <span className="text-sm text-muted-foreground">
-              {messages.filter(m => m.role === "user").length} messages
-            </span>
+            <div className="flex items-center gap-2">
+              <DosageCalculator />
+              <UserProfilePanel />
+              <LanguageSelector />
+              <span className="text-sm text-muted-foreground hidden sm:inline">
+                {messages.filter(m => m.role === "user").length} {t.messages}
+              </span>
+            </div>
           </div>
 
           {/* Quick prompts */}
@@ -218,7 +259,9 @@ const ChatDemo = () => {
                       : "bg-muted text-foreground"
                   }`}
                 >
-                  <p className="whitespace-pre-wrap">{message.content}</p>
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
                   {message.redirectUrl && (
                     <Button
                       className="mt-3 w-full bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange hover:shadow-glow text-white font-retro"
@@ -254,11 +297,12 @@ const ChatDemo = () => {
 
           {/* Input */}
           <div className="flex gap-2">
+            <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} />
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Describe what you're looking for..."
+              placeholder={t.chatPlaceholder}
               disabled={isLoading}
               className="flex-1"
             />
