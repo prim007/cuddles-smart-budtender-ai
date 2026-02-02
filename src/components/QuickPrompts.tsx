@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, Moon, Zap, Heart, Palette, Coffee } from "lucide-react";
+import { Moon, Zap, Heart, Palette, Coffee, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface QuickPromptsProps {
@@ -10,7 +10,6 @@ interface QuickPromptsProps {
 const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
   const { t, language } = useLanguage();
 
-  // Localized prompts based on language
   const prompts = [
     {
       icon: Moon,
@@ -18,7 +17,7 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
       prompt: language === "en" 
         ? "I'm looking for something to help me relax and get a good night's sleep. I'm a beginner."
         : `${t.helpMeSleep} - I'm a beginner looking for relaxation and better sleep.`,
-      color: "from-hippie-blue to-hippie-purple",
+      gradient: "from-hippie-lavender to-hippie-teal",
     },
     {
       icon: Zap,
@@ -26,7 +25,7 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
       prompt: language === "en"
         ? "I want something that will boost my creativity and help me focus on artistic projects."
         : `${t.boostCreativity} - I want to enhance my creative and artistic focus.`,
-      color: "from-hippie-yellow to-hippie-orange",
+      gradient: "from-hippie-amber to-hippie-peach",
     },
     {
       icon: Heart,
@@ -34,7 +33,7 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
       prompt: language === "en"
         ? "I'm looking for something to help with pain relief and relaxation without feeling too sedated."
         : `${t.painRelief} - Looking for relief without heavy sedation.`,
-      color: "from-hippie-pink to-hippie-purple",
+      gradient: "from-hippie-coral to-hippie-lavender",
     },
     {
       icon: Sparkles,
@@ -42,7 +41,7 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
       prompt: language === "en"
         ? "I want something uplifting for social gatherings that will make me feel happy and talkative."
         : `${t.socialEnergy} - I want to feel uplifted and social.`,
-      color: "from-hippie-orange to-hippie-pink",
+      gradient: "from-hippie-peach to-hippie-coral",
     },
     {
       icon: Palette,
@@ -50,7 +49,7 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
       prompt: language === "en"
         ? "I need something to help me unwind after a stressful day. Medium experience level."
         : `${t.stressRelief} - Help me unwind after stress. Medium experience.`,
-      color: "from-hippie-green to-hippie-blue",
+      gradient: "from-hippie-sage to-hippie-teal",
     },
     {
       icon: Coffee,
@@ -58,7 +57,7 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
       prompt: language === "en"
         ? "What would you recommend for a productive morning that won't make me too anxious?"
         : `${t.morningEnergy} - Looking for productive energy without anxiety.`,
-      color: "from-hippie-yellow to-hippie-green",
+      gradient: "from-hippie-amber to-hippie-sage",
     },
   ];
 
@@ -73,11 +72,11 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
             size="sm"
             onClick={() => onSelect(prompt.prompt)}
             disabled={disabled}
-            className={`group relative overflow-hidden border-border/50 hover:border-transparent transition-all duration-300`}
+            className="group relative overflow-hidden border-border/50 hover:border-primary/50 bg-card/50 hover:bg-card transition-all duration-300 rounded-full hover-scale"
           >
-            <span className={`absolute inset-0 bg-gradient-to-r ${prompt.color} opacity-0 group-hover:opacity-20 transition-opacity`} />
-            <Icon className="w-4 h-4 mr-2" />
-            {prompt.label}
+            <span className={`absolute inset-0 bg-gradient-to-r ${prompt.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
+            <Icon className="w-4 h-4 mr-2 text-muted-foreground group-hover:text-primary transition-colors" />
+            <span className="text-sm">{prompt.label}</span>
           </Button>
         );
       })}

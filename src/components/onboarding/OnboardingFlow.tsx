@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useUserProfile, UserProfile } from "@/contexts/UserProfileContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -9,20 +8,17 @@ import OnboardingProgress from "./OnboardingProgress";
 import SelectableCard from "./SelectableCard";
 import MultiSelectChip from "./MultiSelectChip";
 import { 
-  Sparkles, 
-  Flame, 
   Leaf, 
   Zap, 
-  Moon, 
-  Heart, 
-  Coffee,
-  Wind,
-  Smile,
-  Brain,
   ArrowRight,
   ArrowLeft,
   Check,
-  X
+  X,
+  Flame,
+  Wind,
+  Coffee,
+  Smile,
+  Heart
 } from "lucide-react";
 import cuddlesImage from "@/assets/cuddles.png";
 
@@ -162,7 +158,7 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
             description="Let's personalize your experience to give you the best recommendations."
           >
             <div className="flex flex-col items-center py-4">
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-hippie-green to-hippie-yellow mb-4 shadow-lg">
+              <div className="w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-hippie-lavender to-hippie-teal mb-4 shadow-glow">
                 <img src={cuddlesImage} alt="Cuddles" className="w-full h-full object-cover" />
               </div>
               <p className="text-center text-muted-foreground max-w-xs">
@@ -280,8 +276,8 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-md p-0 gap-0 overflow-hidden">
-        <div className="relative">
+      <DialogContent className="sm:max-w-md p-0 gap-0 overflow-hidden border-border/50 shadow-elevated">
+        <div className="relative bg-card">
           {/* Skip button */}
           <Button
             variant="ghost"
@@ -319,7 +315,7 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
               <Button
                 onClick={handleNext}
                 disabled={!canProceed()}
-                className="bg-gradient-to-r from-hippie-green to-hippie-blue hover:opacity-90"
+                className="bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white rounded-xl"
               >
                 {currentStep === totalSteps - 1 ? (
                   <>
