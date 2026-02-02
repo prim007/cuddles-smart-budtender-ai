@@ -14,6 +14,8 @@ import VoiceInputButton from "./VoiceInputButton";
 import LanguageSelector from "./LanguageSelector";
 import UserProfilePanel from "./UserProfilePanel";
 import DosageCalculator from "./DosageCalculator";
+import ImageUploadButton from "./ImageUploadButton";
+import DispensaryFinder from "./DispensaryFinder";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProfile } from "@/contexts/UserProfileContext";
 import ReactMarkdown from "react-markdown";
@@ -214,6 +216,8 @@ const ChatDemo = () => {
               </Button>
             </div>
             <div className="flex items-center gap-2">
+              <ImageUploadButton onImageAnalysis={handleSend} disabled={isLoading} />
+              <DispensaryFinder />
               <DosageCalculator />
               <UserProfilePanel />
               <LanguageSelector />
