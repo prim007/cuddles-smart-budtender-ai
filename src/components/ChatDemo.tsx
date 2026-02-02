@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, ExternalLink, Plus } from "lucide-react";
+import { Send, User, Phone, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
 import { processCuddlesImage } from "@/utils/processImage";
-import { isValidHttpUrl } from "@/utils/urlValidation";
+
 import QuickPrompts from "./QuickPrompts";
 import ConversationHistory, { saveSession } from "./ConversationHistory";
 import EmailCapture from "./EmailCapture";
@@ -25,7 +25,7 @@ const generateSessionId = () => crypto.randomUUID();
 interface Message {
   role: "user" | "assistant";
   content: string;
-  redirectUrl?: string;
+  orderPhone?: string;
 }
 
 const ChatDemo = () => {
@@ -126,18 +126,18 @@ const ChatDemo = () => {
       if (error) throw error;
 
       let responseContent = data.response;
-      let redirectUrl: string | undefined;
+      let orderPhone: string | undefined;
       
-      const redirectMatch = responseContent.match(/\[REDIRECT:(https?:\/\/[^\]]+)\]/);
-      if (redirectMatch) {
-        redirectUrl = redirectMatch[1];
-        responseContent = responseContent.replace(/\[REDIRECT:[^\]]+\]/, '').trim();
+      const orderMatch = responseContent.match(/\[ORDER:([0-9]+)\]/);
+      if (orderMatch) {
+        orderPhone = orderMatch[1];
+        responseContent = responseContent.replace(/\[ORDER:[^\]]+\]/, '').trim();
       }
 
       const assistantMessage: Message = {
         role: "assistant",
         content: responseContent,
-        redirectUrl,
+        orderPhone,
       };
       setMessages((prev) => [...prev, assistantMessage]);
 
@@ -146,7 +146,7 @@ const ChatDemo = () => {
           session_id: sessionId,
           user_message: userMessage.content,
           assistant_message: responseContent,
-          redirect_url: redirectUrl || null,
+          redirect_url: orderPhone ? `tel:${orderPhone}` : null,
           user_metadata: {
             timestamp: new Date().toISOString(),
             userAgent: navigator.userAgent,
@@ -271,13 +271,13 @@ const ChatDemo = () => {
                   <div className="prose prose-sm dark:prose-invert max-w-none">
                     <ReactMarkdown>{message.content}</ReactMarkdown>
                   </div>
-                  {message.redirectUrl && isValidHttpUrl(message.redirectUrl) && (
+                  {message.orderPhone && (
                     <Button
                       className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
-                      onClick={() => window.open(message.redirectUrl, '_blank')}
+                      onClick={() => window.open(`tel:${message.orderPhone}`, '_self')}
                     >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Visit Tripple4 to Purchase
+                      <Phone className="w-4 h-4 mr-2" />
+                      Call Tripple444 to Order: {message.orderPhone}
                     </Button>
                   )}
                 </div>
