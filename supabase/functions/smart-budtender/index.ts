@@ -41,6 +41,69 @@ interface UserProfile {
   toleranceLevel?: 'low' | 'medium' | 'high' | null;
 }
 
+// Allowed values for profile validation (prevents prompt injection)
+const ALLOWED_EXPERIENCE_LEVELS = ['beginner', 'intermediate', 'experienced'] as const;
+const ALLOWED_TOLERANCE_LEVELS = ['low', 'medium', 'high'] as const;
+const ALLOWED_CONSUMPTION_METHODS = ['smoke', 'vape', 'edible', 'tincture'] as const;
+const ALLOWED_EFFECTS = ['relaxation', 'creativity', 'energy', 'pain relief', 'sleep', 'focus', 'euphoria', 'appetite', 'social', 'stress relief'] as const;
+const ALLOWED_FLAVORS = ['citrus', 'pine', 'earthy', 'sweet', 'floral', 'spicy', 'berry', 'tropical', 'herbal', 'diesel'] as const;
+const MAX_ARRAY_LENGTH = 10;
+const MAX_STRING_LENGTH = 50;
+
+// Sanitize a string to prevent injection
+function sanitizeString(str: unknown): string | null {
+  if (typeof str !== 'string') return null;
+  // Remove any control characters and limit length
+  return str.replace(/[\x00-\x1F\x7F]/g, '').slice(0, MAX_STRING_LENGTH).trim() || null;
+}
+
+// Validate and sanitize user profile data
+function validateUserProfile(profile: unknown): UserProfile | null {
+  if (!profile || typeof profile !== 'object') return null;
+  
+  const p = profile as Record<string, unknown>;
+  const validated: UserProfile = {};
+  
+  // Validate experienceLevel
+  if (p.experienceLevel && ALLOWED_EXPERIENCE_LEVELS.includes(p.experienceLevel as typeof ALLOWED_EXPERIENCE_LEVELS[number])) {
+    validated.experienceLevel = p.experienceLevel as UserProfile['experienceLevel'];
+  }
+  
+  // Validate toleranceLevel
+  if (p.toleranceLevel && ALLOWED_TOLERANCE_LEVELS.includes(p.toleranceLevel as typeof ALLOWED_TOLERANCE_LEVELS[number])) {
+    validated.toleranceLevel = p.toleranceLevel as UserProfile['toleranceLevel'];
+  }
+  
+  // Validate consumptionMethod
+  if (p.consumptionMethod && ALLOWED_CONSUMPTION_METHODS.includes(p.consumptionMethod as typeof ALLOWED_CONSUMPTION_METHODS[number])) {
+    validated.consumptionMethod = p.consumptionMethod as UserProfile['consumptionMethod'];
+  }
+  
+  // Validate preferredEffects array
+  if (Array.isArray(p.preferredEffects)) {
+    const validEffects = p.preferredEffects
+      .slice(0, MAX_ARRAY_LENGTH)
+      .map(sanitizeString)
+      .filter((e): e is string => e !== null && ALLOWED_EFFECTS.includes(e.toLowerCase() as typeof ALLOWED_EFFECTS[number]));
+    if (validEffects.length > 0) {
+      validated.preferredEffects = validEffects;
+    }
+  }
+  
+  // Validate flavorPreferences array
+  if (Array.isArray(p.flavorPreferences)) {
+    const validFlavors = p.flavorPreferences
+      .slice(0, MAX_ARRAY_LENGTH)
+      .map(sanitizeString)
+      .filter((f): f is string => f !== null && ALLOWED_FLAVORS.includes(f.toLowerCase() as typeof ALLOWED_FLAVORS[number]));
+    if (validFlavors.length > 0) {
+      validated.flavorPreferences = validFlavors;
+    }
+  }
+  
+  return Object.keys(validated).length > 0 ? validated : null;
+}
+
 function validateMessages(messages: unknown): { valid: boolean; error?: string } {
   if (!Array.isArray(messages)) {
     return { valid: false, error: 'Messages must be an array' };
@@ -170,7 +233,9 @@ serve(async (req) => {
       );
     }
 
-    const profileContext = buildProfileContext(userProfile);
+    // Validate and sanitize user profile to prevent prompt injection
+    const validatedProfile = validateUserProfile(userProfile);
+    const profileContext = buildProfileContext(validatedProfile ?? undefined);
     const languageInstructions = getLanguageInstructions(language);
 
     const systemPrompt = `You are Cuddles, a friendly educational cannabis AI assistant. Your role is to provide general educational information about cannabis to help people learn about different types and their commonly reported effects.
