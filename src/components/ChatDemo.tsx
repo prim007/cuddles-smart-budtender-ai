@@ -1,14 +1,16 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Send, User, ExternalLink } from "lucide-react";
+import { Send, User, ExternalLink, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
 import { processCuddlesImage } from "@/utils/processImage";
+import QuickPrompts from "./QuickPrompts";
+import ConversationHistory, { saveSession, getSessionMessages } from "./ConversationHistory";
+import EmailCapture from "./EmailCapture";
 
-// Generate a unique session ID for this chat session
 const generateSessionId = () => crypto.randomUUID();
 
 interface Message {
@@ -17,23 +19,42 @@ interface Message {
   redirectUrl?: string;
 }
 
+const INITIAL_MESSAGE: Message = {
+  role: "assistant",
+  content: "Hi! I'm Cuddles. Tell me what effects you're looking for (like relaxation, creativity, or pain relief), your experience level, and any flavor preferences. I'll recommend the perfect products for you!",
+};
+
 const ChatDemo = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      content: "Hi! I'm Cuddles. Tell me what effects you're looking for (like relaxation, creativity, or pain relief), your experience level, and any flavor preferences. I'll recommend the perfect products for you!",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [processedImage, setProcessedImage] = useState<string>(cuddlesImage);
-  const [sessionId] = useState<string>(generateSessionId()); // Unique session ID for this chat
+  const [sessionId, setSessionId] = useState<string>(generateSessionId());
+  const [showEmailCapture, setShowEmailCapture] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     processCuddlesImage().then(setProcessedImage);
   }, []);
+
+  // Save session whenever messages change
+  useEffect(() => {
+    if (messages.length > 1) {
+      saveSession(sessionId, messages);
+    }
+  }, [messages, sessionId]);
+
+  // Show email capture after 3 messages
+  useEffect(() => {
+    if (messageCount >= 3 && !showEmailCapture) {
+      const dismissed = localStorage.getItem("cuddles-email-dismissed");
+      if (!dismissed) {
+        setShowEmailCapture(true);
+      }
+    }
+  }, [messageCount, showEmailCapture]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -43,13 +64,27 @@ const ChatDemo = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleLoadSession = useCallback((loadedSessionId: string, loadedMessages: Message[]) => {
+    setSessionId(loadedSessionId);
+    setMessages(loadedMessages);
+    setMessageCount(loadedMessages.filter(m => m.role === "user").length);
+  }, []);
 
-    const userMessage: Message = { role: "user", content: input };
+  const handleNewChat = () => {
+    setSessionId(generateSessionId());
+    setMessages([INITIAL_MESSAGE]);
+    setMessageCount(0);
+  };
+
+  const handleSend = async (messageContent?: string) => {
+    const content = messageContent || input;
+    if (!content.trim() || isLoading) return;
+
+    const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+    setMessageCount((prev) => prev + 1);
 
     try {
       const { data, error } = await supabase.functions.invoke("smart-budtender", {
@@ -58,7 +93,6 @@ const ChatDemo = () => {
 
       if (error) throw error;
 
-      // Parse response for redirect URL
       let responseContent = data.response;
       let redirectUrl: string | undefined;
       
@@ -75,7 +109,6 @@ const ChatDemo = () => {
       };
       setMessages((prev) => [...prev, assistantMessage]);
 
-      // Save conversation to database
       try {
         await supabase.from('chat_conversations').insert({
           session_id: sessionId,
@@ -89,7 +122,6 @@ const ChatDemo = () => {
         });
       } catch (dbError) {
         console.error('Error saving conversation:', dbError);
-        // Don't show error to user, just log it
       }
     } catch (error: any) {
       console.error("Error:", error);
@@ -110,6 +142,11 @@ const ChatDemo = () => {
     }
   };
 
+  const handleDismissEmailCapture = () => {
+    setShowEmailCapture(false);
+    localStorage.setItem("cuddles-email-dismissed", "true");
+  };
+
   return (
     <section id="demo" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -123,7 +160,33 @@ const ChatDemo = () => {
         </div>
 
         <Card className="max-w-4xl mx-auto p-6 shadow-elevated bg-card">
-          <div className="h-[500px] overflow-y-auto mb-4 space-y-4 pr-4">
+          {/* Header with controls */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <ConversationHistory 
+                onLoadSession={handleLoadSession}
+                currentSessionId={sessionId}
+              />
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleNewChat}
+                className="bg-card/80 backdrop-blur-sm border-border hover:bg-accent"
+                aria-label="Start new chat"
+              >
+                <Plus className="h-5 w-5" />
+              </Button>
+            </div>
+            <span className="text-sm text-muted-foreground">
+              {messages.filter(m => m.role === "user").length} messages
+            </span>
+          </div>
+
+          {/* Quick prompts */}
+          <QuickPrompts onSelect={handleSend} disabled={isLoading} />
+
+          {/* Messages */}
+          <div className="h-[400px] overflow-y-auto mb-4 space-y-4 pr-4">
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -189,6 +252,7 @@ const ChatDemo = () => {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* Input */}
           <div className="flex gap-2">
             <Input
               value={input}
@@ -199,15 +263,23 @@ const ChatDemo = () => {
               className="flex-1"
             />
             <Button
-              onClick={handleSend}
+              onClick={() => handleSend()}
               disabled={isLoading || !input.trim()}
               className="px-6"
             >
               <Send className="w-4 h-4" />
             </Button>
           </div>
+
+          {/* Email capture inline */}
+          <EmailCapture variant="inline" />
         </Card>
       </div>
+
+      {/* Floating email capture modal */}
+      {showEmailCapture && (
+        <EmailCapture variant="modal" onClose={handleDismissEmailCapture} />
+      )}
     </section>
   );
 };

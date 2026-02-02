@@ -89,6 +89,30 @@ export type Database = {
         }
         Relationships: []
       }
+      email_leads: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          source: string | null
+          subscribed: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          source?: string | null
+          subscribed?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string | null
+          subscribed?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
