@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { Send, User, ExternalLink, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -187,18 +186,23 @@ const ChatDemo = () => {
   };
 
   return (
-    <section id="demo" className="py-24 bg-muted/30">
-      <div className="container mx-auto px-4">
+    <section id="demo" className="py-24 bg-muted/30 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-hippie-coral/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-hippie-lavender/5 rounded-full blur-3xl" />
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <div className="pill mb-4 animate-fade-in">💬 Live Demo</div>
+          <h2 className="font-display font-bold text-foreground mb-6">
             {t.chatTitle}
           </h2>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             Experience the power of AI-driven recommendations in real-time
           </p>
         </div>
 
-        <Card className="max-w-4xl mx-auto p-6 shadow-elevated bg-card">
+        <div className="max-w-4xl mx-auto glass-card rounded-3xl p-6 md:p-8 animate-fade-in shadow-elevated">
           {/* Header with controls */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -241,14 +245,14 @@ const ChatDemo = () => {
                 }`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden shadow-soft ${
                     message.role === "user"
-                      ? "bg-primary"
-                      : "bg-gradient-to-br from-hippie-green to-hippie-yellow"
+                      ? "bg-gradient-to-br from-hippie-coral to-hippie-amber"
+                      : "bg-gradient-to-br from-hippie-lavender to-hippie-teal"
                   }`}
                 >
                   {message.role === "user" ? (
-                    <User className="w-5 h-5 text-primary-foreground" />
+                    <User className="w-5 h-5 text-white" />
                   ) : (
                     <img 
                       src={processedImage} 
@@ -260,8 +264,8 @@ const ChatDemo = () => {
                 <div
                   className={`px-4 py-3 rounded-2xl max-w-[80%] ${
                     message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground"
+                      ? "bg-gradient-to-br from-hippie-coral to-hippie-peach text-white"
+                      : "bg-card border border-border text-foreground shadow-soft"
                   }`}
                 >
                   <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -269,7 +273,7 @@ const ChatDemo = () => {
                   </div>
                   {message.redirectUrl && isValidHttpUrl(message.redirectUrl) && (
                     <Button
-                      className="mt-3 w-full bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange hover:shadow-glow text-white font-retro"
+                      className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
                       onClick={() => window.open(message.redirectUrl, '_blank')}
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
@@ -281,18 +285,18 @@ const ChatDemo = () => {
             ))}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-hippie-green to-hippie-yellow">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-hippie-lavender to-hippie-teal shadow-soft">
                   <img 
                     src={processedImage} 
                     alt="Cuddles" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="px-4 py-3 rounded-2xl bg-muted">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 rounded-full bg-primary animate-bounce" />
-                    <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0.1s" }} />
-                    <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0.2s" }} />
+                <div className="px-4 py-3 rounded-2xl bg-card border border-border shadow-soft">
+                  <div className="flex gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-hippie-coral animate-bounce" />
+                    <div className="w-2 h-2 rounded-full bg-hippie-peach animate-bounce" style={{ animationDelay: "0.15s" }} />
+                    <div className="w-2 h-2 rounded-full bg-hippie-amber animate-bounce" style={{ animationDelay: "0.3s" }} />
                   </div>
                 </div>
               </div>
@@ -301,7 +305,7 @@ const ChatDemo = () => {
           </div>
 
           {/* Input */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 pt-4 border-t border-border">
             <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} />
             <Input
               value={input}
@@ -309,12 +313,12 @@ const ChatDemo = () => {
               onKeyPress={handleKeyPress}
               placeholder={t.chatPlaceholder}
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 rounded-xl border-border bg-background/50 focus-ring"
             />
             <Button
               onClick={() => handleSend()}
               disabled={isLoading || !input.trim()}
-              className="px-6"
+              className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white"
             >
               <Send className="w-4 h-4" />
             </Button>
@@ -322,7 +326,7 @@ const ChatDemo = () => {
 
           {/* Email capture inline */}
           <EmailCapture variant="inline" />
-        </Card>
+        </div>
       </div>
 
       {/* Floating email capture modal */}
