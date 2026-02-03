@@ -5,27 +5,80 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-// Simple in-memory rate limiter (per IP)
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT = 20; // requests per minute
-const RATE_WINDOW = 60 * 1000; // 1 minute in ms
+// Enhanced rate limiter - tracks both IP requests and sessions per IP
+interface RateLimitRecord {
+  count: number;
+  resetTime: number;
+  sessions: Set<string>;
+}
 
-function checkRateLimit(ip: string): boolean {
+const rateLimitMap = new Map<string, RateLimitRecord>();
+const RATE_LIMIT = 20; // requests per minute per IP
+const RATE_WINDOW = 60 * 1000; // 1 minute in ms
+const MAX_SESSIONS_PER_IP = 5; // max unique sessions per IP per window
+const SESSION_BURST_LIMIT = 50; // total requests across all sessions per IP per hour
+const SESSION_BURST_WINDOW = 60 * 60 * 1000; // 1 hour
+
+// Separate tracker for hourly session bursts
+const hourlyBurstMap = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(ip: string, sessionId?: string): { allowed: boolean; reason?: string } {
   const now = Date.now();
+  
+  // Check hourly burst limit
+  const hourlyRecord = hourlyBurstMap.get(ip);
+  if (hourlyRecord) {
+    if (now > hourlyRecord.resetTime) {
+      hourlyBurstMap.set(ip, { count: 1, resetTime: now + SESSION_BURST_WINDOW });
+    } else if (hourlyRecord.count >= SESSION_BURST_LIMIT) {
+      return { allowed: false, reason: 'hourly_limit' };
+    } else {
+      hourlyRecord.count++;
+    }
+  } else {
+    hourlyBurstMap.set(ip, { count: 1, resetTime: now + SESSION_BURST_WINDOW });
+  }
+  
+  // Check per-minute rate limit
   const record = rateLimitMap.get(ip);
   
   if (!record || now > record.resetTime) {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_WINDOW });
-    return true;
+    const sessions = new Set<string>();
+    if (sessionId) sessions.add(sessionId);
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_WINDOW, sessions });
+    return { allowed: true };
+  }
+  
+  // Check if too many sessions from this IP (prevents session spoofing)
+  if (sessionId && !record.sessions.has(sessionId)) {
+    if (record.sessions.size >= MAX_SESSIONS_PER_IP) {
+      return { allowed: false, reason: 'too_many_sessions' };
+    }
+    record.sessions.add(sessionId);
   }
   
   if (record.count >= RATE_LIMIT) {
-    return false;
+    return { allowed: false, reason: 'rate_limit' };
   }
   
   record.count++;
-  return true;
+  return { allowed: true };
 }
+
+// Cleanup old entries periodically (prevents memory leak)
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, record] of rateLimitMap.entries()) {
+    if (now > record.resetTime + RATE_WINDOW) {
+      rateLimitMap.delete(ip);
+    }
+  }
+  for (const [ip, record] of hourlyBurstMap.entries()) {
+    if (now > record.resetTime + SESSION_BURST_WINDOW) {
+      hourlyBurstMap.delete(ip);
+    }
+  }
+}, 5 * 60 * 1000); // Run cleanup every 5 minutes
 
 // Input validation
 interface ChatMessage {
@@ -197,21 +250,36 @@ serve(async (req) => {
   }
 
   try {
-    // Rate limiting check
+    const body = await req.json();
+    const { messages, userProfile, language = 'en', sessionId } = body;
+    
+    // Rate limiting check with session tracking
     const clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
                      req.headers.get('x-real-ip') || 
                      'unknown';
     
-    if (!checkRateLimit(clientIP)) {
-      console.warn('Rate limit exceeded:', { ip: clientIP, timestamp: new Date().toISOString() });
+    const rateLimitResult = checkRateLimit(clientIP, sessionId);
+    if (!rateLimitResult.allowed) {
+      const reason = rateLimitResult.reason;
+      console.warn('Rate limit exceeded:', { 
+        ip: clientIP, 
+        reason,
+        sessionId: sessionId ? sessionId.substring(0, 8) + '...' : 'none',
+        timestamp: new Date().toISOString() 
+      });
+      
+      let errorMessage = 'Too many requests. Please try again later.';
+      if (reason === 'too_many_sessions') {
+        errorMessage = 'Unusual activity detected. Please try again later.';
+      } else if (reason === 'hourly_limit') {
+        errorMessage = 'You have reached your hourly limit. Please try again in an hour.';
+      }
+      
       return new Response(
-        JSON.stringify({ error: 'Too many requests. Please try again later.' }),
+        JSON.stringify({ error: errorMessage }),
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    const body = await req.json();
-    const { messages, userProfile, language = 'en' } = body;
     
     // Validate input
     const validation = validateMessages(messages);

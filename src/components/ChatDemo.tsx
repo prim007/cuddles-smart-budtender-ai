@@ -112,6 +112,7 @@ const ChatDemo = () => {
       const { data, error } = await supabase.functions.invoke("smart-budtender", {
         body: { 
           messages: [...messages, userMessage],
+          sessionId,
           userProfile: {
             experienceLevel: profile.experienceLevel,
             toleranceLevel: profile.toleranceLevel,
