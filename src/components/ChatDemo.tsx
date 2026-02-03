@@ -48,7 +48,18 @@ const ChatDemo = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    processCuddlesImage().then(setProcessedImage);
+    // Defer heavy image processing to avoid blocking render and forced reflow
+    const scheduleProcessing = () => {
+      processCuddlesImage().then(setProcessedImage);
+    };
+    
+    if ('requestIdleCallback' in window) {
+      const idleId = requestIdleCallback(scheduleProcessing, { timeout: 2000 });
+      return () => cancelIdleCallback(idleId);
+    } else {
+      const timeoutId = setTimeout(scheduleProcessing, 100);
+      return () => clearTimeout(timeoutId);
+    }
   }, []);
 
   // Update initial message when language changes
@@ -79,7 +90,10 @@ const ChatDemo = () => {
   }, [messageCount, showEmailCapture]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Use requestAnimationFrame to batch with next paint cycle and avoid forced reflow
+    requestAnimationFrame(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    });
   };
 
   useEffect(() => {
