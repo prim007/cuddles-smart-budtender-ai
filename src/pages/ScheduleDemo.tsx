@@ -27,6 +27,8 @@ const formSchema = z.object({
   currentPOS: z.string(),
   message: z.string().max(1000).optional(),
   preferredDate: z.date().optional(),
+  // Honeypot field - should always be empty (bots fill this)
+  website: z.string().max(0, "").optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -73,6 +75,7 @@ const integrations = [
 const ScheduleDemo = () => {
   const [date, setDate] = useState<Date>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formLoadTime] = useState<number>(Date.now());
   const { toast } = useToast();
   
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<FormData>({
@@ -80,20 +83,42 @@ const ScheduleDemo = () => {
   });
 
   const onSubmit = async (data: FormData) => {
+    // Anti-bot check #1: Honeypot field should be empty
+    if (data.website && data.website.length > 0) {
+      // Silently reject bot submissions
+      toast({
+        title: "Demo Scheduled! ✨",
+        description: "We'll reach out within 24 hours to confirm your demo time.",
+      });
+      return;
+    }
+
+    // Anti-bot check #2: Form should take at least 3 seconds to fill
+    const timeTaken = Date.now() - formLoadTime;
+    if (timeTaken < 3000) {
+      // Too fast - likely a bot
+      toast({
+        title: "Please slow down",
+        description: "Please take your time filling out the form.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
       const { error } = await supabase
         .from('demo_requests')
         .insert({
-          name: data.name,
-          email: data.email,
-          company: data.company,
-          phone: data.phone,
+          name: data.name.trim(),
+          email: data.email.trim().toLowerCase(),
+          company: data.company.trim(),
+          phone: data.phone.trim(),
           store_count: data.dispensaryCount,
           current_systems: data.currentPOS,
           preferred_date: data.preferredDate?.toISOString().split('T')[0],
-          message: data.message,
+          message: data.message?.trim(),
         });
 
       if (error) throw error;
@@ -294,6 +319,21 @@ const ScheduleDemo = () => {
                   {errors.message && (
                     <p className="text-sm text-red-500 mt-1">{errors.message.message}</p>
                   )}
+                </div>
+
+                {/* Honeypot field - hidden from real users, bots fill it */}
+                <div 
+                  className="absolute -left-[9999px] -top-[9999px]" 
+                  aria-hidden="true"
+                  tabIndex={-1}
+                >
+                  <Label htmlFor="website">Website</Label>
+                  <Input
+                    id="website"
+                    {...register("website")}
+                    autoComplete="off"
+                    tabIndex={-1}
+                  />
                 </div>
 
                 <Button
