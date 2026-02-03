@@ -9,11 +9,27 @@ const Hero = () => {
   const [processedImage, setProcessedImage] = useState<string>(cuddlesImage);
 
   useEffect(() => {
-    processCuddlesImage().then(setProcessedImage);
+    // Defer heavy image processing to avoid blocking initial render and forced reflow
+    const scheduleProcessing = () => {
+      processCuddlesImage().then(setProcessedImage);
+    };
+    
+    // Use requestIdleCallback for non-critical processing, with fallback
+    if ('requestIdleCallback' in window) {
+      const idleId = requestIdleCallback(scheduleProcessing, { timeout: 2000 });
+      return () => cancelIdleCallback(idleId);
+    } else {
+      // Fallback: use setTimeout to defer processing
+      const timeoutId = setTimeout(scheduleProcessing, 100);
+      return () => clearTimeout(timeoutId);
+    }
   }, []);
 
   const scrollToDemo = () => {
-    document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
+    // Use requestAnimationFrame to batch with next paint cycle
+    requestAnimationFrame(() => {
+      document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
+    });
   };
 
   return (
