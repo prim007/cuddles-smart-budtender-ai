@@ -139,6 +139,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_chat_rate_limit: {
+        Args: { p_session_id: string }
+        Returns: boolean
+      }
+      check_demo_rate_limit: { Args: { p_email: string }; Returns: boolean }
+      check_email_rate_limit: { Args: { p_email: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
