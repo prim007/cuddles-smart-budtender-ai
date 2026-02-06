@@ -98,6 +98,9 @@ function validateInput(data: CoachInput): ValidationResult {
 }
 
 serve(async (req) => {
+  const origin = req.headers.get('origin');
+  const corsHeaders = getCorsHeaders(origin);
+  
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -212,6 +215,8 @@ Use emojis sparingly to add warmth. Never be preachy or judgmental.`;
     );
   } catch (error) {
     console.error("Error in tolerance-coach:", error);
+    const origin = req.headers.get('origin');
+    const corsHeaders = getCorsHeaders(origin);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error occurred" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
