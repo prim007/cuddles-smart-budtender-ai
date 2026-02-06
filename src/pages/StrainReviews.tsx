@@ -68,7 +68,7 @@ const StrainReviews = () => {
 
       if (error) throw error;
       
-      const reviewsData = (data || []) as Array<{
+      const reviewsData = ((data || []) as unknown) as Array<{
         id: string;
         strain_name: string;
         strain_type: string | null;
