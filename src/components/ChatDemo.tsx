@@ -157,6 +157,8 @@ const ChatDemo = () => {
       setMessages((prev) => [...prev, assistantMessage]);
 
       try {
+        // Minimize metadata collection - only store non-identifying operational data
+        // Removed: userAgent (fingerprinting risk), profileSummary (potential PII)
         await supabase.from('chat_conversations').insert({
           session_id: sessionId,
           user_message: userMessage.content,
@@ -164,9 +166,7 @@ const ChatDemo = () => {
           redirect_url: orderPhone ? `tel:${orderPhone}` : null,
           user_metadata: {
             timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
             language,
-            profileSummary: getProfileSummary(),
           }
         });
       } catch (dbError) {

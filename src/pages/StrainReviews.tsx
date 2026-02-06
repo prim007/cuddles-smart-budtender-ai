@@ -131,10 +131,12 @@ const StrainReviews = () => {
       const review = reviews.find(r => r.id === reviewId);
       if (!review) return;
 
-      await supabase
-        .from("strain_reviews")
-        .update({ helpful_count: review.helpful_count + 1 })
-        .eq("id", reviewId);
+      // Use secure RPC function to prevent direct table manipulation
+      const { error } = await supabase.rpc('increment_review_helpful', {
+        p_review_id: reviewId
+      });
+
+      if (error) throw error;
 
       setReviews(reviews.map(r =>
         r.id === reviewId ? { ...r, helpful_count: r.helpful_count + 1 } : r
