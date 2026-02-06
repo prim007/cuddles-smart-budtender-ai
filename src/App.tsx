@@ -24,6 +24,12 @@ const InternationalMarket = lazy(() => import("./pages/InternationalMarket"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Install = lazy(() => import("./pages/Install"));
 
+// New Cuddles features
+const StrainJournal = lazy(() => import("./pages/StrainJournal"));
+const StrainScanner = lazy(() => import("./pages/StrainScanner"));
+const StrainReviews = lazy(() => import("./pages/StrainReviews"));
+const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
+
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
