@@ -60,8 +60,9 @@ const StrainReviews = () => {
 
   const fetchReviews = async () => {
     try {
+      // Use the public view that doesn't expose user_id for privacy
       const { data, error } = await supabase
-        .from("strain_reviews")
+        .from("strain_reviews_public" as any)
         .select("*")
         .order("created_at", { ascending: false });
 
