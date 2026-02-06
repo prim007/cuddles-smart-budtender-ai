@@ -26,7 +26,7 @@ interface Review {
   cons: string[] | null;
   helpful_count: number;
   created_at: string;
-  user_id: string;
+  verified_purchase?: boolean;
 }
 
 const EFFECTS_OPTIONS = [
