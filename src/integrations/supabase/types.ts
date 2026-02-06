@@ -113,6 +113,42 @@ export type Database = {
         }
         Relationships: []
       }
+      review_votes: {
+        Row: {
+          created_at: string | null
+          id: string
+          review_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          review_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          review_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_votes_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "strain_reviews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_votes_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "strain_reviews_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       strain_journal: {
         Row: {
           consumption_method: string | null
@@ -370,10 +406,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      increment_review_helpful: {
-        Args: { p_review_id: string }
-        Returns: undefined
-      }
+      increment_review_helpful: { Args: { p_review_id: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
