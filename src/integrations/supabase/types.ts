@@ -113,6 +113,180 @@ export type Database = {
         }
         Relationships: []
       }
+      strain_journal: {
+        Row: {
+          consumption_method: string | null
+          created_at: string
+          dosage: string | null
+          effects: Json | null
+          id: string
+          mood_after: number | null
+          mood_before: number | null
+          notes: string | null
+          rating: number | null
+          session_date: string
+          strain_name: string
+          strain_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          consumption_method?: string | null
+          created_at?: string
+          dosage?: string | null
+          effects?: Json | null
+          id?: string
+          mood_after?: number | null
+          mood_before?: number | null
+          notes?: string | null
+          rating?: number | null
+          session_date?: string
+          strain_name: string
+          strain_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          consumption_method?: string | null
+          created_at?: string
+          dosage?: string | null
+          effects?: Json | null
+          id?: string
+          mood_after?: number | null
+          mood_before?: number | null
+          notes?: string | null
+          rating?: number | null
+          session_date?: string
+          strain_name?: string
+          strain_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      strain_reviews: {
+        Row: {
+          cons: string[] | null
+          created_at: string
+          effects: Json | null
+          helpful_count: number | null
+          id: string
+          pros: string[] | null
+          rating: number
+          review_text: string
+          strain_name: string
+          strain_type: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          verified_purchase: boolean | null
+        }
+        Insert: {
+          cons?: string[] | null
+          created_at?: string
+          effects?: Json | null
+          helpful_count?: number | null
+          id?: string
+          pros?: string[] | null
+          rating: number
+          review_text: string
+          strain_name: string
+          strain_type?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          verified_purchase?: boolean | null
+        }
+        Update: {
+          cons?: string[] | null
+          created_at?: string
+          effects?: Json | null
+          helpful_count?: number | null
+          id?: string
+          pros?: string[] | null
+          rating?: number
+          review_text?: string
+          strain_name?: string
+          strain_type?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          verified_purchase?: boolean | null
+        }
+        Relationships: []
+      }
+      strain_scans: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          id: string
+          identified_strain: string | null
+          image_url: string | null
+          strain_details: Json | null
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          identified_strain?: string | null
+          image_url?: string | null
+          strain_details?: Json | null
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          identified_strain?: string | null
+          image_url?: string | null
+          strain_details?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tolerance_breaks: {
+        Row: {
+          created_at: string
+          daily_logs: Json | null
+          end_date: string | null
+          id: string
+          motivation_notes: string[] | null
+          reason: string | null
+          start_date: string
+          status: string
+          target_days: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          daily_logs?: Json | null
+          end_date?: string | null
+          id?: string
+          motivation_notes?: string[] | null
+          reason?: string | null
+          start_date?: string
+          status?: string
+          target_days: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          daily_logs?: Json | null
+          end_date?: string | null
+          id?: string
+          motivation_notes?: string[] | null
+          reason?: string | null
+          start_date?: string
+          status?: string
+          target_days?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
