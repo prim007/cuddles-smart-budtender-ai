@@ -50,6 +50,20 @@ const AnalyticsDashboard = () => {
   const [topQuestions, setTopQuestions] = useState<TopQuestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { isAdmin, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect non-admin users
+  useEffect(() => {
+    if (!authLoading && !isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "Admin privileges are required to view this page.",
+        variant: "destructive",
+      });
+      navigate('/');
+    }
+  }, [isAdmin, authLoading, navigate, toast]);
 
   const fetchAnalytics = async () => {
     setIsLoading(true);

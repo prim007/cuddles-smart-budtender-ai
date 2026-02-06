@@ -42,6 +42,20 @@ const ChatConversations = () => {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'created_at'>('created_at');
   const { toast } = useToast();
+  const { isAdmin, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect non-admin users
+  useEffect(() => {
+    if (!authLoading && !isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "Admin privileges are required to view this page.",
+        variant: "destructive",
+      });
+      navigate('/');
+    }
+  }, [isAdmin, authLoading, navigate, toast]);
 
   const fetchConversations = async () => {
     try {
