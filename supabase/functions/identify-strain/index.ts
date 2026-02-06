@@ -1,9 +1,20 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+// Allowed origins for CORS
+const ALLOWED_ORIGINS = [
+  'https://cuddles-smart-budtender-ai.lovable.app',
+  'https://id-preview--16082a8c-a109-49a8-a05d-987a18f90c7d.lovable.app',
+  'http://localhost:8080',
+  'http://localhost:5173',
+];
+
+function getCorsHeaders(origin: string | null): Record<string, string> {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  };
+}
 
 // Maximum image size: 10MB in base64 (base64 is ~33% larger than binary)
 const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
