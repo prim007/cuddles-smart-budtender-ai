@@ -26,7 +26,7 @@ interface Review {
   cons: string[] | null;
   helpful_count: number;
   created_at: string;
-  user_id: string;
+  verified_purchase?: boolean;
 }
 
 const EFFECTS_OPTIONS = [
@@ -60,13 +60,33 @@ const StrainReviews = () => {
 
   const fetchReviews = async () => {
     try {
+      // Use the public view that doesn't expose user_id for privacy
       const { data, error } = await supabase
-        .from("strain_reviews")
+        .from("strain_reviews_public" as any)
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setReviews((data || []).map(r => ({ ...r, effects: Array.isArray(r.effects) ? (r.effects as string[]) : [] })));
+      
+      const reviewsData = ((data || []) as unknown) as Array<{
+        id: string;
+        strain_name: string;
+        strain_type: string | null;
+        rating: number;
+        title: string;
+        review_text: string;
+        effects: unknown[];
+        pros: string[] | null;
+        cons: string[] | null;
+        helpful_count: number;
+        verified_purchase: boolean | null;
+        created_at: string;
+      }>;
+      
+      setReviews(reviewsData.map(r => ({ 
+        ...r, 
+        effects: Array.isArray(r.effects) ? (r.effects as string[]) : [] 
+      })));
     } catch (error) {
       console.error("Error fetching reviews:", error);
     } finally {

@@ -310,7 +310,51 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      strain_reviews_public: {
+        Row: {
+          cons: string[] | null
+          created_at: string | null
+          effects: Json | null
+          helpful_count: number | null
+          id: string | null
+          pros: string[] | null
+          rating: number | null
+          review_text: string | null
+          strain_name: string | null
+          strain_type: string | null
+          title: string | null
+          verified_purchase: boolean | null
+        }
+        Insert: {
+          cons?: string[] | null
+          created_at?: string | null
+          effects?: Json | null
+          helpful_count?: number | null
+          id?: string | null
+          pros?: string[] | null
+          rating?: number | null
+          review_text?: string | null
+          strain_name?: string | null
+          strain_type?: string | null
+          title?: string | null
+          verified_purchase?: boolean | null
+        }
+        Update: {
+          cons?: string[] | null
+          created_at?: string | null
+          effects?: Json | null
+          helpful_count?: number | null
+          id?: string | null
+          pros?: string[] | null
+          rating?: number | null
+          review_text?: string | null
+          strain_name?: string | null
+          strain_type?: string | null
+          title?: string | null
+          verified_purchase?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_chat_rate_limit: {
