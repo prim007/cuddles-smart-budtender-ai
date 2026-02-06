@@ -5,17 +5,93 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Maximum image size: 10MB in base64 (base64 is ~33% larger than binary)
+const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
+const MAX_BASE64_LENGTH = Math.ceil(MAX_IMAGE_SIZE_BYTES * 1.37); // ~13.7MB base64 string
+
+// Allowed image formats
+const ALLOWED_FORMATS = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+
+interface ValidationResult {
+  valid: boolean;
+  error?: string;
+}
+
+function validateImageInput(imageBase64: unknown): ValidationResult {
+  // Check if imageBase64 exists and is a string
+  if (!imageBase64 || typeof imageBase64 !== 'string') {
+    return { valid: false, error: "Image is required and must be a string" };
+  }
+
+  // Check size limit
+  if (imageBase64.length > MAX_BASE64_LENGTH) {
+    return { valid: false, error: "Image size exceeds maximum allowed (10MB)" };
+  }
+
+  // Validate format if it's a data URI
+  if (imageBase64.startsWith('data:')) {
+    const formatMatch = imageBase64.match(/^data:(image\/[a-z]+);base64,/i);
+    if (!formatMatch) {
+      return { valid: false, error: "Invalid image data URI format" };
+    }
+    const mimeType = formatMatch[1].toLowerCase();
+    if (!ALLOWED_FORMATS.includes(mimeType)) {
+      return { valid: false, error: `Unsupported image format. Allowed: ${ALLOWED_FORMATS.join(', ')}` };
+    }
+    
+    // Validate the base64 portion
+    const base64Data = imageBase64.split(',')[1];
+    if (!base64Data || !/^[A-Za-z0-9+/=]+$/.test(base64Data)) {
+      return { valid: false, error: "Invalid base64 encoding" };
+    }
+  } else {
+    // If not a data URI, validate it's valid base64
+    if (!/^[A-Za-z0-9+/=]+$/.test(imageBase64)) {
+      return { valid: false, error: "Invalid base64 encoding" };
+    }
+  }
+
+  // Check minimum size (at least some data)
+  const dataLength = imageBase64.startsWith('data:') 
+    ? (imageBase64.split(',')[1]?.length || 0)
+    : imageBase64.length;
+  
+  if (dataLength < 100) {
+    return { valid: false, error: "Image data is too small to be valid" };
+  }
+
+  return { valid: true };
+}
+
+// Sanitize string to remove control characters
+function sanitizeString(str: string): string {
+  return str.replace(/[\x00-\x1F\x7F]/g, '');
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { imageBase64 } = await req.json();
-    
-    if (!imageBase64) {
+    let body;
+    try {
+      body = await req.json();
+    } catch {
       return new Response(
-        JSON.stringify({ error: "Image is required" }),
+        JSON.stringify({ error: "Invalid JSON in request body" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { imageBase64 } = body;
+    
+    // Validate input
+    const validation = validateImageInput(imageBase64);
+    if (!validation.valid) {
+      console.log("Input validation failed:", validation.error);
+      return new Response(
+        JSON.stringify({ error: validation.error }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -24,6 +100,8 @@ serve(async (req) => {
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
+
+    console.log("Processing strain identification request, image size:", imageBase64.length);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -109,7 +187,7 @@ IMPORTANT: This is for educational purposes only. Always remind users that visua
           confidence: 0,
           strain_type: "unknown",
           characteristics: [],
-          description: content,
+          description: sanitizeString(content),
           effects: [],
           similar_strains: []
         };
@@ -119,12 +197,14 @@ IMPORTANT: This is for educational purposes only. Always remind users that visua
         strain_name: "Unknown",
         confidence: 0,
         strain_type: "unknown",
-        description: content,
+        description: sanitizeString(content),
         characteristics: [],
         effects: [],
         similar_strains: []
       };
     }
+
+    console.log("Strain identification completed:", strainData.strain_name);
 
     return new Response(
       JSON.stringify({ 
