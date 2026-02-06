@@ -4,10 +4,11 @@ import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Mail, Phone, Calendar, Building2, RefreshCw } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { useAuth } from "@/hooks/useAuth";
 
 interface DemoRequest {
   id: string;
@@ -28,6 +29,20 @@ const DemoRequests = () => {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'created_at' | 'status'>('created_at');
   const { toast } = useToast();
+  const { isAdmin, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect non-admin users
+  useEffect(() => {
+    if (!authLoading && !isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "Admin privileges are required to view this page.",
+        variant: "destructive",
+      });
+      navigate('/');
+    }
+  }, [isAdmin, authLoading, navigate, toast]);
 
   const fetchRequests = async () => {
     try {
