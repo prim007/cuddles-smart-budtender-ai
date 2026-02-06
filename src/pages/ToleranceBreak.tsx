@@ -60,9 +60,9 @@ const ToleranceBreak = () => {
 
       if (error) throw error;
 
-      const processed = (data || []).map(b => ({
+      const processed: ToleranceBreak[] = (data || []).map(b => ({
         ...b,
-        daily_logs: Array.isArray(b.daily_logs) ? b.daily_logs : []
+        daily_logs: Array.isArray(b.daily_logs) ? (b.daily_logs as Array<{ day: number; mood: number; symptoms: string; date: string }>) : []
       }));
 
       setBreaks(processed);

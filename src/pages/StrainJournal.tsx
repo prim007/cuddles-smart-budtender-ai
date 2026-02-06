@@ -66,7 +66,7 @@ const StrainJournal = () => {
         .order("session_date", { ascending: false });
 
       if (error) throw error;
-      setEntries((data || []).map(e => ({ ...e, effects: Array.isArray(e.effects) ? e.effects : [] })));
+      setEntries((data || []).map(e => ({ ...e, effects: Array.isArray(e.effects) ? (e.effects as string[]) : [] })));
     } catch (error) {
       console.error("Error fetching journal:", error);
     } finally {

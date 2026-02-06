@@ -66,7 +66,7 @@ const StrainReviews = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setReviews((data || []).map(r => ({ ...r, effects: Array.isArray(r.effects) ? r.effects : [] })));
+      setReviews((data || []).map(r => ({ ...r, effects: Array.isArray(r.effects) ? (r.effects as string[]) : [] })));
     } catch (error) {
       console.error("Error fetching reviews:", error);
     } finally {
