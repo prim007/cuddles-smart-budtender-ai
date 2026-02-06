@@ -127,22 +127,33 @@ const StrainReviews = () => {
   };
 
   const markHelpful = async (reviewId: string) => {
-    try {
-      const review = reviews.find(r => r.id === reviewId);
-      if (!review) return;
+    if (!user) {
+      toast({ title: "Sign in required", description: "Please sign in to vote on reviews.", variant: "destructive" });
+      return;
+    }
 
-      // Use secure RPC function to prevent direct table manipulation
-      const { error } = await supabase.rpc('increment_review_helpful', {
+    try {
+      const { data, error } = await supabase.rpc('increment_review_helpful', {
         p_review_id: reviewId
       });
 
       if (error) throw error;
 
+      const result = data as { success: boolean; message?: string; helpful_count?: number };
+      
+      if (!result.success) {
+        toast({ title: "Already voted", description: result.message || "You've already marked this review as helpful." });
+        return;
+      }
+
       setReviews(reviews.map(r =>
-        r.id === reviewId ? { ...r, helpful_count: r.helpful_count + 1 } : r
+        r.id === reviewId ? { ...r, helpful_count: result.helpful_count || r.helpful_count + 1 } : r
       ));
+      
+      toast({ title: "Thanks!", description: "You marked this review as helpful." });
     } catch (error) {
       console.error("Error marking helpful:", error);
+      toast({ title: "Error", description: "Failed to record your vote. Please try again.", variant: "destructive" });
     }
   };
 
