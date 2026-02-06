@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
+import CuddlesFeatures from "@/components/CuddlesFeatures";
 import HowItWorks from "@/components/HowItWorks";
 import ChatDemo from "@/components/ChatDemo";
 import InvestorCTA from "@/components/InvestorCTA";
@@ -19,6 +20,7 @@ const Index = () => {
       <ThemeToggle />
       <OnboardingFlow />
       <Hero />
+      <CuddlesFeatures />
       <Features />
       <HowItWorks />
       <ChatDemo />
