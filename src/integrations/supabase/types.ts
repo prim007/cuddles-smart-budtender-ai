@@ -370,6 +370,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_review_helpful: {
+        Args: { p_review_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
