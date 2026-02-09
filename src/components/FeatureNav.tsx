@@ -11,7 +11,8 @@ import {
   Home,
   MessageCircle,
   LogIn,
-  Newspaper
+  Newspaper,
+  Store
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
