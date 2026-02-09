@@ -229,7 +229,7 @@ const StrainReviews = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <Label>Strain Name *</Label>
-                  <Input value={formData.strain_name} onChange={e => setFormData(p => ({ ...p, strain_name: e.target.value }))} required placeholder="e.g., OG Kush" />
+                  <Input value={formData.strain_name} onChange={e => setFormData(p => ({ ...p, strain_name: e.target.value }))} required placeholder="e.g., OG Kush" maxLength={100} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
