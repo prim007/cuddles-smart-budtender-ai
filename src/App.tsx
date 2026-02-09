@@ -35,6 +35,9 @@ const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
 
+// B2B
+const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
+
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
