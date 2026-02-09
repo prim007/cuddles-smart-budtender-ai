@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-// Replace with your Google Analytics tracking ID
-const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID || 'G-XXXXXXXXXX';
+const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID;
 
 declare global {
   interface Window {
@@ -19,29 +18,35 @@ export const GoogleAnalytics = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (GA_TRACKING_ID && GA_TRACKING_ID !== 'G-XXXXXXXXXX') {
+    // Load GA script dynamically on first mount
+    if (GA_TRACKING_ID && !document.getElementById('ga-script')) {
+      const script = document.createElement('script');
+      script.id = 'ga-script';
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
+      document.head.appendChild(script);
+
+      script.onload = () => {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function gtag() {
+          window.dataLayer?.push(arguments);
+        };
+        window.gtag('js', new Date() as any);
+        window.gtag('config', GA_TRACKING_ID);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (GA_TRACKING_ID && window.gtag) {
       // Track page view on route change
-      if (window.gtag) {
-        window.gtag('config', GA_TRACKING_ID, {
-          page_path: location.pathname + location.search,
-        });
-      }
+      window.gtag('config', GA_TRACKING_ID, {
+        page_path: location.pathname + location.search,
+      });
     }
   }, [location]);
 
   return null;
-};
-
-export const initGA = () => {
-  if (GA_TRACKING_ID && GA_TRACKING_ID !== 'G-XXXXXXXXXX') {
-    // Initialize dataLayer
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag() {
-      window.dataLayer?.push(arguments);
-    };
-    window.gtag('js', new Date() as any);
-    window.gtag('config', GA_TRACKING_ID);
-  }
 };
 
 // Custom event tracking helper
@@ -51,7 +56,7 @@ export const trackEvent = (
   label?: string,
   value?: number
 ) => {
-  if (window.gtag && GA_TRACKING_ID !== 'G-XXXXXXXXXX') {
+  if (window.gtag && GA_TRACKING_ID) {
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
