@@ -284,7 +284,10 @@ const ChatDemo = () => {
                   }`}
                 >
                   <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                    <ReactMarkdown
+                      disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
+                      unwrapDisallowed
+                    >{message.content}</ReactMarkdown>
                   </div>
                   {message.orderPhone && (
                     <Button
