@@ -468,6 +468,7 @@ export type Database = {
       }
     }
     Functions: {
+      check_article_rate_limit: { Args: { p_email: string }; Returns: boolean }
       check_chat_rate_limit: {
         Args: { p_session_id: string }
         Returns: boolean

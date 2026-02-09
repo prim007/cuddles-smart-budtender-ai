@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
+import { z } from "zod";
 
 interface Review {
   id: string;
@@ -94,6 +95,16 @@ const StrainReviews = () => {
     }
   };
 
+  const reviewSchema = z.object({
+    strain_name: z.string().trim().min(1, "Strain name is required").max(100, "Strain name must be 100 characters or less"),
+    strain_type: z.enum(["indica", "sativa", "hybrid"]),
+    rating: z.number().int().min(1).max(5),
+    title: z.string().trim().min(1, "Title is required").max(200, "Title must be 200 characters or less"),
+    review_text: z.string().trim().min(1, "Review is required").max(2000, "Review must be 2000 characters or less"),
+    pros: z.string().max(500).optional(),
+    cons: z.string().max(500).optional(),
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
@@ -101,17 +112,31 @@ const StrainReviews = () => {
       return;
     }
 
+    const result = reviewSchema.safeParse(formData);
+    if (!result.success) {
+      toast({ title: "Validation Error", description: result.error.errors[0].message, variant: "destructive" });
+      return;
+    }
+
+    if (selectedEffects.length > 12) {
+      toast({ title: "Too many effects", description: "Please select up to 12 effects.", variant: "destructive" });
+      return;
+    }
+
+    const parsedPros = result.data.pros ? result.data.pros.split(",").map(p => p.trim()).filter(Boolean).slice(0, 10) : null;
+    const parsedCons = result.data.cons ? result.data.cons.split(",").map(c => c.trim()).filter(Boolean).slice(0, 10) : null;
+
     try {
       const { error } = await supabase.from("strain_reviews").insert({
         user_id: user.id,
-        strain_name: formData.strain_name.trim(),
-        strain_type: formData.strain_type,
-        rating: formData.rating,
-        title: formData.title.trim(),
-        review_text: formData.review_text.trim(),
+        strain_name: result.data.strain_name,
+        strain_type: result.data.strain_type,
+        rating: result.data.rating,
+        title: result.data.title,
+        review_text: result.data.review_text,
         effects: selectedEffects,
-        pros: formData.pros ? formData.pros.split(",").map(p => p.trim()).filter(Boolean) : null,
-        cons: formData.cons ? formData.cons.split(",").map(c => c.trim()).filter(Boolean) : null,
+        pros: parsedPros,
+        cons: parsedCons,
       });
 
       if (error) throw error;
@@ -204,7 +229,7 @@ const StrainReviews = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <Label>Strain Name *</Label>
-                  <Input value={formData.strain_name} onChange={e => setFormData(p => ({ ...p, strain_name: e.target.value }))} required placeholder="e.g., OG Kush" />
+                  <Input value={formData.strain_name} onChange={e => setFormData(p => ({ ...p, strain_name: e.target.value }))} required placeholder="e.g., OG Kush" maxLength={100} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -231,11 +256,11 @@ const StrainReviews = () => {
                 </div>
                 <div>
                   <Label>Review Title *</Label>
-                  <Input value={formData.title} onChange={e => setFormData(p => ({ ...p, title: e.target.value }))} required placeholder="Sum up your experience" />
+                  <Input value={formData.title} onChange={e => setFormData(p => ({ ...p, title: e.target.value }))} required placeholder="Sum up your experience" maxLength={200} />
                 </div>
                 <div>
                   <Label>Your Review *</Label>
-                  <Textarea value={formData.review_text} onChange={e => setFormData(p => ({ ...p, review_text: e.target.value }))} required placeholder="Share your experience..." rows={4} />
+                  <Textarea value={formData.review_text} onChange={e => setFormData(p => ({ ...p, review_text: e.target.value }))} required placeholder="Share your experience..." rows={4} maxLength={2000} />
                 </div>
                 <div>
                   <Label>Effects Experienced</Label>
