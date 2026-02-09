@@ -108,13 +108,14 @@ const Hero = () => {
               Try Cuddles Now
               <ArrowRight className="w-4 h-4" />
             </Button>
-            <Link to="/schedule-demo">
+            <Link to="/dispensary-onboarding">
               <Button
                 size="lg"
                 variant="outline"
-                className="bg-white/10 backdrop-blur-md text-white border border-white/30 hover:bg-white/20 hover:border-white/50 font-display font-medium text-lg px-8 py-6 h-auto rounded-xl"
+                className="bg-white/10 backdrop-blur-md text-white border border-white/30 hover:bg-white/20 hover:border-white/50 font-display font-medium text-lg px-8 py-6 h-auto rounded-xl gap-2"
               >
-                Schedule a Demo
+                <Store className="w-5 h-5" />
+                For Dispensaries
               </Button>
             </Link>
           </div>
