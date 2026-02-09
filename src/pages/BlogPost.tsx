@@ -187,7 +187,10 @@ const BlogPost = () => {
       <section className="pb-20">
         <div className="container mx-auto px-4">
           <article className="max-w-3xl mx-auto prose prose-lg dark:prose-invert prose-headings:font-display prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown
+              disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
+              unwrapDisallowed
+            >{post.content}</ReactMarkdown>
 
             {/* Disclaimer */}
             <div className="mt-12 p-6 bg-muted rounded-xl border">
