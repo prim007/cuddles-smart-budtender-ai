@@ -280,7 +280,7 @@ const Auth = () => {
                 </form>
 
                 <p className="text-xs text-muted-foreground text-center mt-4">
-                  Note: New accounts require admin role assignment to access the dashboard.
+                  By signing up, you'll get access to your strain journal, reviews, and personalized recommendations.
                 </p>
               </TabsContent>
             </Tabs>
