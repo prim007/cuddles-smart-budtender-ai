@@ -13,9 +13,10 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <SEO 
-        title="Cuddles - AI-Powered Cannabis Recommendations"
-        description="Transform cannabis retail with AI that recommends perfect strains based on desired effects, experience level, and preferences. 95% match accuracy, <2s response time."
+        title="Cuddles AI - The World's Smartest Cannabis Budtender | AI Strain Recommendations"
+        description="Cuddles AI is the smartest AI-powered cannabis budtender. Get personalized strain recommendations, track your cannabis journal, scan strains with AI, read community reviews, and manage tolerance breaks. Free to use worldwide."
         url="/"
+        keywords="Cuddles AI, cannabis AI, smart budtender, AI budtender, strain recommendations, cannabis recommendations, weed AI, marijuana AI, cannabis technology, dispensary AI, strain finder, cannabis app, best cannabis AI, cannabis community"
       />
       <ThemeToggle />
       <OnboardingFlow />

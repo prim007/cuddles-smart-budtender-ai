@@ -9,45 +9,56 @@ interface SEOProps {
   author?: string;
   publishedTime?: string;
   structuredData?: object;
+  keywords?: string;
 }
 
+const BASE_URL = "https://cuddles-smart-budtender-ai.lovable.app";
+const DEFAULT_IMAGE = "https://storage.googleapis.com/gpt-engineer-file-uploads/fn4xikHtpsZcJMhE3wUXdvgxIkl2/social-images/social-1770387793477-Screenshot_2026-02-06_at_4.09.58_PM.png";
+
 const SEO = ({
-  title = "Cuddles - AI-Powered Cannabis Recommendations",
-  description = "Transform cannabis retail with AI that recommends perfect strains based on desired effects, experience level, and preferences. 95% match accuracy, <2s response time.",
-  image = "/og-image.jpg",
-  url = "https://cuddles-smart-budtender-ai.lovable.app",
+  title = "Cuddles AI - Smart Cannabis Budtender | AI-Powered Strain Recommendations",
+  description = "Cuddles AI is the world's smartest cannabis budtender. Get personalized strain recommendations powered by AI. Track your cannabis journal, scan strains, read community reviews, and more. Available worldwide.",
+  image = DEFAULT_IMAGE,
+  url = "/",
   type = "website",
-  author = "Cuddles",
+  author = "Cuddles AI",
   publishedTime,
   structuredData,
+  keywords = "Cuddles AI, cannabis AI, smart budtender, AI budtender, strain recommendations, cannabis technology, dispensary AI",
 }: SEOProps) => {
-  const fullTitle = title.includes('Cuddles') ? title : `${title} | Cuddles`;
-  const fullUrl = url.startsWith('http') ? url : `https://cuddles-smart-budtender-ai.lovable.app${url}`;
-  const fullImage = image.startsWith('http') ? image : `https://cuddles-smart-budtender-ai.lovable.app${image}`;
+  const fullTitle = title.includes('Cuddles') ? title : `${title} | Cuddles AI`;
+  const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
+  const fullImage = image.startsWith('http') ? image : `${BASE_URL}${image}`;
 
   const defaultStructuredData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Cuddles",
-    "applicationCategory": "BusinessApplication",
+    "name": "Cuddles AI",
+    "alternateName": ["Cuddles", "Cuddles Smart Budtender"],
+    "applicationCategory": "LifestyleApplication",
     "description": description,
     "operatingSystem": "Web",
+    "url": fullUrl,
     "offers": {
       "@type": "Offer",
-      "price": "5300",
-      "priceCurrency": "ZAR",
-      "priceSpecification": {
-        "@type": "UnitPriceSpecification",
-        "billingDuration": "P1M",
-        "unitText": "MONTHLY"
-      }
+      "price": "0",
+      "priceCurrency": "USD",
+      "description": "Free to use with premium features available"
     },
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
       "ratingCount": "150",
       "bestRating": "5"
-    }
+    },
+    "featureList": [
+      "AI-Powered Strain Recommendations",
+      "Cannabis Strain Journal",
+      "Strain Scanner with Image Recognition",
+      "Community Strain Reviews",
+      "Tolerance Break Coach",
+      "Personalized Dosage Calculator"
+    ]
   };
 
   return (
@@ -57,6 +68,7 @@ const SEO = ({
       <meta name="title" content={fullTitle} />
       <meta name="description" content={description} />
       <meta name="author" content={author} />
+      <meta name="keywords" content={keywords} />
       <link rel="canonical" href={fullUrl} />
 
       {/* Open Graph / Facebook */}
@@ -65,7 +77,8 @@ const SEO = ({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullImage} />
-      <meta property="og:site_name" content="Cuddles" />
+      <meta property="og:site_name" content="Cuddles AI" />
+      <meta property="og:locale" content="en_US" />
       {publishedTime && <meta property="article:published_time" content={publishedTime} />}
 
       {/* Twitter */}
