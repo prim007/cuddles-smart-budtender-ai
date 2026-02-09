@@ -8,6 +8,7 @@ import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
 import { format } from "date-fns";
+import SubmitArticleDialog from "@/components/SubmitArticleDialog";
 
 interface BlogPost {
   id: string;
@@ -65,12 +66,13 @@ const Blog = () => {
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 text-foreground">
               Cuddles Blog
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
               Educational content about cannabis strains, terpenes, and responsible consumption.
               <span className="block mt-2 text-sm italic">
                 For educational purposes only. Not medical advice.
               </span>
             </p>
+            <SubmitArticleDialog />
           </div>
         </div>
       </section>

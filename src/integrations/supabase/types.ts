@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      article_submissions: {
+        Row: {
+          author_email: string
+          author_name: string
+          created_at: string
+          id: string
+          status: string
+          summary: string
+          title: string
+        }
+        Insert: {
+          author_email: string
+          author_name: string
+          created_at?: string
+          id?: string
+          status?: string
+          summary: string
+          title: string
+        }
+        Update: {
+          author_email?: string
+          author_name?: string
+          created_at?: string
+          id?: string
+          status?: string
+          summary?: string
+          title?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
