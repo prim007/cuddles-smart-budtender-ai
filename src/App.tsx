@@ -35,6 +35,9 @@ const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
 
+// B2B
+const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
+
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -98,6 +101,9 @@ const App = () => (
                 {/* Blog */}
                 <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />
                 <Route path="/blog/:slug" element={<Suspense fallback={<PageLoader />}><BlogPost /></Suspense>} />
+                
+                {/* B2B */}
+                <Route path="/dispensary-onboarding" element={<Suspense fallback={<PageLoader />}><DispensaryOnboarding /></Suspense>} />
                 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

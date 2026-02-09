@@ -356,6 +356,63 @@ export type Database = {
         }
         Relationships: []
       }
+      tenants: {
+        Row: {
+          branding_color: string | null
+          branding_logo_url: string | null
+          business_email: string
+          business_name: string
+          created_at: string
+          embed_key: string
+          id: string
+          phone: string | null
+          plan: string
+          plan_price: number
+          pos_system: string | null
+          status: string
+          store_count: number | null
+          updated_at: string
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          branding_color?: string | null
+          branding_logo_url?: string | null
+          business_email: string
+          business_name: string
+          created_at?: string
+          embed_key?: string
+          id?: string
+          phone?: string | null
+          plan?: string
+          plan_price?: number
+          pos_system?: string | null
+          status?: string
+          store_count?: number | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+        }
+        Update: {
+          branding_color?: string | null
+          branding_logo_url?: string | null
+          business_email?: string
+          business_name?: string
+          created_at?: string
+          embed_key?: string
+          id?: string
+          phone?: string | null
+          plan?: string
+          plan_price?: number
+          pos_system?: string | null
+          status?: string
+          store_count?: number | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       tolerance_breaks: {
         Row: {
           created_at: string
