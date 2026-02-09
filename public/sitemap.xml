@@ -7,34 +7,46 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://cuddles-smart-budtender-ai.lovable.app/investment-deck</loc>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/blog</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/blog/indica-vs-sativa-vs-hybrid</loc>
     <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/blog/beginners-guide-to-terpenes</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/blog/responsible-consumption-tips</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/investment-deck</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://cuddles-smart-budtender-ai.lovable.app/schedule-demo</loc>
     <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/reviews</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cuddles-smart-budtender-ai.lovable.app/analytics</loc>
-    <lastmod>2026-02-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://cuddles-smart-budtender-ai.lovable.app/international-market</loc>
-    <lastmod>2026-02-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://cuddles-smart-budtender-ai.lovable.app/privacy-policy</loc>
-    <lastmod>2026-02-09</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://cuddles-smart-budtender-ai.lovable.app/journal</loc>
@@ -49,15 +61,15 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cuddles-smart-budtender-ai.lovable.app/reviews</loc>
-    <lastmod>2026-02-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://cuddles-smart-budtender-ai.lovable.app/t-break</loc>
     <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/privacy-policy</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
