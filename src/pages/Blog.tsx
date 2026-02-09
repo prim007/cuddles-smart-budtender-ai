@@ -8,6 +8,7 @@ import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
 import { format } from "date-fns";
+import SubmitArticleDialog from "@/components/SubmitArticleDialog";
 
 interface BlogPost {
   id: string;
