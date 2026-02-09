@@ -256,7 +256,7 @@ const StrainReviews = () => {
                 </div>
                 <div>
                   <Label>Review Title *</Label>
-                  <Input value={formData.title} onChange={e => setFormData(p => ({ ...p, title: e.target.value }))} required placeholder="Sum up your experience" />
+                  <Input value={formData.title} onChange={e => setFormData(p => ({ ...p, title: e.target.value }))} required placeholder="Sum up your experience" maxLength={200} />
                 </div>
                 <div>
                   <Label>Your Review *</Label>
