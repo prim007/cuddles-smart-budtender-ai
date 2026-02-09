@@ -60,6 +60,12 @@ const features = [
     href: "/blog",
     gradient: "from-hippie-teal to-hippie-green",
   },
+  {
+    icon: Store,
+    title: "Dispensaries",
+    href: "/dispensary-onboarding",
+    gradient: "from-hippie-amber to-hippie-coral",
+  },
 ];
 
 const FeatureNav = () => {

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Bot, Sparkles, ArrowRight, ExternalLink } from "lucide-react";
+import { Bot, Sparkles, ArrowRight, ExternalLink, Store } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { useState, useEffect } from "react";
