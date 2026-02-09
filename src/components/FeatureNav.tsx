@@ -10,7 +10,8 @@ import {
   X, 
   Home,
   MessageCircle,
-  LogIn
+  LogIn,
+  Newspaper
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -51,6 +52,12 @@ const features = [
     title: "T-Break",
     href: "/t-break",
     gradient: "from-hippie-green to-hippie-teal",
+  },
+  {
+    icon: Newspaper,
+    title: "Blog",
+    href: "/blog",
+    gradient: "from-hippie-teal to-hippie-green",
   },
 ];
 
