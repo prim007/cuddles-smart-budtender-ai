@@ -29,6 +29,10 @@ const Install = lazy(() => import("./pages/Install"));
 const StrainJournal = lazy(() => import("./pages/StrainJournal"));
 const StrainScanner = lazy(() => import("./pages/StrainScanner"));
 const StrainReviews = lazy(() => import("./pages/StrainReviews"));
+
+// Blog
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
 
 // Loading fallback component
@@ -90,6 +94,10 @@ const App = () => (
                 <Route path="/scanner" element={<Suspense fallback={<PageLoader />}><StrainScanner /></Suspense>} />
                 <Route path="/reviews" element={<Suspense fallback={<PageLoader />}><StrainReviews /></Suspense>} />
                 <Route path="/t-break" element={<Suspense fallback={<PageLoader />}><ToleranceBreak /></Suspense>} />
+                
+                {/* Blog */}
+                <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />
+                <Route path="/blog/:slug" element={<Suspense fallback={<PageLoader />}><BlogPost /></Suspense>} />
                 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
