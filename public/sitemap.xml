@@ -1,39 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://yourdomain.com/</loc>
-    <lastmod>2025-11-26</lastmod>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/</loc>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/investment-deck</loc>
-    <lastmod>2025-11-26</lastmod>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/investment-deck</loc>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/schedule-demo</loc>
-    <lastmod>2025-11-26</lastmod>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/schedule-demo</loc>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/analytics</loc>
-    <lastmod>2025-11-26</lastmod>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/analytics</loc>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/international-market</loc>
-    <lastmod>2025-11-26</lastmod>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/international-market</loc>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/privacy-policy</loc>
-    <lastmod>2025-11-27</lastmod>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/privacy-policy</loc>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/journal</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/scanner</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/reviews</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cuddles-smart-budtender-ai.lovable.app/t-break</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>

@@ -15,15 +15,15 @@ const SEO = ({
   title = "Cuddles - AI-Powered Cannabis Recommendations",
   description = "Transform cannabis retail with AI that recommends perfect strains based on desired effects, experience level, and preferences. 95% match accuracy, <2s response time.",
   image = "/og-image.jpg",
-  url = "https://yourdomain.com",
+  url = "https://cuddles-smart-budtender-ai.lovable.app",
   type = "website",
   author = "Cuddles",
   publishedTime,
   structuredData,
 }: SEOProps) => {
   const fullTitle = title.includes('Cuddles') ? title : `${title} | Cuddles`;
-  const fullUrl = url.startsWith('http') ? url : `https://yourdomain.com${url}`;
-  const fullImage = image.startsWith('http') ? image : `https://yourdomain.com${image}`;
+  const fullUrl = url.startsWith('http') ? url : `https://cuddles-smart-budtender-ai.lovable.app${url}`;
+  const fullImage = image.startsWith('http') ? image : `https://cuddles-smart-budtender-ai.lovable.app${image}`;
 
   const defaultStructuredData = {
     "@context": "https://schema.org",
