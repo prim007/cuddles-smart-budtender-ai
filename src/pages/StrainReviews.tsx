@@ -260,7 +260,7 @@ const StrainReviews = () => {
                 </div>
                 <div>
                   <Label>Your Review *</Label>
-                  <Textarea value={formData.review_text} onChange={e => setFormData(p => ({ ...p, review_text: e.target.value }))} required placeholder="Share your experience..." rows={4} />
+                  <Textarea value={formData.review_text} onChange={e => setFormData(p => ({ ...p, review_text: e.target.value }))} required placeholder="Share your experience..." rows={4} maxLength={2000} />
                 </div>
                 <div>
                   <Label>Effects Experienced</Label>
