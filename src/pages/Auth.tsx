@@ -138,10 +138,10 @@ const Auth = () => {
         <Card className="shadow-elevated">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-hippie-purple to-hippie-pink bg-clip-text text-transparent">
-              Cuddles Admin
+              Welcome to Cuddles 🌿
             </CardTitle>
             <CardDescription>
-              Sign in to access the admin dashboard
+              Your personal AI budtender — sign in or create an account to get started
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -280,7 +280,7 @@ const Auth = () => {
                 </form>
 
                 <p className="text-xs text-muted-foreground text-center mt-4">
-                  Note: New accounts require admin role assignment to access the dashboard.
+                  By signing up, you'll get access to your strain journal, reviews, and personalized recommendations.
                 </p>
               </TabsContent>
             </Tabs>
