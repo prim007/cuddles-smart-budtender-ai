@@ -1,0 +1,81 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
+const faqs = [
+  {
+    question: "What is Cuddles AI?",
+    answer: "Cuddles AI is the world's smartest AI-powered cannabis budtender. It uses advanced machine learning to recommend personalized cannabis strains based on your desired effects, experience level, and preferences."
+  },
+  {
+    question: "How does the AI strain recommendation work?",
+    answer: "Cuddles analyzes your preferences including desired effects (relaxation, energy, creativity), experience level, and flavor preferences to suggest the best cannabis strains for you. It learns from community reviews and scientific data."
+  },
+  {
+    question: "Is Cuddles AI free to use?",
+    answer: "Yes! Cuddles AI is free to use. You can chat with our AI budtender, browse community reviews, and read our blog without any cost. Create a free account to save your strain journal and track tolerance breaks."
+  },
+  {
+    question: "What is the Strain Scanner?",
+    answer: "The Strain Scanner uses AI image recognition to identify cannabis strains from photos. Simply upload or take a photo of your cannabis, and Cuddles will identify the strain and provide detailed information about its effects and characteristics."
+  },
+  {
+    question: "What is a Tolerance Break Coach?",
+    answer: "The T-Break Coach is an AI-guided program that helps you manage cannabis tolerance breaks. It provides personalized motivation, daily check-ins, and progress tracking to help you reset your tolerance effectively."
+  },
+  {
+    question: "Can dispensaries use Cuddles AI?",
+    answer: "Absolutely! Cuddles AI offers a white-label solution for dispensaries to embed our smart budtender directly into their website. This helps increase customer satisfaction and sales with AI-powered recommendations."
+  }
+];
+
+const faqStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+};
+
+const FAQSection = () => {
+  return (
+    <section className="py-24 bg-muted/30">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto text-center mb-12">
+          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">FAQ</p>
+          <h2 className="font-display font-bold text-foreground mb-4">
+            Frequently Asked <span className="gradient-text">Questions</span>
+          </h2>
+          <p className="text-muted-foreground">
+            Everything you need to know about Cuddles AI
+          </p>
+        </div>
+
+        <div className="max-w-2xl mx-auto">
+          <Accordion type="single" collapsible className="space-y-3">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={index} value={`faq-${index}`} className="bg-card border border-border rounded-xl px-6">
+                <AccordionTrigger className="text-left font-display font-medium text-foreground hover:no-underline">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+        />
+      </div>
+    </section>
+  );
+};
+
+export default FAQSection;

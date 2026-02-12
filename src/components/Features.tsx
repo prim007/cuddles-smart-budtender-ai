@@ -35,7 +35,7 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="py-24 bg-background">
+    <section id="features" className="py-24 bg-background" aria-label="Cuddles AI Features">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">Features</p>

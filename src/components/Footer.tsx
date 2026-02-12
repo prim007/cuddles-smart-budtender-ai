@@ -84,9 +84,14 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="pt-6 border-t border-border text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Cuddles. All rights reserved.
+        {/* SEO-rich text */}
+        <div className="pt-6 border-t border-border">
+          <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-4">
+            Cuddles AI is an AI-powered cannabis budtender offering personalized strain recommendations, a strain journal, strain scanner, community reviews, and a tolerance break coach. Available worldwide.
+          </p>
+          <div className="text-center text-sm text-muted-foreground">
+            © {new Date().getFullYear()} Cuddles AI. All rights reserved.
+          </div>
         </div>
       </div>
     </footer>

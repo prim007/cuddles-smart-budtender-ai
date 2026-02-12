@@ -4,6 +4,7 @@ import CuddlesFeatures from "@/components/CuddlesFeatures";
 import HowItWorks from "@/components/HowItWorks";
 import ChatDemo from "@/components/ChatDemo";
 import InvestorCTA from "@/components/InvestorCTA";
+import FAQSection from "@/components/FAQSection";
 import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -25,6 +26,7 @@ const Index = () => {
       <Features />
       <HowItWorks />
       <ChatDemo />
+      <FAQSection />
       <InvestorCTA />
       <Footer />
     </div>
