@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Bot, ArrowRight, ExternalLink, Store } from "lucide-react";
+import { Bot, ArrowRight, ExternalLink, Store, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 
@@ -50,23 +50,35 @@ const Hero = () => {
             Your intelligent budtender that recommends the perfect strains based on your desired effects, experience level, and preferences
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+            <Link to="/auth">
+              <Button
+                size="lg"
+                className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full"
+              >
+                <UserPlus className="w-5 h-5" />
+                Sign Up Free
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
             <Button
               size="lg"
               onClick={scrollToDemo}
-              className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2"
+              variant="outline"
+              className="bg-white/10 text-white border border-white/20 hover:bg-white/20 font-display font-medium text-lg px-8 py-6 h-auto rounded-xl gap-2"
             >
               <Bot className="w-5 h-5" />
               Try Cuddles Now
-              <ArrowRight className="w-4 h-4" />
             </Button>
+          </div>
+          <div className="flex justify-center mb-16">
             <Link to="/dispensary-onboarding">
               <Button
-                size="lg"
-                variant="outline"
-                className="bg-white/10 text-white border border-white/20 hover:bg-white/20 font-display font-medium text-lg px-8 py-6 h-auto rounded-xl gap-2"
+                size="sm"
+                variant="ghost"
+                className="text-white/60 hover:text-white hover:bg-white/10 font-medium gap-2"
               >
-                <Store className="w-5 h-5" />
+                <Store className="w-4 h-4" />
                 For Dispensaries
               </Button>
             </Link>
