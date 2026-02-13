@@ -9,7 +9,7 @@ const InternationalMarket = () => {
     <div className="min-h-screen pb-20">
       <SEO 
         title="Global Cannabis Market Analysis - Cuddles"
-        description="The global cannabis market exceeds R910B and is growing rapidly. Explore international market opportunities for Cuddles AI-powered cannabis recommendations."
+        description="The global cannabis market is valued at $39.1B USD (2024) and growing at 14.5% CAGR. Explore international market opportunities for Cuddles AI-powered cannabis recommendations."
         url="/international-market"
         type="article"
       />
@@ -58,19 +58,19 @@ const InternationalMarket = () => {
             
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-purple/10 to-hippie-pink/10">
-                <div className="text-4xl font-bold text-hippie-purple mb-2">R590B+</div>
-                <div className="text-foreground/80">Market Size (2024)</div>
-                <div className="text-sm text-muted-foreground mt-2">($33 billion USD)</div>
+               <div className="text-4xl font-bold text-hippie-purple mb-2">$33.6B</div>
+                <div className="text-foreground/80">US Market Size (2024)</div>
+                <div className="text-sm text-muted-foreground mt-2">(~R622B ZAR)</div>
               </div>
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-orange/10 to-hippie-yellow/10">
-                <div className="text-4xl font-bold text-hippie-orange mb-2">25%</div>
+                <div className="text-4xl font-bold text-hippie-orange mb-2">14.5%</div>
                 <div className="text-foreground/80">Projected CAGR</div>
-                <div className="text-sm text-muted-foreground mt-2">(2024-2030)</div>
+                <div className="text-sm text-muted-foreground mt-2">(2024-2033)</div>
               </div>
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-green/10 to-hippie-blue/10">
-                <div className="text-4xl font-bold text-hippie-green mb-2">R1.07T</div>
-                <div className="text-foreground/80">Projected by 2030</div>
-                <div className="text-sm text-muted-foreground mt-2">($60 billion USD)</div>
+                <div className="text-4xl font-bold text-hippie-green mb-2">$151.7B</div>
+                <div className="text-foreground/80">Projected by 2033</div>
+                <div className="text-sm text-muted-foreground mt-2">(~R2.8T ZAR)</div>
               </div>
             </div>
             
@@ -96,14 +96,14 @@ const InternationalMarket = () => {
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-blue/10 to-hippie-purple/10">
-                <div className="text-4xl font-bold text-hippie-blue mb-2">R910B+</div>
+               <div className="text-4xl font-bold text-hippie-blue mb-2">$39.1B</div>
                 <div className="text-foreground/80">Global Market Size (2024)</div>
-                <div className="text-sm text-muted-foreground mt-2">($51 billion USD)</div>
+                <div className="text-sm text-muted-foreground mt-2">(~R723B ZAR)</div>
               </div>
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-green/10 to-hippie-blue/10">
-                <div className="text-4xl font-bold text-hippie-green mb-2">R2.1T+</div>
-                <div className="text-foreground/80">Projected by 2030</div>
-                <div className="text-sm text-muted-foreground mt-2">($120 billion USD)</div>
+                <div className="text-4xl font-bold text-hippie-green mb-2">$151.7B</div>
+                <div className="text-foreground/80">Projected by 2033</div>
+                <div className="text-sm text-muted-foreground mt-2">(~R2.8T ZAR)</div>
               </div>
             </div>
 
@@ -279,7 +279,7 @@ const InternationalMarket = () => {
               Cuddles' Market Opportunity
             </h2>
             <p className="text-xl text-center text-foreground/80 mb-6">
-              With the global cannabis market exceeding R910 billion and growing rapidly, Cuddles is positioned 
+              With the global cannabis market valued at $39.1 billion (2024) and projected to reach $151.7 billion by 2033, Cuddles is positioned 
               to become the leading AI recommendation platform across multiple international markets.
             </p>
             

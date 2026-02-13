@@ -22,8 +22,8 @@ const InvestorCTA = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-3xl mx-auto">
               {[
-                { label: 'Market Size', value: 'R590B+', emoji: '📈' },
-                { label: 'Projected Growth', value: '25% CAGR', emoji: '🚀' },
+                { label: 'Global Market (2024)', value: '$39.1B', emoji: '📈' },
+                { label: 'Projected Growth', value: '14.5% CAGR', emoji: '🚀' },
                 { label: 'Target Retailers', value: '5,000+', emoji: '🏪' },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-xl p-5 bg-muted/50 border border-border">
