@@ -1,28 +1,8 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, BarChart3, Brain, TrendingUp, Users, ShoppingCart, Zap, CheckCircle2, Send } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import SEO from "@/components/SEO";
-
-const demoFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(100),
-  email: z.string().email("Invalid email address").max(255),
-  company: z.string().min(2, "Company name must be at least 2 characters").max(100),
-  phone: z.string().min(10, "Phone number must be at least 10 digits").max(20).optional().or(z.literal("")),
-  message: z.string().max(1000).optional(),
-  website: z.string().max(0, "").optional(), // honeypot
-});
-
-type DemoFormData = z.infer<typeof demoFormSchema>;
 
 const benefits = [
   {
@@ -58,72 +38,13 @@ const benefits = [
 ];
 
 const stats = [
-  { value: "35%", label: "Higher average order value with AI recommendations", source: "Headset Industry Report" },
-  { value: "40%", label: "Better customer retention with personalized experiences", source: "McKinsey Retail Study" },
-  { value: "30%", label: "Reduction in dead inventory with demand forecasting", source: "Cannabis Business Times" },
-  { value: "<2s", label: "Real-time recommendation speed per customer query", source: "Cuddles Platform" },
+  { value: "35%", label: "Higher average order value with AI recommendations" },
+  { value: "40%", label: "Better customer retention with personalized experiences" },
+  { value: "30%", label: "Reduction in dead inventory with demand forecasting" },
+  { value: "<2s", label: "Real-time recommendation speed per customer query" },
 ];
 
 const WhyCuddles = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [formLoadTime] = useState<number>(Date.now());
-  const { toast } = useToast();
-
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<DemoFormData>({
-    resolver: zodResolver(demoFormSchema),
-  });
-
-  const onSubmit = async (data: DemoFormData) => {
-    // Honeypot check
-    if (data.website && data.website.length > 0) {
-      setSubmitted(true);
-      return;
-    }
-
-    // Timing check
-    if (Date.now() - formLoadTime < 3000) {
-      toast({
-        title: "Please slow down",
-        description: "Please take your time filling out the form.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const { error } = await supabase.functions.invoke("send-demo-email", {
-        body: {
-          name: data.name.trim(),
-          email: data.email.trim().toLowerCase(),
-          company: data.company.trim(),
-          phone: data.phone?.trim() || "Not provided",
-          message: data.message?.trim() || "No additional message",
-        },
-      });
-
-      if (error) throw error;
-
-      setSubmitted(true);
-      reset();
-      toast({
-        title: "Demo Request Sent! ✨",
-        description: "We'll be in touch within 24 hours.",
-      });
-    } catch (error) {
-      console.error("Error sending demo request:", error);
-      toast({
-        title: "Submission Failed",
-        description: "There was an error. Please try again or email us directly.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="min-h-screen pb-20">
       <SEO
@@ -157,15 +78,10 @@ const WhyCuddles = () => {
             Cannabis businesses lose millions in revenue from poor inventory decisions, generic customer experiences, and lack of data insights. Cuddles AI changes that.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#demo-form">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2">
+            <Link to="/schedule-demo">
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full">
                 <Send className="w-5 h-5" />
                 Schedule a Demo
-              </Button>
-            </a>
-            <Link to="/schedule-demo">
-              <Button size="lg" variant="outline" className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-display font-medium text-lg px-8 py-6 h-auto rounded-xl">
-                Full Demo Details
               </Button>
             </Link>
           </div>
@@ -245,73 +161,21 @@ const WhyCuddles = () => {
         </div>
       </section>
 
-      {/* Demo Form */}
-      <section id="demo-form" className="py-16 px-4">
-        <div className="container mx-auto max-w-2xl">
-          <div className="text-center mb-10">
-            <h2 className="font-display font-bold text-foreground mb-4 text-3xl md:text-4xl">
+      {/* CTA Section */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-2xl text-center">
+          <h2 className="font-display font-bold text-foreground mb-4 text-3xl md:text-4xl">
+            Ready to Transform Your Business?
+          </h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            Schedule a personalized demo and see how Cuddles AI can boost your sales, optimize inventory, and delight your customers.
+          </p>
+          <Link to="/schedule-demo">
+            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-display font-semibold text-lg px-10 py-6 h-auto rounded-xl gap-2">
+              <Send className="w-5 h-5" />
               Schedule a Demo
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              See how Cuddles AI can transform your business. We'll get back to you within 24 hours.
-            </p>
-          </div>
-
-          {submitted ? (
-            <Card className="p-10 text-center bg-card border-primary/30">
-              <CheckCircle2 className="w-16 h-16 text-primary mx-auto mb-4" />
-              <h3 className="text-2xl font-display font-bold text-foreground mb-2">Request Received!</h3>
-              <p className="text-muted-foreground mb-6">
-                We've sent your demo request to our team. Expect to hear from us within 24 hours.
-              </p>
-              <Link to="/">
-                <Button variant="outline">Back to Home</Button>
-              </Link>
-            </Card>
-          ) : (
-            <Card className="p-8 bg-card border-border">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                <div>
-                  <Label htmlFor="demo-name">Full Name *</Label>
-                  <Input id="demo-name" {...register("name")} placeholder="Your full name" className="mt-2" />
-                  {errors.name && <p className="text-sm text-destructive mt-1">{errors.name.message}</p>}
-                </div>
-
-                <div>
-                  <Label htmlFor="demo-email">Email *</Label>
-                  <Input id="demo-email" type="email" {...register("email")} placeholder="you@company.com" className="mt-2" />
-                  {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
-                </div>
-
-                <div>
-                  <Label htmlFor="demo-company">Company / Business Name *</Label>
-                  <Input id="demo-company" {...register("company")} placeholder="Your dispensary or brand" className="mt-2" />
-                  {errors.company && <p className="text-sm text-destructive mt-1">{errors.company.message}</p>}
-                </div>
-
-                <div>
-                  <Label htmlFor="demo-phone">Phone (Optional)</Label>
-                  <Input id="demo-phone" type="tel" {...register("phone")} placeholder="+27 xxx xxx xxxx" className="mt-2" />
-                </div>
-
-                <div>
-                  <Label htmlFor="demo-message">Tell us about your business (Optional)</Label>
-                  <Textarea id="demo-message" {...register("message")} placeholder="What challenges are you facing? How many locations do you have?" className="mt-2 min-h-[100px]" />
-                </div>
-
-                {/* Honeypot */}
-                <div className="absolute -left-[9999px] -top-[9999px]" aria-hidden="true" tabIndex={-1}>
-                  <Label htmlFor="hp-website">Website</Label>
-                  <Input id="hp-website" {...register("website")} autoComplete="off" tabIndex={-1} />
-                </div>
-
-                <Button type="submit" disabled={isSubmitting} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-display font-semibold text-lg py-6 h-auto rounded-xl gap-2">
-                  <Send className="w-5 h-5" />
-                  {isSubmitting ? "Sending..." : "Request a Demo"}
-                </Button>
-              </form>
-            </Card>
-          )}
+            </Button>
+          </Link>
         </div>
       </section>
     </div>
