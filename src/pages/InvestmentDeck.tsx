@@ -9,7 +9,7 @@ const InvestmentDeck = () => {
     "@context": "https://schema.org",
     "@type": "PresentationDigitalDocument",
     "name": "Cuddles Investment Deck",
-    "description": "Revolutionizing Cannabis Retail with AI-Powered Recommendations. R590B+ market opportunity.",
+    "description": "Revolutionizing Cannabis Retail with AI-Powered Recommendations. $39.1B global market opportunity.",
     "author": {
       "@type": "Organization",
       "name": "Cuddles"
@@ -20,7 +20,7 @@ const InvestmentDeck = () => {
     <div className="min-h-screen pb-20">
       <SEO 
         title="Investment Deck - Cuddles"
-        description="Revolutionizing Cannabis Retail with AI-Powered Recommendations. R590B+ US Cannabis Market, 25% CAGR projected growth. View our investment deck."
+        description="Revolutionizing Cannabis Retail with AI-Powered Recommendations. $39.1B global cannabis market (2024), 14.5% CAGR projected growth. View our investment deck."
         url="/investment-deck"
         type="article"
         structuredData={structuredData}
@@ -73,12 +73,12 @@ const InvestmentDeck = () => {
             
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-purple/10 to-hippie-pink/10">
-                <div className="text-4xl font-bold text-hippie-purple mb-2">R590B+</div>
-                <div className="text-foreground/80">South African Cannabis Market Size (2024)</div>
+                <div className="text-4xl font-bold text-hippie-purple mb-2">R723B+</div>
+                <div className="text-foreground/80">Global Cannabis Market Size (2024) — $39.1B USD</div>
               </div>
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-orange/10 to-hippie-yellow/10">
-                <div className="text-4xl font-bold text-hippie-orange mb-2">25%</div>
-                <div className="text-foreground/80">Projected CAGR (2024-2030)</div>
+                <div className="text-4xl font-bold text-hippie-orange mb-2">14.5%</div>
+                <div className="text-foreground/80">Projected CAGR (2024-2033)</div>
               </div>
               <div className="text-center p-6 rounded-lg bg-gradient-to-br from-hippie-green/10 to-hippie-blue/10">
                 <div className="text-4xl font-bold text-hippie-green mb-2">5,000+</div>
@@ -265,7 +265,7 @@ const InvestmentDeck = () => {
               Ready to Join Us?
             </h2>
             <p className="text-xl text-center text-foreground/80 mb-8">
-              We're raising our Series A to scale operations, expand our AI capabilities, and capture market share across North America.
+              We're raising our Series A to scale operations, expand our AI capabilities, and capture market share across South Africa and beyond.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
