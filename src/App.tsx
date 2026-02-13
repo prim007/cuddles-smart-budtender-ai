@@ -37,6 +37,7 @@ const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
 
 // B2B
 const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
+const WhyCuddles = lazy(() => import("./pages/WhyCuddles"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -104,6 +105,7 @@ const App = () => (
                 
                 {/* B2B */}
                 <Route path="/dispensary-onboarding" element={<Suspense fallback={<PageLoader />}><DispensaryOnboarding /></Suspense>} />
+                <Route path="/why-cuddles" element={<Suspense fallback={<PageLoader />}><WhyCuddles /></Suspense>} />
                 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

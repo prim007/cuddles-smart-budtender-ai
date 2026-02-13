@@ -12,7 +12,8 @@ import {
   MessageCircle,
   LogIn,
   Newspaper,
-  Store
+  Store,
+  Lightbulb
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -23,6 +24,12 @@ const features = [
     title: "Home",
     href: "/",
     gradient: "from-hippie-lavender to-hippie-purple",
+  },
+  {
+    icon: Lightbulb,
+    title: "Why Cuddles",
+    href: "/why-cuddles",
+    gradient: "from-hippie-amber to-hippie-orange",
   },
   {
     icon: MessageCircle,
