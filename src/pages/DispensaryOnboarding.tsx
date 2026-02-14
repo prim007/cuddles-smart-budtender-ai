@@ -36,12 +36,12 @@ const POS_OPTIONS = [
 ];
 
 const PLAN_FEATURES = [
-  { icon: <Zap className="w-5 h-5" />, text: "AI-powered budtender chat widget" },
-  { icon: <Store className="w-5 h-5" />, text: "POS inventory sync" },
-  { icon: <BarChart3 className="w-5 h-5" />, text: "Customer analytics dashboard" },
-  { icon: <Shield className="w-5 h-5" />, text: "Custom branding & white-label" },
-  { icon: <Headphones className="w-5 h-5" />, text: "Priority support & onboarding" },
-  { icon: <Sparkles className="w-5 h-5" />, text: "Strain recommendations engine" },
+  { icon: <Zap className="w-5 h-5" />, text: "AI-powered budtender chat widget", benefit: "Serve customers 24/7 without extra staff" },
+  { icon: <Store className="w-5 h-5" />, text: "POS inventory sync", benefit: "Real-time menu updates from Dutchie, Flowhub & more" },
+  { icon: <BarChart3 className="w-5 h-5" />, text: "Customer analytics dashboard", benefit: "Understand what your customers really want" },
+  { icon: <Shield className="w-5 h-5" />, text: "Custom branding & white-label", benefit: "Looks like your brand, not ours" },
+  { icon: <Headphones className="w-5 h-5" />, text: "Priority support & onboarding", benefit: "We set it up for you in under 24 hours" },
+  { icon: <Sparkles className="w-5 h-5" />, text: "Strain recommendations engine", benefit: "Boost average order value with smart upsells" },
 ];
 
 const DispensaryOnboarding = () => {
@@ -114,6 +114,11 @@ const DispensaryOnboarding = () => {
   };
 
   const handleNext = () => {
+    if (step === 0 && !user) {
+      toast.info("Please sign in to continue setup");
+      navigate("/auth?redirect=/dispensary-onboarding");
+      return;
+    }
     if (step === 2) {
       handleSubmit();
     } else if (step < totalSteps - 1) {
@@ -159,13 +164,16 @@ const DispensaryOnboarding = () => {
                   Add Cuddles AI to your dispensary website in minutes. Give your customers a personalized budtender experience 24/7.
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto text-left">
-                {PLAN_FEATURES.map((f, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span className="text-primary">{f.icon}</span>
-                    {f.text}
-                  </div>
-                ))}
+                <div className="grid grid-cols-1 gap-3 max-w-lg mx-auto text-left">
+                  {PLAN_FEATURES.map((f, i) => (
+                    <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-muted/40 border border-border/50">
+                      <span className="text-primary mt-0.5 shrink-0">{f.icon}</span>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">{f.text}</p>
+                        <p className="text-xs text-muted-foreground">{f.benefit}</p>
+                      </div>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
