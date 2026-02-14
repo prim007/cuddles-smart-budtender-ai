@@ -5,7 +5,7 @@ import { Send, User, Phone, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
-import { processCuddlesImage } from "@/utils/processImage";
+
 
 import QuickPrompts from "./QuickPrompts";
 import ConversationHistory, { saveSession } from "./ConversationHistory";
@@ -40,27 +40,12 @@ const ChatDemo = () => {
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [processedImage, setProcessedImage] = useState<string>(cuddlesImage);
+  const processedImage = cuddlesImage;
   const [sessionId, setSessionId] = useState<string>(generateSessionId());
   const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-
-  useEffect(() => {
-    // Defer heavy image processing to avoid blocking render and forced reflow
-    const scheduleProcessing = () => {
-      processCuddlesImage().then(setProcessedImage);
-    };
-    
-    if ('requestIdleCallback' in window) {
-      const idleId = requestIdleCallback(scheduleProcessing, { timeout: 2000 });
-      return () => cancelIdleCallback(idleId);
-    } else {
-      const timeoutId = setTimeout(scheduleProcessing, 100);
-      return () => clearTimeout(timeoutId);
-    }
-  }, []);
 
   // Update initial message when language changes
   useEffect(() => {
