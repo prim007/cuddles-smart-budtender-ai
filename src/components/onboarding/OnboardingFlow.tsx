@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useUserProfile, UserProfile } from "@/contexts/UserProfileContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import OnboardingStep from "./OnboardingStep";
@@ -20,6 +20,7 @@ import {
   Smile,
   Heart
 } from "lucide-react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import cuddlesImage from "@/assets/cuddles.png";
 
 const ONBOARDING_COMPLETE_KEY = "cuddles-onboarding-complete";
@@ -275,8 +276,11 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-md p-0 gap-0 overflow-hidden border-border/50 shadow-elevated">
-        <div className="relative bg-card">
+      <DialogContent className="sm:max-w-md p-0 gap-0 overflow-hidden border-border/50 shadow-elevated max-h-[90vh] w-[95vw] sm:w-full" aria-describedby={undefined}>
+        <VisuallyHidden>
+          <DialogTitle>Onboarding</DialogTitle>
+        </VisuallyHidden>
+        <div className="relative bg-card overflow-y-auto max-h-[90vh]">
           {/* Skip button */}
           <Button
             variant="ghost"
@@ -288,19 +292,19 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
             Skip
           </Button>
 
-          <div className="p-6 pt-12">
+          <div className="p-4 sm:p-6 pt-12">
             {/* Progress */}
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <OnboardingProgress currentStep={currentStep} totalSteps={totalSteps} />
             </div>
 
             {/* Step content */}
-            <div className="min-h-[280px]">
+            <div className="min-h-0">
               {renderStep()}
             </div>
 
             {/* Navigation */}
-            <div className="flex justify-between mt-6 pt-4 border-t border-border">
+            <div className="flex justify-between mt-4 sm:mt-6 pt-4 border-t border-border">
               <Button
                 variant="ghost"
                 onClick={handleBack}
