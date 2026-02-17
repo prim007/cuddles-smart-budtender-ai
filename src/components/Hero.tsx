@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Bot, ArrowRight, ExternalLink, Store, UserPlus } from "lucide-react";
+import { Bot, ArrowRight, ExternalLink, Store, UserPlus, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
+import { trackEvent } from "@/components/GoogleAnalytics";
 
 const Hero = () => {
   const scrollToDemo = () => {
@@ -54,6 +55,7 @@ const Hero = () => {
             <Link to="/auth">
               <Button
                 size="lg"
+                onClick={() => trackEvent('cta_click', 'signup', 'hero_signup')}
                 className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full"
               >
                 <UserPlus className="w-5 h-5" />
@@ -63,7 +65,7 @@ const Hero = () => {
             </Link>
             <Button
               size="lg"
-              onClick={scrollToDemo}
+              onClick={() => { trackEvent('cta_click', 'demo', 'hero_try_now'); scrollToDemo(); }}
               variant="outline"
               className="bg-white/10 text-white border border-white/20 hover:bg-white/20 font-display font-medium text-lg px-8 py-6 h-auto rounded-xl gap-2"
             >
@@ -71,7 +73,18 @@ const Hero = () => {
               Try Cuddles Now
             </Button>
           </div>
-          <div className="flex justify-center mb-16">
+          <div className="flex justify-center gap-3 mb-16">
+            <Link to="/schedule-demo">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => trackEvent('cta_click', 'demo', 'hero_schedule_demo')}
+                className="text-white/60 hover:text-white hover:bg-white/10 font-medium gap-2"
+              >
+                <Calendar className="w-4 h-4" />
+                Schedule a Demo
+              </Button>
+            </Link>
             <Link to="/dispensary-onboarding">
               <Button
                 size="sm"

@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Clock, Tag, ArrowRight } from "lucide-react";
+import { Calendar, Clock, Tag, ArrowRight, Bot, UserPlus } from "lucide-react";
+import { trackEvent } from "@/components/GoogleAnalytics";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -153,6 +155,44 @@ const Blog = () => {
               <p className="text-muted-foreground">No blog posts yet. Check back soon!</p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10 border border-border text-center">
+            <h3 className="font-display text-2xl font-bold text-foreground mb-3">
+              Ready to find your perfect strain?
+            </h3>
+            <p className="text-muted-foreground mb-6">
+              Cuddles AI gives personalized recommendations based on your preferences.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to="/auth">
+                <Button
+                  size="lg"
+                  onClick={() => trackEvent('cta_click', 'signup', 'blog_listing_bottom')}
+                  className="font-display font-semibold rounded-xl gap-2 w-full"
+                >
+                  <UserPlus className="w-5 h-5" />
+                  Sign Up Free
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <Link to="/#demo">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={() => trackEvent('cta_click', 'demo', 'blog_listing_try_ai')}
+                  className="font-display font-medium rounded-xl gap-2 w-full"
+                >
+                  <Bot className="w-5 h-5" />
+                  Try Cuddles AI
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
