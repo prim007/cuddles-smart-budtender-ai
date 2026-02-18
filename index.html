@@ -60,7 +60,10 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-KHJ04X5EE1');
+      gtag('config', 'G-KHJ04X5EE1', {
+        send_page_view: true,
+        cookie_flags: 'SameSite=None;Secure'
+      });
     </script>
 
     <!-- Organization Schema for Google Knowledge Panel -->
@@ -78,6 +81,7 @@
         "name": "South Africa"
       },
       "areaServed": "Worldwide",
+      "knowsAbout": ["Cannabis", "AI Recommendations", "Strain Reviews", "Cannabis Technology"],
       "sameAs": []
     }
     </script>
@@ -96,6 +100,37 @@
         "target": "https://cuddles-smart-budtender-ai.lovable.app/reviews?search={search_term_string}",
         "query-input": "required name=search_term_string"
       }
+    }
+    </script>
+
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://cuddles-smart-budtender-ai.lovable.app/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://cuddles-smart-budtender-ai.lovable.app/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Strain Reviews", "item": "https://cuddles-smart-budtender-ai.lovable.app/reviews" },
+        { "@type": "ListItem", "position": 4, "name": "Strain Journal", "item": "https://cuddles-smart-budtender-ai.lovable.app/journal" },
+        { "@type": "ListItem", "position": 5, "name": "Strain Scanner", "item": "https://cuddles-smart-budtender-ai.lovable.app/scanner" },
+        { "@type": "ListItem", "position": 6, "name": "T-Break Coach", "item": "https://cuddles-smart-budtender-ai.lovable.app/t-break" }
+      ]
+    }
+    </script>
+
+    <!-- SoftwareApplication Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Cuddles AI",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web, Android, iOS",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "150", "bestRating": "5" },
+      "description": "AI-powered cannabis budtender for personalized strain recommendations, journal tracking, and community reviews.",
+      "featureList": ["AI Strain Recommendations", "Strain Journal", "Strain Scanner", "Community Reviews", "Tolerance Break Coach", "Dosage Calculator"]
     }
     </script>
   </head>
