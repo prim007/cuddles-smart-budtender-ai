@@ -108,8 +108,15 @@ const ChatDemo = () => {
     setMessageCount((prev) => prev + 1);
 
     try {
-      const { data, error } = await supabase.functions.invoke("smart-budtender", {
-        body: { 
+      const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-budtender`;
+      
+      const resp = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
           messages: [...messages, userMessage],
           sessionId,
           userProfile: {
@@ -120,34 +127,102 @@ const ChatDemo = () => {
             flavorPreferences: profile.flavorPreferences,
           },
           language,
-        },
+        }),
       });
 
-      if (error) throw error;
-
-      let responseContent = data.response;
-      let orderPhone: string | undefined;
-      
-      const orderMatch = responseContent.match(/\[ORDER:([0-9]+)\]/);
-      if (orderMatch) {
-        orderPhone = orderMatch[1];
-        responseContent = responseContent.replace(/\[ORDER:[^\]]+\]/, '').trim();
+      if (!resp.ok) {
+        const errData = await resp.json().catch(() => ({}));
+        throw new Error(errData.error || `Request failed (${resp.status})`);
       }
 
-      const assistantMessage: Message = {
-        role: "assistant",
-        content: responseContent,
-        orderPhone,
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
+      if (!resp.body) throw new Error("No response stream");
 
+      // Stream SSE tokens
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let assistantSoFar = "";
+      let streamDone = false;
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") { streamDone = true; break; }
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const tokenContent = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (tokenContent) {
+              assistantSoFar += tokenContent;
+              const currentContent = assistantSoFar;
+              setMessages((prev) => {
+                const last = prev[prev.length - 1];
+                if (last?.role === "assistant" && !last.orderPhone) {
+                  return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: currentContent } : m);
+                }
+                return [...prev, { role: "assistant", content: currentContent }];
+              });
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+
+      // Final flush
+      if (textBuffer.trim()) {
+        for (let raw of textBuffer.split("\n")) {
+          if (!raw) continue;
+          if (raw.endsWith("\r")) raw = raw.slice(0, -1);
+          if (raw.startsWith(":") || raw.trim() === "") continue;
+          if (!raw.startsWith("data: ")) continue;
+          const jsonStr = raw.slice(6).trim();
+          if (jsonStr === "[DONE]") continue;
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const tokenContent = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (tokenContent) assistantSoFar += tokenContent;
+          } catch { /* ignore */ }
+        }
+      }
+
+      // Process order phone from complete response
+      let finalContent = assistantSoFar;
+      let orderPhone: string | undefined;
+      const orderMatch = finalContent.match(/\[ORDER:([0-9]+)\]/);
+      if (orderMatch) {
+        orderPhone = orderMatch[1];
+        finalContent = finalContent.replace(/\[ORDER:[^\]]+\]/, '').trim();
+      }
+
+      // Final update with orderPhone if present
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+        if (last?.role === "assistant") {
+          return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: finalContent, orderPhone } : m);
+        }
+        return [...prev, { role: "assistant", content: finalContent, orderPhone }];
+      });
+
+      // Save conversation
       try {
-        // Minimize metadata collection - only store non-identifying operational data
-        // Removed: userAgent (fingerprinting risk), profileSummary (potential PII)
         await supabase.from('chat_conversations').insert({
           session_id: sessionId,
           user_message: userMessage.content,
-          assistant_message: responseContent,
+          assistant_message: finalContent,
           redirect_url: orderPhone ? `tel:${orderPhone}` : null,
           user_metadata: {
             timestamp: new Date().toISOString(),
@@ -159,11 +234,16 @@ const ChatDemo = () => {
       }
     } catch (error: any) {
       console.error("Error:", error);
-      toast({
-        title: t.error,
-        description: error.message || "Failed to get response. Please try again.",
-        variant: "destructive",
-      });
+      const errorMsg = error.message || "Failed to get response. Please try again.";
+      
+      // Surface rate limit / payment errors clearly
+      if (errorMsg.includes("429") || errorMsg.includes("rate limit") || errorMsg.includes("Too many")) {
+        toast({ title: "Slow down", description: "Too many requests. Please wait a moment and try again.", variant: "destructive" });
+      } else if (errorMsg.includes("402") || errorMsg.includes("Payment")) {
+        toast({ title: "Service unavailable", description: "AI service temporarily unavailable. Please try again later.", variant: "destructive" });
+      } else {
+        toast({ title: t.error, description: errorMsg, variant: "destructive" });
+      }
     } finally {
       setIsLoading(false);
     }
