@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID;
+const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID || 'G-KHJ04X5EE1';
 
 declare global {
   interface Window {
@@ -17,8 +17,62 @@ declare global {
 export const GoogleAnalytics = () => {
   const location = useLocation();
 
+  // Track scroll depth
   useEffect(() => {
-    // Load GA script dynamically on first mount
+    if (!GA_TRACKING_ID) return;
+
+    const thresholds = [25, 50, 75, 90];
+    const fired = new Set<number>();
+
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      const pct = Math.round((scrollTop / docHeight) * 100);
+
+      for (const t of thresholds) {
+        if (pct >= t && !fired.has(t)) {
+          fired.add(t);
+          trackEvent('scroll_depth', 'engagement', `${t}%`);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
+
+  // Track time on page
+  useEffect(() => {
+    if (!GA_TRACKING_ID) return;
+    const start = Date.now();
+
+    return () => {
+      const seconds = Math.round((Date.now() - start) / 1000);
+      if (seconds > 5) {
+        trackEvent('time_on_page', 'engagement', location.pathname, seconds);
+      }
+    };
+  }, [location.pathname]);
+
+  // Track outbound link clicks
+  useEffect(() => {
+    if (!GA_TRACKING_ID) return;
+
+    const handleClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest('a');
+      if (!anchor) return;
+      const href = anchor.getAttribute('href');
+      if (href && href.startsWith('http') && !href.includes(window.location.hostname)) {
+        trackEvent('outbound_click', 'engagement', href);
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);
+
+  useEffect(() => {
     if (GA_TRACKING_ID && !document.getElementById('ga-script')) {
       const script = document.createElement('script');
       script.id = 'ga-script';
@@ -32,16 +86,20 @@ export const GoogleAnalytics = () => {
           window.dataLayer?.push(arguments);
         };
         window.gtag('js', new Date() as any);
-        window.gtag('config', GA_TRACKING_ID);
+        window.gtag('config', GA_TRACKING_ID, {
+          send_page_view: true,
+          cookie_flags: 'SameSite=None;Secure',
+        });
       };
     }
   }, []);
 
   useEffect(() => {
     if (GA_TRACKING_ID && window.gtag) {
-      // Track page view on route change
       window.gtag('config', GA_TRACKING_ID, {
         page_path: location.pathname + location.search,
+        page_title: document.title,
+        page_location: window.location.href,
       });
     }
   }, [location]);
@@ -56,11 +114,21 @@ export const trackEvent = (
   label?: string,
   value?: number
 ) => {
-  if (window.gtag && GA_TRACKING_ID) {
+  if (window.gtag) {
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
       value: value,
     });
   }
+};
+
+// Track feature usage for engagement metrics
+export const trackFeatureUse = (featureName: string) => {
+  trackEvent('feature_use', 'engagement', featureName);
+};
+
+// Track search queries for content optimization
+export const trackSearch = (query: string) => {
+  trackEvent('search', 'engagement', query);
 };
