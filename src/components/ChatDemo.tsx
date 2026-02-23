@@ -387,6 +387,24 @@ const ChatDemo = () => {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* Post-chat catalog nudge */}
+          {messages.filter(m => m.role === "user").length >= 2 && (
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-[hsl(142,70%,45%)]/10 border border-[hsl(142,70%,45%)]/20 mb-4">
+              <span className="text-2xl">🛒</span>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-foreground">Ready to order?</p>
+                <p className="text-xs text-muted-foreground">Browse our full product catalog on WhatsApp</p>
+              </div>
+              <Button
+                size="sm"
+                className="bg-[hsl(142,70%,45%)] hover:bg-[hsl(142,70%,40%)] text-white rounded-lg text-xs"
+                onClick={() => window.open("https://wa.me/c/27645436734", "_blank")}
+              >
+                Browse Catalog
+              </Button>
+            </div>
+          )}
+
           {/* Input */}
           <div className="flex gap-2 pt-4 border-t border-border">
             <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} />

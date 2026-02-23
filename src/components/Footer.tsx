@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
-import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText } from "lucide-react";
+import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag } from "lucide-react";
 
 const features = [
   { icon: Home, title: "Home", href: "/" },
   { icon: MessageCircle, title: "Chat Demo", href: "/#demo" },
+  { icon: ShoppingBag, title: "Catalog", href: "/catalog" },
   { icon: FileText, title: "Blog", href: "/blog" },
   { icon: BookOpen, title: "Strain Journal", href: "/journal" },
   { icon: Camera, title: "Strain Scanner", href: "/scanner" },
