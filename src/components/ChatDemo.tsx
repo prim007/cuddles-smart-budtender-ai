@@ -200,7 +200,7 @@ const ChatDemo = () => {
       }
 
       // Process order phone from complete response
-      let finalContent = assistantSoFar;
+      let finalContent = assistantSoFar || "";
       let orderPhone: string | undefined;
       const orderMatch = finalContent.match(/\[ORDER:([0-9]+)\]/);
       if (orderMatch) {
