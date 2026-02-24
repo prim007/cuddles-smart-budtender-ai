@@ -105,39 +105,56 @@
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      "name": "Cuddles AI",
-      "description": "AI-powered cannabis budtender offering personalized strain recommendations, journal tracking, and dispensary solutions.",
+      "@id": "https://cuddles-smart-budtender-ai.lovable.app/#business",
+      "name": "Tripple444",
+      "alternateName": ["Tripple 444", "Cuddles AI by Tripple444", "Tripple444 Cannabis"],
+      "description": "Tripple444 is a cannabis business powered by Cuddles AI — offering AI-powered strain recommendations, product catalog, and delivery via WhatsApp.",
       "url": "https://cuddles-smart-budtender-ai.lovable.app",
       "logo": "https://cuddles-smart-budtender-ai.lovable.app/pwa-512x512.png",
       "image": "https://storage.googleapis.com/gpt-engineer-file-uploads/fn4xikHtpsZcJMhE3wUXdvgxIkl2/social-images/social-1770387793477-Screenshot_2026-02-06_at_4.09.58_PM.png",
+      "telephone": "+27645436734",
       "address": {
         "@type": "PostalAddress",
-        "addressCountry": "ZA",
-        "addressRegion": "South Africa"
+        "addressLocality": "Cape Town",
+        "addressRegion": "Western Cape",
+        "addressCountry": "ZA"
       },
       "geo": {
         "@type": "GeoCoordinates",
         "latitude": "-33.9249",
         "longitude": "18.4241"
       },
-      "priceRange": "Free",
+      "priceRange": "$$",
+      "currenciesAccepted": "ZAR",
+      "paymentAccepted": "Cash, EFT, WhatsApp Order",
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-        "opens": "00:00",
-        "closes": "23:59"
+        "opens": "08:00",
+        "closes": "22:00"
+      },
+      "sameAs": [
+        "https://wa.me/c/27645436734"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+27645436734",
+        "contactType": "sales",
+        "areaServed": "ZA",
+        "availableLanguage": ["English", "Afrikaans"]
       },
       "serviceArea": {
         "@type": "Place",
-        "name": "Worldwide"
+        "name": "Cape Town, South Africa"
       },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Cuddles AI Services",
+        "name": "Tripple444 Products & Services",
         "itemListElement": [
-          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "AI Strain Recommendations"}},
-          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Cannabis Strain Journal"}},
-          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Dispensary White-Label AI Budtender"}}
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "AI Strain Recommendations by Cuddles"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Cannabis Product Catalog"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "WhatsApp Ordering & Delivery"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Cannabis Strain Journal & Tracking"}}
         ]
       }
     }
