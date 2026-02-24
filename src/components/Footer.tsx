@@ -85,10 +85,13 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* SEO-rich text */}
+        {/* SEO-rich text with internal links */}
         <div className="pt-6 border-t border-border">
+          <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-2">
+            Cuddles AI is the world's smartest <Link to="/why-cuddles" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> offering personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, <Link to="/reviews" className="underline hover:text-foreground">community reviews</Link>, and a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>. Available worldwide for cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
+          </p>
           <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-4">
-            Cuddles AI is an AI-powered cannabis budtender offering personalized strain recommendations, a strain journal, strain scanner, community reviews, and a tolerance break coach. Available worldwide.
+            Learn about cannabis with our <Link to="/blog" className="underline hover:text-foreground">educational blog</Link> covering topics from <Link to="/blog/indica-vs-sativa-vs-hybrid" className="underline hover:text-foreground">indica vs sativa</Link> to <Link to="/blog/beginners-guide-to-terpenes" className="underline hover:text-foreground">terpenes</Link> and <Link to="/blog/responsible-consumption-tips" className="underline hover:text-foreground">responsible consumption</Link>.
           </p>
           <div className="text-center text-sm text-muted-foreground">
             © {new Date().getFullYear()} Cuddles AI. All rights reserved.
