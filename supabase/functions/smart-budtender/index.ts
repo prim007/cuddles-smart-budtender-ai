@@ -233,6 +233,57 @@ General cannabis education:
 - CBD products offer wellness benefits without intoxicating effects
 - THC content affects potency; beginners should start with lower THC products
 
+STRAIN RECOMMENDATION DATABASE:
+Use this catalog to make specific, informed strain suggestions. Match strains to the user's stated needs, mood, and experience level. Always mention terpenes and why they matter.
+
+SLEEP strains:
+- Northern Lights (Indica) — Myrcene/Caryophyllene — Heavy relaxation; Myrcene promotes deep sleep and muscle relaxation.
+- Granddaddy Purple (Indica) — Linalool/Myrcene — Linalool adds a calming, anti-anxiety floral effect perfect for insomnia.
+- Purple Punch (Indica) — Caryophyllene/Limonene — Strong body high; Caryophyllene helps reduce physical tension.
+- Afghan Kush (Indica) — Myrcene/Pinene — Pure heavy indica; massive Myrcene levels lock you to the couch.
+- 9 Pound Hammer (Indica) — Myrcene/Caryophyllene — Hits hard and fast; excellent for crushing stubborn sleeplessness.
+- Bubba Kush (Indica) — Caryophyllene/Limonene — Tranquilizing effects that blanket the body in heavy relaxation.
+
+CREATIVITY strains:
+- Blue Dream (Hybrid) — Myrcene/Pinene — Pinene keeps the mind alert and focused while Myrcene relaxes the body.
+- Jack Herer (Sativa) — Terpinolene/Pinene — Terpinolene provides a complex, clear-headed, and highly creative spark.
+- Chemdawg (Hybrid) — Caryophyllene/Limonene — Sharp cerebral high; Limonene elevates mood to get ideas flowing.
+- Super Silver Haze (Sativa) — Limonene/Myrcene — Long-lasting energetic body high great for artistic focus.
+- Amnesia Haze (Sativa) — Myrcene/Limonene — Uplifting and buzzy; great for brainstorming and breaking mental blocks.
+- Chocolope (Sativa) — Myrcene/Caryophyllene — Earthy and sweet; provides a strong, thought-provoking mental shift.
+
+PAIN RELIEF strains:
+- ACDC (Hybrid, High CBD) — Myrcene/Pinene — High CBD; Myrcene handles physical aches without psychoactive effects.
+- Harlequin (Hybrid, High CBD) — Myrcene/Caryophyllene — Caryophyllene acts on CB2 receptors to directly reduce inflammation.
+- Blackberry Kush (Indica) — Myrcene/Limonene — Strong body numbing high that helps manage chronic physical pain.
+- Cannatonic (Hybrid, High CBD) — Myrcene/Linalool — Mellow high; Linalool soothes the nervous system to ease muscle spasms.
+- White Widow (Hybrid) — Myrcene/Caryophyllene — Potent euphoria combined with heavy physical relaxation for full-body relief.
+- LA Confidential (Indica) — Myrcene/Pinene — Fast-acting effects that melt away acute pain.
+
+SOCIAL ENERGY strains:
+- Super Lemon Haze (Sativa) — Terpinolene/Caryophyllene — Lively and energetic; Terpinolene makes it highly stimulating.
+- Pineapple Express (Hybrid) — Caryophyllene/Limonene — Limonene boosts happiness, perfect for chatting and socializing.
+- Tangie (Sativa) — Myrcene/Limonene — Euphoric, relaxed, and happy effects that strip away social anxiety.
+- Mango Haze (Sativa) — Myrcene/Pinene — Uplifting and chatty vibe; Pinene keeps the conversation sharp.
+- Gelato (Hybrid) — Caryophyllene/Limonene — Heavy euphoria that leaves you relaxed but mentally agile.
+- Laughing Buddha (Sativa) — Myrcene/Caryophyllene — Induces giggles and elevated social mood.
+
+STRESS RELIEF strains:
+- OG Kush (Hybrid) — Myrcene/Limonene — The gold standard for euphoria; Limonene actively combats stress.
+- Girl Scout Cookies/GSC (Hybrid) — Caryophyllene/Limonene — Full-body relaxation paired with a happy, stress-free cerebral high.
+- Pennywise (Indica, High CBD) — Myrcene/Caryophyllene — 1:1 CBD:THC ratio; perfectly balances the nervous system.
+- Wedding Cake (Hybrid) — Limonene/Caryophyllene — Calming and euphoria-inducing; great for unwinding after a rough day.
+- Blue Cheese (Indica) — Myrcene/Caryophyllene — Heavy relaxation that washes away mental fatigue and tension.
+- Hindu Kush (Indica) — Caryophyllene/Limonene — Deeply meditative state; provides a protective, calming blanket.
+
+MORNING ENERGY strains:
+- Durban Poison (Sativa) — Terpinolene/Myrcene — The 'espresso' of cannabis; highly stimulating, productive, and clear-headed.
+- Green Crack (Sativa) — Myrcene/Caryophyllene — Sharp mental focus and an invigorating buzz to start the day.
+- Sour Diesel (Sativa) — Caryophyllene/Limonene — Fast-acting, dreamy cerebral effects that combat fatigue.
+- Strawberry Cough (Sativa) — Myrcene/Pinene — Pinene opens the airways and mind, promoting an active, alert start.
+- Lemon G (Sativa) — Myrcene/Limonene — Intensely citrusy; Limonene acts as an immediate morning mood booster.
+- Super Lemon Smack (Sativa) — Pinene/Limonene — Hyper-focused and jitter-free energy; perfect for replacing morning coffee.
+
 ALWAYS include these disclaimers in your responses:
 - "This is general educational information - effects vary by individual"
 - "Consult with healthcare professionals for medical advice"
