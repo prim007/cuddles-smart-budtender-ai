@@ -356,6 +356,74 @@ export type Database = {
         }
         Relationships: []
       }
+      tenant_strains: {
+        Row: {
+          category: string
+          cbd_max: number | null
+          cbd_min: number | null
+          created_at: string
+          id: string
+          in_stock: boolean | null
+          notes: string | null
+          price: number | null
+          primary_effect: string | null
+          primary_terpene: string | null
+          secondary_terpene: string | null
+          strain_name: string
+          strain_type: string
+          tenant_id: string
+          thc_max: number | null
+          thc_min: number | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          cbd_max?: number | null
+          cbd_min?: number | null
+          created_at?: string
+          id?: string
+          in_stock?: boolean | null
+          notes?: string | null
+          price?: number | null
+          primary_effect?: string | null
+          primary_terpene?: string | null
+          secondary_terpene?: string | null
+          strain_name: string
+          strain_type?: string
+          tenant_id: string
+          thc_max?: number | null
+          thc_min?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          cbd_max?: number | null
+          cbd_min?: number | null
+          created_at?: string
+          id?: string
+          in_stock?: boolean | null
+          notes?: string | null
+          price?: number | null
+          primary_effect?: string | null
+          primary_terpene?: string | null
+          secondary_terpene?: string | null
+          strain_name?: string
+          strain_type?: string
+          tenant_id?: string
+          thc_max?: number | null
+          thc_min?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_strains_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenants: {
         Row: {
           branding_color: string | null
