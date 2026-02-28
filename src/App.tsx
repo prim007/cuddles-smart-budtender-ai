@@ -39,6 +39,7 @@ const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
 const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
 const WhyCuddles = lazy(() => import("./pages/WhyCuddles"));
 const Catalog = lazy(() => import("./pages/Catalog"));
+const ManageStrains = lazy(() => import("./pages/ManageStrains"));
 
 // Loading fallback component
 const PageLoader = () => (
