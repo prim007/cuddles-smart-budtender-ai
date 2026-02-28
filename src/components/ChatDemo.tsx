@@ -220,6 +220,15 @@ const ChatDemo = () => {
         return [...prev, { role: "assistant", content: finalContent, orderPhone }];
       });
 
+      // Speak the response if voice is enabled and it's a greeting
+      if (voiceEnabled && ttsSupported && finalContent) {
+        const didGreet = speakIfGreeting(content, finalContent);
+        // Also speak if the message was sent via voice input
+        if (!didGreet && wasVoiceInput) {
+          speak(finalContent);
+        }
+      }
+
       // Save conversation
       try {
         await supabase.from('chat_conversations').insert({
