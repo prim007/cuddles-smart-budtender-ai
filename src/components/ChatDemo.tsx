@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, Phone, Plus } from "lucide-react";
+import { Send, User, Phone, Plus, Volume2, VolumeX } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
@@ -18,6 +18,7 @@ import ImageUploadButton from "./ImageUploadButton";
 import DispensaryFinder from "./DispensaryFinder";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProfile } from "@/contexts/UserProfileContext";
+import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import ReactMarkdown from "react-markdown";
 
 const generateSessionId = () => crypto.randomUUID();
@@ -31,6 +32,8 @@ interface Message {
 const ChatDemo = () => {
   const { t, language } = useLanguage();
   const { profile, getProfileSummary } = useUserProfile();
+  const { isSpeaking, isSupported: ttsSupported, speak, stop, speakIfGreeting } = useSpeechSynthesis();
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
   
   const INITIAL_MESSAGE: Message = {
     role: "assistant",
@@ -97,9 +100,10 @@ const ChatDemo = () => {
     setMessageCount(0);
   };
 
-  const handleSend = async (messageContent?: string) => {
+  const handleSend = async (messageContent?: string, fromVoice = false) => {
     const content = messageContent || input;
     if (!content.trim() || isLoading) return;
+    const wasVoiceInput = fromVoice;
 
     const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
@@ -217,6 +221,15 @@ const ChatDemo = () => {
         return [...prev, { role: "assistant", content: finalContent, orderPhone }];
       });
 
+      // Speak the response if voice is enabled and it's a greeting
+      if (voiceEnabled && ttsSupported && finalContent) {
+        const didGreet = speakIfGreeting(content, finalContent);
+        // Also speak if the message was sent via voice input
+        if (!didGreet && wasVoiceInput) {
+          speak(finalContent);
+        }
+      }
+
       // Save conversation
       try {
         await supabase.from('chat_conversations').insert({
@@ -262,7 +275,7 @@ const ChatDemo = () => {
   };
 
   const handleVoiceTranscript = (transcript: string) => {
-    handleSend(transcript);
+    handleSend(transcript, true);
   };
 
   return (
@@ -301,6 +314,17 @@ const ChatDemo = () => {
               </Button>
             </div>
             <div className="flex items-center gap-2">
+              {ttsSupported && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => { if (isSpeaking) stop(); setVoiceEnabled(!voiceEnabled); }}
+                  className={`bg-card/80 backdrop-blur-sm border-border hover:bg-accent ${voiceEnabled ? 'text-primary' : 'text-muted-foreground'}`}
+                  title={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
+                >
+                  {voiceEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                </Button>
+              )}
               <ImageUploadButton onImageAnalysis={handleSend} disabled={isLoading} />
               <DispensaryFinder />
               <DosageCalculator />
