@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, Phone, Plus } from "lucide-react";
+import { Send, User, Phone, Plus, Volume2, VolumeX } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
@@ -18,6 +18,7 @@ import ImageUploadButton from "./ImageUploadButton";
 import DispensaryFinder from "./DispensaryFinder";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProfile } from "@/contexts/UserProfileContext";
+import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import ReactMarkdown from "react-markdown";
 
 const generateSessionId = () => crypto.randomUUID();
@@ -31,6 +32,8 @@ interface Message {
 const ChatDemo = () => {
   const { t, language } = useLanguage();
   const { profile, getProfileSummary } = useUserProfile();
+  const { isSpeaking, isSupported: ttsSupported, speak, stop, speakIfGreeting } = useSpeechSynthesis();
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
   
   const INITIAL_MESSAGE: Message = {
     role: "assistant",
