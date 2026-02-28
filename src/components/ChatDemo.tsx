@@ -262,7 +262,7 @@ const ChatDemo = () => {
   };
 
   const handleVoiceTranscript = (transcript: string) => {
-    setInput(transcript);
+    handleSend(transcript);
   };
 
   return (
