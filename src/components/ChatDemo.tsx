@@ -314,6 +314,17 @@ const ChatDemo = () => {
               </Button>
             </div>
             <div className="flex items-center gap-2">
+              {ttsSupported && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => { if (isSpeaking) stop(); setVoiceEnabled(!voiceEnabled); }}
+                  className={`bg-card/80 backdrop-blur-sm border-border hover:bg-accent ${voiceEnabled ? 'text-primary' : 'text-muted-foreground'}`}
+                  title={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
+                >
+                  {voiceEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                </Button>
+              )}
               <ImageUploadButton onImageAnalysis={handleSend} disabled={isLoading} />
               <DispensaryFinder />
               <DosageCalculator />
