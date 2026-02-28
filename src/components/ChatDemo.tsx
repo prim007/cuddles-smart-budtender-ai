@@ -407,7 +407,7 @@ const ChatDemo = () => {
 
           {/* Input */}
           <div className="flex gap-2 pt-4 border-t border-border">
-            <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} />
+            <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} className="h-10 w-10 min-w-[2.5rem]" />
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
