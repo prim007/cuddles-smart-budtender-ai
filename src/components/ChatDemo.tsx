@@ -100,9 +100,10 @@ const ChatDemo = () => {
     setMessageCount(0);
   };
 
-  const handleSend = async (messageContent?: string) => {
+  const handleSend = async (messageContent?: string, fromVoice = false) => {
     const content = messageContent || input;
     if (!content.trim() || isLoading) return;
+    const wasVoiceInput = fromVoice;
 
     const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
@@ -274,7 +275,7 @@ const ChatDemo = () => {
   };
 
   const handleVoiceTranscript = (transcript: string) => {
-    handleSend(transcript);
+    handleSend(transcript, true);
   };
 
   return (
