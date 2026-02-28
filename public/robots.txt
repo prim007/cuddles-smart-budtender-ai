@@ -25,4 +25,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://cuddles-smart-budtender-ai.lovable.app/sitemap.xml
+Sitemap: https://cuddles-ai.com/sitemap.xml
