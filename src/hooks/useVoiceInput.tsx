@@ -88,6 +88,9 @@ export const useVoiceInput = ({
             case "network":
               onError("Network error. Please check your connection.");
               break;
+            case "service-not-allowed":
+              onError("Voice input is not available in this browser. Please try Chrome or Safari.");
+              break;
             default:
               onError(`Speech recognition error: ${event.error}`);
           }
