@@ -339,8 +339,8 @@ ALWAYS include relevant disclaimers. Be warm, emotionally present, and genuinely
 When a customer expresses readiness to purchase or asks where to buy, after your educational response, add the exact text: "[ORDER:0645436734]" at the end of your response. This will show them the Tripple444 order phone number.`;
 
 serve(async (req) => {
-  const origin = req.headers.get('origin');
-  const corsHeaders = getCorsHeaders(origin);
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
   
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
