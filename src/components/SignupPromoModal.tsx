@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Gift, Sparkles, Mail } from "lucide-react";
+import { Sparkles, Mail, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -11,14 +11,7 @@ const SignupPromoModal = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [promoCode, setPromoCode] = useState("");
   const { toast } = useToast();
-
-  const generatePromoCode = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const suffix = Array.from({ length: 5 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
-    return `CUDDLES15-${suffix}`;
-  };
 
   useEffect(() => {
     const dismissed = sessionStorage.getItem("cuddles_promo_dismissed");
@@ -51,15 +44,11 @@ const SignupPromoModal = () => {
       });
 
       if (error && error.code === "23505") {
-        const code = generatePromoCode();
-        setPromoCode(code);
-        toast({ title: "Already signed up!", description: "Here's your discount code again!" });
+        toast({ title: "Already signed up!", description: "You're already on the list! We'll send your code soon." });
       } else if (error) {
         throw error;
       } else {
-        const code = generatePromoCode();
-        setPromoCode(code);
-        toast({ title: "You're in! 🎉", description: "Your 15% discount code is ready!" });
+        toast({ title: "You're in! 🎉", description: "We'll send your 15% discount code shortly!" });
       }
       setSubmitted(true);
     } catch {
@@ -75,18 +64,14 @@ const SignupPromoModal = () => {
         {submitted ? (
           <div className="text-center py-6 space-y-4">
             <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto">
-              <Gift className="h-8 w-8 text-primary" />
+              <CheckCircle className="h-8 w-8 text-primary" />
             </div>
             <DialogHeader>
               <DialogTitle className="text-2xl text-center">You're all set! 🎉</DialogTitle>
               <DialogDescription className="text-center text-base">
-                Use this code to get <span className="font-bold text-primary">15% off</span> your first order:
+                We'll send your <span className="font-bold text-primary">15% discount code</span> to your email shortly. In the meantime, check out our shop!
               </DialogDescription>
             </DialogHeader>
-            <div className="bg-muted border border-border rounded-lg px-4 py-3 mx-auto max-w-xs">
-              <p className="text-lg font-mono font-bold tracking-wider text-foreground select-all">{promoCode}</p>
-            </div>
-            <p className="text-sm text-muted-foreground">Copy the code above and use it at checkout</p>
             <a
               href="https://tripplefour-shop-hub.lovable.app"
               target="_blank"
@@ -94,7 +79,7 @@ const SignupPromoModal = () => {
               className="inline-block"
             >
               <Button className="mt-2 bg-primary text-primary-foreground hover:bg-primary/90">
-                Shop Now & Use Code 🛒
+                Browse the Shop 🛒
               </Button>
             </a>
           </div>
@@ -107,7 +92,7 @@ const SignupPromoModal = () => {
               <DialogHeader>
                 <DialogTitle className="text-2xl text-center">Welcome to Cuddles! ✌️</DialogTitle>
                 <DialogDescription className="text-center text-base">
-                  Sign up to unlock the full Cuddles AI experience and get <span className="font-bold text-primary">15% off your first order</span> — a special promo code will be sent to your email.
+                  Sign up and get <span className="font-bold text-primary">15% off your first order</span> — we'll send your promo code to your email.
                 </DialogDescription>
               </DialogHeader>
             </div>
