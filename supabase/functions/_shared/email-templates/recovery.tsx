@@ -24,20 +24,21 @@ export const RecoveryEmail = ({
 }: RecoveryEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Reset your password for {siteName}</Preview>
+    <Preview>Reset your Cuddles password 🔒</Preview>
     <Body style={main}>
       <Container style={container}>
+        <Text style={brand}>🌿 Cuddles</Text>
         <Heading style={h1}>Reset your password</Heading>
         <Text style={text}>
-          We received a request to reset your password for {siteName}. Click
-          the button below to choose a new password.
+          We got a request to reset your Cuddles password. No stress — click below
+          to pick a new one.
         </Text>
         <Button style={button} href={confirmationUrl}>
           Reset Password
         </Button>
         <Text style={footer}>
-          If you didn't request a password reset, you can safely ignore this
-          email. Your password will not be changed.
+          Didn't request this? No worries, your password stays the same. Just
+          ignore this email.
         </Text>
       </Container>
     </Body>
@@ -46,26 +47,35 @@ export const RecoveryEmail = ({
 
 export default RecoveryEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
+const main = { backgroundColor: '#ffffff', fontFamily: 'Outfit, Arial, sans-serif' }
+const container = { padding: '32px 28px' }
+const brand = {
+  fontSize: '18px',
   fontWeight: 'bold' as const,
-  color: '#000000',
+  color: 'hsl(350, 65%, 55%)',
+  margin: '0 0 24px',
+  fontFamily: 'Space Grotesk, Arial, sans-serif',
+}
+const h1 = {
+  fontSize: '24px',
+  fontWeight: 'bold' as const,
+  color: 'hsl(270, 30%, 15%)',
   margin: '0 0 20px',
+  fontFamily: 'Space Grotesk, Arial, sans-serif',
 }
 const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
+  fontSize: '15px',
+  color: 'hsl(270, 15%, 45%)',
+  lineHeight: '1.6',
+  margin: '0 0 24px',
 }
 const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
+  backgroundColor: 'hsl(350, 65%, 55%)',
+  color: 'hsl(30, 50%, 98%)',
+  fontSize: '15px',
+  fontWeight: 'bold' as const,
+  borderRadius: '12px',
+  padding: '14px 24px',
   textDecoration: 'none',
 }
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+const footer = { fontSize: '12px', color: '#999999', margin: '32px 0 0' }
