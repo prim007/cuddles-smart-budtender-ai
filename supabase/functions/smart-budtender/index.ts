@@ -365,7 +365,16 @@ serve(async (req) => {
     }
     
     // Validate
-    const validation = validateMessages(messages);
+    // Truncate long messages to prevent validation errors on long conversations
+    const MAX_CONTENT_LENGTH = 4500;
+    const truncatedMessages = messages.map((msg: { role: string; content: string }) => ({
+      ...msg,
+      content: typeof msg.content === 'string' && msg.content.length > MAX_CONTENT_LENGTH
+        ? msg.content.slice(0, MAX_CONTENT_LENGTH) + '...'
+        : msg.content,
+    }));
+
+    const validation = validateMessages(truncatedMessages);
     if (!validation.valid) {
       return new Response(JSON.stringify({ error: validation.error }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -395,7 +404,7 @@ serve(async (req) => {
         model,
         messages: [
           { role: 'system', content: systemPrompt },
-          ...messages,
+          ...truncatedMessages,
         ],
         stream: true,
       }),
