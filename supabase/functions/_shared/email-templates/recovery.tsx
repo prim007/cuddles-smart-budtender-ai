@@ -28,7 +28,8 @@ export const RecoveryEmail = ({
     <Preview>Reset your Cuddles password 🔒</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>🌿 Cuddles</Text>
+        <Img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style={logo} />
+        <Text style={brand}>Cuddles</Text>
         <Heading style={h1}>Reset your password</Heading>
         <Text style={text}>
           We got a request to reset your Cuddles password. No stress — click below

@@ -33,7 +33,8 @@ export const EmailChangeEmail = ({
     <Preview>Confirm your email change for Cuddles 🌿</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>🌿 Cuddles</Text>
+        <Img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style={logo} />
+        <Text style={brand}>Cuddles</Text>
         <Heading style={h1}>Confirm your new email</Heading>
         <Text style={text}>
           You requested to change your Cuddles email from{' '}

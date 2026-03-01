@@ -23,7 +23,8 @@ export const ReauthenticationEmail = ({ token }: ReauthenticationEmailProps) => 
     <Preview>Your Cuddles verification code 🔐</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>🌿 Cuddles</Text>
+        <Img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style={logo} />
+        <Text style={brand}>Cuddles</Text>
         <Heading style={h1}>Verification code</Heading>
         <Text style={text}>Use this code to confirm your identity:</Text>
         <Text style={codeStyle}>{token}</Text>

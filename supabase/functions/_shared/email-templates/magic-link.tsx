@@ -28,7 +28,8 @@ export const MagicLinkEmail = ({
     <Preview>Your Cuddles login link ✨</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>🌿 Cuddles</Text>
+        <Img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style={logo} />
+        <Text style={brand}>Cuddles</Text>
         <Heading style={h1}>Your login link</Heading>
         <Text style={text}>
           Tap the button below to sign in to Cuddles. This link expires shortly,
