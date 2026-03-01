@@ -80,12 +80,23 @@ const SignupPromoModal = () => {
             <DialogHeader>
               <DialogTitle className="text-2xl text-center">You're all set! 🎉</DialogTitle>
               <DialogDescription className="text-center text-base">
-                A special <span className="font-bold text-primary">15% discount code</span> will be sent to your inbox. Keep an eye out!
+                Use this code to get <span className="font-bold text-primary">15% off</span> your first order:
               </DialogDescription>
             </DialogHeader>
-            <Button onClick={handleClose} className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
-              Start Exploring Cuddles
-            </Button>
+            <div className="bg-muted border border-border rounded-lg px-4 py-3 mx-auto max-w-xs">
+              <p className="text-lg font-mono font-bold tracking-wider text-foreground select-all">{promoCode}</p>
+            </div>
+            <p className="text-sm text-muted-foreground">Copy the code above and use it at checkout</p>
+            <a
+              href="https://tripplefour-shop-hub.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block"
+            >
+              <Button className="mt-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                Shop Now & Use Code 🛒
+              </Button>
+            </a>
           </div>
         ) : (
           <div className="space-y-4">
