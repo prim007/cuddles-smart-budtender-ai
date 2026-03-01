@@ -51,11 +51,15 @@ const SignupPromoModal = () => {
       });
 
       if (error && error.code === "23505") {
-        toast({ title: "Already signed up!", description: "You're already on our list. Check your inbox for your discount code!" });
+        const code = generatePromoCode();
+        setPromoCode(code);
+        toast({ title: "Already signed up!", description: "Here's your discount code again!" });
       } else if (error) {
         throw error;
       } else {
-        toast({ title: "You're in! 🎉", description: "Check your inbox for your 15% discount code!" });
+        const code = generatePromoCode();
+        setPromoCode(code);
+        toast({ title: "You're in! 🎉", description: "Your 15% discount code is ready!" });
       }
       setSubmitted(true);
     } catch {
