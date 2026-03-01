@@ -341,9 +341,6 @@ When a customer expresses readiness to purchase or asks where to buy, after your
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
-  
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
   }
 
   try {
