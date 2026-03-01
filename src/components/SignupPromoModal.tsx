@@ -11,7 +11,14 @@ const SignupPromoModal = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
   const { toast } = useToast();
+
+  const generatePromoCode = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const suffix = Array.from({ length: 5 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    return `CUDDLES15-${suffix}`;
+  };
 
   useEffect(() => {
     const dismissed = sessionStorage.getItem("cuddles_promo_dismissed");
