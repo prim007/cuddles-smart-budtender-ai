@@ -169,13 +169,23 @@ function getLanguageInstructions(language: string): string {
   return `\n\nIMPORTANT: Respond in ${languageName}. All your responses must be in ${languageName}, maintaining a friendly and educational tone.`;
 }
 
-// --- Smart Model Routing ---
+// --- Smart Model Routing (3-tier) ---
 const SIMPLE_PATTERNS = [
   /^(hi|hello|hey|what'?s up|yo|sup)\b/i,
   /^(thanks|thank you|ok|okay|cool|got it|nice)\b/i,
   /^what (is|are) /i,
   /^(tell me about|describe) /i,
   /^(indica|sativa|hybrid)\??$/i,
+];
+
+const COMPLEX_PATTERNS = [
+  /\b(endocannabinoid|cb1|cb2|receptor|cannabinoid ratio|terpene ratio|entourage effect)\b/i,
+  /\b(medical condition|chronic|fibromyalgia|neuropathy|autoimmune|inflammation|chemotherapy)\b/i,
+  /\b(interaction|contraindication|medication|pharmaceutical|drug interaction)\b/i,
+  /\b(custom ratio|ideal ratio|optimal ratio|personalize|tailored|specific condition)\b/i,
+  /\b(research|study|science|mechanism|pathway|molecular|biochem)\b/i,
+  /\b(multiple (conditions|symptoms|issues)|complex|intersecting|comorbid)\b/i,
+  /\b(why does|how does|explain the|reasoning behind|deep dive)\b/i,
 ];
 
 function selectModel(messages: { role: string; content: string }[]): string {
@@ -189,7 +199,12 @@ function selectModel(messages: { role: string; content: string }[]): string {
     return 'google/gemini-2.5-flash-lite';
   }
   
-  // Long or complex messages → use flash
+  // Complex scientific/medical queries → use pro model for deep reasoning
+  if (content.length > 40 && COMPLEX_PATTERNS.some(p => p.test(content))) {
+    return 'google/gemini-2.5-pro';
+  }
+  
+  // Standard queries → use flash
   return 'google/gemini-3-flash-preview';
 }
 
