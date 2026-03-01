@@ -9,6 +9,7 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Preview,
   Text,
 } from 'npm:@react-email/components@0.0.22'
@@ -27,7 +28,8 @@ export const MagicLinkEmail = ({
     <Preview>Your Cuddles login link ✨</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>🌿 Cuddles</Text>
+        <Img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style={logo} />
+        <Text style={brand}>Cuddles</Text>
         <Heading style={h1}>Your login link</Heading>
         <Text style={text}>
           Tap the button below to sign in to Cuddles. This link expires shortly,
@@ -47,6 +49,7 @@ export const MagicLinkEmail = ({
 export default MagicLinkEmail
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Outfit, Arial, sans-serif' }
+const logo = { margin: '0 0 8px', borderRadius: '12px' }
 const container = { padding: '32px 28px' }
 const brand = {
   fontSize: '18px',

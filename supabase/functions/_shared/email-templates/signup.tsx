@@ -9,6 +9,7 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Link,
   Preview,
   Text,
@@ -32,7 +33,8 @@ export const SignupEmail = ({
     <Preview>Welcome to Cuddles 🌿 — confirm your email to get started</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>🌿 Cuddles</Text>
+        <Img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style={logo} />
+        <Text style={brand}>Cuddles</Text>
         <Heading style={h1}>Hey there! Welcome aboard ✌️</Heading>
         <Text style={text}>
           Thanks for joining{' '}
@@ -63,6 +65,7 @@ export const SignupEmail = ({
 export default SignupEmail
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Outfit, Arial, sans-serif' }
+const logo = { margin: '0 0 8px', borderRadius: '12px' }
 const container = { padding: '32px 28px' }
 const brand = {
   fontSize: '18px',
