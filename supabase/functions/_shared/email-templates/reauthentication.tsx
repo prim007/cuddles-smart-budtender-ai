@@ -40,6 +40,7 @@ export const ReauthenticationEmail = ({ token }: ReauthenticationEmailProps) => 
 export default ReauthenticationEmail
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Outfit, Arial, sans-serif' }
+const logo = { margin: '0 0 8px', borderRadius: '12px' }
 const container = { padding: '32px 28px' }
 const brand = {
   fontSize: '18px',
