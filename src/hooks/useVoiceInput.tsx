@@ -91,6 +91,9 @@ export const useVoiceInput = ({
             case "service-not-allowed":
               onError("Voice input is not available in this browser. Please try Chrome or Safari.");
               break;
+            case "aborted":
+              // Intentional stop — don't show error
+              break;
             default:
               onError(`Speech recognition error: ${event.error}`);
           }
