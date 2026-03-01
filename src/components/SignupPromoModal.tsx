@@ -11,7 +11,14 @@ const SignupPromoModal = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
   const { toast } = useToast();
+
+  const generatePromoCode = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const suffix = Array.from({ length: 5 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    return `CUDDLES15-${suffix}`;
+  };
 
   useEffect(() => {
     const dismissed = sessionStorage.getItem("cuddles_promo_dismissed");
@@ -44,11 +51,15 @@ const SignupPromoModal = () => {
       });
 
       if (error && error.code === "23505") {
-        toast({ title: "Already signed up!", description: "You're already on our list. Check your inbox for your discount code!" });
+        const code = generatePromoCode();
+        setPromoCode(code);
+        toast({ title: "Already signed up!", description: "Here's your discount code again!" });
       } else if (error) {
         throw error;
       } else {
-        toast({ title: "You're in! 🎉", description: "Check your inbox for your 15% discount code!" });
+        const code = generatePromoCode();
+        setPromoCode(code);
+        toast({ title: "You're in! 🎉", description: "Your 15% discount code is ready!" });
       }
       setSubmitted(true);
     } catch {
@@ -69,12 +80,23 @@ const SignupPromoModal = () => {
             <DialogHeader>
               <DialogTitle className="text-2xl text-center">You're all set! 🎉</DialogTitle>
               <DialogDescription className="text-center text-base">
-                A special <span className="font-bold text-primary">15% discount code</span> will be sent to your inbox. Keep an eye out!
+                Use this code to get <span className="font-bold text-primary">15% off</span> your first order:
               </DialogDescription>
             </DialogHeader>
-            <Button onClick={handleClose} className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
-              Start Exploring Cuddles
-            </Button>
+            <div className="bg-muted border border-border rounded-lg px-4 py-3 mx-auto max-w-xs">
+              <p className="text-lg font-mono font-bold tracking-wider text-foreground select-all">{promoCode}</p>
+            </div>
+            <p className="text-sm text-muted-foreground">Copy the code above and use it at checkout</p>
+            <a
+              href="https://tripplefour-shop-hub.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block"
+            >
+              <Button className="mt-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                Shop Now & Use Code 🛒
+              </Button>
+            </a>
           </div>
         ) : (
           <div className="space-y-4">
