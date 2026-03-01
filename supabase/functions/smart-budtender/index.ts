@@ -404,7 +404,7 @@ serve(async (req) => {
         model,
         messages: [
           { role: 'system', content: systemPrompt },
-          ...messages,
+          ...truncatedMessages,
         ],
         stream: true,
       }),
