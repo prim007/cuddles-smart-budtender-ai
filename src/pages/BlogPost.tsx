@@ -1,10 +1,11 @@
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Clock, ArrowLeft, Tag, Share2, Bot, UserPlus, ArrowRight } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, Tag, Share2, Bot, UserPlus, ArrowRight, MessageCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { trackEvent } from "@/components/GoogleAnalytics";
+import { trackEvent, trackArticleEngaged } from "@/components/GoogleAnalytics";
 import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
@@ -26,6 +27,23 @@ interface BlogPost {
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
+  const articleEngagedRef = React.useRef(false);
+
+  // Track 50% scroll depth on article
+  React.useEffect(() => {
+    if (!slug) return;
+    const handleScroll = () => {
+      if (articleEngagedRef.current) return;
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0 && scrollTop / docHeight >= 0.5) {
+        articleEngagedRef.current = true;
+        trackArticleEngaged(slug);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [slug]);
 
   const { data: post, isLoading, error } = useQuery({
     queryKey: ["blog-post", slug],
@@ -203,14 +221,45 @@ const BlogPost = () => {
             </div>
           </article>
 
-          {/* CTA: Funnel readers to AI tools */}
-          <div className="max-w-3xl mx-auto mt-16 p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10 border border-border text-center">
-            <h3 className="font-display text-2xl font-bold text-foreground mb-3">
-              Want personalized recommendations?
-            </h3>
-            <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-              Let Cuddles AI find the perfect strain for you based on your preferences, experience, and desired effects.
-            </p>
+          {/* Contextual AI chat prompts embedded in blog */}
+          <div className="max-w-3xl mx-auto mt-16 p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10 border border-border">
+            <div className="text-center mb-6">
+              <h3 className="font-display text-2xl font-bold text-foreground mb-2">
+                Have questions about this topic?
+              </h3>
+              <p className="text-muted-foreground max-w-lg mx-auto">
+                Ask Cuddles AI anything related to this article — get instant, personalized answers.
+              </p>
+            </div>
+
+            {/* Contextual quick prompts based on article tags */}
+            <div className="flex flex-wrap gap-2 justify-center mb-6">
+              {(post.tags || []).slice(0, 3).map((tag) => (
+                <Link key={tag} to={`/#demo`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => trackEvent('blog_ai_prompt', 'engagement', `${tag}_${post.slug}`)}
+                    className="rounded-full gap-2"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    Tell me more about {tag}
+                  </Button>
+                </Link>
+              ))}
+              <Link to="/#demo">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => trackEvent('blog_ai_prompt', 'engagement', `general_${post.slug}`)}
+                  className="rounded-full gap-2"
+                >
+                  <Bot className="w-3.5 h-3.5" />
+                  Get a recommendation
+                </Button>
+              </Link>
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/auth">
                 <Button

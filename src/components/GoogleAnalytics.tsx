@@ -132,3 +132,35 @@ export const trackFeatureUse = (featureName: string) => {
 export const trackSearch = (query: string) => {
   trackEvent('search', 'engagement', query);
 };
+
+// --- Key conversion events for GA4 ---
+
+// Fire when user sends their first message in a session
+export const trackChatInitiated = (sessionId: string) => {
+  trackEvent('chat_initiated', 'conversion', sessionId);
+};
+
+// Fire when the AI returns a strain/product recommendation
+export const trackRecommendationGiven = (strainOrTopic: string) => {
+  trackEvent('recommendation_given', 'conversion', strainOrTopic);
+};
+
+// Fire when a user clicks a quick-prompt button
+export const trackPromptClicked = (promptLabel: string) => {
+  trackEvent('prompt_clicked', 'engagement', promptLabel);
+};
+
+// Fire when user clicks an outbound product/order link from chat
+export const trackOrderLinkClicked = (destination: string) => {
+  trackEvent('order_link_clicked', 'conversion', destination);
+};
+
+// Fire on signup completion
+export const trackSignupComplete = (method: string) => {
+  trackEvent('signup_complete', 'conversion', method);
+};
+
+// Fire when blog article is read past 50%
+export const trackArticleEngaged = (slug: string) => {
+  trackEvent('article_engaged', 'engagement', slug);
+};

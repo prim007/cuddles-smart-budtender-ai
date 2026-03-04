@@ -19,6 +19,7 @@ import DispensaryFinder from "./DispensaryFinder";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProfile } from "@/contexts/UserProfileContext";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
+import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } from "@/components/GoogleAnalytics";
 import ReactMarkdown from "react-markdown";
 
 const generateSessionId = () => crypto.randomUUID();
@@ -109,7 +110,11 @@ const ChatDemo = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
-    setMessageCount((prev) => prev + 1);
+    setMessageCount((prev) => {
+      const newCount = prev + 1;
+      if (newCount === 1) trackChatInitiated(sessionId);
+      return newCount;
+    });
 
     try {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-budtender`;
@@ -210,6 +215,12 @@ const ChatDemo = () => {
       if (orderMatch) {
         orderPhone = orderMatch[1];
         finalContent = finalContent.replace(/\[ORDER:[^\]]+\]/, '').trim();
+        trackOrderLinkClicked(`tel:${orderMatch[1]}`);
+      }
+
+      // Track if the AI gave a recommendation (heuristic: mentions strain-related keywords)
+      if (/\b(recommend|try|suggest|strain|indica|sativa|hybrid)\b/i.test(finalContent)) {
+        trackRecommendationGiven(sessionId);
       }
 
       // Final update with orderPhone if present
