@@ -24,10 +24,10 @@ const Index = () => {
       <ThemeToggle />
       <OnboardingFlow />
       <Hero />
+      <ChatDemo />
       <CuddlesFeatures />
       <Features />
       <HowItWorks />
-      <ChatDemo />
       <FAQSection />
       <InvestorCTA />
       <Footer />

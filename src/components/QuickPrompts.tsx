@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Moon, Zap, Heart, Palette, Coffee, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { trackPromptClicked } from "@/components/GoogleAnalytics";
 
 interface QuickPromptsProps {
   onSelect: (prompt: string) => void;
@@ -70,7 +71,7 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
             key={index}
             variant="outline"
             size="sm"
-            onClick={() => onSelect(prompt.prompt)}
+            onClick={() => { trackPromptClicked(prompt.label); onSelect(prompt.prompt); }}
             disabled={disabled}
             className="group relative overflow-hidden border-border/50 hover:border-primary/50 bg-card/50 hover:bg-card transition-all duration-300 rounded-full hover-scale"
           >
