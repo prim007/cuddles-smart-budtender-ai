@@ -41,6 +41,10 @@ const WhyCuddles = lazy(() => import("./pages/WhyCuddles"));
 const Catalog = lazy(() => import("./pages/Catalog"));
 const ManageStrains = lazy(() => import("./pages/ManageStrains"));
 
+// SEO pages
+const Strains = lazy(() => import("./pages/Strains"));
+const StrainDetail = lazy(() => import("./pages/StrainDetail"));
+
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
