@@ -54,22 +54,64 @@ const ImageUploadButton = ({ onImageAnalysis, disabled }: ImageUploadButtonProps
     setIsAnalyzing(true);
     
     try {
-      // Simulate image analysis with AI description
-      // In production, this would call an AI vision API
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const { data, error } = await supabase.functions.invoke("identify-strain", {
+        body: { imageBase64: selectedImage },
+      });
+
+      if (error) throw error;
+
+      if (data.error) {
+        toast({
+          title: t.error,
+          description: data.error,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const result = data.data;
+      const disclaimer = data.disclaimer || "";
+
+      // Build a rich description from the AI analysis
+      let analysis = `🔍 **Strain Identified: ${result.strain_name}** (${result.confidence}% confidence)\n\n`;
+      analysis += `**Type:** ${result.strain_type}\n\n`;
       
-      // Generate a contextual analysis prompt based on the image
-      const analysisPrompt = `I'm looking at a cannabis product image. Can you help me understand more about this type of product? What effects might it typically have, and what should I know as a consumer?`;
-      
-      onImageAnalysis(analysisPrompt);
+      if (result.description) {
+        analysis += `${result.description}\n\n`;
+      }
+
+      if (result.characteristics?.length > 0) {
+        analysis += `**Visual Traits:** ${result.characteristics.join(", ")}\n\n`;
+      }
+
+      if (result.thc_estimate) {
+        analysis += `**THC Estimate:** ${result.thc_estimate}`;
+        if (result.cbd_estimate) analysis += ` | **CBD Estimate:** ${result.cbd_estimate}`;
+        analysis += `\n\n`;
+      }
+
+      if (result.effects?.length > 0) {
+        analysis += `**Expected Effects:** ${result.effects.join(", ")}\n\n`;
+      }
+
+      if (result.similar_strains?.length > 0) {
+        analysis += `**Similar Strains:** ${result.similar_strains.join(", ")}\n\n`;
+      }
+
+      if (disclaimer) {
+        analysis += `⚠️ _${disclaimer}_`;
+      }
+
+      onImageAnalysis(analysis);
       setIsOpen(false);
       setSelectedImage(null);
       
       toast({
         title: "Image analyzed!",
-        description: "Your question has been sent to Cuddles.",
+        description: `Identified: ${result.strain_name} (${result.confidence}% confidence)`,
       });
     } catch (error) {
+      console.error("Scan error:", error);
       toast({
         title: t.error,
         description: "Failed to analyze image. Please try again.",
