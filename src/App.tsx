@@ -41,6 +41,10 @@ const WhyCuddles = lazy(() => import("./pages/WhyCuddles"));
 const Catalog = lazy(() => import("./pages/Catalog"));
 const ManageStrains = lazy(() => import("./pages/ManageStrains"));
 
+// SEO pages
+const Strains = lazy(() => import("./pages/Strains"));
+const StrainDetail = lazy(() => import("./pages/StrainDetail"));
+
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -110,6 +114,10 @@ const App = () => (
                 <Route path="/why-cuddles" element={<Suspense fallback={<PageLoader />}><WhyCuddles /></Suspense>} />
                 <Route path="/catalog" element={<Suspense fallback={<PageLoader />}><Catalog /></Suspense>} />
                 <Route path="/manage-strains" element={<Suspense fallback={<PageLoader />}><ManageStrains /></Suspense>} />
+
+                {/* Strain SEO Pages */}
+                <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
+                <Route path="/strains/:slug" element={<Suspense fallback={<PageLoader />}><StrainDetail /></Suspense>} />
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
