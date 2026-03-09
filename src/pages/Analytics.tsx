@@ -152,7 +152,7 @@ const Analytics = () => {
 
         {/* Why It Matters Section */}
         <section className="mb-16">
-          <h2 className="text-3xl font-groovy text-center mb-8">Why This Data Matters</h2>
+          <h2 className="text-3xl font-display font-bold text-center mb-8">Why This Data Matters</h2>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <Card className="border-hippie-purple/30 shadow-lg">
