@@ -239,7 +239,7 @@ const ToleranceBreak = () => {
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle className="font-groovy text-xl">Start Your Tolerance Break</DialogTitle>
+                  <DialogTitle className="font-display font-bold text-xl">Start Your Tolerance Break</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={startBreak} className="space-y-4">
                   <div>
