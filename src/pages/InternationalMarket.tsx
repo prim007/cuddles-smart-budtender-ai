@@ -275,7 +275,7 @@ const InternationalMarket = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <Card className="p-8 md:p-12 bg-gradient-to-br from-hippie-purple/20 via-hippie-pink/20 to-hippie-orange/20 backdrop-blur-sm border-hippie-pink/50">
-            <h2 className="text-3xl md:text-5xl font-groovy text-center text-foreground mb-6">
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-center text-foreground mb-6">
               Cuddles' Market Opportunity
             </h2>
             <p className="text-xl text-center text-foreground/80 mb-6">
