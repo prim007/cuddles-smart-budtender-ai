@@ -5,3 +5,5 @@ project_id = "rcigcarkcpinnniddxcm"
     verify_jwt = false
   [functions.send-promo-code]
     verify_jwt = false
+  [functions.validate-promo-code]
+    verify_jwt = false
