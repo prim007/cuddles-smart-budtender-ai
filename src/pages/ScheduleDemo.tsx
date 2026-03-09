@@ -171,7 +171,7 @@ const ScheduleDemo = () => {
         
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="text-center mb-12">
-            <h1 className="text-5xl md:text-7xl font-groovy mb-6 bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
               Schedule Your Demo
             </h1>
             <p className="text-xl md:text-2xl text-foreground/90">
