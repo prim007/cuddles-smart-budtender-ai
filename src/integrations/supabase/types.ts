@@ -172,6 +172,8 @@ export type Database = {
           promo_code: string | null
           source: string | null
           subscribed: boolean | null
+          used: boolean
+          used_at: string | null
         }
         Insert: {
           created_at?: string
@@ -180,6 +182,8 @@ export type Database = {
           promo_code?: string | null
           source?: string | null
           subscribed?: boolean | null
+          used?: boolean
+          used_at?: string | null
         }
         Update: {
           created_at?: string
@@ -188,6 +192,8 @@ export type Database = {
           promo_code?: string | null
           source?: string | null
           subscribed?: boolean | null
+          used?: boolean
+          used_at?: string | null
         }
         Relationships: []
       }
