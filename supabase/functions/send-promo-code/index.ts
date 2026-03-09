@@ -98,7 +98,7 @@ serve(async (req) => {
           <tr>
             <td style="padding:0 28px 20px;">
               <h1 style="margin:0;font-family:'Space Grotesk',Arial,sans-serif;font-size:24px;font-weight:bold;color:hsl(270,30%,15%);">
-                Hey there! 🎉
+                Hey there! ✌️
               </h1>
             </td>
           </tr>
@@ -106,7 +106,12 @@ serve(async (req) => {
           <!-- Body -->
           <tr>
             <td style="padding:0 28px 20px;font-size:15px;color:#5c4a6b;">
-              Thanks for signing up with <strong>Cuddles AI</strong>! As promised, here's your exclusive <strong>15% discount code</strong> to use on the Tripple Four shop:
+              We noticed you signed up on <strong>Cuddles AI</strong> — thank you for checking us out! We really appreciate you being part of the community.
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 28px 20px;font-size:15px;color:#5c4a6b;">
+              As a thank you, here's an exclusive <strong>15% discount code</strong> just for you to use on the <strong>Tripple Four shop</strong>:
             </td>
           </tr>
 
@@ -115,7 +120,7 @@ serve(async (req) => {
             <td style="padding:0 28px 24px;">
               <div style="background:linear-gradient(135deg,hsl(350,65%,55%),hsl(25,90%,60%));border-radius:16px;padding:24px;text-align:center;">
                 <p style="margin:0 0 8px;font-size:13px;color:rgba(255,255,255,0.85);font-family:'Outfit',Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;">Your Promo Code</p>
-                <p style="margin:0;font-family:'Space Grotesk',monospace;font-size:32px;font-weight:bold;color:#ffffff;letter-spacing:3px;">${promoCode}</p>
+                <p style="margin:0;font-family:'Space Grotesk',monospace;font-size:32px;font-weight:bold;color:#ffffff;letter-spacing:3px;">\${promoCode}</p>
               </div>
             </td>
           </tr>
@@ -123,10 +128,10 @@ serve(async (req) => {
           <!-- Instructions -->
           <tr>
             <td style="padding:0 28px 24px;font-size:15px;color:#5c4a6b;">
-              <strong style="color:hsl(270,30%,15%);">How to use:</strong><br/>
-              1. Browse products on our shop<br/>
-              2. Add items to your cart<br/>
-              3. Enter the code at checkout<br/>
+              <strong style="color:hsl(270,30%,15%);">How to use it:</strong><br/>
+              1. Head over to <a href="https://tripplefourshophub.online" style="color:hsl(350,65%,55%);text-decoration:underline;">tripplefourshophub.online</a><br/>
+              2. Browse and add items to your cart<br/>
+              3. Enter the code above at checkout<br/>
               4. Enjoy 15% off your order! 🌿
             </td>
           </tr>
