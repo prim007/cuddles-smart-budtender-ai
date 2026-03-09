@@ -138,7 +138,7 @@ const InvestmentDeck = () => {
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-green to-hippie-blue flex items-center justify-center">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-groovy text-foreground">Our Solution</h2>
+                <h2 className="text-3xl font-display font-bold text-foreground">Our Solution</h2>
               </div>
               <ul className="space-y-4 text-foreground/80">
                 <li className="flex gap-3">
