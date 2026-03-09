@@ -70,7 +70,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Cuddles AI <hello@tripplefourshophub.online>",
+        from: "Cuddles AI <onboarding@resend.dev>",
         to: [email.trim().toLowerCase()],
         subject: "Your 15% Discount Code from Cuddles! ✌️",
         html: `
