@@ -208,7 +208,7 @@ const ToleranceBreak = () => {
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
             <Heart className="w-12 h-12 mx-auto mb-4 text-hippie-purple" />
-            <h2 className="text-xl font-groovy mb-2">Sign In Required</h2>
+            <h2 className="text-xl font-display font-bold mb-2">Sign In Required</h2>
             <p className="text-muted-foreground mb-4">Create an account to track your tolerance breaks.</p>
             <Link to="/auth">
               <Button className="bg-gradient-to-r from-hippie-purple to-hippie-pink">Sign In</Button>
