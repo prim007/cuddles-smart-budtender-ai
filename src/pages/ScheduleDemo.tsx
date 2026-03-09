@@ -389,7 +389,7 @@ const ScheduleDemo = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-groovy text-foreground mb-4">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
               Seamless Integrations
             </h2>
             <p className="text-xl text-foreground/80">
