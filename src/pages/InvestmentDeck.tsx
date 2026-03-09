@@ -45,7 +45,7 @@ const InvestmentDeck = () => {
         </div>
         
         <div className="container mx-auto max-w-4xl relative z-10">
-          <h1 className="text-5xl md:text-7xl font-groovy text-center mb-6 bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-display font-bold text-center mb-6 bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
             Investment Deck
           </h1>
           <p className="text-xl md:text-2xl text-center text-foreground/90 mb-8">
