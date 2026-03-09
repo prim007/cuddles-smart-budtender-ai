@@ -35,7 +35,7 @@ const InternationalMarket = () => {
         <div className="container mx-auto max-w-4xl relative z-10">
           <div className="flex items-center justify-center gap-3 mb-6">
             <Globe className="w-12 h-12 text-hippie-purple" />
-            <h1 className="text-5xl md:text-7xl font-groovy text-center bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-display font-bold text-center bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
               Global Market Opportunity
             </h1>
           </div>
