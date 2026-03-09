@@ -41,10 +41,9 @@ const EmailCapture = ({ variant = "inline", onClose }: EmailCaptureProps) => {
 
       if (error) {
         if (error.code === "23505") {
-          // Unique constraint violation
           toast({
             title: "Already subscribed",
-            description: "This email is already on our list!",
+            description: "Check your inbox for your promo code!",
           });
           setIsSubmitted(true);
         } else {
@@ -54,9 +53,14 @@ const EmailCapture = ({ variant = "inline", onClose }: EmailCaptureProps) => {
         setIsSubmitted(true);
         toast({
           title: "Welcome to the tribe! ✌️",
-          description: "You'll be the first to know about updates and exclusive content.",
+          description: "Check your inbox for your 15% discount code!",
         });
       }
+
+      // Send promo code email
+      supabase.functions.invoke("send-promo-code", {
+        body: { email: email.trim().toLowerCase() },
+      }).catch((err) => console.error("Failed to send promo email:", err));
     } catch (error) {
       console.error("Error submitting email:", error);
       toast({

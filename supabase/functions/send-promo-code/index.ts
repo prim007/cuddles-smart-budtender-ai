@@ -1,0 +1,204 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+function generatePromoCode(): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "CUDDLES-";
+  for (let i = 0; i < 8; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { email } = await req.json();
+    if (!email) {
+      return new Response(JSON.stringify({ error: "Email is required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Check if lead already has a code
+    const { data: existing } = await supabase
+      .from("email_leads")
+      .select("promo_code, email")
+      .eq("email", email.trim().toLowerCase())
+      .maybeSingle();
+
+    let promoCode = existing?.promo_code;
+
+    if (!promoCode) {
+      // Generate unique code
+      promoCode = generatePromoCode();
+      const { error: updateError } = await supabase
+        .from("email_leads")
+        .update({ promo_code: promoCode })
+        .eq("email", email.trim().toLowerCase());
+
+      if (updateError) {
+        console.error("Failed to save promo code:", updateError);
+        throw new Error("Failed to save promo code");
+      }
+    }
+
+    // Send email via Resend
+    const emailResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Cuddles AI <hello@tripplefourshophub.online>",
+        to: [email.trim().toLowerCase()],
+        subject: "Your 15% Discount Code from Cuddles! ✌️",
+        html: `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background-color:#ffffff;font-family:'Outfit',Arial,Helvetica,sans-serif;color:#5c4a6b;line-height:1.6;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+
+          <!-- Logo -->
+          <tr>
+            <td style="padding:0 28px 24px;">
+              <img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style="border-radius:12px;display:block;margin-bottom:8px;" />
+              <span style="font-family:'Space Grotesk',Arial,sans-serif;font-size:20px;font-weight:bold;color:hsl(350,65%,55%);">Cuddles</span>
+            </td>
+          </tr>
+
+          <!-- Greeting -->
+          <tr>
+            <td style="padding:0 28px 20px;">
+              <h1 style="margin:0;font-family:'Space Grotesk',Arial,sans-serif;font-size:24px;font-weight:bold;color:hsl(270,30%,15%);">
+                Hey there! 🎉
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:0 28px 20px;font-size:15px;color:#5c4a6b;">
+              Thanks for signing up with <strong>Cuddles AI</strong>! As promised, here's your exclusive <strong>15% discount code</strong> to use on the Tripple Four shop:
+            </td>
+          </tr>
+
+          <!-- Promo Code Box -->
+          <tr>
+            <td style="padding:0 28px 24px;">
+              <div style="background:linear-gradient(135deg,hsl(350,65%,55%),hsl(25,90%,60%));border-radius:16px;padding:24px;text-align:center;">
+                <p style="margin:0 0 8px;font-size:13px;color:rgba(255,255,255,0.85);font-family:'Outfit',Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;">Your Promo Code</p>
+                <p style="margin:0;font-family:'Space Grotesk',monospace;font-size:32px;font-weight:bold;color:#ffffff;letter-spacing:3px;">${promoCode}</p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Instructions -->
+          <tr>
+            <td style="padding:0 28px 24px;font-size:15px;color:#5c4a6b;">
+              <strong style="color:hsl(270,30%,15%);">How to use:</strong><br/>
+              1. Browse products on our shop<br/>
+              2. Add items to your cart<br/>
+              3. Enter the code at checkout<br/>
+              4. Enjoy 15% off your order! 🌿
+            </td>
+          </tr>
+
+          <!-- CTA Button -->
+          <tr>
+            <td style="padding:0 28px 28px;">
+              <a href="https://tripplefourshophub.online" style="display:inline-block;background-color:hsl(350,65%,55%);color:#ffffff;font-family:'Space Grotesk',Arial,sans-serif;font-size:15px;font-weight:bold;text-decoration:none;border-radius:12px;padding:14px 28px;">
+                Shop Now 🛒
+              </a>
+            </td>
+          </tr>
+
+          <!-- Note -->
+          <tr>
+            <td style="padding:0 28px 28px;font-size:14px;color:#999;">
+              This code is unique to you and can be used once. No expiry — use it whenever you're ready!
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding:0 28px;">
+              <hr style="border:none;border-top:1px solid #ede8f0;margin:0 0 24px;" />
+            </td>
+          </tr>
+
+          <!-- Sign-off -->
+          <tr>
+            <td style="padding:0 28px 8px;font-size:15px;color:#5c4a6b;">Stay lifted,</td>
+          </tr>
+          <tr>
+            <td style="padding:0 28px 32px;">
+              <strong style="color:hsl(270,30%,15%);font-family:'Space Grotesk',Arial,sans-serif;">Primrose Maseko</strong><br/>
+              <span style="font-size:13px;color:#999;">Founder, Cuddles AI &amp; Tripple444</span>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:0 28px 16px;">
+              <p style="margin:0;font-size:12px;color:#999;text-align:center;">
+                You're receiving this because you signed up at <a href="https://cuddles-ai.com" style="color:hsl(350,65%,55%);text-decoration:underline;">cuddles-ai.com</a>.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+        `,
+      }),
+    });
+
+    const emailResult = await emailResponse.json();
+    if (!emailResponse.ok) {
+      console.error("Resend API error:", emailResult);
+      throw new Error(`Resend API failed [${emailResponse.status}]: ${JSON.stringify(emailResult)}`);
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, promo_code: promoCode }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    console.error("Error sending promo code:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return new Response(
+      JSON.stringify({ error: message }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+});
