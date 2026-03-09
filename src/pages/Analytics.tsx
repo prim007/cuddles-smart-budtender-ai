@@ -336,7 +336,7 @@ const Analytics = () => {
         <section className="text-center">
           <Card className="border-hippie-purple/30 shadow-xl bg-gradient-to-br from-hippie-purple/10 via-hippie-pink/10 to-hippie-orange/10">
             <CardHeader>
-              <CardTitle className="text-3xl font-groovy">Ready to Unlock Your Data?</CardTitle>
+              <CardTitle className="text-3xl font-display font-bold">Ready to Unlock Your Data?</CardTitle>
               <CardDescription className="text-lg">
                 See how Cuddles transforms customer conversations into business growth
               </CardDescription>

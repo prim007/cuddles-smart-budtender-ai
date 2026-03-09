@@ -432,7 +432,7 @@ const ScheduleDemo = () => {
 
           <Card className="mt-12 p-8 bg-gradient-to-br from-hippie-blue/10 to-hippie-purple/10 border-hippie-blue/30">
             <div className="text-center">
-              <h3 className="text-2xl font-groovy text-foreground mb-4">
+              <h3 className="text-2xl font-display font-bold text-foreground mb-4">
                 Don't See Your System?
               </h3>
               <p className="text-lg text-foreground/80 mb-6">

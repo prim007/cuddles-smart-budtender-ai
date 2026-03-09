@@ -289,7 +289,7 @@ const StrainReviews = () => {
 
       <section className="pt-24 px-4">
         <div className="container mx-auto max-w-6xl">
-          <h1 className="text-3xl md:text-4xl font-groovy mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent">
             Community Reviews ⭐
           </h1>
 

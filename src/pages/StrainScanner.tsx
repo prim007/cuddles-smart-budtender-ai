@@ -177,7 +177,7 @@ const StrainScanner = () => {
                   <div className="flex items-center gap-3">
                     <Leaf className="w-8 h-8 text-hippie-green" />
                     <div>
-                      <CardTitle className="text-2xl font-groovy">{result.strain_name}</CardTitle>
+                      <CardTitle className="text-2xl font-display font-bold">{result.strain_name}</CardTitle>
                       <Badge className={getTypeColor(result.strain_type)}>{result.strain_type}</Badge>
                     </div>
                   </div>
