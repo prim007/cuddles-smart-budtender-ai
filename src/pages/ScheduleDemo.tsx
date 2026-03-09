@@ -349,7 +349,7 @@ const ScheduleDemo = () => {
             {/* What to Expect */}
             <div className="space-y-6">
               <Card className="p-6 bg-card/50 backdrop-blur-sm border-hippie-yellow/30">
-                <h3 className="text-2xl font-groovy text-foreground mb-4">What to Expect</h3>
+                <h3 className="text-2xl font-display font-bold text-foreground mb-4">What to Expect</h3>
                 <ul className="space-y-3">
                   {[
                     "30-minute personalized walkthrough",
