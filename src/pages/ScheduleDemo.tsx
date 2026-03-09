@@ -171,7 +171,7 @@ const ScheduleDemo = () => {
         
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="text-center mb-12">
-            <h1 className="text-5xl md:text-7xl font-groovy mb-6 bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
               Schedule Your Demo
             </h1>
             <p className="text-xl md:text-2xl text-foreground/90">
@@ -349,7 +349,7 @@ const ScheduleDemo = () => {
             {/* What to Expect */}
             <div className="space-y-6">
               <Card className="p-6 bg-card/50 backdrop-blur-sm border-hippie-yellow/30">
-                <h3 className="text-2xl font-groovy text-foreground mb-4">What to Expect</h3>
+                <h3 className="text-2xl font-display font-bold text-foreground mb-4">What to Expect</h3>
                 <ul className="space-y-3">
                   {[
                     "30-minute personalized walkthrough",
@@ -389,7 +389,7 @@ const ScheduleDemo = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-groovy text-foreground mb-4">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
               Seamless Integrations
             </h2>
             <p className="text-xl text-foreground/80">
@@ -432,7 +432,7 @@ const ScheduleDemo = () => {
 
           <Card className="mt-12 p-8 bg-gradient-to-br from-hippie-blue/10 to-hippie-purple/10 border-hippie-blue/30">
             <div className="text-center">
-              <h3 className="text-2xl font-groovy text-foreground mb-4">
+              <h3 className="text-2xl font-display font-bold text-foreground mb-4">
                 Don't See Your System?
               </h3>
               <p className="text-lg text-foreground/80 mb-6">

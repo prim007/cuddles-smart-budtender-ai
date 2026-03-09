@@ -104,7 +104,7 @@ const StrainScanner = () => {
 
       <section className="pt-24 px-4">
         <div className="container mx-auto max-w-2xl">
-          <h1 className="text-3xl md:text-4xl font-groovy mb-2 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent text-center">
+          <h1 className="text-3xl md:text-4xl font-display font-bold mb-2 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent text-center">
             Strain Scanner 🔍
           </h1>
           <p className="text-center text-muted-foreground mb-8">
@@ -177,7 +177,7 @@ const StrainScanner = () => {
                   <div className="flex items-center gap-3">
                     <Leaf className="w-8 h-8 text-hippie-green" />
                     <div>
-                      <CardTitle className="text-2xl font-groovy">{result.strain_name}</CardTitle>
+                      <CardTitle className="text-2xl font-display font-bold">{result.strain_name}</CardTitle>
                       <Badge className={getTypeColor(result.strain_type)}>{result.strain_type}</Badge>
                     </div>
                   </div>

@@ -34,7 +34,7 @@ const PrivacyPolicy = () => {
               <Shield className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-groovy text-foreground">Privacy Policy</h1>
+              <h1 className="text-4xl font-display font-bold text-foreground">Privacy Policy</h1>
               <p className="text-muted-foreground mt-1">Last updated: November 27, 2025</p>
             </div>
           </div>

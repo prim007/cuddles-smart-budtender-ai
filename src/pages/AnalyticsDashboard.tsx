@@ -221,7 +221,7 @@ const AnalyticsDashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-groovy bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-display font-bold bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent mb-2">
             Analytics Dashboard
           </h1>
           <p className="text-muted-foreground">

@@ -131,7 +131,7 @@ const StrainJournal = () => {
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
             <BookOpen className="w-12 h-12 mx-auto mb-4 text-hippie-purple" />
-            <h2 className="text-xl font-groovy mb-2">Sign In Required</h2>
+            <h2 className="text-xl font-display font-bold mb-2">Sign In Required</h2>
             <p className="text-muted-foreground mb-4">Create an account to start your strain journal.</p>
             <Link to="/auth">
               <Button className="bg-gradient-to-r from-hippie-purple to-hippie-pink">Sign In</Button>
@@ -157,7 +157,7 @@ const StrainJournal = () => {
             </DialogTrigger>
             <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="font-groovy text-xl">Log Cannabis Session</DialogTitle>
+                <DialogTitle className="font-display font-bold text-xl">Log Cannabis Session</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -243,7 +243,7 @@ const StrainJournal = () => {
 
       <section className="pt-24 px-4">
         <div className="container mx-auto max-w-4xl">
-          <h1 className="text-3xl md:text-4xl font-groovy mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent">
             Strain Journal 📓
           </h1>
 

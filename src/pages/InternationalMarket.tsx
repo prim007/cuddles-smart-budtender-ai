@@ -35,7 +35,7 @@ const InternationalMarket = () => {
         <div className="container mx-auto max-w-4xl relative z-10">
           <div className="flex items-center justify-center gap-3 mb-6">
             <Globe className="w-12 h-12 text-hippie-purple" />
-            <h1 className="text-5xl md:text-7xl font-groovy text-center bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-display font-bold text-center bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
               Global Market Opportunity
             </h1>
           </div>
@@ -53,7 +53,7 @@ const InternationalMarket = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-purple to-hippie-pink flex items-center justify-center">
                 <DollarSign className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">US Cannabis Market</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">US Cannabis Market</h2>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -91,7 +91,7 @@ const InternationalMarket = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-orange to-hippie-yellow flex items-center justify-center">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">Global Cannabis Market</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Global Cannabis Market</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -119,7 +119,7 @@ const InternationalMarket = () => {
       {/* Key Markets */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl md:text-4xl font-groovy text-center text-foreground mb-12">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-center text-foreground mb-12">
             Key International Markets
           </h2>
 
@@ -213,7 +213,7 @@ const InternationalMarket = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-green to-hippie-blue flex items-center justify-center">
                 <Award className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">Key Market Drivers</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Key Market Drivers</h2>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -275,7 +275,7 @@ const InternationalMarket = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <Card className="p-8 md:p-12 bg-gradient-to-br from-hippie-purple/20 via-hippie-pink/20 to-hippie-orange/20 backdrop-blur-sm border-hippie-pink/50">
-            <h2 className="text-3xl md:text-5xl font-groovy text-center text-foreground mb-6">
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-center text-foreground mb-6">
               Cuddles' Market Opportunity
             </h2>
             <p className="text-xl text-center text-foreground/80 mb-6">

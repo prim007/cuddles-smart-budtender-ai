@@ -208,7 +208,7 @@ const ToleranceBreak = () => {
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
             <Heart className="w-12 h-12 mx-auto mb-4 text-hippie-purple" />
-            <h2 className="text-xl font-groovy mb-2">Sign In Required</h2>
+            <h2 className="text-xl font-display font-bold mb-2">Sign In Required</h2>
             <p className="text-muted-foreground mb-4">Create an account to track your tolerance breaks.</p>
             <Link to="/auth">
               <Button className="bg-gradient-to-r from-hippie-purple to-hippie-pink">Sign In</Button>
@@ -239,7 +239,7 @@ const ToleranceBreak = () => {
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle className="font-groovy text-xl">Start Your Tolerance Break</DialogTitle>
+                  <DialogTitle className="font-display font-bold text-xl">Start Your Tolerance Break</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={startBreak} className="space-y-4">
                   <div>
@@ -265,7 +265,7 @@ const ToleranceBreak = () => {
 
       <section className="pt-24 px-4">
         <div className="container mx-auto max-w-2xl">
-          <h1 className="text-3xl md:text-4xl font-groovy mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent text-center">
+          <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent text-center">
             Tolerance Break Coach 🧘
           </h1>
 
@@ -416,7 +416,7 @@ const ToleranceBreak = () => {
             /* No Active Break */
             <Card className="text-center py-12">
               <Heart className="w-16 h-16 mx-auto mb-4 text-hippie-purple" />
-              <h3 className="text-xl font-groovy mb-2">Ready for a Reset?</h3>
+              <h3 className="text-xl font-display font-bold mb-2">Ready for a Reset?</h3>
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                 A tolerance break can help you enjoy cannabis more while saving money. Cuddles will be your personal coach through the journey!
               </p>

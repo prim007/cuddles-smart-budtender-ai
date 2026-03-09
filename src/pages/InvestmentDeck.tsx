@@ -45,7 +45,7 @@ const InvestmentDeck = () => {
         </div>
         
         <div className="container mx-auto max-w-4xl relative z-10">
-          <h1 className="text-5xl md:text-7xl font-groovy text-center mb-6 bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-display font-bold text-center mb-6 bg-gradient-to-r from-hippie-yellow via-hippie-pink to-hippie-purple bg-clip-text text-transparent">
             Investment Deck
           </h1>
           <p className="text-xl md:text-2xl text-center text-foreground/90 mb-8">
@@ -68,7 +68,7 @@ const InvestmentDeck = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-orange to-hippie-yellow flex items-center justify-center">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">Market Opportunity</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Market Opportunity</h2>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -111,7 +111,7 @@ const InvestmentDeck = () => {
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
                   <Target className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-groovy text-foreground">The Problem</h2>
+                <h2 className="text-3xl font-display font-bold text-foreground">The Problem</h2>
               </div>
               <ul className="space-y-4 text-foreground/80">
                 <li className="flex gap-3">
@@ -138,7 +138,7 @@ const InvestmentDeck = () => {
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-green to-hippie-blue flex items-center justify-center">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-groovy text-foreground">Our Solution</h2>
+                <h2 className="text-3xl font-display font-bold text-foreground">Our Solution</h2>
               </div>
               <ul className="space-y-4 text-foreground/80">
                 <li className="flex gap-3">
@@ -171,7 +171,7 @@ const InvestmentDeck = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-purple to-hippie-pink flex items-center justify-center">
                 <DollarSign className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">Business Model</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Business Model</h2>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6">
@@ -205,7 +205,7 @@ const InvestmentDeck = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-yellow to-hippie-orange flex items-center justify-center">
                 <Award className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">Traction & Metrics</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Traction & Metrics</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 mb-8">
@@ -261,7 +261,7 @@ const InvestmentDeck = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <Card className="p-8 md:p-12 bg-gradient-to-br from-hippie-purple/20 via-hippie-pink/20 to-hippie-orange/20 backdrop-blur-sm border-hippie-pink/50">
-            <h2 className="text-3xl md:text-5xl font-groovy text-center text-foreground mb-6">
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-center text-foreground mb-6">
               Ready to Join Us?
             </h2>
             <p className="text-xl text-center text-foreground/80 mb-8">

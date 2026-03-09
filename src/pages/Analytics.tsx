@@ -26,7 +26,7 @@ const Analytics = () => {
             <span className="text-sm font-semibold">Data-Driven Intelligence</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-groovy bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent mb-6">
+          <h1 className="text-4xl md:text-6xl font-display font-bold bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent mb-6">
             Cuddles Analytics Platform
           </h1>
           
@@ -37,7 +37,7 @@ const Analytics = () => {
 
         {/* What We Collect Section */}
         <section className="mb-16">
-          <h2 className="text-3xl font-groovy text-center mb-8">What Cuddles Collects</h2>
+          <h2 className="text-3xl font-display font-bold text-center mb-8">What Cuddles Collects</h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="border-hippie-purple/30 shadow-lg">
@@ -152,7 +152,7 @@ const Analytics = () => {
 
         {/* Why It Matters Section */}
         <section className="mb-16">
-          <h2 className="text-3xl font-groovy text-center mb-8">Why This Data Matters</h2>
+          <h2 className="text-3xl font-display font-bold text-center mb-8">Why This Data Matters</h2>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <Card className="border-hippie-purple/30 shadow-lg">
@@ -239,7 +239,7 @@ const Analytics = () => {
 
         {/* How to Leverage Section */}
         <section className="mb-16">
-          <h2 className="text-3xl font-groovy text-center mb-8">How to Leverage Cuddles Data</h2>
+          <h2 className="text-3xl font-display font-bold text-center mb-8">How to Leverage Cuddles Data</h2>
           
           <div className="max-w-4xl mx-auto space-y-6">
             <Card className="border-hippie-purple/30 shadow-lg">
@@ -336,7 +336,7 @@ const Analytics = () => {
         <section className="text-center">
           <Card className="border-hippie-purple/30 shadow-xl bg-gradient-to-br from-hippie-purple/10 via-hippie-pink/10 to-hippie-orange/10">
             <CardHeader>
-              <CardTitle className="text-3xl font-groovy">Ready to Unlock Your Data?</CardTitle>
+              <CardTitle className="text-3xl font-display font-bold">Ready to Unlock Your Data?</CardTitle>
               <CardDescription className="text-lg">
                 See how Cuddles transforms customer conversations into business growth
               </CardDescription>

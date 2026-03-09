@@ -128,7 +128,7 @@ const DemoRequests = () => {
       <section className="pt-32 pb-12 px-4">
         <div className="container mx-auto max-w-7xl">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-groovy bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-display font-bold bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent">
               Demo Requests
             </h1>
             <Button onClick={fetchRequests} disabled={loading}>
