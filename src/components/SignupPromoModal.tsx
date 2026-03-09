@@ -44,12 +44,18 @@ const SignupPromoModal = () => {
       });
 
       if (error && error.code === "23505") {
-        toast({ title: "Already signed up!", description: "You're already on the list! We'll send your code soon." });
+        toast({ title: "Already signed up!", description: "You're already on the list! Check your inbox for your code." });
       } else if (error) {
         throw error;
       } else {
-        toast({ title: "You're in! 🎉", description: "We'll send your 15% discount code shortly!" });
+        toast({ title: "You're in! 🎉", description: "Check your inbox for your 15% discount code!" });
       }
+
+      // Send promo code email
+      supabase.functions.invoke("send-promo-code", {
+        body: { email: email.trim().toLowerCase() },
+      }).catch((err) => console.error("Failed to send promo email:", err));
+
       setSubmitted(true);
     } catch {
       toast({ title: "Oops!", description: "Something went wrong. Please try again.", variant: "destructive" });
