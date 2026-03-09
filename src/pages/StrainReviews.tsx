@@ -224,7 +224,7 @@ const StrainReviews = () => {
             </DialogTrigger>
             <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="font-groovy text-xl">Write a Strain Review</DialogTitle>
+                <DialogTitle className="font-display font-bold text-xl">Write a Strain Review</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
