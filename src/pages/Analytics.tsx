@@ -26,7 +26,7 @@ const Analytics = () => {
             <span className="text-sm font-semibold">Data-Driven Intelligence</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-groovy bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent mb-6">
+          <h1 className="text-4xl md:text-6xl font-display font-bold bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent mb-6">
             Cuddles Analytics Platform
           </h1>
           
