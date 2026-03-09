@@ -239,7 +239,7 @@ const Analytics = () => {
 
         {/* How to Leverage Section */}
         <section className="mb-16">
-          <h2 className="text-3xl font-groovy text-center mb-8">How to Leverage Cuddles Data</h2>
+          <h2 className="text-3xl font-display font-bold text-center mb-8">How to Leverage Cuddles Data</h2>
           
           <div className="max-w-4xl mx-auto space-y-6">
             <Card className="border-hippie-purple/30 shadow-lg">
