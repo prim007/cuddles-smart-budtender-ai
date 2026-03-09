@@ -265,7 +265,7 @@ const ToleranceBreak = () => {
 
       <section className="pt-24 px-4">
         <div className="container mx-auto max-w-2xl">
-          <h1 className="text-3xl md:text-4xl font-groovy mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent text-center">
+          <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent text-center">
             Tolerance Break Coach 🧘
           </h1>
 
