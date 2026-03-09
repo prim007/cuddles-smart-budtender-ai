@@ -111,7 +111,7 @@ const InvestmentDeck = () => {
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
                   <Target className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-groovy text-foreground">The Problem</h2>
+                <h2 className="text-3xl font-display font-bold text-foreground">The Problem</h2>
               </div>
               <ul className="space-y-4 text-foreground/80">
                 <li className="flex gap-3">
