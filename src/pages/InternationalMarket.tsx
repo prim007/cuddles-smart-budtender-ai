@@ -91,7 +91,7 @@ const InternationalMarket = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-orange to-hippie-yellow flex items-center justify-center">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">Global Cannabis Market</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Global Cannabis Market</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
