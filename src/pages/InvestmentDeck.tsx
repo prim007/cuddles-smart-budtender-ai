@@ -205,7 +205,7 @@ const InvestmentDeck = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-yellow to-hippie-orange flex items-center justify-center">
                 <Award className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">Traction & Metrics</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Traction & Metrics</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 mb-8">
