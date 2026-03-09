@@ -171,7 +171,7 @@ const InvestmentDeck = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-purple to-hippie-pink flex items-center justify-center">
                 <DollarSign className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-groovy text-foreground">Business Model</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Business Model</h2>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6">
