@@ -119,7 +119,7 @@ const InternationalMarket = () => {
       {/* Key Markets */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl md:text-4xl font-groovy text-center text-foreground mb-12">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-center text-foreground mb-12">
             Key International Markets
           </h2>
 
