@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import SignupPromoModal from "@/components/SignupPromoModal";
+import SignupBanner from "@/components/SignupBanner";
 
 const Index = () => {
   return (
@@ -25,6 +26,7 @@ const Index = () => {
       <OnboardingFlow />
       <Hero />
       <ChatDemo />
+      <SignupBanner />
       <CuddlesFeatures />
       <Features />
       <HowItWorks />
