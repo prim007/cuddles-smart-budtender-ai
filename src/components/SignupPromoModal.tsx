@@ -1,29 +1,58 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sparkles, Mail, CheckCircle } from "lucide-react";
+import { Sparkles, Mail, CheckCircle, Clock, Users, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { trackEvent, trackSignupComplete } from "@/components/GoogleAnalytics";
+
+const SHOP_URL = "https://tripplefourshophub.online";
 
 const SignupPromoModal = () => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [triggerSource, setTriggerSource] = useState<"timer" | "exit">("timer");
   const { toast } = useToast();
 
+  // Timer-based trigger (3s)
   useEffect(() => {
     const dismissed = sessionStorage.getItem("cuddles_promo_dismissed");
     if (!dismissed) {
-      const timer = setTimeout(() => setOpen(true), 3000);
+      const timer = setTimeout(() => {
+        setTriggerSource("timer");
+        setOpen(true);
+        trackEvent("promo_modal_shown", "conversion", "timer");
+      }, 3000);
       return () => clearTimeout(timer);
     }
+  }, []);
+
+  // Exit-intent trigger (desktop only)
+  useEffect(() => {
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0) {
+        const dismissed = sessionStorage.getItem("cuddles_promo_dismissed");
+        const exitShown = sessionStorage.getItem("cuddles_exit_shown");
+        if (!dismissed && !exitShown) {
+          setTriggerSource("exit");
+          setOpen(true);
+          sessionStorage.setItem("cuddles_exit_shown", "true");
+          trackEvent("promo_modal_shown", "conversion", "exit_intent");
+        }
+      }
+    };
+
+    document.addEventListener("mouseleave", handleMouseLeave);
+    return () => document.removeEventListener("mouseleave", handleMouseLeave);
   }, []);
 
   const handleClose = () => {
     setOpen(false);
     sessionStorage.setItem("cuddles_promo_dismissed", "true");
+    trackEvent("promo_modal_dismissed", "conversion", triggerSource);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,9 +78,9 @@ const SignupPromoModal = () => {
         throw error;
       } else {
         toast({ title: "You're in! 🎉", description: "Check your inbox for your 15% discount code!" });
+        trackSignupComplete("promo_modal");
       }
 
-      // Send promo code email
       supabase.functions.invoke("send-promo-code", {
         body: { email: email.trim().toLowerCase() },
       }).catch((err) => console.error("Failed to send promo email:", err));
@@ -66,67 +95,89 @@ const SignupPromoModal = () => {
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) handleClose(); }}>
-      <DialogContent className="sm:max-w-md border-border bg-card">
+      <DialogContent className="sm:max-w-md border-border bg-card overflow-hidden p-0">
         {submitted ? (
-          <div className="text-center py-6 space-y-4">
-            <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto">
+          <div className="text-center py-8 px-6 space-y-4">
+            <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto animate-bounce">
               <CheckCircle className="h-8 w-8 text-primary" />
             </div>
             <DialogHeader>
               <DialogTitle className="text-2xl text-center">You're all set! 🎉</DialogTitle>
               <DialogDescription className="text-center text-base">
-                We'll send your <span className="font-bold text-primary">15% discount code</span> to your email shortly. In the meantime, check out our shop!
+                We'll send your <span className="font-bold text-primary">15% discount code</span> to your email shortly. Head to the shop to browse!
               </DialogDescription>
             </DialogHeader>
             <a
-              href="https://tripplefour-shop-hub.lovable.app"
+              href={SHOP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block"
+              onClick={() => trackEvent("shop_link_clicked", "conversion", "promo_modal_success")}
             >
-              <Button className="mt-2 bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button className="mt-2 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold text-base px-6 py-3 h-auto">
                 Browse the Shop 🛒
               </Button>
             </a>
           </div>
         ) : (
-          <div className="space-y-4">
-            <div className="text-center space-y-2">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-2">
-                <Sparkles className="h-7 w-7 text-primary-foreground" />
-              </div>
-              <DialogHeader>
-                <DialogTitle className="text-2xl text-center">Welcome to Cuddles! ✌️</DialogTitle>
-                <DialogDescription className="text-center text-base">
-                  Sign up and get <span className="font-bold text-primary">15% off your first order</span> — we'll send your promo code to your email.
-                </DialogDescription>
-              </DialogHeader>
+          <div>
+            {/* Urgency banner */}
+            <div className="bg-gradient-to-r from-primary/90 to-accent/90 px-4 py-2.5 flex items-center justify-center gap-2 text-primary-foreground">
+              <Clock className="h-4 w-4" />
+              <span className="text-sm font-semibold">Limited Time: 15% Off Your First Order</span>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3 pt-2">
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10"
-                  disabled={isLoading}
-                />
+            <div className="px-6 py-6 space-y-4">
+              <div className="text-center space-y-2">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-2">
+                  <Gift className="h-7 w-7 text-primary-foreground" />
+                </div>
+                <DialogHeader>
+                  <DialogTitle className="text-2xl text-center">
+                    {triggerSource === "exit" ? "Wait! Don't leave empty-handed 🌿" : "Welcome to Cuddles! ✌️"}
+                  </DialogTitle>
+                  <DialogDescription className="text-center text-base">
+                    {triggerSource === "exit"
+                      ? "Grab your exclusive 15% discount before you go — just enter your email."
+                      : "Sign up and get 15% off your first order — we'll send your promo code instantly."}
+                  </DialogDescription>
+                </DialogHeader>
               </div>
-              <Button
-                type="submit"
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
-                disabled={isLoading || !email.trim()}
-              >
-                {isLoading ? "Signing up..." : "Sign Up & Get 15% Off"}
-              </Button>
-            </form>
 
-            <p className="text-xs text-center text-muted-foreground">
-              No spam, just good vibes. Unsubscribe anytime.
-            </p>
+              <form onSubmit={handleSubmit} className="space-y-3 pt-1">
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10 h-12 text-base"
+                    disabled={isLoading}
+                    autoFocus
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-base h-12"
+                  disabled={isLoading || !email.trim()}
+                >
+                  {isLoading ? "Signing up..." : "🎁 Claim My 15% Discount"}
+                </Button>
+              </form>
+
+              {/* Social proof */}
+              <div className="flex items-center justify-center gap-4 pt-2 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Users className="h-3.5 w-3.5" />
+                  2,400+ members
+                </span>
+                <span>•</span>
+                <span>No spam, ever</span>
+                <span>•</span>
+                <span>Free to join</span>
+              </div>
+            </div>
           </div>
         )}
       </DialogContent>
