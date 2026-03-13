@@ -198,6 +198,17 @@ const BlogPost = () => {
                 Share
               </Button>
             </div>
+
+            {post.featured_image ? (
+              <div className="mb-2 overflow-hidden rounded-2xl border border-border/60">
+                <img
+                  src={post.featured_image}
+                  alt={post.title}
+                  loading="eager"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            ) : null}
           </div>
         </div>
       </section>
