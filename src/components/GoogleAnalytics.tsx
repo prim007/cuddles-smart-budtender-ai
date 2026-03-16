@@ -1,21 +1,55 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID || 'G-KHJ04X5EE1';
 
 declare global {
   interface Window {
-    gtag?: (
-      command: string,
-      targetId: string,
-      config?: Record<string, any>
-    ) => void;
+    gtag?: (...args: any[]) => void;
     dataLayer?: any[];
   }
 }
 
 export const GoogleAnalytics = () => {
   const location = useLocation();
+
+  // Load GA script once — use gtag recommended loading pattern
+  useEffect(() => {
+    if (!GA_TRACKING_ID || document.getElementById('ga-script')) return;
+
+    // Initialize dataLayer before script loads to queue events
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag() {
+      window.dataLayer?.push(arguments);
+    };
+    window.gtag('js', new Date() as any);
+    window.gtag('config', GA_TRACKING_ID, {
+      send_page_view: false, // We send manually on route change to avoid double-counting
+      cookie_flags: 'SameSite=None;Secure',
+      transport_type: 'beacon', // Use navigator.sendBeacon for reliability
+    });
+
+    const script = document.createElement('script');
+    script.id = 'ga-script';
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
+    document.head.appendChild(script);
+  }, []);
+
+  // Track page views on route change — send after short delay to capture correct title
+  useEffect(() => {
+    if (!GA_TRACKING_ID || !window.gtag) return;
+
+    const timer = setTimeout(() => {
+      window.gtag?.('event', 'page_view', {
+        page_path: location.pathname + location.search,
+        page_title: document.title,
+        page_location: window.location.href,
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname, location.search]);
 
   // Track scroll depth
   useEffect(() => {
@@ -42,16 +76,29 @@ export const GoogleAnalytics = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
-  // Track time on page
+  // Track time on page — use beacon on unload for reliability
   useEffect(() => {
     if (!GA_TRACKING_ID) return;
     const start = Date.now();
 
-    return () => {
+    const sendTimeOnPage = () => {
       const seconds = Math.round((Date.now() - start) / 1000);
       if (seconds > 5) {
         trackEvent('time_on_page', 'engagement', location.pathname, seconds);
       }
+    };
+
+    // Use visibilitychange (more reliable than unload on mobile)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        sendTimeOnPage();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      sendTimeOnPage();
     };
   }, [location.pathname]);
 
@@ -72,42 +119,10 @@ export const GoogleAnalytics = () => {
     return () => document.removeEventListener('click', handleClick);
   }, []);
 
-  useEffect(() => {
-    if (GA_TRACKING_ID && !document.getElementById('ga-script')) {
-      const script = document.createElement('script');
-      script.id = 'ga-script';
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
-      document.head.appendChild(script);
-
-      script.onload = () => {
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = function gtag() {
-          window.dataLayer?.push(arguments);
-        };
-        window.gtag('js', new Date() as any);
-        window.gtag('config', GA_TRACKING_ID, {
-          send_page_view: true,
-          cookie_flags: 'SameSite=None;Secure',
-        });
-      };
-    }
-  }, []);
-
-  useEffect(() => {
-    if (GA_TRACKING_ID && window.gtag) {
-      window.gtag('config', GA_TRACKING_ID, {
-        page_path: location.pathname + location.search,
-        page_title: document.title,
-        page_location: window.location.href,
-      });
-    }
-  }, [location]);
-
   return null;
 };
 
-// Custom event tracking helper
+// Use beacon transport for critical events to prevent data loss
 export const trackEvent = (
   action: string,
   category: string,
@@ -119,6 +134,7 @@ export const trackEvent = (
       event_category: category,
       event_label: label,
       value: value,
+      transport_type: 'beacon',
     });
   }
 };
@@ -134,33 +150,26 @@ export const trackSearch = (query: string) => {
 };
 
 // --- Key conversion events for GA4 ---
-
-// Fire when user sends their first message in a session
 export const trackChatInitiated = (sessionId: string) => {
   trackEvent('chat_initiated', 'conversion', sessionId);
 };
 
-// Fire when the AI returns a strain/product recommendation
 export const trackRecommendationGiven = (strainOrTopic: string) => {
   trackEvent('recommendation_given', 'conversion', strainOrTopic);
 };
 
-// Fire when a user clicks a quick-prompt button
 export const trackPromptClicked = (promptLabel: string) => {
   trackEvent('prompt_clicked', 'engagement', promptLabel);
 };
 
-// Fire when user clicks an outbound product/order link from chat
 export const trackOrderLinkClicked = (destination: string) => {
   trackEvent('order_link_clicked', 'conversion', destination);
 };
 
-// Fire on signup completion
 export const trackSignupComplete = (method: string) => {
   trackEvent('signup_complete', 'conversion', method);
 };
 
-// Fire when blog article is read past 50%
 export const trackArticleEngaged = (slug: string) => {
   trackEvent('article_engaged', 'engagement', slug);
 };
