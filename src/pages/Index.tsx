@@ -11,6 +11,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import SignupPromoModal from "@/components/SignupPromoModal";
 import SignupBanner from "@/components/SignupBanner";
+import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 
 const Index = () => {
   return (
@@ -18,9 +19,9 @@ const Index = () => {
       <SignupPromoModal />
       <SEO 
         title="Cuddles AI - The World's Smartest Cannabis Budtender | AI Strain Recommendations"
-        description="Cuddles AI is the smartest AI-powered cannabis budtender. Get personalized strain recommendations, track your cannabis journal, scan strains with AI, read community reviews, and manage tolerance breaks. Free to use worldwide."
+        description="Get personalized cannabis strain recommendations from Cuddles AI, the smartest AI budtender. Find your perfect indica, sativa, or hybrid strain based on desired effects, terpene profiles, and experience level. Free to use."
         url="/"
-        keywords="Cuddles AI, cannabis AI, smart budtender, AI budtender, strain recommendations, cannabis recommendations, weed AI, marijuana AI, cannabis technology, dispensary AI, strain finder, cannabis app, best cannabis AI, cannabis community"
+        keywords="cannabis AI, AI budtender, strain recommendations, weed recommendations, cannabis strain finder, best strains for sleep, best strains for anxiety, terpene guide, indica vs sativa, CBD vs THC, smart budtender, dispensary AI, Cuddles AI"
       />
       <ThemeToggle />
       <OnboardingFlow />
@@ -28,6 +29,7 @@ const Index = () => {
       <ChatDemo />
       <SignupBanner />
       <CuddlesFeatures />
+      <FeaturedBlogPosts />
       <Features />
       <HowItWorks />
       <FAQSection />
