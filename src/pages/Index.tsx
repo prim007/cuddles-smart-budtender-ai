@@ -11,6 +11,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import SignupPromoModal from "@/components/SignupPromoModal";
 import SignupBanner from "@/components/SignupBanner";
+import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 
 const Index = () => {
   return (
