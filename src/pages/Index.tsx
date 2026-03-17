@@ -29,6 +29,7 @@ const Index = () => {
       <ChatDemo />
       <SignupBanner />
       <CuddlesFeatures />
+      <FeaturedBlogPosts />
       <Features />
       <HowItWorks />
       <FAQSection />
