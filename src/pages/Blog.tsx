@@ -47,9 +47,10 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Cannabis Education Blog"
-        description="Learn about cannabis strains, terpenes, consumption methods, and responsible use. Educational content for both beginners and experienced users."
+        title="Cannabis Education Blog - Strains, Terpenes & Research"
+        description="Expert cannabis education: learn about indica vs sativa, terpene profiles, CBD vs THC, responsible dosing, and the latest cannabis legislation. Written by industry experts."
         url="/blog"
+        keywords="cannabis blog, cannabis education, indica vs sativa, terpene guide, CBD vs THC, cannabis strains guide, cannabis research, cannabis dosing, cannabis safety, medicinal cannabis"
       />
       <ThemeToggle />
 
