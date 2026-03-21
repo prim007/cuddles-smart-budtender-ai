@@ -47,8 +47,13 @@ const Hero = () => {
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed font-sans">
+          <p className="text-lg md:text-xl text-white/70 mb-4 max-w-2xl mx-auto leading-relaxed font-sans">
             Your intelligent budtender that recommends the perfect strains based on your desired effects, experience level, and preferences
+          </p>
+
+          {/* Engagement nudge — drives users directly to chat */}
+          <p className="text-sm text-white/50 mb-10 animate-pulse">
+            👇 Try asking Cuddles something below — no signup needed
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
