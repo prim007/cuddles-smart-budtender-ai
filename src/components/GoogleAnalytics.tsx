@@ -10,6 +10,66 @@ declare global {
   }
 }
 
+// --- UTM helpers ---
+const UTM_PARAMS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
+const UTM_STORAGE_KEY = 'cuddles-utm';
+
+/** Parse UTM params from current URL and persist in sessionStorage */
+const captureUtmParams = (): Record<string, string> => {
+  const params = new URLSearchParams(window.location.search);
+  const utm: Record<string, string> = {};
+  
+  for (const key of UTM_PARAMS) {
+    const val = params.get(key);
+    if (val) utm[key] = val;
+  }
+
+  // If we found UTM params, persist them for the session
+  if (Object.keys(utm).length > 0) {
+    try {
+      sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(utm));
+    } catch { /* storage full / disabled */ }
+  }
+
+  // Return stored params (may have been captured on a previous page)
+  try {
+    const stored = sessionStorage.getItem(UTM_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : utm;
+  } catch {
+    return utm;
+  }
+};
+
+/** Get stored UTM params without re-parsing */
+const getStoredUtm = (): Record<string, string> => {
+  try {
+    const stored = sessionStorage.getItem(UTM_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+};
+
+// --- Bot detection ---
+const BOT_DATACENTER_CITIES = new Set([
+  'council bluffs', 'boardman', 'ashburn', 'the dalles',
+  'north charleston', 'pryor', 'pryor creek', 'quincy',
+  'new albany', 'papillion',
+]);
+
+const isLikelyBot = (): boolean => {
+  const ua = navigator.userAgent.toLowerCase();
+  // Common bot signatures
+  if (/bot|crawl|spider|scrape|headless|phantom|puppeteer|selenium|lighthouse/i.test(ua)) {
+    return true;
+  }
+  // No language = likely headless
+  if (!navigator.language && !navigator.languages?.length) {
+    return true;
+  }
+  return false;
+};
+
 export const GoogleAnalytics = () => {
   const location = useLocation();
 
@@ -17,17 +77,33 @@ export const GoogleAnalytics = () => {
   useEffect(() => {
     if (!GA_TRACKING_ID || document.getElementById('ga-script')) return;
 
+    // Skip GA entirely for obvious bots
+    if (isLikelyBot()) return;
+
+    // Capture UTM params on first load
+    const utm = captureUtmParams();
+
     // Initialize dataLayer before script loads to queue events
     window.dataLayer = window.dataLayer || [];
     window.gtag = function gtag() {
       window.dataLayer?.push(arguments);
     };
-    window.gtag('js', new Date() as any);
-    window.gtag('config', GA_TRACKING_ID, {
+
+    const configOptions: Record<string, any> = {
       send_page_view: false, // We send manually on route change to avoid double-counting
       cookie_flags: 'SameSite=None;Secure',
       transport_type: 'beacon', // Use navigator.sendBeacon for reliability
-    });
+    };
+
+    // Forward UTM params to GA config for proper attribution
+    if (utm.utm_source) configOptions.campaign_source = utm.utm_source;
+    if (utm.utm_medium) configOptions.campaign_medium = utm.utm_medium;
+    if (utm.utm_campaign) configOptions.campaign_name = utm.utm_campaign;
+    if (utm.utm_term) configOptions.campaign_term = utm.utm_term;
+    if (utm.utm_content) configOptions.campaign_content = utm.utm_content;
+
+    window.gtag('js', new Date() as any);
+    window.gtag('config', GA_TRACKING_ID, configOptions);
 
     const script = document.createElement('script');
     script.id = 'ga-script';
@@ -36,15 +112,19 @@ export const GoogleAnalytics = () => {
     document.head.appendChild(script);
   }, []);
 
-  // Track page views on route change — send after short delay to capture correct title
+  // Track page views on route change — include UTM data for attribution
   useEffect(() => {
     if (!GA_TRACKING_ID || !window.gtag) return;
 
     const timer = setTimeout(() => {
+      const utm = getStoredUtm();
       window.gtag?.('event', 'page_view', {
         page_path: location.pathname + location.search,
         page_title: document.title,
         page_location: window.location.href,
+        ...(utm.utm_source && { campaign_source: utm.utm_source }),
+        ...(utm.utm_medium && { campaign_medium: utm.utm_medium }),
+        ...(utm.utm_campaign && { campaign_name: utm.utm_campaign }),
       });
     }, 100);
 
@@ -130,11 +210,13 @@ export const trackEvent = (
   value?: number
 ) => {
   if (window.gtag) {
+    const utm = getStoredUtm();
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
       value: value,
       transport_type: 'beacon',
+      ...(utm.utm_source && { campaign_source: utm.utm_source }),
     });
   }
 };
