@@ -197,6 +197,139 @@ export type Database = {
         }
         Relationships: []
       }
+      plant_care_logs: {
+        Row: {
+          created_at: string
+          details: Json | null
+          id: string
+          log_date: string
+          log_type: string
+          notes: string | null
+          plant_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          id?: string
+          log_date?: string
+          log_type: string
+          notes?: string | null
+          plant_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          id?: string
+          log_date?: string
+          log_type?: string
+          notes?: string | null
+          plant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plant_care_logs_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plant_environment_logs: {
+        Row: {
+          created_at: string
+          humidity: number | null
+          id: string
+          light_hours: number | null
+          logged_at: string
+          notes: string | null
+          nutrient_ppm: number | null
+          ph_level: number | null
+          plant_id: string
+          temperature: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          humidity?: number | null
+          id?: string
+          light_hours?: number | null
+          logged_at?: string
+          notes?: string | null
+          nutrient_ppm?: number | null
+          ph_level?: number | null
+          plant_id: string
+          temperature?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          humidity?: number | null
+          id?: string
+          light_hours?: number | null
+          logged_at?: string
+          notes?: string | null
+          nutrient_ppm?: number | null
+          ph_level?: number | null
+          plant_id?: string
+          temperature?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plant_environment_logs_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plants: {
+        Row: {
+          created_at: string
+          growth_stage: string
+          id: string
+          image_url: string | null
+          notes: string | null
+          plant_name: string
+          planted_date: string
+          strain_name: string | null
+          strain_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          growth_stage?: string
+          id?: string
+          image_url?: string | null
+          notes?: string | null
+          plant_name: string
+          planted_date?: string
+          strain_name?: string | null
+          strain_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          growth_stage?: string
+          id?: string
+          image_url?: string | null
+          notes?: string | null
+          plant_name?: string
+          planted_date?: string
+          strain_name?: string | null
+          strain_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       review_votes: {
         Row: {
           created_at: string | null

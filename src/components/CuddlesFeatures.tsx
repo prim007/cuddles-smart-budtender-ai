@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Camera, Star, Heart, ArrowRight } from "lucide-react";
+import { BookOpen, Camera, Star, Heart, ArrowRight, Sprout } from "lucide-react";
 
 const features = [
   {
@@ -27,6 +27,12 @@ const features = [
     title: "T-Break Coach",
     description: "AI-guided tolerance break program with progress tracking and personalized motivation.",
     href: "/t-break",
+  },
+  {
+    icon: Sprout,
+    title: "Seedling Monitor",
+    description: "Track your grow from seed to harvest with care logs, environment tracking, and AI cultivation tips.",
+    href: "/grow",
   },
 ];
 

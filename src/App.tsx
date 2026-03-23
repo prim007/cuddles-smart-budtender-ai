@@ -34,6 +34,7 @@ const StrainReviews = lazy(() => import("./pages/StrainReviews"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
+const SeedlingMonitor = lazy(() => import("./pages/SeedlingMonitor"));
 
 // B2B
 const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
@@ -104,6 +105,7 @@ const App = () => (
                 <Route path="/scanner" element={<Suspense fallback={<PageLoader />}><StrainScanner /></Suspense>} />
                 <Route path="/reviews" element={<Suspense fallback={<PageLoader />}><StrainReviews /></Suspense>} />
                 <Route path="/t-break" element={<Suspense fallback={<PageLoader />}><ToleranceBreak /></Suspense>} />
+                <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />
                 
                 {/* Blog */}
                 <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />

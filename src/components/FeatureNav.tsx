@@ -13,7 +13,8 @@ import {
   LogIn,
   Newspaper,
   Store,
-  Lightbulb
+  Lightbulb,
+  Sprout
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -60,6 +61,12 @@ const features = [
     title: "T-Break",
     href: "/t-break",
     gradient: "from-hippie-green to-hippie-teal",
+  },
+  {
+    icon: Sprout,
+    title: "Grow",
+    href: "/grow",
+    gradient: "from-hippie-green to-hippie-amber",
   },
   {
     icon: Newspaper,
