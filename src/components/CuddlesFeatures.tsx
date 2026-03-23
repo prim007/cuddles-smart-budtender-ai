@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Camera, Star, Heart, ArrowRight } from "lucide-react";
+import { BookOpen, Camera, Star, Heart, ArrowRight, Sprout } from "lucide-react";
 
 const features = [
   {
