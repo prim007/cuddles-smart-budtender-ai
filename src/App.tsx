@@ -34,6 +34,7 @@ const StrainReviews = lazy(() => import("./pages/StrainReviews"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
+const SeedlingMonitor = lazy(() => import("./pages/SeedlingMonitor"));
 
 // B2B
 const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
