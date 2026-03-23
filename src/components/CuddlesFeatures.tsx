@@ -28,6 +28,12 @@ const features = [
     description: "AI-guided tolerance break program with progress tracking and personalized motivation.",
     href: "/t-break",
   },
+  {
+    icon: Sprout,
+    title: "Seedling Monitor",
+    description: "Track your grow from seed to harvest with care logs, environment tracking, and AI cultivation tips.",
+    href: "/grow",
+  },
 ];
 
 const CuddlesFeatures = () => {
