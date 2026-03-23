@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
-import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag } from "lucide-react";
+import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout } from "lucide-react";
 
 const features = [
   { icon: Home, title: "Home", href: "/" },
@@ -11,6 +11,7 @@ const features = [
   { icon: Camera, title: "Strain Scanner", href: "/scanner" },
   { icon: Star, title: "Community Reviews", href: "/reviews" },
   { icon: Heart, title: "T-Break Coach", href: "/t-break" },
+  { icon: Sprout, title: "Seedling Monitor", href: "/grow" },
 ];
 
 const Footer = () => {
@@ -88,7 +89,7 @@ const Footer = () => {
         {/* SEO-rich text with internal links */}
         <div className="pt-6 border-t border-border">
           <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-2">
-            Cuddles AI is the world's smartest <Link to="/why-cuddles" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> offering personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, <Link to="/reviews" className="underline hover:text-foreground">community reviews</Link>, and a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>. Available worldwide for cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
+            Cuddles AI is the world's smartest <Link to="/why-cuddles" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> offering personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, <Link to="/reviews" className="underline hover:text-foreground">community reviews</Link>, a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>, and a <Link to="/grow" className="underline hover:text-foreground">seedling monitor for growers</Link>. Available worldwide for cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
           </p>
           <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-4">
             Learn about cannabis with our <Link to="/blog" className="underline hover:text-foreground">educational blog</Link> covering topics from <Link to="/blog/indica-vs-sativa-vs-hybrid" className="underline hover:text-foreground">indica vs sativa</Link> to <Link to="/blog/beginners-guide-to-terpenes" className="underline hover:text-foreground">terpenes</Link> and <Link to="/blog/responsible-consumption-tips" className="underline hover:text-foreground">responsible consumption</Link>.
