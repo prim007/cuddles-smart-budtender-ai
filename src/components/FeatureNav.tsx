@@ -63,6 +63,12 @@ const features = [
     gradient: "from-hippie-green to-hippie-teal",
   },
   {
+    icon: Sprout,
+    title: "Grow",
+    href: "/grow",
+    gradient: "from-hippie-green to-hippie-amber",
+  },
+  {
     icon: Newspaper,
     title: "Blog",
     href: "/blog",
