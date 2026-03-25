@@ -12,6 +12,7 @@ import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import SignupPromoModal from "@/components/SignupPromoModal";
 import SignupBanner from "@/components/SignupBanner";
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
+import SignupCTA from "@/components/SignupCTA";
 
 const Index = () => {
   return (
@@ -34,6 +35,7 @@ const Index = () => {
       <HowItWorks />
       <FAQSection />
       <InvestorCTA />
+      <SignupCTA />
       <Footer />
     </div>
   );

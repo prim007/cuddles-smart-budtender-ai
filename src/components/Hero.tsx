@@ -64,7 +64,7 @@ const Hero = () => {
                 className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full"
               >
                 <UserPlus className="w-5 h-5" />
-                Sign Up Free
+                Sign Up Free — It Takes 10 Seconds
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
