@@ -15,7 +15,7 @@ const SignupCTA = () => {
     const alreadyDismissed = sessionStorage.getItem("signup_cta_dismissed");
     if (alreadyDismissed) { setDismissed(true); return; }
 
-    const timer = setTimeout(() => setVisible(true), 15000); // show after 15s of browsing
+    const timer = setTimeout(() => setVisible(true), 60000); // show after 60s of browsing
     return () => clearTimeout(timer);
   }, [user, dismissed]);
 
