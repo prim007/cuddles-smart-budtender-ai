@@ -420,6 +420,10 @@ const ChatDemo = () => {
                 </div>
               </div>
             )}
+            {/* Show signup prompt after 3 AI responses */}
+            {messages.filter(m => m.role === "assistant").length >= 4 && (
+              <ChatSignupPrompt />
+            )}
             <div ref={messagesEndRef} />
           </div>
 
