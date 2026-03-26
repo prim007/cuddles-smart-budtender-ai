@@ -17,7 +17,7 @@ const SignupPromoModal = () => {
   const [triggerSource, setTriggerSource] = useState<"timer" | "exit">("timer");
   const { toast } = useToast();
 
-  // Timer-based trigger (3s)
+  // Timer-based trigger (45s — give users time to experience value first)
   useEffect(() => {
     const dismissed = sessionStorage.getItem("cuddles_promo_dismissed");
     if (!dismissed) {
@@ -25,7 +25,7 @@ const SignupPromoModal = () => {
         setTriggerSource("timer");
         setOpen(true);
         trackEvent("promo_modal_shown", "conversion", "timer");
-      }, 3000);
+      }, 45000);
       return () => clearTimeout(timer);
     }
   }, []);
