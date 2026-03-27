@@ -168,7 +168,7 @@ const FeatureNav = () => {
             key={feature.href}
             to={feature.href}
             className={cn(
-              "group flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-all duration-200",
+              "group flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200",
               isActive(feature.href)
                 ? "bg-gradient-to-r from-hippie-purple/10 to-hippie-pink/10"
                 : "hover:bg-muted"
