@@ -153,7 +153,7 @@ export const Scene5CTA: React.FC = () => {
           opacity: interpolate(frame, [70, 90], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
         }}
       >
-        cuddles-smart-budtender-ai.lovable.app
+        cuddles-ai.com
       </div>
     </AbsoluteFill>
   );
