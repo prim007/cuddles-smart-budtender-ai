@@ -9,6 +9,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { UserProfileProvider } from "@/contexts/UserProfileContext";
 import { CartProvider } from "@/contexts/CartContext";
+import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import FeatureNav from "@/components/FeatureNav";
 import Index from "./pages/Index";
@@ -45,6 +46,7 @@ const ManageStrains = lazy(() => import("./pages/ManageStrains"));
 const Shop = lazy(() => import("./pages/Shop"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const OrderTracking = lazy(() => import("./pages/OrderTracking"));
+const Premium = lazy(() => import("./pages/Premium"));
 
 // SEO pages
 const Strains = lazy(() => import("./pages/Strains"));
@@ -65,6 +67,7 @@ const App = () => (
       <UserProfileProvider>
         <CartProvider>
         <AuthProvider>
+          <SubscriptionProvider>
           <TooltipProvider>
             <Toaster />
             <Sonner />
@@ -124,6 +127,7 @@ const App = () => (
                 <Route path="/shop" element={<Suspense fallback={<PageLoader />}><Shop /></Suspense>} />
                 <Route path="/checkout" element={<Suspense fallback={<PageLoader />}><Checkout /></Suspense>} />
                 <Route path="/orders/:orderId" element={<Suspense fallback={<PageLoader />}><OrderTracking /></Suspense>} />
+                <Route path="/premium" element={<Suspense fallback={<PageLoader />}><Premium /></Suspense>} />
 
                 {/* Strain SEO Pages */}
                 <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
@@ -134,6 +138,7 @@ const App = () => (
               </Routes>
             </BrowserRouter>
           </TooltipProvider>
+          </SubscriptionProvider>
         </AuthProvider>
         </CartProvider>
       </UserProfileProvider>
