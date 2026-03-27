@@ -103,7 +103,16 @@ const Hero = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          {/* Quick-start prompts carousel */}
+          <HeroQuickPrompts onSelect={(prompt) => {
+            // Scroll to chat and send the prompt
+            const chatInput = document.querySelector('#demo') as HTMLElement;
+            chatInput?.scrollIntoView({ behavior: 'smooth' });
+            // Dispatch custom event for ChatDemo to pick up
+            window.dispatchEvent(new CustomEvent('cuddles-quick-prompt', { detail: prompt }));
+          }} />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
             {[
               { label: 'Match Accuracy', value: '95%', icon: '🎯' },
               { label: 'Response Time', value: '<2s', icon: '⚡' },
