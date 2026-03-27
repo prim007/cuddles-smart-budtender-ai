@@ -16,7 +16,7 @@ import SignupCTA from "@/components/SignupCTA";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen md:pt-20">
       <SignupPromoModal />
       <SEO 
         title="Cuddles AI - The World's Smartest Cannabis Budtender | AI Strain Recommendations"
