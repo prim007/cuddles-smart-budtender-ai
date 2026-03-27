@@ -161,8 +161,8 @@ const FeatureNav = () => {
         </div>
       </div>
 
-      {/* Desktop bottom navigation bar */}
-      <nav className="hidden md:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card/90 backdrop-blur-md border border-border rounded-full px-2 py-2 shadow-elevated">
+      {/* Desktop top navigation bar */}
+      <nav className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-md border-b border-border px-4 py-2 shadow-elevated justify-center">
         {features.map((feature) => (
           <Link
             key={feature.href}
