@@ -14,7 +14,8 @@ import {
   Newspaper,
   Store,
   Lightbulb,
-  Sprout
+  Sprout,
+  ShoppingBag
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -73,6 +74,12 @@ const features = [
     title: "Blog",
     href: "/blog",
     gradient: "from-hippie-teal to-hippie-green",
+  },
+  {
+    icon: ShoppingBag,
+    title: "Shop",
+    href: "/shop",
+    gradient: "from-hippie-coral to-hippie-orange",
   },
   {
     icon: Store,

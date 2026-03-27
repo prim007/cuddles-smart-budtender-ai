@@ -290,6 +290,16 @@ const ChatDemo = () => {
     handleSend(transcript, true);
   };
 
+  // Listen for hero quick-prompt events
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const prompt = (e as CustomEvent).detail;
+      if (prompt) handleSend(prompt);
+    };
+    window.addEventListener('cuddles-quick-prompt', handler);
+    return () => window.removeEventListener('cuddles-quick-prompt', handler);
+  }, [messages, isLoading]);
+
   return (
     <section id="demo" className="py-24 bg-muted/30 relative overflow-hidden">
       {/* Background decoration */}
