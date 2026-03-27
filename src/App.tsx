@@ -127,6 +127,7 @@ const App = () => (
                 <Route path="/shop" element={<Suspense fallback={<PageLoader />}><Shop /></Suspense>} />
                 <Route path="/checkout" element={<Suspense fallback={<PageLoader />}><Checkout /></Suspense>} />
                 <Route path="/orders/:orderId" element={<Suspense fallback={<PageLoader />}><OrderTracking /></Suspense>} />
+                <Route path="/premium" element={<Suspense fallback={<PageLoader />}><Premium /></Suspense>} />
 
                 {/* Strain SEO Pages */}
                 <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
