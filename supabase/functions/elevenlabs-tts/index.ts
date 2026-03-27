@@ -10,13 +10,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
-  console.log("Key exists:", !!ELEVENLABS_API_KEY);
-  console.log("Key length:", ELEVENLABS_API_KEY?.length);
-  console.log("Key prefix:", ELEVENLABS_API_KEY?.substring(0, 6));
-
-  if (!ELEVENLABS_API_KEY) {
-    return new Response(JSON.stringify({ error: "Missing ELEVENLABS_API_KEY" }), {
+  // Try connector key first, fall back to manual key
+  const API_KEY = Deno.env.get("ELEVENLABS_API_KEY_1") || Deno.env.get("ELEVENLABS_API_KEY");
+  if (!API_KEY) {
+    return new Response(JSON.stringify({ error: "Missing ElevenLabs API key" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -25,33 +22,31 @@ serve(async (req) => {
   const { text, voiceId } = await req.json();
   const voice = voiceId || "EXAVITQu4vr4xnSDxMaL";
 
-  const url = `https://api.elevenlabs.io/v1/text-to-speech/${voice}?output_format=mp3_44100_128`;
-  console.log("Calling ElevenLabs URL:", url);
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "xi-api-key": ELEVENLABS_API_KEY,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      text,
-      model_id: "eleven_multilingual_v2",
-      voice_settings: {
-        stability: 0.5,
-        similarity_boost: 0.75,
-        style: 0.4,
-        use_speaker_boost: true,
-        speed: 1.0,
+  const response = await fetch(
+    `https://api.elevenlabs.io/v1/text-to-speech/${voice}?output_format=mp3_44100_128`,
+    {
+      method: "POST",
+      headers: {
+        "xi-api-key": API_KEY,
+        "Content-Type": "application/json",
       },
-    }),
-  });
-
-  console.log("ElevenLabs response status:", response.status);
+      body: JSON.stringify({
+        text,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.75,
+          style: 0.4,
+          use_speaker_boost: true,
+          speed: 1.0,
+        },
+      }),
+    }
+  );
 
   if (!response.ok) {
     const err = await response.text();
-    console.error("ElevenLabs error:", err);
+    console.error("ElevenLabs error:", response.status, err);
     return new Response(JSON.stringify({ error: err }), {
       status: response.status,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
