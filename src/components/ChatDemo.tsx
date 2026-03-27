@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import ChatSignupPrompt from "./ChatSignupPrompt";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, Phone, Plus, Volume2, VolumeX } from "lucide-react";
+import { Send, User, ExternalLink, Plus, Volume2, VolumeX } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
@@ -407,10 +407,10 @@ const ChatDemo = () => {
                   {message.orderPhone && (
                     <Button
                       className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
-                      onClick={() => window.open(`tel:${message.orderPhone}`, '_self')}
+                      onClick={() => window.open('https://tripplefourshophub.online', '_blank')}
                     >
-                      <Phone className="w-4 h-4 mr-2" />
-                      Call Tripple444 to Order: {message.orderPhone}
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Shop Now at Tripple Four
                     </Button>
                   )}
                 </div>
@@ -452,9 +452,9 @@ const ChatDemo = () => {
               <Button
                 size="sm"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs"
-                onClick={() => window.location.href = "/shop"}
+                onClick={() => window.open('https://tripplefourshophub.online', '_blank')}
               >
-                Order Delivery
+                Shop Now
               </Button>
             </div>
           )}
