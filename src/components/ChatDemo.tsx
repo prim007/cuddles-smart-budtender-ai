@@ -407,10 +407,10 @@ const ChatDemo = () => {
                   {message.orderPhone && (
                     <Button
                       className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
-                      onClick={() => window.open(`tel:${message.orderPhone}`, '_self')}
+                      onClick={() => window.open('https://tripplefourshophub.online', '_blank')}
                     >
-                      <Phone className="w-4 h-4 mr-2" />
-                      Call Tripple444 to Order: {message.orderPhone}
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Shop Now at Tripple Four
                     </Button>
                   )}
                 </div>
