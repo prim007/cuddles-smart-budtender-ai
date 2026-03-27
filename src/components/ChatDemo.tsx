@@ -463,28 +463,56 @@ const ChatDemo = () => {
             </div>
           )}
 
-          {/* Input */}
-          <div className="flex gap-2 pt-4 border-t border-border">
-            <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} className="h-10 w-10 min-w-[2.5rem]" />
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder={t.chatPlaceholder}
-              disabled={isLoading}
-              className="flex-1 rounded-xl border-border bg-background/50 focus-ring"
-            />
-            <Button
-              onClick={() => handleSend()}
-              disabled={isLoading || !input.trim()}
-              className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white"
-            >
-              <Send className="w-4 h-4" />
-            </Button>
-          </div>
+          {/* Signup gate after 3 messages for unauthenticated users */}
+          {!user && messageCount >= 3 ? (
+            <div className="pt-4 border-t border-border">
+              <div className="text-center p-6 rounded-xl bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 border border-primary/20">
+                <p className="font-display font-bold text-foreground text-lg mb-1">
+                  🔒 You've used your 3 free messages
+                </p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Create a free account to continue chatting, save your strains, and get personalized recommendations.
+                </p>
+                <Link
+                  to="/auth"
+                  onClick={() => trackEvent("cta_click", "signup", "chat_gate")}
+                >
+                  <Button className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground gap-2 font-semibold px-8 py-5 text-base rounded-xl w-full sm:w-auto">
+                    <UserPlus className="w-5 h-5" /> Sign Up Free — It Takes 10 Seconds
+                  </Button>
+                </Link>
+                <p className="text-xs text-muted-foreground mt-3">
+                  Already have an account?{" "}
+                  <Link to="/auth" className="text-primary underline hover:text-primary/80">Log in</Link>
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Input */}
+              <div className="flex gap-2 pt-4 border-t border-border">
+                <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} className="h-10 w-10 min-w-[2.5rem]" />
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder={t.chatPlaceholder}
+                  disabled={isLoading}
+                  className="flex-1 rounded-xl border-border bg-background/50 focus-ring"
+                />
+                <Button
+                  onClick={() => handleSend()}
+                  disabled={isLoading || !input.trim()}
+                  className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </div>
 
-          {/* Email capture inline */}
-          <EmailCapture variant="inline" />
+              {/* Email capture inline */}
+              <EmailCapture variant="inline" />
+            </>
+          )}
         </div>
       </div>
 
