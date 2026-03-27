@@ -1,40 +1,18 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
-import { crypto } from "https://deno.land/std@0.190.0/crypto/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-function generateSignature(data: Record<string, string>, passphrase: string): string {
-  const params = Object.keys(data)
-    .filter((key) => data[key] !== "")
-    .sort()
-    .map((key) => `${key}=${encodeURIComponent(data[key]).replace(/%20/g, "+")}`)
-    .join("&");
-
-  const withPassphrase = `${params}&passphrase=${encodeURIComponent(passphrase).replace(/%20/g, "+")}`;
+async function md5(input: string): Promise<string> {
   const encoder = new TextEncoder();
-  const hashBuffer = new Uint8Array(
-    // deno-lint-ignore no-explicit-any
-    (crypto as any).subtle ? [] : []
-  );
-  // Use MD5 for PayFast signature
-  const md5 = (str: string): string => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash |= 0;
-    }
-    // PayFast requires proper MD5 - use crypto
-    return "";
-  };
-
-  // We need to compute MD5 - Deno doesn't have built-in MD5
-  // Use a simple implementation
-  return withPassphrase;
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest("MD5", data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 serve(async (req) => {
@@ -81,7 +59,6 @@ serve(async (req) => {
       custom_str2: "premium",
     };
 
-    // For subscription (recurring billing)
     if (type === "subscription") {
       paymentData.subscription_type = "1";
       paymentData.recurring_amount = "99.00";
@@ -89,7 +66,7 @@ serve(async (req) => {
       paymentData.cycles = "0"; // Indefinite
     }
 
-    // Generate MD5 signature
+    // Generate MD5 signature per PayFast docs
     const paramString = Object.keys(paymentData)
       .filter((key) => paymentData[key] !== "")
       .sort()
@@ -97,25 +74,16 @@ serve(async (req) => {
       .join("&");
 
     const signatureInput = `${paramString}&passphrase=${encodeURIComponent(passphrase).replace(/%20/g, "+")}`;
-
-    // Compute MD5 using crypto.subtle
-    const encoder = new TextEncoder();
-    const data2 = encoder.encode(signatureInput);
-    const hashBuffer = await crypto.subtle.digest("MD5", data2);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const signature = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-
+    const signature = await md5(signatureInput);
     paymentData.signature = signature;
 
-    // Build the redirect URL
+    // Build redirect URL
     const pfHost = "https://www.payfast.co.za/eng/process";
     const queryString = Object.keys(paymentData)
       .map((key) => `${key}=${encodeURIComponent(paymentData[key])}`)
       .join("&");
 
-    const redirectUrl = `${pfHost}?${queryString}`;
-
-    return new Response(JSON.stringify({ url: redirectUrl }), {
+    return new Response(JSON.stringify({ url: `${pfHost}?${queryString}` }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
