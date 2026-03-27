@@ -452,9 +452,9 @@ const ChatDemo = () => {
               <Button
                 size="sm"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs"
-                onClick={() => window.location.href = "/shop"}
+                onClick={() => window.open('https://tripplefourshophub.online', '_blank')}
               >
-                Order Delivery
+                Shop Now
               </Button>
             </div>
           )}
