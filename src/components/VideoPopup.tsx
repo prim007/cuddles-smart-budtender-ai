@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX, UserPlus } from "lucide-react";
 
 const VIDEO_POPUP_KEY = "cuddles_video_seen";
 const POPUP_DELAY_MS = 8000;
