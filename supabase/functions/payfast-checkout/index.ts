@@ -77,13 +77,8 @@ serve(async (req) => {
     const signature = await md5(signatureInput);
     paymentData.signature = signature;
 
-    // Build redirect URL
-    const pfHost = "https://www.payfast.co.za/eng/process";
-    const queryString = Object.keys(paymentData)
-      .map((key) => `${key}=${encodeURIComponent(paymentData[key])}`)
-      .join("&");
-
-    return new Response(JSON.stringify({ url: `${pfHost}?${queryString}` }), {
+    // Return payment data for form POST (avoids popup blockers)
+    return new Response(JSON.stringify({ paymentData }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
