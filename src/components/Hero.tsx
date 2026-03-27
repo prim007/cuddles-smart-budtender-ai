@@ -3,6 +3,7 @@ import { Bot, ArrowRight, ExternalLink, Store, UserPlus, Calendar } from "lucide
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
+import HeroQuickPrompts from "./HeroQuickPrompts";
 
 const Hero = () => {
   const scrollToDemo = () => {
