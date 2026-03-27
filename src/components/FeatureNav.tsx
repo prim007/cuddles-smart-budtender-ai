@@ -76,7 +76,12 @@ const features = [
     gradient: "from-hippie-teal to-hippie-green",
   },
   {
-    icon: ShoppingBag,
+    icon: Crown,
+    title: "Premium",
+    href: "/premium",
+    gradient: "from-hippie-amber to-hippie-orange",
+  },
+  {
     title: "Shop",
     href: "/shop",
     gradient: "from-hippie-coral to-hippie-orange",
