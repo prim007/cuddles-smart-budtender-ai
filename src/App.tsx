@@ -8,6 +8,7 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { UserProfileProvider } from "@/contexts/UserProfileContext";
+import { CartProvider } from "@/contexts/CartContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import FeatureNav from "@/components/FeatureNav";
 import Index from "./pages/Index";
@@ -41,6 +42,9 @@ const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
 const WhyCuddles = lazy(() => import("./pages/WhyCuddles"));
 const Catalog = lazy(() => import("./pages/Catalog"));
 const ManageStrains = lazy(() => import("./pages/ManageStrains"));
+const Shop = lazy(() => import("./pages/Shop"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 
 // SEO pages
 const Strains = lazy(() => import("./pages/Strains"));
@@ -59,6 +63,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
       <UserProfileProvider>
+        <CartProvider>
         <AuthProvider>
           <TooltipProvider>
             <Toaster />
@@ -116,6 +121,9 @@ const App = () => (
                 <Route path="/why-cuddles" element={<Suspense fallback={<PageLoader />}><WhyCuddles /></Suspense>} />
                 <Route path="/catalog" element={<Suspense fallback={<PageLoader />}><Catalog /></Suspense>} />
                 <Route path="/manage-strains" element={<Suspense fallback={<PageLoader />}><ManageStrains /></Suspense>} />
+                <Route path="/shop" element={<Suspense fallback={<PageLoader />}><Shop /></Suspense>} />
+                <Route path="/checkout" element={<Suspense fallback={<PageLoader />}><Checkout /></Suspense>} />
+                <Route path="/orders/:orderId" element={<Suspense fallback={<PageLoader />}><OrderTracking /></Suspense>} />
 
                 {/* Strain SEO Pages */}
                 <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
@@ -127,6 +135,7 @@ const App = () => (
             </BrowserRouter>
           </TooltipProvider>
         </AuthProvider>
+        </CartProvider>
       </UserProfileProvider>
     </LanguageProvider>
   </QueryClientProvider>

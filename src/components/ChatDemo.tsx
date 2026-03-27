@@ -429,18 +429,18 @@ const ChatDemo = () => {
 
           {/* Post-chat catalog nudge */}
           {messages.filter(m => m.role === "user").length >= 2 && (
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-[hsl(142,70%,45%)]/10 border border-[hsl(142,70%,45%)]/20 mb-4">
-              <span className="text-2xl">🛒</span>
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 mb-4">
+              <span className="text-2xl">🚀</span>
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">Ready to order?</p>
-                <p className="text-xs text-muted-foreground">Browse our full product catalog on WhatsApp</p>
+                <p className="text-xs text-muted-foreground">Get it delivered to your door</p>
               </div>
               <Button
                 size="sm"
-                className="bg-[hsl(142,70%,45%)] hover:bg-[hsl(142,70%,40%)] text-white rounded-lg text-xs"
-                onClick={() => window.open("https://wa.me/c/27645436734", "_blank")}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs"
+                onClick={() => window.location.href = "/shop"}
               >
-                Browse Catalog
+                Order Delivery
               </Button>
             </div>
           )}
