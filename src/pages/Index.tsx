@@ -13,11 +13,13 @@ import SignupPromoModal from "@/components/SignupPromoModal";
 import SignupBanner from "@/components/SignupBanner";
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
+import VideoPopup from "@/components/VideoPopup";
 
 const Index = () => {
   return (
     <div className="min-h-screen md:pt-20">
       <SignupPromoModal />
+      <VideoPopup />
       <SEO 
         title="Cuddles AI - The World's Smartest Cannabis Budtender | AI Strain Recommendations"
         description="Get personalized cannabis strain recommendations from Cuddles AI, the smartest AI budtender. Find your perfect indica, sativa, or hybrid strain based on desired effects, terpene profiles, and experience level. Free to use."
