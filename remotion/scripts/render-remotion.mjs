@@ -36,7 +36,7 @@ await renderMedia({
   codec: "h264",
   outputLocation: "/mnt/documents/cuddles-explainer.mp4",
   puppeteerInstance: browser,
-  muted: false,
+  muted: true,
   concurrency: 1,
 });
 
