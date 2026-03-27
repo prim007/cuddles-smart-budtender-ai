@@ -603,6 +603,54 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          amount: number
+          cancelled_at: string | null
+          created_at: string
+          currency: string
+          ends_at: string | null
+          id: string
+          payfast_token: string | null
+          payment_id: string | null
+          plan: string
+          started_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          cancelled_at?: string | null
+          created_at?: string
+          currency?: string
+          ends_at?: string | null
+          id?: string
+          payfast_token?: string | null
+          payment_id?: string | null
+          plan?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          cancelled_at?: string | null
+          created_at?: string
+          currency?: string
+          ends_at?: string | null
+          id?: string
+          payfast_token?: string | null
+          payment_id?: string | null
+          plan?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tenant_strains: {
         Row: {
           category: string
