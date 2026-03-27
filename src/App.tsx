@@ -46,6 +46,7 @@ const ManageStrains = lazy(() => import("./pages/ManageStrains"));
 const Shop = lazy(() => import("./pages/Shop"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const OrderTracking = lazy(() => import("./pages/OrderTracking"));
+const Premium = lazy(() => import("./pages/Premium"));
 
 // SEO pages
 const Strains = lazy(() => import("./pages/Strains"));
