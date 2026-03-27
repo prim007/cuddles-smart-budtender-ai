@@ -62,7 +62,21 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         body: { type: "subscription" },
       });
       if (error) throw error;
-      if (data?.url) window.open(data.url, "_blank");
+      if (data?.paymentData) {
+        // Use form POST to avoid popup blockers
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "https://www.payfast.co.za/eng/process";
+        Object.entries(data.paymentData).forEach(([key, value]) => {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = key;
+          input.value = String(value ?? "");
+          form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
+      }
     } catch (err) {
       console.error("Error creating PayFast checkout:", err);
     } finally {
