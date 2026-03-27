@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, ExternalLink, Plus, Volume2, VolumeX } from "lucide-react";
+import { Send, User, ExternalLink, Plus, Volume2, VolumeX, UserPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
