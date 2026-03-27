@@ -119,6 +119,111 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_order_items: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string
+          quantity: number
+          strain_id: string
+          strain_name: string
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id: string
+          quantity?: number
+          strain_id: string
+          strain_name: string
+          total_price: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string
+          quantity?: number
+          strain_id?: string
+          strain_name?: string
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_order_items_strain_id_fkey"
+            columns: ["strain_id"]
+            isOneToOne: false
+            referencedRelation: "tenant_strains"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_orders: {
+        Row: {
+          created_at: string
+          customer_name: string | null
+          customer_phone: string | null
+          delivery_address: string
+          delivery_fee: number
+          delivery_lat: number | null
+          delivery_lng: number | null
+          distance_km: number | null
+          driver_notes: string | null
+          estimated_delivery_minutes: number | null
+          id: string
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          delivery_address: string
+          delivery_fee?: number
+          delivery_lat?: number | null
+          delivery_lng?: number | null
+          distance_km?: number | null
+          driver_notes?: string | null
+          estimated_delivery_minutes?: number | null
+          id?: string
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          delivery_address?: string
+          delivery_fee?: number
+          delivery_lat?: number | null
+          delivery_lng?: number | null
+          distance_km?: number | null
+          driver_notes?: string | null
+          estimated_delivery_minutes?: number | null
+          id?: string
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       demo_requests: {
         Row: {
           company: string
