@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -6,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX, UserPlus } from "lucide-react";
 
 const VIDEO_POPUP_KEY = "cuddles_video_seen";
 const POPUP_DELAY_MS = 8000;
@@ -68,16 +69,25 @@ const VideoPopup = () => {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="p-4 pt-2 flex justify-center">
-          <Button
+        <div className="p-4 pt-2 flex flex-col gap-2 items-center">
+          <Link to="/auth" className="w-full flex justify-center">
+            <Button
+              onClick={() => handleOpenChange(false)}
+              className="bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl px-6 w-full gap-2"
+            >
+              <UserPlus className="w-4 h-4" />
+              Sign Up Free — It Takes 10 Seconds
+            </Button>
+          </Link>
+          <button
             onClick={() => {
               handleOpenChange(false);
               document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl px-6"
+            className="text-xs text-white/40 hover:text-white/60 underline"
           >
-            🌿 Try Cuddles Now
-          </Button>
+            Try without signing up
+          </button>
         </div>
       </DialogContent>
     </Dialog>
