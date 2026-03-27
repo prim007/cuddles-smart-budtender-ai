@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const Premium = () => {
   const { user } = useAuth();
-  const { isPremium, isLoading, subscriptionEnd, startCheckout, openPortal, checkSubscription } = useSubscription();
+  const { isPremium, isLoading, subscriptionEnd, startCheckout, checkSubscription } = useSubscription();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
 
@@ -121,9 +121,6 @@ const Premium = () => {
                       </p>
                     )}
                   </div>
-                  <Button variant="outline" className="w-full" onClick={openPortal}>
-                    Manage Subscription
-                  </Button>
                 </div>
               ) : user ? (
                 <Button

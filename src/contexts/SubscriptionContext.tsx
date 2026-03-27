@@ -2,10 +2,7 @@ import { useState, useEffect, createContext, useContext, ReactNode, useCallback 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-// Stripe product/price mapping
 export const PREMIUM_TIER = {
-  product_id: "prod_UE40MKZjULwaNJ",
-  price_id: "price_1TFbsIGD6Z27Vz01qJGDG4OI",
   name: "Cuddles Premium",
   price: "R99",
   interval: "month",
@@ -17,7 +14,6 @@ interface SubscriptionContextType {
   subscriptionEnd: string | null;
   checkSubscription: () => Promise<void>;
   startCheckout: () => Promise<void>;
-  openPortal: () => Promise<void>;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -53,7 +49,6 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     checkSubscription();
   }, [checkSubscription]);
 
-  // Auto-refresh every 60s
   useEffect(() => {
     if (!user) return;
     const interval = setInterval(checkSubscription, 60000);
@@ -62,28 +57,21 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
   const startCheckout = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { priceId: PREMIUM_TIER.price_id },
+      setIsLoading(true);
+      const { data, error } = await supabase.functions.invoke("payfast-checkout", {
+        body: { type: "subscription" },
       });
       if (error) throw error;
       if (data?.url) window.open(data.url, "_blank");
     } catch (err) {
-      console.error("Error creating checkout:", err);
-    }
-  };
-
-  const openPortal = async () => {
-    try {
-      const { data, error } = await supabase.functions.invoke("customer-portal");
-      if (error) throw error;
-      if (data?.url) window.open(data.url, "_blank");
-    } catch (err) {
-      console.error("Error opening portal:", err);
+      console.error("Error creating PayFast checkout:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <SubscriptionContext.Provider value={{ isPremium, isLoading, subscriptionEnd, checkSubscription, startCheckout, openPortal }}>
+    <SubscriptionContext.Provider value={{ isPremium, isLoading, subscriptionEnd, checkSubscription, startCheckout }}>
       {children}
     </SubscriptionContext.Provider>
   );
