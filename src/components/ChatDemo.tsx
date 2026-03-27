@@ -290,15 +290,19 @@ const ChatDemo = () => {
     handleSend(transcript, true);
   };
 
+  // Keep a stable ref to handleSend so the event listener never goes stale
+  const handleSendRef = useRef(handleSend);
+  useEffect(() => { handleSendRef.current = handleSend; });
+
   // Listen for hero quick-prompt events
   useEffect(() => {
     const handler = (e: Event) => {
       const prompt = (e as CustomEvent).detail;
-      if (prompt) handleSend(prompt);
+      if (prompt) handleSendRef.current(prompt);
     };
     window.addEventListener('cuddles-quick-prompt', handler);
     return () => window.removeEventListener('cuddles-quick-prompt', handler);
-  }, [messages, isLoading]);
+  }, []);
 
   return (
     <section id="demo" className="py-24 bg-muted/30 relative overflow-hidden">
