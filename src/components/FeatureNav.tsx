@@ -161,14 +161,14 @@ const FeatureNav = () => {
         </div>
       </div>
 
-      {/* Desktop bottom navigation bar */}
-      <nav className="hidden md:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card/90 backdrop-blur-md border border-border rounded-full px-2 py-2 shadow-elevated">
+      {/* Desktop top navigation bar */}
+      <nav className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-md border-b border-border px-4 py-2 shadow-elevated justify-center">
         {features.map((feature) => (
           <Link
             key={feature.href}
             to={feature.href}
             className={cn(
-              "group flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-all duration-200",
+              "group flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200",
               isActive(feature.href)
                 ? "bg-gradient-to-r from-hippie-purple/10 to-hippie-pink/10"
                 : "hover:bg-muted"
