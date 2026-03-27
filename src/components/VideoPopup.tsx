@@ -90,7 +90,7 @@ const VideoPopup = () => {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden bg-[hsl(270,40%,12%)] border-white/10">
+      <DialogContent data-video-popup={open ? "true" : undefined} className="sm:max-w-[500px] p-0 overflow-hidden bg-[hsl(270,40%,12%)] border-white/10">
         <DialogHeader className="p-4 pb-0 flex flex-row items-center justify-between">
           <DialogTitle className="text-white text-lg font-semibold">
             Meet Cuddles 🌿

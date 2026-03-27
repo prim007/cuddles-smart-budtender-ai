@@ -18,10 +18,22 @@ const SignupPromoModal = () => {
   const { toast } = useToast();
 
   // Timer-based trigger (45s — give users time to experience value first)
+  // Wait for video popup to close first
   useEffect(() => {
     const dismissed = sessionStorage.getItem("cuddles_promo_dismissed");
     if (!dismissed) {
       const timer = setTimeout(() => {
+        // Don't show if video popup is still open
+        const videoPopupOpen = document.querySelector('[data-video-popup="true"]');
+        if (videoPopupOpen) {
+          // Retry after 10s
+          const retry = setTimeout(() => {
+            setTriggerSource("timer");
+            setOpen(true);
+            trackEvent("promo_modal_shown", "conversion", "timer");
+          }, 10000);
+          return () => clearTimeout(retry);
+        }
         setTriggerSource("timer");
         setOpen(true);
         trackEvent("promo_modal_shown", "conversion", "timer");
