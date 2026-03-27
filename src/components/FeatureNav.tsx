@@ -83,6 +83,7 @@ const features = [
     gradient: "from-hippie-amber to-hippie-orange",
   },
   {
+    icon: ShoppingBag,
     title: "Shop",
     href: "/shop",
     gradient: "from-hippie-coral to-hippie-orange",
