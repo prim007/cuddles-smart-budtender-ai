@@ -42,6 +42,9 @@ const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
 const WhyCuddles = lazy(() => import("./pages/WhyCuddles"));
 const Catalog = lazy(() => import("./pages/Catalog"));
 const ManageStrains = lazy(() => import("./pages/ManageStrains"));
+const Shop = lazy(() => import("./pages/Shop"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 
 // SEO pages
 const Strains = lazy(() => import("./pages/Strains"));
