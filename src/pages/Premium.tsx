@@ -131,11 +131,12 @@ const Premium = () => {
                   {isLoading ? "Loading..." : "Upgrade to Premium"}
                 </Button>
               ) : (
-                <Link to="/auth">
-                  <Button className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-semibold">
-                    Sign Up to Unlock Premium
-                  </Button>
-                </Link>
+                <Button
+                  className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-semibold"
+                  onClick={() => { window.location.href = "/auth"; }}
+                >
+                  Sign Up to Unlock Premium
+                </Button>
               )}
             </div>
           </div>
