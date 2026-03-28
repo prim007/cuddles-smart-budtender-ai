@@ -75,12 +75,12 @@ const Footer = () => {
                 Sign In / Sign Up
               </Link>
               <a 
-                href="https://tripplefourmarketplace.lovable.app"
+                href="https://tripplefourshophub.online"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Marketplace
+                Shop — Tripple Four
               </a>
             </div>
           </div>

@@ -85,8 +85,9 @@ const features = [
   {
     icon: ShoppingBag,
     title: "Shop",
-    href: "/shop",
+    href: "https://tripplefourshophub.online",
     gradient: "from-hippie-coral to-hippie-orange",
+    external: true,
   },
   {
     icon: Store,
