@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Check, Crown, Sparkles, BookOpen, Zap, Shield } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription, PREMIUM_TIER } from "@/contexts/SubscriptionContext";
 import SEO from "@/components/SEO";
