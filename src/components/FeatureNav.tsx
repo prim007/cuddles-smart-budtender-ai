@@ -193,31 +193,39 @@ const FeatureNav = () => {
 
       {/* Desktop top navigation bar */}
       <nav className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-md border-b border-border px-4 py-2 shadow-elevated justify-center">
-        {features.map((feature) => (
-          <Link
-            key={feature.href}
-            to={feature.href}
-            className={cn(
-              "group flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200",
-              isActive(feature.href)
-                ? "bg-gradient-to-r from-hippie-purple/10 to-hippie-pink/10"
-                : "hover:bg-muted"
-            )}
-          >
-            <div className={cn(
-              "w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110 bg-gradient-to-br",
-              feature.gradient
-            )}>
-              <feature.icon className="w-5 h-5 text-white" />
-            </div>
-            <span className={cn(
-              "text-xs font-medium transition-colors",
-              isActive(feature.href) ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
-            )}>
-              {feature.title}
-            </span>
-          </Link>
-        ))}
+        {features.map((feature) => {
+          const cls = cn(
+            "group flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200",
+            isActive(feature.href)
+              ? "bg-gradient-to-r from-hippie-purple/10 to-hippie-pink/10"
+              : "hover:bg-muted"
+          );
+          const content = (
+            <>
+              <div className={cn(
+                "w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110 bg-gradient-to-br",
+                feature.gradient
+              )}>
+                <feature.icon className="w-5 h-5 text-white" />
+              </div>
+              <span className={cn(
+                "text-xs font-medium transition-colors",
+                isActive(feature.href) ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+              )}>
+                {feature.title}
+              </span>
+            </>
+          );
+          return feature.external ? (
+            <a key={feature.href} href={feature.href} target="_blank" rel="noopener noreferrer" className={cls}>
+              {content}
+            </a>
+          ) : (
+            <Link key={feature.href} to={feature.href} className={cls}>
+              {content}
+            </Link>
+          );
+        })}
         
         {!user && (
           <Link
