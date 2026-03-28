@@ -21,7 +21,15 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 
-const features = [
+interface Feature {
+  icon: typeof Home;
+  title: string;
+  href: string;
+  gradient: string;
+  external?: boolean;
+}
+
+const features: Feature[] = [
   {
     icon: Home,
     title: "Home",
