@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Check, Crown, Sparkles, BookOpen, Zap, Shield } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription, PREMIUM_TIER } from "@/contexts/SubscriptionContext";
 import SEO from "@/components/SEO";
@@ -14,6 +14,7 @@ const Premium = () => {
   const { isPremium, isLoading, subscriptionEnd, startCheckout, checkSubscription } = useSubscription();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
@@ -132,10 +133,10 @@ const Premium = () => {
                 </Button>
               ) : (
                 <Button
+                  asChild
                   className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-semibold"
-                  onClick={() => { window.location.href = "/auth"; }}
                 >
-                  Sign Up to Unlock Premium
+                  <Link to="/auth">Sign Up to Unlock Premium</Link>
                 </Button>
               )}
             </div>
