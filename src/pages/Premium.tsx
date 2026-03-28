@@ -133,10 +133,10 @@ const Premium = () => {
                 </Button>
               ) : (
                 <Button
+                  asChild
                   className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-semibold"
-                  onClick={() => { window.location.href = "/auth"; }}
                 >
-                  Sign Up to Unlock Premium
+                  <Link to="/auth">Sign Up to Unlock Premium</Link>
                 </Button>
               )}
             </div>
