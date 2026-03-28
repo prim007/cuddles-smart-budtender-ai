@@ -147,27 +147,34 @@ const FeatureNav = () => {
         isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
       )}>
         <div className="bg-card border border-border rounded-2xl p-4 shadow-elevated space-y-2">
-          {features.map((feature) => (
-            <Link
-              key={feature.href}
-              to={feature.href}
-              onClick={() => setIsOpen(false)}
-              className={cn(
-                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
-                isActive(feature.href)
-                  ? "bg-gradient-to-r from-hippie-purple/10 to-hippie-pink/10 text-foreground"
-                  : "hover:bg-muted text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <div className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br",
-                feature.gradient
-              )}>
-                <feature.icon className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-medium">{feature.title}</span>
-            </Link>
-          ))}
+          {features.map((feature) => {
+            const content = (
+              <>
+                <div className={cn(
+                  "w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br",
+                  feature.gradient
+                )}>
+                  <feature.icon className="w-5 h-5 text-white" />
+                </div>
+                <span className="font-medium">{feature.title}</span>
+              </>
+            );
+            const cls = cn(
+              "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
+              isActive(feature.href)
+                ? "bg-gradient-to-r from-hippie-purple/10 to-hippie-pink/10 text-foreground"
+                : "hover:bg-muted text-muted-foreground hover:text-foreground"
+            );
+            return feature.external ? (
+              <a key={feature.href} href={feature.href} target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)} className={cls}>
+                {content}
+              </a>
+            ) : (
+              <Link key={feature.href} to={feature.href} onClick={() => setIsOpen(false)} className={cls}>
+                {content}
+              </Link>
+            );
+          })}
           
           {!user && (
             <Link
