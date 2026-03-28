@@ -484,6 +484,8 @@ const ChatDemo = () => {
                 <p className="text-xs text-muted-foreground mt-3">
                   Already have an account?{" "}
                   <Link to="/auth" className="text-primary underline hover:text-primary/80">Log in</Link>
+                  {" · "}
+                  <a href="https://tripplefourshophub.online" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Shop Now 🛒</a>
                 </p>
               </div>
             </div>
