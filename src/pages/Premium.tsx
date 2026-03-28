@@ -14,6 +14,7 @@ const Premium = () => {
   const { isPremium, isLoading, subscriptionEnd, startCheckout, checkSubscription } = useSubscription();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
