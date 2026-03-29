@@ -17,29 +17,39 @@ const SignupPromoModal = () => {
   const [triggerSource, setTriggerSource] = useState<"timer" | "exit">("timer");
   const { toast } = useToast();
 
-  // Timer-based trigger (45s — give users time to experience value first)
-  // Wait for video popup to close first
+  // Scroll-depth trigger (25% scroll) — let users explore value first
   useEffect(() => {
     const dismissed = sessionStorage.getItem("cuddles_promo_dismissed");
-    if (!dismissed) {
-      const timer = setTimeout(() => {
+    if (dismissed) return;
+
+    let triggered = false;
+    const handleScroll = () => {
+      if (triggered) return;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+      if (scrollPercent >= 25) {
+        triggered = true;
         // Don't show if video popup is still open
         const videoPopupOpen = document.querySelector('[data-video-popup="true"]');
         if (videoPopupOpen) {
-          // Retry after 10s
           const retry = setTimeout(() => {
             setTriggerSource("timer");
             setOpen(true);
-            trackEvent("promo_modal_shown", "conversion", "timer");
+            trackEvent("promo_modal_shown", "conversion", "scroll_depth");
           }, 10000);
           return () => clearTimeout(retry);
         }
         setTriggerSource("timer");
         setOpen(true);
-        trackEvent("promo_modal_shown", "conversion", "timer");
-      }, 45000);
-      return () => clearTimeout(timer);
-    }
+        trackEvent("promo_modal_shown", "conversion", "scroll_depth");
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Exit-intent trigger (desktop only)
