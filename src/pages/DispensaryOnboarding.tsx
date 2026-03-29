@@ -83,12 +83,16 @@ const DispensaryOnboarding = () => {
           store_count: storeCount,
           branding_color: brandingColor,
         })
-        .select("embed_key")
+        .select("id")
         .single();
 
       if (error) throw error;
 
-      setEmbedKey(data.embed_key);
+      // Fetch embed_key securely via RPC function
+      const { data: embedKeyData, error: embedError } = await supabase.rpc("get_my_embed_key");
+      if (embedError) throw embedError;
+
+      setEmbedKey(embedKeyData);
       setStep(3);
       toast.success("Welcome aboard! Your account is ready.");
     } catch (err: any) {

@@ -886,6 +886,48 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions_safe: {
+        Row: {
+          amount: number | null
+          cancelled_at: string | null
+          created_at: string | null
+          currency: string | null
+          ends_at: string | null
+          id: string | null
+          plan: string | null
+          started_at: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount?: number | null
+          cancelled_at?: string | null
+          created_at?: string | null
+          currency?: string | null
+          ends_at?: string | null
+          id?: string | null
+          plan?: string | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number | null
+          cancelled_at?: string | null
+          created_at?: string | null
+          currency?: string | null
+          ends_at?: string | null
+          id?: string | null
+          plan?: string | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_article_rate_limit: { Args: { p_email: string }; Returns: boolean }
@@ -895,6 +937,7 @@ export type Database = {
       }
       check_demo_rate_limit: { Args: { p_email: string }; Returns: boolean }
       check_email_rate_limit: { Args: { p_email: string }; Returns: boolean }
+      get_my_embed_key: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
