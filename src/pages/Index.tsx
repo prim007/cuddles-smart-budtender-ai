@@ -30,7 +30,10 @@ const Index = () => {
       <ThemeToggle />
       <OnboardingFlow />
       <Hero />
-      <ChatDemo />
+      <div id="chat-demo">
+        <ChatDemo />
+      </div>
+      <StickyChatFAB />
       <SignupBanner />
       <CuddlesFeatures />
       <FeaturedBlogPosts />
