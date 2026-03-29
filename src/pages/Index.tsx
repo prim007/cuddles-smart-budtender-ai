@@ -14,6 +14,7 @@ import SignupBanner from "@/components/SignupBanner";
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
 import VideoPopup from "@/components/VideoPopup";
+import StickyChatFAB from "@/components/StickyChatFAB";
 
 const Index = () => {
   return (
