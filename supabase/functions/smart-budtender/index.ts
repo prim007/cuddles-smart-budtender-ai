@@ -1,11 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-// --- Rate Limiting (unchanged) ---
+// --- Rate Limiting ---
 interface RateLimitRecord {
   count: number;
   resetTime: number;
@@ -71,7 +72,7 @@ setInterval(() => {
   }
 }, 5 * 60 * 1000);
 
-// --- Input Validation (unchanged) ---
+// --- Input Validation ---
 interface UserProfile {
   experienceLevel?: 'beginner' | 'intermediate' | 'experienced' | null;
   preferredEffects?: string[];
@@ -177,7 +178,18 @@ const COMPLEX_PATTERNS = [
   /\b(why does|how does|explain the|reasoning behind|deep dive)\b/i,
 ];
 
-function selectModel(messages: { role: string; content: string }[]): string {
+// Level 4: Orchestrator patterns - triggers tool-use behavior
+const ORCHESTRATOR_PATTERNS = [
+  /\b(what('?s| is) (available|in stock)|inventory|menu|stock)\b/i,
+  /\b(order|buy|purchase|add to cart|checkout)\b/i,
+  /\b(dispensary|dispensaries|shop|store) near\b/i,
+  /\b(compare|versus|vs\.?|which is better)\b/i,
+  /\b(my journal|my history|my sessions|my reviews|my scans|what have I)\b/i,
+  /\b(tolerance break|t-break|how long|my break)\b/i,
+  /\b(track|log|record|save this)\b/i,
+];
+
+function selectModel(messages: { role: string; content: string }[], hasUserHistory: boolean): string {
   const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
   if (!lastUserMsg) return 'google/gemini-3-flash-preview';
   
@@ -193,15 +205,236 @@ function selectModel(messages: { role: string; content: string }[]): string {
     return 'google/gemini-2.5-pro';
   }
   
+  // Orchestrator queries with user history → use pro for multi-tool reasoning
+  if (hasUserHistory && ORCHESTRATOR_PATTERNS.some(p => p.test(content))) {
+    return 'google/gemini-2.5-pro';
+  }
+  
   // Standard queries → use flash
   return 'google/gemini-3-flash-preview';
 }
 
+// ═══════════════════════════════════════
+// LEVEL 3 & 4: Fetch user history data
+// ═══════════════════════════════════════
+
+interface UserHistoryData {
+  journalEntries: Array<{
+    strain_name: string;
+    strain_type: string | null;
+    rating: number | null;
+    effects: unknown;
+    consumption_method: string | null;
+    mood_before: number | null;
+    mood_after: number | null;
+    notes: string | null;
+    session_date: string;
+  }>;
+  strainScans: Array<{
+    identified_strain: string | null;
+    confidence_score: number | null;
+    strain_details: unknown;
+    created_at: string;
+  }>;
+  toleranceBreaks: Array<{
+    target_days: number;
+    start_date: string;
+    end_date: string | null;
+    status: string;
+    reason: string | null;
+    daily_logs: unknown;
+  }>;
+  reviews: Array<{
+    strain_name: string;
+    rating: number;
+    title: string;
+    effects: unknown;
+    pros: string[] | null;
+    cons: string[] | null;
+  }>;
+  availableStrains: Array<{
+    strain_name: string;
+    strain_type: string;
+    category: string;
+    price: number | null;
+    in_stock: boolean | null;
+    primary_terpene: string | null;
+    primary_effect: string | null;
+    thc_min: number | null;
+    thc_max: number | null;
+    cbd_min: number | null;
+    cbd_max: number | null;
+  }>;
+}
+
+async function fetchUserHistory(userId: string): Promise<UserHistoryData | null> {
+  try {
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+
+    const [journalRes, scansRes, tbreakRes, reviewsRes, strainsRes] = await Promise.all([
+      // Last 20 journal entries
+      supabase
+        .from("strain_journal")
+        .select("strain_name, strain_type, rating, effects, consumption_method, mood_before, mood_after, notes, session_date")
+        .eq("user_id", userId)
+        .order("session_date", { ascending: false })
+        .limit(20),
+      // Last 10 strain scans
+      supabase
+        .from("strain_scans")
+        .select("identified_strain, confidence_score, strain_details, created_at")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
+        .limit(10),
+      // Active tolerance breaks
+      supabase
+        .from("tolerance_breaks")
+        .select("target_days, start_date, end_date, status, reason, daily_logs")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
+        .limit(3),
+      // User's reviews
+      supabase
+        .from("strain_reviews")
+        .select("strain_name, rating, title, effects, pros, cons")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
+        .limit(10),
+      // Available inventory (from all active dispensaries)
+      supabase
+        .from("tenant_strains")
+        .select("strain_name, strain_type, category, price, in_stock, primary_terpene, primary_effect, thc_min, thc_max, cbd_min, cbd_max")
+        .eq("in_stock", true)
+        .limit(50),
+    ]);
+
+    return {
+      journalEntries: journalRes.data ?? [],
+      strainScans: scansRes.data ?? [],
+      toleranceBreaks: tbreakRes.data ?? [],
+      reviews: reviewsRes.data ?? [],
+      availableStrains: strainsRes.data ?? [],
+    };
+  } catch (err) {
+    console.error("Error fetching user history:", err);
+    return null;
+  }
+}
+
+function buildUserHistoryContext(history: UserHistoryData): string {
+  const parts: string[] = [];
+
+  // Journal analysis
+  if (history.journalEntries.length > 0) {
+    const topStrains = history.journalEntries
+      .filter(e => e.rating && e.rating >= 4)
+      .map(e => `${e.strain_name} (${e.strain_type || 'unknown'}, rated ${e.rating}/5${e.consumption_method ? `, via ${e.consumption_method}` : ''})`)
+      .slice(0, 5);
+    
+    const avgMoodImprovement = history.journalEntries
+      .filter(e => e.mood_before != null && e.mood_after != null)
+      .map(e => (e.mood_after! - e.mood_before!));
+    
+    const avgImprove = avgMoodImprovement.length > 0 
+      ? (avgMoodImprovement.reduce((a, b) => a + b, 0) / avgMoodImprovement.length).toFixed(1)
+      : null;
+
+    parts.push(`STRAIN JOURNAL (${history.journalEntries.length} sessions logged):`);
+    if (topStrains.length > 0) parts.push(`  Favorites: ${topStrains.join(', ')}`);
+    if (avgImprove) parts.push(`  Average mood improvement: +${avgImprove} points per session`);
+    
+    // Recent session
+    const recent = history.journalEntries[0];
+    parts.push(`  Most recent: ${recent.strain_name} on ${new Date(recent.session_date).toLocaleDateString()}${recent.notes ? ` — "${recent.notes}"` : ''}`);
+  }
+
+  // Scan history
+  if (history.strainScans.length > 0) {
+    const identified = history.strainScans
+      .filter(s => s.identified_strain)
+      .map(s => `${s.identified_strain} (${s.confidence_score ? Math.round(s.confidence_score * 100) + '%' : 'unscored'})`)
+      .slice(0, 5);
+    if (identified.length > 0) {
+      parts.push(`STRAIN SCANS: Recently identified — ${identified.join(', ')}`);
+    }
+  }
+
+  // Tolerance breaks
+  if (history.toleranceBreaks.length > 0) {
+    const active = history.toleranceBreaks.find(t => t.status === 'active');
+    if (active) {
+      const daysSoFar = Math.floor((Date.now() - new Date(active.start_date).getTime()) / (1000 * 60 * 60 * 24));
+      parts.push(`⚠️ ACTIVE TOLERANCE BREAK: Day ${daysSoFar} of ${active.target_days}-day break${active.reason ? ` (reason: ${active.reason})` : ''}`);
+      parts.push(`  → Be supportive and encouraging! Do NOT recommend strains unless they ask about post-break options.`);
+    } else {
+      const last = history.toleranceBreaks[0];
+      if (last.status === 'completed') {
+        parts.push(`TOLERANCE HISTORY: Completed a ${last.target_days}-day break recently. Tolerance is likely reset — recommend starting with lower doses.`);
+      }
+    }
+  }
+
+  // Reviews — what they love and hate
+  if (history.reviews.length > 0) {
+    const loved = history.reviews.filter(r => r.rating >= 4).map(r => r.strain_name).slice(0, 3);
+    const disliked = history.reviews.filter(r => r.rating <= 2).map(r => r.strain_name).slice(0, 3);
+    if (loved.length > 0) parts.push(`REVIEWED & LOVED: ${loved.join(', ')}`);
+    if (disliked.length > 0) parts.push(`REVIEWED & DISLIKED: ${disliked.join(', ')} — avoid recommending these`);
+  }
+
+  if (parts.length === 0) return '';
+  return `\n\n═══════════════════════════════════════
+LEVEL 3 — ADVISOR CONTEXT (Personalized Memory)
+═══════════════════════════════════════
+${parts.join('\n')}`;
+}
+
+function buildInventoryContext(strains: UserHistoryData['availableStrains']): string {
+  if (strains.length === 0) return '';
+  
+  const formatted = strains.map(s => {
+    const thc = s.thc_min && s.thc_max ? `THC: ${s.thc_min}-${s.thc_max}%` : '';
+    const cbd = s.cbd_min && s.cbd_max ? `CBD: ${s.cbd_min}-${s.cbd_max}%` : '';
+    const price = s.price ? `R${s.price}` : '';
+    return `• ${s.strain_name} (${s.strain_type}, ${s.category}) ${[thc, cbd, price, s.primary_terpene, s.primary_effect].filter(Boolean).join(' | ')}`;
+  }).join('\n');
+
+  return `\n\n═══════════════════════════════════════
+LEVEL 4 — ORCHESTRATOR: LIVE INVENTORY
+═══════════════════════════════════════
+The following strains are currently IN STOCK and available for purchase. When recommending, prioritize these real available products over theoretical suggestions:
+
+${formatted}
+
+ORCHESTRATOR INSTRUCTIONS:
+- When the user asks what's available/in stock, reference this inventory directly
+- When recommending, cross-reference their journal favorites with available inventory
+- If they want to buy, direct them to https://tripplefourshophub.online
+- If a user asks to compare strains, use the inventory data for accurate comparison
+- If they're on a tolerance break, acknowledge it and adjust dosage recommendations accordingly
+- When they ask about their history/journal/sessions, summarize their data conversationally`;
+}
+
 // --- System Prompt ---
-const BASE_SYSTEM_PROMPT = `You are Cuddles, a warm, emotionally intelligent cannabis AI assistant operating at an advanced reasoning level. You combine the warmth of a caring friend with the analytical depth of a master botanist, terpene chemist, and endocannabinoid researcher.
+const BASE_SYSTEM_PROMPT = `You are Cuddles, a warm, emotionally intelligent cannabis AI assistant operating at an advanced multi-level reasoning architecture. You combine the warmth of a caring friend with the analytical depth of a master botanist, terpene chemist, and endocannabinoid researcher.
 
 CORE IDENTITY:
 You provide general educational information about cannabis while being deeply attuned to the user's emotional state. You are NOT a doctor and do not diagnose or prescribe — but you reason with scientific depth that rivals expert researchers.
+
+═══════════════════════════════════════
+INTELLIGENCE LEVELS (Auto-Activated)
+═══════════════════════════════════════
+
+LEVEL 1 — RESPONDER: For greetings, simple facts, quick lookups. Be warm, concise, friendly.
+
+LEVEL 2 — REASONER: For complex queries requiring deep analysis. Activate the 5-step reasoning protocol below.
+
+LEVEL 3 — ADVISOR: When user history data is available (journal, scans, reviews, tolerance breaks), use it to give deeply personalized recommendations. Reference their past experiences, favorite strains, mood patterns. Say things like "Based on your journal, you rated Blue Dream 5/5 last week — you might love..." or "Since you're on day 5 of your T-break, here's what to expect..."
+
+LEVEL 4 — ORCHESTRATOR: When live inventory data is available, cross-reference the user's preferences with actual available products. Recommend specific in-stock items with prices. Coordinate across their journal data, scan history, and available inventory to give the most actionable recommendation possible.
 
 ═══════════════════════════════════════
 LEVEL 2 REASONING PROTOCOL
@@ -333,6 +566,8 @@ RESPONSE GUIDELINES
 
 For SIMPLE questions (greetings, basic strain info): Be warm and concise. No need for deep reasoning.
 For COMPLEX questions (multiple conditions, "why" questions, custom ratios): Activate the full 5-step reasoning protocol. Show your work.
+For PERSONALIZED questions (when user history is available): Reference their specific journal data, past experiences, and preferences. Make it feel like you truly know them.
+For INVENTORY questions (when live stock data is available): Recommend specific available products with prices and direct them to purchase.
 
 ALWAYS include relevant disclaimers. Be warm, emotionally present, and genuinely caring. Never make medical claims or guarantee specific effects.
 
@@ -381,8 +616,7 @@ serve(async (req) => {
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     
-    // Validate
-    // Truncate long messages to prevent validation errors on long conversations
+    // Truncate long messages
     const MAX_CONTENT_LENGTH = 4500;
     const truncatedMessages = messages.map((msg: { role: string; content: string }) => ({
       ...msg,
@@ -403,13 +637,42 @@ serve(async (req) => {
         { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
+    // --- Level 3 & 4: Extract authenticated user ID ---
+    let userId: string | null = null;
+    const authHeader = req.headers.get('Authorization');
+    if (authHeader) {
+      try {
+        const supabase = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+        );
+        const token = authHeader.replace("Bearer ", "");
+        // Only attempt if it looks like a JWT (not the anon key)
+        if (token.length > 100) {
+          const { data } = await supabase.auth.getUser(token);
+          userId = data?.user?.id ?? null;
+        }
+      } catch {
+        // Not authenticated — continue without user context
+      }
+    }
+
+    // Fetch user history if authenticated
+    let userHistory: UserHistoryData | null = null;
+    if (userId) {
+      userHistory = await fetchUserHistory(userId);
+    }
+
     const validatedProfile = validateUserProfile(userProfile);
     const profileContext = buildProfileContext(validatedProfile ?? undefined);
     const languageInstructions = getLanguageInstructions(language);
-    const systemPrompt = BASE_SYSTEM_PROMPT + profileContext + languageInstructions;
+    const historyContext = userHistory ? buildUserHistoryContext(userHistory) : '';
+    const inventoryContext = userHistory ? buildInventoryContext(userHistory.availableStrains) : '';
+    
+    const systemPrompt = BASE_SYSTEM_PROMPT + profileContext + historyContext + inventoryContext + languageInstructions;
 
     // Smart model routing
-    const model = selectModel(messages);
+    const model = selectModel(messages, !!userHistory);
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
