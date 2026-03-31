@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX, UserPlus } from "lucide-react";
 
 const VIDEO_POPUP_KEY = "cuddles_video_seen";
-const POPUP_DELAY_MS = 8000;
+const POPUP_DELAY_MS = 120000; // 2 minutes
 
 const VideoPopup = () => {
   const [open, setOpen] = useState(false);
