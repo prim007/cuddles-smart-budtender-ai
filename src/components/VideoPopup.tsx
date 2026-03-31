@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX, UserPlus } from "lucide-react";
 
 const VIDEO_POPUP_KEY = "cuddles_video_seen";
-const POPUP_DELAY_MS = 8000;
+const POPUP_DELAY_MS = 120000; // 2 minutes
 
 const VideoPopup = () => {
   const [open, setOpen] = useState(false);
@@ -45,7 +45,7 @@ const VideoPopup = () => {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent data-video-popup={open ? "true" : undefined} className="sm:max-w-[500px] p-0 overflow-hidden bg-[hsl(270,40%,12%)] border-white/10">
+      <DialogContent data-video-popup={open ? "true" : undefined} className="sm:max-w-[340px] p-0 overflow-hidden bg-[hsl(270,40%,12%)] border-white/10">
         <DialogHeader className="p-4 pb-0 flex flex-row items-center justify-between">
           <DialogTitle className="text-white text-lg font-semibold">
             Meet Cuddles 🌿
