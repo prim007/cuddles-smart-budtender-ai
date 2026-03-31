@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX, UserPlus } from "lucide-react";
 
-const VIDEO_POPUP_KEY = "cuddles_video_seen";
+const VIDEO_POPUP_KEY = "cuddles_video_seen_v2";
 const POPUP_DELAY_MS = 120000; // 2 minutes
 
 const VideoPopup = () => {
