@@ -25,6 +25,7 @@ import { useUserProfile } from "@/contexts/UserProfileContext";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } from "@/components/GoogleAnalytics";
 import ReactMarkdown from "react-markdown";
+import ChatStrainCard from "./ChatStrainCard";
 
 const generateSessionId = () => crypto.randomUUID();
 
@@ -412,6 +413,9 @@ const ChatDemo = () => {
                       unwrapDisallowed
                     >{message.content}</ReactMarkdown>
                   </div>
+                  {message.role === "assistant" && index > 0 && (
+                    <ChatStrainCard messageContent={message.content} />
+                  )}
                   {message.orderPhone && (
                     <Button
                       className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
