@@ -75,6 +75,7 @@ const App = () => (
             <BrowserRouter>
               <GoogleAnalytics />
               <FeatureNav />
+              <ExitIntentCartReminder />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
