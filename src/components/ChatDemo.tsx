@@ -25,6 +25,7 @@ import { useUserProfile } from "@/contexts/UserProfileContext";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } from "@/components/GoogleAnalytics";
 import ReactMarkdown from "react-markdown";
+import ChatStrainCard from "./ChatStrainCard";
 
 const generateSessionId = () => crypto.randomUUID();
 
