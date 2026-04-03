@@ -29,7 +29,7 @@ const SignupPromoModal = () => {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
 
-      if (scrollPercent >= 25) {
+      if (scrollPercent >= 10) {
         triggered = true;
         // Don't show if video popup is still open
         const videoPopupOpen = document.querySelector('[data-video-popup="true"]');
