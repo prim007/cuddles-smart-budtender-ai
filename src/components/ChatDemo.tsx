@@ -313,6 +313,27 @@ const ChatDemo = () => {
     return () => window.removeEventListener('cuddles-quick-prompt', handler);
   }, []);
 
+  // Auto-send a welcome prompt after 5s if user hasn't interacted yet
+  const autoPromptSent = useRef(false);
+  useEffect(() => {
+    if (autoPromptSent.current || messageCount > 0) return;
+    const timer = setTimeout(() => {
+      if (!autoPromptSent.current && messageCount === 0) {
+        autoPromptSent.current = true;
+        // Add a nudge message from assistant instead of auto-sending user message
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "💡 **Not sure where to start?** Try asking me:\n\n- \"What's good for sleep?\"\n- \"I'm new to cannabis, help me out\"\n- \"Best strain for creativity?\"\n\nJust type below or tap a quick prompt! 👇",
+          },
+        ]);
+        trackEvent("auto_prompt_shown", "engagement", "chat_nudge");
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [messageCount]);
+
   return (
     <section id="demo" className="py-24 bg-muted/30 relative overflow-hidden">
       {/* Background decoration */}

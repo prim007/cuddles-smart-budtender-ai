@@ -52,33 +52,57 @@ const Hero = () => {
             Your intelligent budtender that recommends the perfect strains based on your desired effects, experience level, and preferences
           </p>
 
-          {/* Engagement nudge — drives users directly to chat */}
+          {/* Social proof banner */}
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-8 animate-fade-in">
+            <span className="flex -space-x-2">
+              {['🟢','🟢','🟢'].map((_, i) => (
+                <span key={i} className="w-2.5 h-2.5 rounded-full bg-green-400 border border-white/30 inline-block" />
+              ))}
+            </span>
+            <span className="text-sm text-white/90 font-medium">
+              <strong className="text-white">2,400+</strong> users joined this month
+            </span>
+            <span className="text-white/50">•</span>
+            <span className="text-sm text-white/70">Free forever</span>
+          </div>
+
+          {/* Engagement nudge */}
           <p className="text-sm text-white/50 mb-10 animate-pulse">
             👇 Try asking Cuddles something below — no signup needed
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
             <Link to="/auth">
               <Button
                 size="lg"
                 onClick={() => trackEvent('cta_click', 'signup', 'hero_signup')}
-                className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full"
+                className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full shadow-lg shadow-primary/30 animate-pulse hover:animate-none"
               >
                 <UserPlus className="w-5 h-5" />
                 Sign Up Free — It Takes 10 Seconds
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
-            <Button
-              size="lg"
-              onClick={() => { trackEvent('cta_click', 'demo', 'hero_try_now'); scrollToDemo(); }}
-              variant="outline"
-              className="bg-white/10 text-white border border-white/20 hover:bg-white/20 font-display font-medium text-lg px-8 py-6 h-auto rounded-xl gap-2"
-            >
-              <Bot className="w-5 h-5" />
-              Try Cuddles Now
-            </Button>
+            <a href="https://tripplefourmarketplace.lovable.app" target="_blank" rel="noopener noreferrer">
+              <Button
+                size="lg"
+                onClick={() => trackEvent('cta_click', 'shop', 'hero_order')}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:opacity-90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full"
+              >
+                <Store className="w-5 h-5" />
+                Order Delivery 🛒
+              </Button>
+            </a>
           </div>
+          <Button
+            size="lg"
+            onClick={() => { trackEvent('cta_click', 'demo', 'hero_try_now'); scrollToDemo(); }}
+            variant="outline"
+            className="bg-white/10 text-white border border-white/20 hover:bg-white/20 font-display font-medium text-base px-6 py-4 h-auto rounded-xl gap-2 mb-6"
+          >
+            <Bot className="w-5 h-5" />
+            Try Cuddles Now — No Signup Needed
+          </Button>
           <div className="flex justify-center gap-3 mb-16">
             <Link to="/schedule-demo">
               <Button
