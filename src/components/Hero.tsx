@@ -52,7 +52,21 @@ const Hero = () => {
             Your intelligent budtender that recommends the perfect strains based on your desired effects, experience level, and preferences
           </p>
 
-          {/* Engagement nudge — drives users directly to chat */}
+          {/* Social proof banner */}
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-8 animate-fade-in">
+            <span className="flex -space-x-2">
+              {['🟢','🟢','🟢'].map((_, i) => (
+                <span key={i} className="w-2.5 h-2.5 rounded-full bg-green-400 border border-white/30 inline-block" />
+              ))}
+            </span>
+            <span className="text-sm text-white/90 font-medium">
+              <strong className="text-white">2,400+</strong> users joined this month
+            </span>
+            <span className="text-white/50">•</span>
+            <span className="text-sm text-white/70">Free forever</span>
+          </div>
+
+          {/* Engagement nudge */}
           <p className="text-sm text-white/50 mb-10 animate-pulse">
             👇 Try asking Cuddles something below — no signup needed
           </p>
