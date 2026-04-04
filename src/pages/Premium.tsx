@@ -104,7 +104,7 @@ const Premium = () => {
                 <h3 className="font-display font-bold text-xl text-foreground mb-1">Cuddles Basic</h3>
                 <p className="text-muted-foreground text-sm">Free forever</p>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-foreground">R0</span>
+                  <span className="text-4xl font-bold text-foreground">{freePrice}</span>
                   <span className="text-muted-foreground">/month</span>
                 </div>
               </div>
