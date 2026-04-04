@@ -26,6 +26,12 @@ const Premium = () => {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [currency, setCurrency] = useState<CurrencyCode>("ZAR");
+
+  const curr = CURRENCIES[currency];
+  const convertedPrice = currency === "ZAR" ? BASE_PRICE_ZAR : Math.round(BASE_PRICE_ZAR * curr.rate * 100) / 100;
+  const displayPrice = currency === "ZAR" ? `${curr.symbol}${convertedPrice}` : `${curr.symbol}${convertedPrice.toFixed(2)}`;
+  const freePrice = `${curr.symbol}0`;
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
