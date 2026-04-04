@@ -1,22 +1,49 @@
 import { Button } from "@/components/ui/button";
-import { Bot, ArrowRight, ExternalLink, Store, UserPlus, Calendar } from "lucide-react";
+import { Bot, ArrowRight, ExternalLink, Store, UserPlus, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
-import HeroQuickPrompts from "./HeroQuickPrompts";
+import { useEffect, useState } from "react";
 
 const Hero = () => {
+  const [liveCount, setLiveCount] = useState(12);
+
+  // Simulate live user count fluctuation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveCount((prev) => Math.max(5, prev + Math.floor(Math.random() * 5) - 2));
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToDemo = () => {
     document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      const input = document.querySelector('#demo input[type="text"]') as HTMLInputElement;
+      input?.focus();
+    }, 800);
   };
 
+  // Auto-scroll to chat after 3 seconds if user hasn't scrolled
+  useEffect(() => {
+    let userScrolled = false;
+    const onScroll = () => { userScrolled = true; };
+    window.addEventListener("scroll", onScroll, { passive: true, once: true });
+    const timer = setTimeout(() => {
+      if (!userScrolled) {
+        document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 3000);
+    return () => { clearTimeout(timer); window.removeEventListener("scroll", onScroll); };
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center py-20 bg-gradient-to-br from-[hsl(270,40%,15%)] via-[hsl(320,45%,18%)] to-[hsl(350,50%,22%)]">
+    <section className="relative flex items-center justify-center py-12 md:py-16 bg-gradient-to-br from-[hsl(270,40%,15%)] via-[hsl(320,45%,18%)] to-[hsl(350,50%,22%)]">
       <div className="container mx-auto px-4 relative z-10">
         {/* Navigation */}
-        <nav className="absolute top-0 left-0 right-0 flex items-center justify-between py-4 px-4 md:px-0">
+        <nav className="absolute top-0 left-0 right-0 flex items-center justify-between py-3 px-4 md:px-0">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl overflow-hidden ring-2 ring-white/20">
+            <div className="w-8 h-8 rounded-xl overflow-hidden ring-2 ring-white/20">
               <img src={cuddlesImage} alt="Cuddles" className="w-full h-full object-cover" />
             </div>
             <span className="font-display font-semibold text-white text-lg hidden sm:block">Cuddles</span>
@@ -28,124 +55,71 @@ const Hero = () => {
                 <span className="hidden sm:inline">Marketplace</span>
               </Button>
             </a>
-            <Link to="/analytics">
-              <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10 font-medium">
-                Analytics
+            <Link to="/auth">
+              <Button size="sm" className="bg-white/15 text-white hover:bg-white/25 font-medium gap-1 border border-white/20">
+                <UserPlus className="w-3.5 h-3.5" />
+                Sign Up
               </Button>
             </Link>
           </div>
         </nav>
         
-        <div className="max-w-4xl mx-auto text-center pt-16">
-          <p className="text-white/70 text-sm font-medium uppercase tracking-wider mb-6">
-            AI-Powered Cannabis Recommendations
-          </p>
+        <div className="max-w-3xl mx-auto text-center pt-14">
+          {/* Live activity indicator */}
+          <div className="inline-flex items-center gap-2 bg-green-500/15 border border-green-500/30 rounded-full px-3 py-1.5 mb-4 animate-fade-in">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+            </span>
+            <span className="text-xs text-green-300 font-medium">
+              {liveCount} people chatting right now
+            </span>
+          </div>
 
-          <h1 className="font-display font-bold text-white mb-6 leading-tight">
-            Meet
-            <span className="block gradient-text text-5xl md:text-7xl lg:text-8xl py-2">
+          <h1 className="font-display font-bold text-white mb-3 leading-tight">
+            <span className="text-2xl md:text-3xl block text-white/80">Your AI Cannabis Expert</span>
+            <span className="block gradient-text text-4xl md:text-6xl py-1">
               Cuddles
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-white/70 mb-4 max-w-2xl mx-auto leading-relaxed font-sans">
-            Your intelligent budtender that recommends the perfect strains based on your desired effects, experience level, and preferences
+          <p className="text-base md:text-lg text-white/60 mb-6 max-w-xl mx-auto leading-relaxed font-sans">
+            Tell me what you're looking for — sleep, pain relief, creativity — and I'll find your perfect strain in seconds.
           </p>
 
-          {/* Social proof banner */}
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-8 animate-fade-in">
-            <span className="flex -space-x-2">
-              {['🟢','🟢','🟢'].map((_, i) => (
-                <span key={i} className="w-2.5 h-2.5 rounded-full bg-green-400 border border-white/30 inline-block" />
-              ))}
-            </span>
-            <span className="text-sm text-white/90 font-medium">
-              <strong className="text-white">2,400+</strong> users joined this month
-            </span>
-            <span className="text-white/50">•</span>
-            <span className="text-sm text-white/70">Free forever</span>
-          </div>
-
-          {/* Engagement nudge */}
-          <p className="text-sm text-white/50 mb-10 animate-pulse">
-            👇 Try asking Cuddles something below — no signup needed
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
-            <Link to="/auth">
-              <Button
-                size="lg"
-                onClick={() => trackEvent('cta_click', 'signup', 'hero_signup')}
-                className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full shadow-lg shadow-primary/30 animate-pulse hover:animate-none"
-              >
-                <UserPlus className="w-5 h-5" />
-                Sign Up Free — It Takes 10 Seconds
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-3">
+            <Button
+              size="lg"
+              onClick={() => { trackEvent('cta_click', 'demo', 'hero_try_now'); scrollToDemo(); }}
+              className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-5 h-auto rounded-xl gap-2 shadow-lg shadow-primary/30 animate-pulse hover:animate-none"
+            >
+              <MessageCircle className="w-5 h-5" />
+              Ask Cuddles Now — It's Free
+              <ArrowRight className="w-4 h-4" />
+            </Button>
             <a href="https://tripplefourmarketplace.lovable.app" target="_blank" rel="noopener noreferrer">
               <Button
                 size="lg"
                 onClick={() => trackEvent('cta_click', 'shop', 'hero_order')}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:opacity-90 font-display font-semibold text-lg px-8 py-6 h-auto rounded-xl gap-2 w-full"
+                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:opacity-90 font-display font-semibold text-lg px-8 py-5 h-auto rounded-xl gap-2 w-full"
               >
                 <Store className="w-5 h-5" />
                 Order Delivery 🛒
               </Button>
             </a>
           </div>
-          <Button
-            size="lg"
-            onClick={() => { trackEvent('cta_click', 'demo', 'hero_try_now'); scrollToDemo(); }}
-            variant="outline"
-            className="bg-white/10 text-white border border-white/20 hover:bg-white/20 font-display font-medium text-base px-6 py-4 h-auto rounded-xl gap-2 mb-6"
-          >
-            <Bot className="w-5 h-5" />
-            Try Cuddles Now — No Signup Needed
-          </Button>
-          <div className="flex justify-center gap-3 mb-16">
-            <Link to="/schedule-demo">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => trackEvent('cta_click', 'demo', 'hero_schedule_demo')}
-                className="text-white/60 hover:text-white hover:bg-white/10 font-medium gap-2"
-              >
-                <Calendar className="w-4 h-4" />
-                Schedule a Demo
-              </Button>
-            </Link>
-            <Link to="/dispensary-onboarding">
-              <Button
-                size="sm"
-                variant="ghost"
-                className="text-white/60 hover:text-white hover:bg-white/10 font-medium gap-2"
-              >
-                <Store className="w-4 h-4" />
-                For Dispensaries
-              </Button>
-            </Link>
-          </div>
 
-          {/* Quick-start prompts carousel */}
-          <HeroQuickPrompts onSelect={(prompt) => {
-            // Scroll to chat and send the prompt
-            const chatInput = document.querySelector('#demo') as HTMLElement;
-            chatInput?.scrollIntoView({ behavior: 'smooth' });
-            // Dispatch custom event for ChatDemo to pick up
-            window.dispatchEvent(new CustomEvent('cuddles-quick-prompt', { detail: prompt }));
-          }} />
+          <p className="text-xs text-white/40 mb-6">No signup required · Free forever · 2,400+ happy users</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
+          <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
             {[
-              { label: 'Match Accuracy', value: '95%', icon: '🎯' },
-              { label: 'Response Time', value: '<2s', icon: '⚡' },
-              { label: 'User Satisfaction', value: '4.9/5', icon: '⭐' },
+              { value: '95%', label: 'Match accuracy' },
+              { value: '<2s', label: 'Response time' },
+              { value: '4.9★', label: 'User rating' },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-2xl p-6 bg-white/5 border border-white/10">
-                <div className="text-2xl mb-2">{stat.icon}</div>
-                <div className="text-3xl font-display font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-white/50 text-sm font-medium">{stat.label}</div>
+              <div key={stat.label} className="rounded-xl p-3 bg-white/5 border border-white/10">
+                <div className="text-xl font-display font-bold text-white">{stat.value}</div>
+                <div className="text-white/40 text-xs">{stat.label}</div>
               </div>
             ))}
           </div>

@@ -6,9 +6,9 @@ const StickyChatFAB = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
-  // Show tooltip badge after 5 seconds
+  // Show tooltip badge after 2 seconds (faster engagement)
   useEffect(() => {
-    const timer = setTimeout(() => setShowTooltip(true), 5000);
+    const timer = setTimeout(() => setShowTooltip(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -50,8 +50,8 @@ const StickyChatFAB = () => {
             >
               <X className="h-3 w-3 text-muted-foreground" />
             </button>
-            <p className="text-sm font-medium text-foreground">Need a strain recommendation? 🌿</p>
-            <p className="text-xs text-muted-foreground mt-1">Ask the AI budtender</p>
+            <p className="text-sm font-medium text-foreground">💬 Ask me anything about cannabis!</p>
+            <p className="text-xs text-muted-foreground mt-1">Free • No signup needed</p>
           </div>
           {/* Arrow pointing to FAB */}
           <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[8px] border-l-border" />

@@ -59,26 +59,31 @@ const Shop = () => {
         description="Order cannabis for delivery. Browse strains, add to cart, and get it delivered to your door."
       />
       <div className="min-h-screen bg-background pt-20">
+        {/* Urgency banner */}
+        <div className="bg-gradient-to-r from-primary to-accent text-primary-foreground text-center py-2 text-sm font-medium">
+          🔥 Free delivery on orders over R500 · Order now, delivered today
+        </div>
+
         {/* Header */}
-        <div className="bg-gradient-to-br from-primary/10 via-background to-accent/10 py-12">
+        <div className="bg-gradient-to-br from-primary/10 via-background to-accent/10 py-8">
           <div className="container mx-auto px-4">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Cuddles
             </Link>
             <div className="flex items-center justify-between">
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <Truck className="w-8 h-8 text-primary" />
-                  <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
+                <div className="flex items-center gap-3 mb-1">
+                  <Truck className="w-7 h-7 text-primary" />
+                  <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
                     Order Delivery
                   </h1>
                 </div>
-                <p className="text-muted-foreground">
-                  Browse strains · Add to cart · Get it delivered 🚀
+                <p className="text-sm text-muted-foreground">
+                  Browse · Add to cart · Get it delivered 🚀
                 </p>
               </div>
               <Link to="/checkout">
@@ -239,6 +244,27 @@ const Shop = () => {
             </div>
           )}
         </div>
+
+        {/* Sticky checkout bar */}
+        {itemCount > 0 && (
+          <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border p-4 z-50 animate-in slide-in-from-bottom">
+            <div className="container mx-auto flex items-center justify-between max-w-4xl">
+              <div>
+                <p className="font-semibold text-foreground">
+                  {itemCount} item{itemCount > 1 ? "s" : ""} · R{subtotal.toFixed(2)}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {subtotal >= 500 ? "✅ Free delivery!" : `Add R${(500 - subtotal).toFixed(2)} for free delivery`}
+                </p>
+              </div>
+              <Link to="/checkout">
+                <Button size="lg" className="rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground font-display font-semibold px-8">
+                  Checkout →
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
