@@ -6,8 +6,19 @@ import { useSubscription, PREMIUM_TIER } from "@/contexts/SubscriptionContext";
 import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+
+const CURRENCIES = {
+  ZAR: { symbol: "R", rate: 1, label: "ZAR (R)" },
+  USD: { symbol: "$", rate: 0.054, label: "USD ($)" },
+  EUR: { symbol: "€", rate: 0.050, label: "EUR (€)" },
+  GBP: { symbol: "£", rate: 0.043, label: "GBP (£)" },
+} as const;
+
+type CurrencyCode = keyof typeof CURRENCIES;
+
+const BASE_PRICE_ZAR = 99;
 
 const Premium = () => {
   const { user } = useAuth();
