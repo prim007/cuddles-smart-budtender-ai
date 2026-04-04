@@ -79,6 +79,22 @@ const Premium = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Go beyond basic recommendations. Track, learn, and get matched with the perfect strains based on your personal history.
             </p>
+            {/* Currency selector */}
+            <div className="flex items-center justify-center gap-2 mt-6">
+              {(Object.keys(CURRENCIES) as CurrencyCode[]).map((code) => (
+                <button
+                  key={code}
+                  onClick={() => setCurrency(code)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    currency === code
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  {CURRENCIES[code].label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
