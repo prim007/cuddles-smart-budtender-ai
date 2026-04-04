@@ -244,6 +244,27 @@ const Shop = () => {
             </div>
           )}
         </div>
+
+        {/* Sticky checkout bar */}
+        {itemCount > 0 && (
+          <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border p-4 z-50 animate-in slide-in-from-bottom">
+            <div className="container mx-auto flex items-center justify-between max-w-4xl">
+              <div>
+                <p className="font-semibold text-foreground">
+                  {itemCount} item{itemCount > 1 ? "s" : ""} · R{subtotal.toFixed(2)}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {subtotal >= 500 ? "✅ Free delivery!" : `Add R${(500 - subtotal).toFixed(2)} for free delivery`}
+                </p>
+              </div>
+              <Link to="/checkout">
+                <Button size="lg" className="rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground font-display font-semibold px-8">
+                  Checkout →
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
