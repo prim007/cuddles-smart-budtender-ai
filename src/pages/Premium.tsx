@@ -6,8 +6,19 @@ import { useSubscription, PREMIUM_TIER } from "@/contexts/SubscriptionContext";
 import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+
+const CURRENCIES = {
+  ZAR: { symbol: "R", rate: 1, label: "ZAR (R)" },
+  USD: { symbol: "$", rate: 0.054, label: "USD ($)" },
+  EUR: { symbol: "€", rate: 0.050, label: "EUR (€)" },
+  GBP: { symbol: "£", rate: 0.043, label: "GBP (£)" },
+} as const;
+
+type CurrencyCode = keyof typeof CURRENCIES;
+
+const BASE_PRICE_ZAR = 99;
 
 const Premium = () => {
   const { user } = useAuth();
@@ -15,6 +26,12 @@ const Premium = () => {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [currency, setCurrency] = useState<CurrencyCode>("ZAR");
+
+  const curr = CURRENCIES[currency];
+  const convertedPrice = currency === "ZAR" ? BASE_PRICE_ZAR : Math.round(BASE_PRICE_ZAR * curr.rate * 100) / 100;
+  const displayPrice = currency === "ZAR" ? `${curr.symbol}${convertedPrice}` : `${curr.symbol}${convertedPrice.toFixed(2)}`;
+  const freePrice = `${curr.symbol}0`;
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
@@ -62,6 +79,22 @@ const Premium = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Go beyond basic recommendations. Track, learn, and get matched with the perfect strains based on your personal history.
             </p>
+            {/* Currency selector */}
+            <div className="flex items-center justify-center gap-2 mt-6">
+              {(Object.keys(CURRENCIES) as CurrencyCode[]).map((code) => (
+                <button
+                  key={code}
+                  onClick={() => setCurrency(code)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    currency === code
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  {CURRENCIES[code].label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -71,7 +104,7 @@ const Premium = () => {
                 <h3 className="font-display font-bold text-xl text-foreground mb-1">Cuddles Basic</h3>
                 <p className="text-muted-foreground text-sm">Free forever</p>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-foreground">R0</span>
+                  <span className="text-4xl font-bold text-foreground">{freePrice}</span>
                   <span className="text-muted-foreground">/month</span>
                 </div>
               </div>
@@ -99,8 +132,11 @@ const Premium = () => {
                 </h3>
                 <p className="text-muted-foreground text-sm">Your personal cannabis companion</p>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-foreground">{PREMIUM_TIER.price}</span>
-                  <span className="text-muted-foreground">/{PREMIUM_TIER.interval}</span>
+                  <span className="text-4xl font-bold text-foreground">{displayPrice}</span>
+                  <span className="text-muted-foreground">/month</span>
+                  {currency !== "ZAR" && (
+                    <span className="block text-xs text-muted-foreground mt-1">≈ R{BASE_PRICE_ZAR} ZAR · Billed in ZAR</span>
+                  )}
                 </div>
               </div>
               <ul className="space-y-3 flex-1 mb-8">
