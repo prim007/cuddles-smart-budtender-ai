@@ -6,9 +6,9 @@ const StickyChatFAB = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
-  // Show tooltip badge after 5 seconds
+  // Show tooltip badge after 2 seconds (faster engagement)
   useEffect(() => {
-    const timer = setTimeout(() => setShowTooltip(true), 5000);
+    const timer = setTimeout(() => setShowTooltip(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
