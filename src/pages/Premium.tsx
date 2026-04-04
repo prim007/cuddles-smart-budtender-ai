@@ -132,8 +132,11 @@ const Premium = () => {
                 </h3>
                 <p className="text-muted-foreground text-sm">Your personal cannabis companion</p>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-foreground">{PREMIUM_TIER.price}</span>
-                  <span className="text-muted-foreground">/{PREMIUM_TIER.interval}</span>
+                  <span className="text-4xl font-bold text-foreground">{displayPrice}</span>
+                  <span className="text-muted-foreground">/month</span>
+                  {currency !== "ZAR" && (
+                    <span className="block text-xs text-muted-foreground mt-1">≈ R{BASE_PRICE_ZAR} ZAR · Billed in ZAR</span>
+                  )}
                 </div>
               </div>
               <ul className="space-y-3 flex-1 mb-8">
