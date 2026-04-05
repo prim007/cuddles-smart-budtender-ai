@@ -19,7 +19,7 @@ import StickyChatFAB from "@/components/StickyChatFAB";
 const Index = () => {
   return (
     <div className="min-h-screen md:pt-20">
-      <SignupPromoModal />
+      
       <VideoPopup />
       <SEO 
         title="Cuddles AI - The World's Smartest Cannabis Budtender | AI Strain Recommendations"
