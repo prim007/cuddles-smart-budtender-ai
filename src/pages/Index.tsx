@@ -9,7 +9,7 @@ import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
-import SignupPromoModal from "@/components/SignupPromoModal";
+
 
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
