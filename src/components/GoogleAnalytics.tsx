@@ -64,7 +64,7 @@ const isLikelyBot = (): boolean => {
   }
   if (!navigator.language && !navigator.languages?.length) return true;
   if (navigator.webdriver) return true;
-  if (!window.chrome && /chrome/i.test(ua)) return true;
+  if (!(window as any).chrome && /chrome/i.test(ua)) return true;
   if (screen.width === 0 || screen.height === 0) return true;
   return false;
 };
