@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import SignupPromoModal from "@/components/SignupPromoModal";
-import SignupBanner from "@/components/SignupBanner";
+
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
 import VideoPopup from "@/components/VideoPopup";
