@@ -9,7 +9,7 @@ import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
-import SignupPromoModal from "@/components/SignupPromoModal";
+
 
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
@@ -19,7 +19,7 @@ import StickyChatFAB from "@/components/StickyChatFAB";
 const Index = () => {
   return (
     <div className="min-h-screen md:pt-20">
-      <SignupPromoModal />
+      
       <VideoPopup />
       <SEO 
         title="Cuddles AI - The World's Smartest Cannabis Budtender | AI Strain Recommendations"
