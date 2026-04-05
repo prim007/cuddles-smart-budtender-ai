@@ -59,15 +59,20 @@ const BOT_DATACENTER_CITIES = new Set([
 
 const isLikelyBot = (): boolean => {
   const ua = navigator.userAgent.toLowerCase();
-  // Common bot signatures
-  if (/bot|crawl|spider|scrape|headless|phantom|puppeteer|selenium|lighthouse/i.test(ua)) {
+  if (/bot|crawl|spider|scrape|headless|phantom|puppeteer|selenium|lighthouse|prerender|wget|curl|httpie|axios|node-fetch|python|java\/|go-http/i.test(ua)) {
     return true;
   }
-  // No language = likely headless
-  if (!navigator.language && !navigator.languages?.length) {
-    return true;
-  }
+  if (!navigator.language && !navigator.languages?.length) return true;
+  if (navigator.webdriver) return true;
+  if (!window.chrome && /chrome/i.test(ua)) return true;
+  if (screen.width === 0 || screen.height === 0) return true;
   return false;
+};
+
+/** Filter out noise: skip tracking for ultra-short sessions (<10s engagement) */
+let sessionStartTime = Date.now();
+const isLowQualitySession = (): boolean => {
+  return (Date.now() - sessionStartTime) < 10000;
 };
 
 export const GoogleAnalytics = () => {
