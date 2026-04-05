@@ -214,7 +214,7 @@ export const trackEvent = (
   label?: string,
   value?: number
 ) => {
-  if (window.gtag) {
+  if (window.gtag && !isLowQualitySession()) {
     const utm = getStoredUtm();
     window.gtag('event', action, {
       event_category: category,

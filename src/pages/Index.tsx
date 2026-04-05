@@ -34,7 +34,7 @@ const Index = () => {
         <ChatDemo />
       </div>
       <StickyChatFAB />
-      <SignupBanner />
+      
       <CuddlesFeatures />
       <FeaturedBlogPosts />
       <Features />
