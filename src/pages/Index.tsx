@@ -9,12 +9,13 @@ import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
-
-
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
 import VideoPopup from "@/components/VideoPopup";
 import StickyChatFAB from "@/components/StickyChatFAB";
+import TrendingStrainsTicker from "@/components/TrendingStrainsTicker";
+import StrainQuiz from "@/components/StrainQuiz";
+import Testimonials from "@/components/Testimonials";
 
 const Index = () => {
   return (
@@ -30,11 +31,13 @@ const Index = () => {
       <ThemeToggle />
       <OnboardingFlow />
       <Hero />
+      <TrendingStrainsTicker />
       <div id="chat-demo">
         <ChatDemo />
       </div>
       <StickyChatFAB />
-      
+      <StrainQuiz />
+      <Testimonials />
       <CuddlesFeatures />
       <FeaturedBlogPosts />
       <Features />
