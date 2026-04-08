@@ -9,12 +9,13 @@ import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
-
-
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
 import VideoPopup from "@/components/VideoPopup";
 import StickyChatFAB from "@/components/StickyChatFAB";
+import TrendingStrainsTicker from "@/components/TrendingStrainsTicker";
+import StrainQuiz from "@/components/StrainQuiz";
+import Testimonials from "@/components/Testimonials";
 
 const Index = () => {
   return (
@@ -22,19 +23,21 @@ const Index = () => {
       
       <VideoPopup />
       <SEO 
-        title="Cuddles AI - The World's Smartest Cannabis Budtender | AI Strain Recommendations"
-        description="Get personalized cannabis strain recommendations from Cuddles AI, the smartest AI budtender. Find your perfect indica, sativa, or hybrid strain based on desired effects, terpene profiles, and experience level. Free to use."
+        title="Cuddles AI - South Africa's Smartest Cannabis Budtender | Strain Recommendations"
+        description="Get personalized cannabis strain recommendations from Cuddles AI. Find your perfect indica, sativa, or hybrid based on effects, terpenes & experience. Trusted by 2,400+ South African users. Free."
         url="/"
-        keywords="cannabis AI, AI budtender, strain recommendations, weed recommendations, cannabis strain finder, best strains for sleep, best strains for anxiety, terpene guide, indica vs sativa, CBD vs THC, smart budtender, dispensary AI, Cuddles AI"
+        keywords="cannabis South Africa, AI budtender, dagga strains, strain recommendations, best strains for sleep, cannabis delivery SA, CBD oil South Africa, weed recommendations, terpene guide, indica vs sativa, Cuddles AI, dispensary near me"
       />
       <ThemeToggle />
       <OnboardingFlow />
       <Hero />
+      <TrendingStrainsTicker />
       <div id="chat-demo">
         <ChatDemo />
       </div>
       <StickyChatFAB />
-      
+      <StrainQuiz />
+      <Testimonials />
       <CuddlesFeatures />
       <FeaturedBlogPosts />
       <Features />
