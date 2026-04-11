@@ -255,6 +255,25 @@ export const trackOrderLinkClicked = (destination: string) => {
 
 export const trackSignupComplete = (method: string) => {
   trackEvent('signup_complete', 'conversion', method);
+  // Fire GA4 generate_lead event so it shows up in "Qualified Leads" report
+  if (window.gtag) {
+    window.gtag('event', 'generate_lead', {
+      method,
+      currency: 'ZAR',
+      value: 0,
+    });
+  }
+};
+
+export const trackLeadCaptured = (source: string, email?: string) => {
+  trackEvent('lead_captured', 'conversion', source);
+  if (window.gtag) {
+    window.gtag('event', 'generate_lead', {
+      method: source,
+      currency: 'ZAR',
+      value: 0,
+    });
+  }
 };
 
 export const trackArticleEngaged = (slug: string) => {
