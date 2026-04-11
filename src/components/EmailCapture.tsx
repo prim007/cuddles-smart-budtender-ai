@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Mail, Sparkles, X, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { trackLeadCaptured } from "@/components/GoogleAnalytics";
 
 interface EmailCaptureProps {
   variant?: "inline" | "modal";
@@ -51,6 +52,7 @@ const EmailCapture = ({ variant = "inline", onClose }: EmailCaptureProps) => {
         }
       } else {
         setIsSubmitted(true);
+        trackLeadCaptured("email_capture_chat", email.trim().toLowerCase());
         toast({
           title: "Welcome to the tribe! ✌️",
           description: "Check your inbox for your 15% discount code!",
