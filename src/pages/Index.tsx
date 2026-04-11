@@ -16,6 +16,7 @@ import StickyChatFAB from "@/components/StickyChatFAB";
 import TrendingStrainsTicker from "@/components/TrendingStrainsTicker";
 import StrainQuiz from "@/components/StrainQuiz";
 import Testimonials from "@/components/Testimonials";
+import YouTubeSection from "@/components/YouTubeSection";
 
 const Index = () => {
   return (
@@ -31,6 +32,7 @@ const Index = () => {
       <ThemeToggle />
       <OnboardingFlow />
       <Hero />
+      <YouTubeSection />
       <TrendingStrainsTicker />
       <div id="chat-demo">
         <ChatDemo />
