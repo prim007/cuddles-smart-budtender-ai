@@ -1,12 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { Bot, ArrowRight, ExternalLink, Store, UserPlus, MessageCircle } from "lucide-react";
+import { ArrowRight, ExternalLink, Store, UserPlus, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+const HERO_PROMPTS = [
+  "Best strain for sleep?",
+  "Something for anxiety relief",
+  "A creative sativa for daytime",
+  "Help with chronic pain",
+];
 
 const Hero = () => {
   const [liveCount, setLiveCount] = useState(12);
+  const [heroInput, setHeroInput] = useState("");
+  const [placeholderIdx, setPlaceholderIdx] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Simulate live user count fluctuation
   useEffect(() => {
@@ -16,26 +26,32 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const scrollToDemo = () => {
-    document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => {
-      const input = document.querySelector('#demo input[type="text"]') as HTMLInputElement;
-      input?.focus();
-    }, 800);
+  // Cycle placeholder text
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIdx((i) => (i + 1) % HERO_PROMPTS.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const sendToChat = (text: string) => {
+    trackEvent('hero_chat_submit', 'conversion', text);
+    const chatSection = document.getElementById('chat-demo');
+    if (chatSection) {
+      chatSection.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        // Dispatch the quick-prompt event that ChatDemo already listens for
+        window.dispatchEvent(new CustomEvent('cuddles-quick-prompt', { detail: text }));
+      }, 600);
+    }
   };
 
-  // Auto-scroll to chat after 3 seconds if user hasn't scrolled
-  useEffect(() => {
-    let userScrolled = false;
-    const onScroll = () => { userScrolled = true; };
-    window.addEventListener("scroll", onScroll, { passive: true, once: true });
-    const timer = setTimeout(() => {
-      if (!userScrolled) {
-        document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 3000);
-    return () => { clearTimeout(timer); window.removeEventListener("scroll", onScroll); };
-  }, []);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!heroInput.trim()) return;
+    sendToChat(heroInput.trim());
+    setHeroInput("");
+  };
 
   return (
     <section className="relative flex items-center justify-center py-12 md:py-16 bg-gradient-to-br from-[hsl(270,40%,15%)] via-[hsl(320,45%,18%)] to-[hsl(350,50%,22%)]">
@@ -83,20 +99,45 @@ const Hero = () => {
             </span>
           </h1>
 
-          <p className="text-base md:text-lg text-white/60 mb-6 max-w-xl mx-auto leading-relaxed font-sans">
+          <p className="text-base md:text-lg text-white/60 mb-5 max-w-xl mx-auto leading-relaxed font-sans">
             Tell me what you're looking for — sleep, pain relief, creativity — and I'll find your perfect strain in seconds.
           </p>
 
+          {/* Inline chat input — above the fold, instant value */}
+          <form onSubmit={handleSubmit} className="max-w-lg mx-auto mb-4">
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-2 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+              <input
+                ref={inputRef}
+                type="text"
+                value={heroInput}
+                onChange={(e) => setHeroInput(e.target.value)}
+                placeholder={HERO_PROMPTS[placeholderIdx]}
+                className="flex-1 bg-transparent text-white placeholder:text-white/40 outline-none text-base py-2"
+              />
+              <button
+                type="submit"
+                className="shrink-0 w-10 h-10 rounded-xl bg-primary hover:bg-primary/90 text-white flex items-center justify-center transition-colors"
+                aria-label="Ask Cuddles"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </form>
+
+          {/* Quick-tap prompts */}
+          <div className="flex flex-wrap gap-2 justify-center mb-5">
+            {HERO_PROMPTS.map((prompt) => (
+              <button
+                key={prompt}
+                onClick={() => sendToChat(prompt)}
+                className="text-xs px-3 py-1.5 rounded-full bg-white/8 border border-white/15 text-white/70 hover:bg-white/15 hover:text-white transition-colors"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-3">
-            <Button
-              size="lg"
-              onClick={() => { trackEvent('cta_click', 'demo', 'hero_try_now'); scrollToDemo(); }}
-              className="bg-primary text-white hover:bg-primary/90 font-display font-semibold text-lg px-8 py-5 h-auto rounded-xl gap-2 shadow-lg shadow-primary/30 animate-pulse hover:animate-none"
-            >
-              <MessageCircle className="w-5 h-5" />
-              Ask Cuddles Now — It's Free
-              <ArrowRight className="w-4 h-4" />
-            </Button>
             <a href="https://tripplefourmarketplace.lovable.app" target="_blank" rel="noopener noreferrer">
               <Button
                 size="lg"
@@ -109,7 +150,7 @@ const Hero = () => {
             </a>
           </div>
 
-          <p className="text-xs text-white/40 mb-6">No signup required · Free forever · 2,400+ happy users</p>
+          <p className="text-xs text-white/40 mb-6">No signup required · Free forever · 2,500+ happy users</p>
 
           <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
             {[
