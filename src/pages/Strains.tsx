@@ -60,10 +60,10 @@ const Strains = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Cannabis Strain Directory | Cuddles AI"
-        description="Explore our complete cannabis strain directory. Find detailed info on terpenes, THC content, effects, and get AI-powered recommendations."
+        title="Cannabis Strain Database | AI-Powered Recommendations for Dispensaries"
+        description="Browse 200+ cannabis strains with terpene profiles, THC/CBD data, and AI-powered recommendations. Used by dispensaries to help customers find their perfect strain."
         url="/strains"
-        keywords="cannabis strains, strain directory, indica, sativa, hybrid, terpenes, THC, CBD, strain finder"
+        keywords="cannabis strain database, dispensary strain finder, AI strain recommendations, indica sativa hybrid, terpene profiles, THC CBD content, cannabis product catalog"
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ThemeToggle />

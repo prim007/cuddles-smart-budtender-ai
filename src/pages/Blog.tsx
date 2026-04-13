@@ -47,10 +47,10 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Cannabis Education Blog - Strains, Terpenes & Research"
-        description="Expert cannabis education: learn about indica vs sativa, terpene profiles, CBD vs THC, responsible dosing, and the latest cannabis legislation. Written by industry experts."
+        title="Cannabis Retail Insights | AI Budtender Tips for Dispensary Owners"
+        description="Expert insights on cannabis retail automation, AI-powered budtending, terpene science, and dispensary growth strategies. Written for dispensary owners and cannabis professionals."
         url="/blog"
-        keywords="cannabis blog, cannabis education, indica vs sativa, terpene guide, CBD vs THC, cannabis strains guide, cannabis research, cannabis dosing, cannabis safety, medicinal cannabis"
+        keywords="cannabis retail blog, dispensary tips, AI budtender insights, cannabis automation, terpene guide, dispensary growth, cannabis industry trends, smart budtender"
       />
       <ThemeToggle />
 
