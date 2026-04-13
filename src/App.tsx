@@ -48,6 +48,10 @@ const Shop = lazy(() => import("./pages/Shop"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 const Premium = lazy(() => import("./pages/Premium"));
+const AIBudtender = lazy(() => import("./pages/AIBudtender"));
+const POSIntegrations = lazy(() => import("./pages/POSIntegrations"));
+const AIvsManualBudtending = lazy(() => import("./pages/AIvsManualBudtending"));
+const AIBasketSize = lazy(() => import("./pages/AIBasketSize"));
 
 // SEO pages
 const Strains = lazy(() => import("./pages/Strains"));
@@ -134,6 +138,12 @@ const App = () => (
                 {/* Strain SEO Pages */}
                 <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
                 <Route path="/strains/:slug" element={<Suspense fallback={<PageLoader />}><StrainDetail /></Suspense>} />
+
+                {/* B2B SEO Pages */}
+                <Route path="/ai-budtender" element={<Suspense fallback={<PageLoader />}><AIBudtender /></Suspense>} />
+                <Route path="/pos-integrations" element={<Suspense fallback={<PageLoader />}><POSIntegrations /></Suspense>} />
+                <Route path="/ai-vs-manual-budtending" element={<Suspense fallback={<PageLoader />}><AIvsManualBudtending /></Suspense>} />
+                <Route path="/how-ai-budtender-increases-basket-size" element={<Suspense fallback={<PageLoader />}><AIBasketSize /></Suspense>} />
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

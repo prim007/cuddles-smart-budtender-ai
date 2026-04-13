@@ -18,7 +18,7 @@ const Footer = () => {
   return (
     <footer className="bg-card border-t border-border py-12 pb-32 md:pb-28">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
@@ -52,34 +52,45 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Links */}
+          {/* For Dispensaries */}
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">For Dispensaries</h4>
+            <div className="flex flex-col gap-2">
+              <Link to="/ai-budtender" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                AI Budtender
+              </Link>
+              <Link to="/pos-integrations" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                POS Integrations
+              </Link>
+              <Link to="/ai-vs-manual-budtending" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                AI vs Manual Budtending
+              </Link>
+              <Link to="/how-ai-budtender-increases-basket-size" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Increase Basket Size
+              </Link>
+              <Link to="/why-cuddles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Why Cuddles AI
+              </Link>
+              <Link to="/dispensary-onboarding" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Get Started Free
+              </Link>
+            </div>
+          </div>
+
+          {/* Company */}
           <div>
             <h4 className="font-semibold text-foreground mb-4">Company</h4>
             <div className="flex flex-col gap-2">
-              <Link 
-                to="/privacy-policy" 
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
+              <Link to="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Privacy Policy
               </Link>
-              <Link 
-                to="/schedule-demo" 
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
+              <Link to="/schedule-demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Schedule Demo
               </Link>
-              <Link 
-                to="/auth" 
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
+              <Link to="/auth" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Sign In / Sign Up
               </Link>
-              <a 
-                href="https://tripplefourshophub.online"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
+              <a href="https://tripplefourshophub.online" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Shop — Tripple Four
               </a>
             </div>
@@ -89,7 +100,7 @@ const Footer = () => {
         {/* SEO-rich text with internal links */}
         <div className="pt-6 border-t border-border">
           <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-2">
-            Cuddles AI is the world's smartest <Link to="/why-cuddles" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> offering personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, <Link to="/reviews" className="underline hover:text-foreground">community reviews</Link>, a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>, and a <Link to="/grow" className="underline hover:text-foreground">seedling monitor for growers</Link>. Available worldwide for cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
+            Cuddles AI is the world's smartest <Link to="/ai-budtender" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> offering personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, <Link to="/reviews" className="underline hover:text-foreground">community reviews</Link>, a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>, and a <Link to="/grow" className="underline hover:text-foreground">seedling monitor for growers</Link>. <Link to="/pos-integrations" className="underline hover:text-foreground">Integrates with Dutchie, Flowhub, Cova & Sweed</Link>. Available worldwide for cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
           </p>
           <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-4">
             Learn about cannabis with our <Link to="/blog" className="underline hover:text-foreground">educational blog</Link> covering topics from <Link to="/blog/indica-vs-sativa-vs-hybrid" className="underline hover:text-foreground">indica vs sativa</Link> to <Link to="/blog/beginners-guide-to-terpenes" className="underline hover:text-foreground">terpenes</Link> and <Link to="/blog/responsible-consumption-tips" className="underline hover:text-foreground">responsible consumption</Link>.
