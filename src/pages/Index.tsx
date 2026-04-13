@@ -24,10 +24,10 @@ const Index = () => {
       
       <VideoPopup />
       <SEO 
-        title="Cuddles AI - South Africa's Smartest Cannabis Budtender | Strain Recommendations"
-        description="Get personalized cannabis strain recommendations from Cuddles AI. Find your perfect indica, sativa, or hybrid based on effects, terpenes & experience. Trusted by 2,400+ South African users. Free."
+        title="Cuddles AI | The #1 Smart Budtender to Scale Your Dispensary Sales"
+        description="AI-powered budtender that increases basket size by 35%, reduces wait times, and delivers personalized strain recommendations. Trusted by 2,500+ users. Free to try."
         url="/"
-        keywords="cannabis South Africa, AI budtender, dagga strains, strain recommendations, best strains for sleep, cannabis delivery SA, CBD oil South Africa, weed recommendations, terpene guide, indica vs sativa, Cuddles AI, dispensary near me"
+        keywords="AI budtender for dispensaries, cannabis retail automation, automated cannabis product recommendations, smart budtender, dispensary AI, reduce dispensary wait times, cannabis POS AI integration, dagga strains South Africa, strain recommendations"
       />
       <ThemeToggle />
       <OnboardingFlow />

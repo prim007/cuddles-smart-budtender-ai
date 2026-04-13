@@ -48,8 +48,9 @@ const WhyCuddles = () => {
   return (
     <div className="min-h-screen pb-20">
       <SEO
-        title="Why Cuddles AI - Transform Cannabis Retail with AI Analytics"
-        description="Discover how Cuddles AI helps cannabis suppliers and dispensaries understand sales better, optimize inventory, and increase revenue with AI-powered insights."
+        title="AI Budtender for Dispensaries | Increase Sales & Reduce Wait Times"
+        description="See how dispensaries using Cuddles AI see 35% higher basket sizes and 50% faster service. The smart budtender that pays for itself in week one."
+        keywords="AI budtender for dispensaries, cannabis retail automation, dispensary sales increase, reduce dispensary wait times, smart cannabis recommendations, dispensary AI solution"
         url="/why-cuddles"
       />
 
