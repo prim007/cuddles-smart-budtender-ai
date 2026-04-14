@@ -68,6 +68,15 @@ const Footer = () => {
               <Link to="/how-ai-budtender-increases-basket-size" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Increase Basket Size
               </Link>
+              <Link to="/cannabis-retail-automation" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Cannabis Retail Automation
+              </Link>
+              <Link to="/reduce-dispensary-wait-times" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Reduce Wait Times
+              </Link>
+              <Link to="/technology" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Our Technology (RAG)
+              </Link>
               <Link to="/why-cuddles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Why Cuddles AI
               </Link>
@@ -100,7 +109,7 @@ const Footer = () => {
         {/* SEO-rich text with internal links */}
         <div className="pt-6 border-t border-border">
           <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-2">
-            Cuddles AI is the world's smartest <Link to="/ai-budtender" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> offering personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, <Link to="/reviews" className="underline hover:text-foreground">community reviews</Link>, a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>, and a <Link to="/grow" className="underline hover:text-foreground">seedling monitor for growers</Link>. <Link to="/pos-integrations" className="underline hover:text-foreground">Integrates with Dutchie, Flowhub, Cova & Sweed</Link>. Available worldwide for cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
+            Cuddles AI is the world's smartest <Link to="/ai-budtender" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> offering personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, <Link to="/reviews" className="underline hover:text-foreground">community reviews</Link>, a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>, and a <Link to="/grow" className="underline hover:text-foreground">seedling monitor for growers</Link>. <Link to="/pos-integrations" className="underline hover:text-foreground">Integrates with Dutchie, Flowhub, Cova & Sweed</Link>. Powered by <Link to="/technology" className="underline hover:text-foreground">RAG technology</Link> for <Link to="/cannabis-retail-automation" className="underline hover:text-foreground">cannabis retail automation</Link>. Available worldwide for cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
           </p>
           <p className="text-xs text-muted-foreground/60 text-center max-w-2xl mx-auto mb-4">
             Learn about cannabis with our <Link to="/blog" className="underline hover:text-foreground">educational blog</Link> covering topics from <Link to="/blog/indica-vs-sativa-vs-hybrid" className="underline hover:text-foreground">indica vs sativa</Link> to <Link to="/blog/beginners-guide-to-terpenes" className="underline hover:text-foreground">terpenes</Link> and <Link to="/blog/responsible-consumption-tips" className="underline hover:text-foreground">responsible consumption</Link>.

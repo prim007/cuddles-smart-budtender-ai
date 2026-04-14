@@ -8,10 +8,11 @@ const InternationalMarket = () => {
   return (
     <div className="min-h-screen pb-20">
       <SEO 
-        title="Global Cannabis Market Analysis - Cuddles"
-        description="The global cannabis market is valued at $39.1B USD (2024) and growing at 14.5% CAGR. Explore international market opportunities for Cuddles AI-powered cannabis recommendations."
+        title="Global Cannabis Market 2026 | AI Solutions for International Dispensaries"
+        description="The $39.1B global cannabis market is growing at 14.5% CAGR. See how Cuddles AI serves dispensaries across the US, Canada, Europe, Africa & Asia-Pacific with AI-powered budtending."
         url="/international-market"
         type="article"
+        keywords="global cannabis market, international dispensary AI, cannabis market size 2026, cannabis retail worldwide, AI budtender international, dispensary technology global"
       />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
