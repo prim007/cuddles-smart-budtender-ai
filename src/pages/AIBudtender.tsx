@@ -189,6 +189,24 @@ const AIBudtender = () => {
         </div>
       </section>
 
+      {/* Related Pages */}
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <h3 className="font-display text-lg font-semibold text-foreground mb-4 text-center">Learn More</h3>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link to="/cannabis-retail-automation" className="text-sm text-primary hover:underline">Cannabis Retail Automation</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/technology" className="text-sm text-primary hover:underline">Our RAG Technology</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/reduce-dispensary-wait-times" className="text-sm text-primary hover:underline">Reduce Wait Times</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/how-ai-budtender-increases-basket-size" className="text-sm text-primary hover:underline">Increase Basket Size</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/pos-integrations" className="text-sm text-primary hover:underline">POS Integrations</Link>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
