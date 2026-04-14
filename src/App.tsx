@@ -52,6 +52,9 @@ const AIBudtender = lazy(() => import("./pages/AIBudtender"));
 const POSIntegrations = lazy(() => import("./pages/POSIntegrations"));
 const AIvsManualBudtending = lazy(() => import("./pages/AIvsManualBudtending"));
 const AIBasketSize = lazy(() => import("./pages/AIBasketSize"));
+const CannabisRetailAutomation = lazy(() => import("./pages/CannabisRetailAutomation"));
+const RAGWhitepaper = lazy(() => import("./pages/RAGWhitepaper"));
+const DispensaryWaitTimes = lazy(() => import("./pages/DispensaryWaitTimes"));
 
 // SEO pages
 const Strains = lazy(() => import("./pages/Strains"));
@@ -144,6 +147,9 @@ const App = () => (
                 <Route path="/pos-integrations" element={<Suspense fallback={<PageLoader />}><POSIntegrations /></Suspense>} />
                 <Route path="/ai-vs-manual-budtending" element={<Suspense fallback={<PageLoader />}><AIvsManualBudtending /></Suspense>} />
                 <Route path="/how-ai-budtender-increases-basket-size" element={<Suspense fallback={<PageLoader />}><AIBasketSize /></Suspense>} />
+                <Route path="/cannabis-retail-automation" element={<Suspense fallback={<PageLoader />}><CannabisRetailAutomation /></Suspense>} />
+                <Route path="/technology" element={<Suspense fallback={<PageLoader />}><RAGWhitepaper /></Suspense>} />
+                <Route path="/reduce-dispensary-wait-times" element={<Suspense fallback={<PageLoader />}><DispensaryWaitTimes /></Suspense>} />
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

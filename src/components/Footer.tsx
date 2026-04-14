@@ -68,6 +68,15 @@ const Footer = () => {
               <Link to="/how-ai-budtender-increases-basket-size" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Increase Basket Size
               </Link>
+              <Link to="/cannabis-retail-automation" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Cannabis Retail Automation
+              </Link>
+              <Link to="/reduce-dispensary-wait-times" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Reduce Wait Times
+              </Link>
+              <Link to="/technology" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Our Technology (RAG)
+              </Link>
               <Link to="/why-cuddles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Why Cuddles AI
               </Link>

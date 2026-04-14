@@ -23,7 +23,19 @@ const faqs = [
   },
   {
     question: "Can dispensaries use Cuddles AI?",
-    answer: "Absolutely! Cuddles AI offers a white-label solution for dispensaries to embed our smart budtender directly into their website. This helps increase customer satisfaction and sales with AI-powered recommendations."
+    answer: "Absolutely! Cuddles AI offers a white-label solution for dispensaries to embed our smart budtender directly into their website. It integrates with POS systems like Dutchie, Flowhub, Cova, and Sweed. Start with a free 14-day trial at cuddles-ai.com/dispensary-onboarding."
+  },
+  {
+    question: "How does Cuddles AI increase dispensary sales?",
+    answer: "Cuddles AI uses RAG (Retrieval-Augmented Generation) technology to deliver personalized, inventory-aware recommendations that increase basket size by 35%. It provides 24/7 automated customer engagement, reduces wait times by 50%, and captures after-hours web traffic that would otherwise bounce."
+  },
+  {
+    question: "Is Cuddles AI available internationally?",
+    answer: "Yes! Cuddles AI works in every legal cannabis market worldwide — including the US, Canada, Germany, Netherlands, South Africa, Thailand, and Australia. The platform supports multiple languages and adapts to local compliance requirements automatically."
+  },
+  {
+    question: "What POS systems does Cuddles integrate with?",
+    answer: "Cuddles AI integrates with major cannabis POS systems including Dutchie, Flowhub, Cova, and Sweed. The integration syncs your product catalog, inventory levels, and pricing in real-time so AI recommendations are always accurate."
   }
 ];
 
