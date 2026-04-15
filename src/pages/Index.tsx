@@ -32,14 +32,14 @@ const Index = () => {
       <ThemeToggle />
       <OnboardingFlow />
       <Hero />
-      <YouTubeSection />
-      <TrendingStrainsTicker />
       <div id="chat-demo">
         <ChatDemo />
       </div>
       <StickyChatFAB />
-      <StrainQuiz />
+      <TrendingStrainsTicker />
       <Testimonials />
+      <StrainQuiz />
+      <YouTubeSection />
       <CuddlesFeatures />
       <FeaturedBlogPosts />
       <Features />
