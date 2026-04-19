@@ -229,11 +229,12 @@ IMPORTANT: This is for educational purposes only. Always remind users that visua
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error in identify-strain:", error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Error in identify-strain:", errMsg);
     const origin = req.headers.get('origin');
     const corsHeaders = getCorsHeaders(origin);
     return new Response(
-      JSON.stringify({ error: "Unable to process your request. Please try again later." }),
+      JSON.stringify({ error: "Unable to process your request. Please try again later.", detail: errMsg }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
