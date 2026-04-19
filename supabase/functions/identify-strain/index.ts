@@ -169,6 +169,8 @@ IMPORTANT: This is for educational purposes only. Always remind users that visua
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error("AI gateway error:", response.status, errorText);
       if (response.status === 429) {
         return new Response(
           JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
@@ -181,9 +183,7 @@ IMPORTANT: This is for educational purposes only. Always remind users that visua
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      throw new Error("Failed to analyze image");
+      throw new Error(`AI gateway returned ${response.status}: ${errorText.slice(0, 200)}`);
     }
 
     const data = await response.json();
