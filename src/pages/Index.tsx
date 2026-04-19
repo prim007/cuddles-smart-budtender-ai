@@ -24,10 +24,10 @@ const Index = () => {
       
       <VideoPopup />
       <SEO 
-        title="Cuddles AI | The #1 Smart Budtender to Scale Your Dispensary Sales"
-        description="AI-powered budtender that increases basket size by 35%, reduces wait times, and delivers personalized strain recommendations. Trusted by 2,500+ users. Free to try."
+        title="Cuddles AI — Smart Cannabis Budtender & AI Strain Finder"
+        description="Free AI cannabis budtender. Get personalized strain recommendations in seconds, scan strains by photo, track your journal, and shop verified dispensaries. Used by 2,500+."
         url="/"
-        keywords="AI budtender for dispensaries, cannabis retail automation, automated cannabis product recommendations, smart budtender, dispensary AI, reduce dispensary wait times, cannabis POS AI integration, dagga strains South Africa, strain recommendations"
+        keywords="AI budtender, smart budtender, cannabis AI, AI strain finder, strain recommendations, cannabis app, weed strain guide, dispensary AI, cannabis POS integration, strain scanner, cannabis journal, dagga South Africa"
       />
       <ThemeToggle />
       <OnboardingFlow />
