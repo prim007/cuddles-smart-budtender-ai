@@ -88,6 +88,16 @@ const SEO = ({
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content={fullImage} />
 
+      {/* Hreflang — multi-region English targeting (matches real traffic) */}
+      <link rel="alternate" hrefLang="en" href={fullUrl} />
+      <link rel="alternate" hrefLang="en-us" href={fullUrl} />
+      <link rel="alternate" hrefLang="en-gb" href={fullUrl} />
+      <link rel="alternate" hrefLang="en-za" href={fullUrl} />
+      <link rel="alternate" hrefLang="x-default" href={fullUrl} />
+
+      {/* Robots — encourage rich previews */}
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
       {/* Structured Data */}
       <script type="application/ld+json">
         {JSON.stringify(structuredData || defaultStructuredData)}
