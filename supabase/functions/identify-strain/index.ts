@@ -4,6 +4,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 const ALLOWED_ORIGINS = [
   'https://cuddles-smart-budtender-ai.lovable.app',
   'https://id-preview--16082a8c-a109-49a8-a05d-987a18f90c7d.lovable.app',
+  'https://cuddles-ai.com',
+  'https://www.cuddles-ai.com',
   'http://localhost:8080',
   'http://localhost:5173',
 ];
@@ -13,6 +15,7 @@ function getCorsHeaders(origin: string | null): Record<string, string> {
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 }
 
