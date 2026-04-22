@@ -24,10 +24,10 @@ const Index = () => {
       
       <VideoPopup />
       <SEO 
-        title="Cuddles AI — Smart Cannabis Budtender & AI Strain Finder"
-        description="Free AI cannabis budtender. Get personalized strain recommendations in seconds, scan strains by photo, track your journal, and shop verified dispensaries. Used by 2,500+."
+        title="Cuddles AI — Buy Cannabis Online South Africa | AI Budtender + Same-Day Delivery"
+        description="Free AI cannabis budtender for South Africa. R390 vapes, R320 oils, premium strains with same-day delivery in Joburg, Cape Town & Pretoria. Chat with Cuddles to find your perfect match — no signup required."
         url="/"
-        keywords="AI budtender, smart budtender, cannabis AI, AI strain finder, strain recommendations, cannabis app, weed strain guide, dispensary AI, cannabis POS integration, strain scanner, cannabis journal, dagga South Africa"
+        keywords="buy cannabis online South Africa, weed delivery Johannesburg, cannabis delivery Cape Town, dagga delivery, AI budtender South Africa, R390 vape, cannabis oil delivery, online dispensary SA, Cuddles AI, smart budtender, weed strains South Africa, Tripple444"
       />
       <ThemeToggle />
       <OnboardingFlow />
