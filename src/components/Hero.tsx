@@ -93,14 +93,17 @@ const Hero = () => {
           </div>
 
           <h1 className="font-display font-bold text-white mb-3 leading-tight">
-            <span className="text-2xl md:text-3xl block text-white/80">Your AI Cannabis Expert</span>
+            <span className="text-2xl md:text-3xl block text-white/80">AI Budtender · Cannabis Delivery SA</span>
             <span className="block gradient-text text-4xl md:text-6xl py-1">
               Cuddles
             </span>
           </h1>
 
-          <p className="text-base md:text-lg text-white/60 mb-5 max-w-xl mx-auto leading-relaxed font-sans">
-            Tell me what you're looking for — sleep, pain relief, creativity — and I'll find your perfect strain in seconds.
+          <p className="text-base md:text-lg text-white/60 mb-2 max-w-xl mx-auto leading-relaxed font-sans">
+            Buy cannabis online in South Africa — premium strains, R390 vapes & R320 oils delivered same-day in Joburg, Cape Town & Pretoria.
+          </p>
+          <p className="text-sm text-white/50 mb-5 max-w-xl mx-auto">
+            Tell Cuddles what you need — sleep, pain relief, creativity — and get your perfect match in seconds.
           </p>
 
           {/* Inline chat input — above the fold, instant value */}
