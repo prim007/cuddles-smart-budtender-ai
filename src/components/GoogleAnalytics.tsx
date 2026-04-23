@@ -59,13 +59,17 @@ const BOT_DATACENTER_CITIES = new Set([
 
 const isLikelyBot = (): boolean => {
   const ua = navigator.userAgent.toLowerCase();
-  if (/bot|crawl|spider|scrape|headless|phantom|puppeteer|selenium|lighthouse|prerender|wget|curl|httpie|axios|node-fetch|python|java\/|go-http/i.test(ua)) {
+  if (/bot|crawl|spider|scrape|headless|phantom|puppeteer|selenium|lighthouse|prerender|wget|curl|httpie|axios|node-fetch|python|java\/|go-http|ahrefs|semrush|mj12|dotbot|yandex|bingpreview|facebookexternalhit|slackbot|discordbot/i.test(ua)) {
     return true;
   }
   if (!navigator.language && !navigator.languages?.length) return true;
   if (navigator.webdriver) return true;
   if (!(window as any).chrome && /chrome/i.test(ua)) return true;
   if (screen.width === 0 || screen.height === 0) return true;
+  // Headless signals: no plugins, no touch, no permissions API on "mobile"
+  if ((navigator as any).plugins?.length === 0 && /mobile/i.test(ua)) return true;
+  // Tiny / unusual viewports favored by scrapers
+  if (window.innerWidth < 200 || window.innerHeight < 200) return true;
   return false;
 };
 
