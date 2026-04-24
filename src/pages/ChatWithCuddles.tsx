@@ -67,24 +67,25 @@ const ChatWithCuddles = () => {
             </div>
             <div>
               <h2 className="font-display font-bold text-foreground mb-4 text-2xl md:text-3xl">
-                Introducing Cuddles
+                What Cuddles Actually Does
               </h2>
               <p className="text-muted-foreground mb-3">
-                <strong>Cuddles</strong> — the <em>Cannabis Understanding, Dosing & Lifestyle Educator</em> —
-                is a conversational AI built on the world's largest evidence-based and community-sourced
-                knowledge base for cannabis natural medicine, indexing 3,300+ peer-reviewed studies via the{" "}
-                <a
-                  href="https://www.cannabisandhealth.org/research-library/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline hover:text-primary/80"
-                >
-                  Cannabis &amp; Health Research Initiative
-                </a>.
+                Cuddles is a purpose-built cannabis AI that goes far beyond a generic chatbot. It
+                pairs <strong>personalized strain recommendations</strong> with a{" "}
+                <strong>strain journal, image-based strain scanner, community reviews, dosage
+                calculator, tolerance-break coach</strong> and a <strong>seedling grow tracker</strong> —
+                all in one conversational interface that learns your preferences over time.
+              </p>
+              <p className="text-muted-foreground mb-3">
+                For dispensaries, the same engine plugs into POS systems to drive measurable results:
+                bigger basket sizes, shorter queues, automated upsell guidance and 24/7 customer
+                education that scales without hiring more budtenders.
               </p>
               <p className="text-muted-foreground">
-                Built by the team at Cuddles AI, strengthened by evidence and guided by a shared commitment to{" "}
-                <strong>empower all people with knowledge</strong>.
+                For researchers, journalists and curious consumers, Cuddles is a fast way to explore
+                the cannabis evidence landscape — terpene chemistry, cannabinoid effects, dosing
+                ranges and consumption methods — explained in plain language with appropriate medical
+                disclaimers.
               </p>
             </div>
           </div>
