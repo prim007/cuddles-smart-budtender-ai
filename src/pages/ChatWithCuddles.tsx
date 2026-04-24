@@ -29,13 +29,14 @@ const ChatWithCuddles = () => {
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-4">
-              Your trusted source, always available.
+              Honest cannabis answers, on demand.
             </p>
             <p className="text-base text-muted-foreground max-w-2xl mx-auto mb-8">
-              You've been bonding with ChatGPT, Grok and Gemini — but you've never met an AI quite like Cuddles.
-              Built to expand the reach of credible cannabis education, <strong>Cuddles gives you 24/7,
-              compassionate, non-judgmental answers</strong> to your most pressing questions about strains,
-              cannabinoids, dosing, and harm reduction.
+              Generic chatbots weren't built for this plant. <strong>Cuddles is.</strong> She's a
+              dedicated cannabis companion trained on peer-reviewed research, real strain data and
+              South African dispensary context — ready any time of day to walk you through strain
+              choices, terpene profiles, sensible dosing and harm-reduction tips, without the
+              stigma and without the upsell.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link to="/#demo">
