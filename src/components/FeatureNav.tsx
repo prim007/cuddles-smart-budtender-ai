@@ -11,6 +11,7 @@ import {
   Home,
   MessageCircle,
   LogIn,
+  LogOut,
   Newspaper,
   Store,
   Lightbulb,
@@ -108,7 +109,12 @@ const features: Feature[] = [
 const FeatureNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    setIsOpen(false);
+  };
 
   const isActive = (href: string) => {
     if (href === "/") return location.pathname === "/";
@@ -176,7 +182,7 @@ const FeatureNav = () => {
             );
           })}
           
-          {!user && (
+          {!user ? (
             <Link
               to="/auth"
               onClick={() => setIsOpen(false)}
@@ -187,6 +193,16 @@ const FeatureNav = () => {
               </div>
               <span className="font-medium">Sign In</span>
             </Link>
+          ) : (
+            <button
+              onClick={handleSignOut}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-hippie-coral/30 hover:bg-hippie-coral/5 transition-all duration-200"
+            >
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-hippie-coral to-hippie-pink">
+                <LogOut className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-medium">Sign Out</span>
+            </button>
           )}
         </div>
       </div>
@@ -227,7 +243,7 @@ const FeatureNav = () => {
           );
         })}
         
-        {!user && (
+        {!user ? (
           <Link
             to="/auth"
             className="group flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-all duration-200 hover:bg-muted"
@@ -239,6 +255,18 @@ const FeatureNav = () => {
               Sign In
             </span>
           </Link>
+        ) : (
+          <button
+            onClick={handleSignOut}
+            className="group flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-all duration-200 hover:bg-muted"
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-hippie-coral to-hippie-pink transition-transform duration-200 group-hover:scale-110">
+              <LogOut className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground">
+              Sign Out
+            </span>
+          </button>
         )}
       </nav>
     </>
