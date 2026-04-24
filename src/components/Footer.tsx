@@ -99,6 +99,9 @@ const Footer = () => {
               <Link to="/auth" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Sign In / Sign Up
               </Link>
+              <Link to="/education/chat-with-cuddles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Chat with Cuddles
+              </Link>
               <a href="https://tripplefourshophub.online" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Shop — Tripple Four
               </a>

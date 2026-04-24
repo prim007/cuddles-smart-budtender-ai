@@ -55,6 +55,7 @@ const AIBasketSize = lazy(() => import("./pages/AIBasketSize"));
 const CannabisRetailAutomation = lazy(() => import("./pages/CannabisRetailAutomation"));
 const RAGWhitepaper = lazy(() => import("./pages/RAGWhitepaper"));
 const DispensaryWaitTimes = lazy(() => import("./pages/DispensaryWaitTimes"));
+const ChatWithCuddles = lazy(() => import("./pages/ChatWithCuddles"));
 
 // SEO pages
 const Strains = lazy(() => import("./pages/Strains"));
@@ -150,6 +151,7 @@ const App = () => (
                 <Route path="/cannabis-retail-automation" element={<Suspense fallback={<PageLoader />}><CannabisRetailAutomation /></Suspense>} />
                 <Route path="/technology" element={<Suspense fallback={<PageLoader />}><RAGWhitepaper /></Suspense>} />
                 <Route path="/reduce-dispensary-wait-times" element={<Suspense fallback={<PageLoader />}><DispensaryWaitTimes /></Suspense>} />
+                <Route path="/education/chat-with-cuddles" element={<Suspense fallback={<PageLoader />}><ChatWithCuddles /></Suspense>} />
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
