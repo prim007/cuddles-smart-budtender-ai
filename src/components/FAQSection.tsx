@@ -39,18 +39,8 @@ const faqs = [
   }
 ];
 
-const faqStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": faqs.map(faq => ({
-    "@type": "Question",
-    "name": faq.question,
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": faq.answer
-    }
-  }))
-};
+// Note: FAQPage JSON-LD is intentionally rendered once in index.html (SA buyer-intent FAQs)
+// to avoid Google Search Console "Duplicate field FAQPage" warnings. Do not re-add schema here.
 
 const FAQSection = () => {
   return (
@@ -80,11 +70,6 @@ const FAQSection = () => {
             ))}
           </Accordion>
         </div>
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
-        />
       </div>
     </section>
   );
