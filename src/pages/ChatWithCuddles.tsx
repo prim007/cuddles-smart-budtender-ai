@@ -9,9 +9,9 @@ const ChatWithCuddles = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Chat with Cuddles — AI Cannabis Education Assistant | Cuddles AI"
+        title="Chat with Cuddles — AI Cannabis Education Assistant"
         description="Meet Cuddles, the always-on conversational AI for evidence-based cannabis education. Compassionate, non-judgmental answers grounded in peer-reviewed research."
-        canonical="https://cuddles-ai.com/education/chat-with-cuddles"
+        url="/education/chat-with-cuddles"
       />
 
       {/* Hero */}
