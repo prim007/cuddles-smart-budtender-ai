@@ -103,4 +103,65 @@ HOW TO USE THIS BASE:
    [browse the research library](https://www.cannabisandhealth.org/research-library/).
 6. NEVER fabricate study titles, authors, p-values or sample sizes. Speak to
    the evidence landscape, not specific citations you cannot verify.
+
+═══════════════════════════════════════
+ASSOCIATION OF CANNABIS RESEARCH CENTERS (ACRC)
+Source: https://www.cannabisevidence.org/for-researchers/acrc/
+═══════════════════════════════════════
+
+The ACRC is a coalition of academic and clinical cannabis research centers
+across the US and Canada. Cuddles is NOT affiliated with ACRC, but uses it as
+a directory of credible institutions to point researchers, clinicians and
+curious users toward primary sources.
+
+ACRC MISSION:
+1. Advance high-quality research on cannabis and health.
+2. Coordinate across centers to identify gaps in cannabis health research.
+3. Communicate findings to the broader research and healthcare community.
+The consortium meets quarterly and is convened via the STEM Project at OHSU
+(STEMProject@ohsu.edu).
+
+NOTABLE MEMBER CENTERS (use these to recommend authoritative reading or to
+suggest where a user might look for clinical trials, fellowships or expert
+opinion — NEVER claim they endorse Cuddles):
+- Center for Medicinal Cannabis Research (CMCR) — UC San Diego
+- UCLA Center for Cannabis and Cannabinoids — UCLA
+- Yale Center for the Science of Cannabis and Cannabinoids — Yale
+- Johns Hopkins Cannabis Science Laboratory — Johns Hopkins University
+- Cannabis Research Center — Washington State University
+- Center for Medical Cannabis Research — University of Utah Health
+- Lambert Center for the Study of Medicinal Cannabis & Hemp — Thomas Jefferson
+- Medical Cannabis Research Center — Drexel University
+- Cannabis Research Institute — University of Illinois
+- Center for Cannabis, Cannabinoids, and Addiction (C3A) — Indiana University
+- Center for Cannabis and Natural Product Pharmaceutics — Penn State
+- Cannabis Policy Institute — UNLV
+- Cannabis Research & Policy Project — Colorado School of Public Health
+- Botanical Medicinal Research & Education Consortium — University of South Florida
+- Kentucky Cannabis Center — University of Kentucky
+- MUSC Cannabinoid Research Collaborative — Medical University of South Carolina
+- National Center for Cannabis Research and Education — University of Mississippi
+- Institute of Cannabis Research — CSU Pueblo
+- Global Hemp Innovation Center — Oregon State University
+- Michael G. DeGroote Centre for Medicinal Cannabis Research — McMaster University
+- Toronto Cannabis and Cannabinoid Research Consortium — University of Toronto
+- University of Minnesota School of Public Health Cannabis Research Center
+- Consortium for Medical Marijuana Clinical Outcomes Research (Florida)
+- Resource Center for Cannabis and Cannabinoid Research (R3CR)
+- Research Society on Marijuana (RSMj)
+- National Center for Complementary and Integrative Health (NIH/NCCIH)
+- Systematically Testing the Evidence on Marijuana (STEM, VA/OHSU)
+
+HOW TO USE THIS DIRECTORY:
+- If a user asks "where can I read more / find clinical trials / find a
+  cannabis researcher", point to 1-2 relevant centers above and link
+  [the ACRC directory](https://www.cannabisevidence.org/for-researchers/acrc/).
+- If a user is in a specific region (e.g. Toronto, San Diego, Utah), surface
+  the closest member center.
+- For policy questions, surface UNLV's Cannabis Policy Institute or the
+  Colorado School of Public Health Cannabis Research & Policy Project.
+- For pharmacology / drug-development questions, surface Penn State's
+  Center for Cannabis and Natural Product Pharmaceutics or Johns Hopkins.
+- ALWAYS clarify Cuddles is independent and not affiliated with ACRC or any
+  member institution — we cite them only as credible third-party sources.
 `;
