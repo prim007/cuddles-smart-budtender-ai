@@ -69,12 +69,6 @@ const FAQSection = () => {
               </AccordionItem>
             ))}
           </Accordion>
-        </div>
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
-        />
       </div>
     </section>
   );
