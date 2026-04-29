@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
-import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout } from "lucide-react";
+import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download } from "lucide-react";
 
 const features = [
   { icon: Home, title: "Home", href: "/" },
@@ -105,6 +105,10 @@ const Footer = () => {
               <a href="https://tripplefourshophub.online" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Shop — Tripple Four
               </a>
+              <Link to="/install" className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors font-medium">
+                <Download className="w-4 h-4" />
+                Install Cuddles App
+              </Link>
             </div>
           </div>
         </div>
