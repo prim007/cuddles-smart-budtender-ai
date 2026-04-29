@@ -60,6 +60,7 @@ const ChatWithCuddles = lazy(() => import("./pages/ChatWithCuddles"));
 // SEO pages
 const Strains = lazy(() => import("./pages/Strains"));
 const StrainDetail = lazy(() => import("./pages/StrainDetail"));
+const FeaturedStrains = lazy(() => import("./pages/FeaturedStrains"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -141,6 +142,7 @@ const App = () => (
 
                 {/* Strain SEO Pages */}
                 <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
+                <Route path="/strains/featured" element={<Suspense fallback={<PageLoader />}><FeaturedStrains /></Suspense>} />
                 <Route path="/strains/:slug" element={<Suspense fallback={<PageLoader />}><StrainDetail /></Suspense>} />
 
                 {/* B2B SEO Pages */}
