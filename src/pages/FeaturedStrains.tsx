@@ -8,7 +8,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Calendar, Leaf, ArrowRight, Loader2 } from "lucide-react";
+import { Sparkles, Calendar, Leaf, ArrowRight } from "lucide-react";
 
 interface WeeklyEntry { name: string; slug: string; }
 
@@ -101,8 +101,20 @@ const FeaturedStrains = () => {
         </div>
 
         {generating && (
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-6">
-            <Loader2 className="w-4 h-4 animate-spin" /> Generating fresh AI profiles...
+          <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground mb-6">
+            <span className="relative inline-flex items-center justify-center w-8 h-8">
+              <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
+              <Leaf
+                className="w-5 h-5 text-primary relative animate-bounce"
+                style={{ animation: "bounce 1.2s ease-in-out infinite, spin 3s linear infinite" }}
+              />
+            </span>
+            <span className="font-medium">Generating Strain Profiles</span>
+            <span className="inline-flex gap-0.5">
+              <span className="w-1 h-1 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }} />
+              <span className="w-1 h-1 rounded-full bg-primary animate-bounce" style={{ animationDelay: "150ms" }} />
+              <span className="w-1 h-1 rounded-full bg-primary animate-bounce" style={{ animationDelay: "300ms" }} />
+            </span>
           </div>
         )}
 
