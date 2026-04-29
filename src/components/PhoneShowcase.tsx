@@ -90,7 +90,7 @@ const PhoneShowcase = () => {
   return (
     <div className="space-y-0">
       {SECTIONS.map((s, i) => (
-        <section key={i} className={`${s.bg} py-16 md:py-24`}>
+        <section key={i} className={`${s.bg} py-16 md:py-24 text-zinc-900`}>
           <div className="container mx-auto px-4">
             <div
               className={`grid items-center gap-10 md:gap-16 lg:grid-cols-2 ${
@@ -99,13 +99,13 @@ const PhoneShowcase = () => {
             >
               {/* Copy */}
               <div className="text-center lg:text-left">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-white/60 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground/70 backdrop-blur-sm">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-900/10 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-zinc-700 backdrop-blur-sm">
                   {s.eyebrow}
                 </div>
-                <h2 className="font-display text-3xl font-bold leading-tight text-foreground md:text-4xl lg:text-5xl">
+                <h2 className="font-display text-3xl font-bold leading-tight text-zinc-900 md:text-4xl lg:text-5xl">
                   {s.title}
                 </h2>
-                <p className="mx-auto mt-5 max-w-xl text-base text-foreground/70 md:text-lg lg:mx-0">
+                <p className="mx-auto mt-5 max-w-xl text-base text-zinc-700 md:text-lg lg:mx-0">
                   {s.description}
                 </p>
                 <ul className="mx-auto mt-6 max-w-md space-y-3 lg:mx-0">
@@ -114,7 +114,7 @@ const PhoneShowcase = () => {
                       <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-hippie-coral to-hippie-amber text-white">
                         <Check className="h-3 w-3" />
                       </span>
-                      <span className="text-sm text-foreground/80 md:text-base">{b}</span>
+                      <span className="text-sm text-zinc-800 md:text-base">{b}</span>
                     </li>
                   ))}
                 </ul>
