@@ -522,6 +522,75 @@ export type Database = {
         }
         Relationships: []
       }
+      strain_profiles: {
+        Row: {
+          best_time_of_day: string | null
+          cbd_range: string | null
+          created_at: string
+          effects: Json | null
+          flavors: Json | null
+          generated_at: string
+          growing_difficulty: string | null
+          id: string
+          lineage: string | null
+          long_description: string | null
+          medical_uses: Json | null
+          negatives: Json | null
+          short_description: string | null
+          similar_strains: Json | null
+          strain_name: string
+          strain_slug: string
+          strain_type: string | null
+          terpenes: Json | null
+          thc_range: string | null
+          updated_at: string
+        }
+        Insert: {
+          best_time_of_day?: string | null
+          cbd_range?: string | null
+          created_at?: string
+          effects?: Json | null
+          flavors?: Json | null
+          generated_at?: string
+          growing_difficulty?: string | null
+          id?: string
+          lineage?: string | null
+          long_description?: string | null
+          medical_uses?: Json | null
+          negatives?: Json | null
+          short_description?: string | null
+          similar_strains?: Json | null
+          strain_name: string
+          strain_slug: string
+          strain_type?: string | null
+          terpenes?: Json | null
+          thc_range?: string | null
+          updated_at?: string
+        }
+        Update: {
+          best_time_of_day?: string | null
+          cbd_range?: string | null
+          created_at?: string
+          effects?: Json | null
+          flavors?: Json | null
+          generated_at?: string
+          growing_difficulty?: string | null
+          id?: string
+          lineage?: string | null
+          long_description?: string | null
+          medical_uses?: Json | null
+          negatives?: Json | null
+          short_description?: string | null
+          similar_strains?: Json | null
+          strain_name?: string
+          strain_slug?: string
+          strain_type?: string | null
+          terpenes?: Json | null
+          thc_range?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       strain_reviews: {
         Row: {
           cons: string[] | null
@@ -836,6 +905,27 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      weekly_featured_strains: {
+        Row: {
+          created_at: string
+          id: string
+          strain_slugs: Json
+          week_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          strain_slugs?: Json
+          week_start: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          strain_slugs?: Json
+          week_start?: string
         }
         Relationships: []
       }

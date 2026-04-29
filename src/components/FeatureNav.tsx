@@ -17,7 +17,8 @@ import {
   Lightbulb,
   Sprout,
   ShoppingBag,
-  Crown
+  Crown,
+  Sparkles
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -78,6 +79,12 @@ const features: Feature[] = [
     title: "Grow",
     href: "/grow",
     gradient: "from-hippie-green to-hippie-amber",
+  },
+  {
+    icon: Sparkles,
+    title: "Strains",
+    href: "/strains/featured",
+    gradient: "from-hippie-purple to-hippie-pink",
   },
   {
     icon: Newspaper,
