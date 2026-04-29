@@ -17,6 +17,7 @@ import TrendingStrainsTicker from "@/components/TrendingStrainsTicker";
 import StrainQuiz from "@/components/StrainQuiz";
 import Testimonials from "@/components/Testimonials";
 import YouTubeSection from "@/components/YouTubeSection";
+import PhoneShowcase from "@/components/PhoneShowcase";
 
 const Index = () => {
   return (
@@ -32,6 +33,7 @@ const Index = () => {
       <ThemeToggle />
       <OnboardingFlow />
       <Hero />
+      <PhoneShowcase />
       <div id="chat-demo">
         <ChatDemo />
       </div>
