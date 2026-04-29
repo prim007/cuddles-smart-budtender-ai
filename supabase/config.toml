@@ -9,3 +9,7 @@ project_id = "rcigcarkcpinnniddxcm"
     verify_jwt = false
   [functions.identify-strain]
     verify_jwt = false
+  [functions.generate-strain-profile]
+    verify_jwt = false
+  [functions.rotate-weekly-strains]
+    verify_jwt = false
