@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_traces: {
+        Row: {
+          agent_role: string
+          created_at: string
+          error: string | null
+          id: string
+          latency_ms: number | null
+          payload: Json
+          result: Json | null
+          session_id: string | null
+          step_index: number
+          tokens_in: number | null
+          tokens_out: number | null
+          tool_called: string | null
+          user_id: string | null
+        }
+        Insert: {
+          agent_role: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          latency_ms?: number | null
+          payload?: Json
+          result?: Json | null
+          session_id?: string | null
+          step_index?: number
+          tokens_in?: number | null
+          tokens_out?: number | null
+          tool_called?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          agent_role?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          latency_ms?: number | null
+          payload?: Json
+          result?: Json | null
+          session_id?: string | null
+          step_index?: number
+          tokens_in?: number | null
+          tokens_out?: number | null
+          tool_called?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       article_submissions: {
         Row: {
           author_email: string
@@ -882,6 +930,36 @@ export type Database = {
           start_date?: string
           status?: string
           target_days?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_memory: {
+        Row: {
+          created_at: string
+          id: string
+          last_recommendations: Json
+          preferences: Json
+          summary: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_recommendations?: Json
+          preferences?: Json
+          summary?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_recommendations?: Json
+          preferences?: Json
+          summary?: string | null
           updated_at?: string
           user_id?: string
         }
