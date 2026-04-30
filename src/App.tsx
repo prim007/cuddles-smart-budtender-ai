@@ -24,6 +24,7 @@ const Analytics = lazy(() => import("./pages/Analytics"));
 const AnalyticsDashboard = lazy(() => import("./pages/AnalyticsDashboard"));
 const DemoRequests = lazy(() => import("./pages/DemoRequests"));
 const ChatConversations = lazy(() => import("./pages/ChatConversations"));
+const AgentTraces = lazy(() => import("./pages/AgentTraces"));
 const InternationalMarket = lazy(() => import("./pages/InternationalMarket"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Install = lazy(() => import("./pages/Install"));
@@ -112,6 +113,14 @@ const App = () => (
                   element={
                     <ProtectedRoute requireAdmin>
                       <Suspense fallback={<PageLoader />}><ChatConversations /></Suspense>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/agent-traces"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <Suspense fallback={<PageLoader />}><AgentTraces /></Suspense>
                     </ProtectedRoute>
                   }
                 />
