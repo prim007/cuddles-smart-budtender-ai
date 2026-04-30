@@ -122,6 +122,18 @@ const ChatDemo = () => {
       return newCount;
     });
 
+    // Shadow-mode: fire-and-forget call to the recommendation agent.
+    // User never sees this response — it logs to agent_traces for accuracy review.
+    supabase.auth.getSession().then(({ data: { session: s } }) => {
+      supabase.functions.invoke("agent-recommend", {
+        body: {
+          user_message: content,
+          user_id: s?.user?.id ?? null,
+          session_id: sessionId,
+        },
+      }).catch((e) => console.debug("[shadow agent]", e));
+    });
+
     try {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-budtender`;
       
