@@ -13,3 +13,5 @@ project_id = "rcigcarkcpinnniddxcm"
     verify_jwt = false
   [functions.rotate-weekly-strains]
     verify_jwt = false
+  [functions.agent-recommend]
+    verify_jwt = false
