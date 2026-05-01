@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_trace_feedback: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          rating: number
+          reviewer_id: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          rating: number
+          reviewer_id: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          rating?: number
+          reviewer_id?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
       agent_traces: {
         Row: {
           agent_role: string
