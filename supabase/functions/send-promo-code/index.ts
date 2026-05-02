@@ -39,14 +39,22 @@ serve(async (req) => {
       });
     }
 
-    // Check if lead already has a code
+    // Require the email to exist in email_leads (lead must have signed up)
+    const normalizedEmail = email.trim().toLowerCase();
     const { data: existing } = await supabase
       .from("email_leads")
-      .select("promo_code, email")
-      .eq("email", email.trim().toLowerCase())
+      .select("id, promo_code, email")
+      .eq("email", normalizedEmail)
       .maybeSingle();
 
-    let promoCode = existing?.promo_code;
+    if (!existing) {
+      return new Response(JSON.stringify({ error: "Email not registered" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    let promoCode = existing.promo_code;
 
     if (!promoCode) {
       // Generate unique code
@@ -54,7 +62,7 @@ serve(async (req) => {
       const { error: updateError } = await supabase
         .from("email_leads")
         .update({ promo_code: promoCode })
-        .eq("email", email.trim().toLowerCase());
+        .eq("id", existing.id);
 
       if (updateError) {
         console.error("Failed to save promo code:", updateError);
@@ -200,9 +208,8 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error("Error sending promo code:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
     return new Response(
-      JSON.stringify({ error: message }),
+      JSON.stringify({ error: "An internal error occurred" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
