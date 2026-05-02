@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,16 +11,49 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Try connector key first, fall back to manual key
+  // Require auth
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  try {
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+    );
+    const token = authHeader.replace("Bearer ", "");
+    const { data, error } = await supabase.auth.getClaims(token);
+    if (error || !data?.claims) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  } catch {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   const API_KEY = Deno.env.get("ELEVENLABS_API_KEY_1") || Deno.env.get("ELEVENLABS_API_KEY");
   if (!API_KEY) {
-    return new Response(JSON.stringify({ error: "Missing ElevenLabs API key" }), {
+    return new Response(JSON.stringify({ error: "TTS service unavailable" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
   const { text, voiceId } = await req.json();
+  if (!text || typeof text !== "string" || text.length > 5000) {
+    return new Response(JSON.stringify({ error: "Invalid input" }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
   const voice = voiceId || "EXAVITQu4vr4xnSDxMaL";
 
   const response = await fetch(
@@ -47,7 +81,7 @@ serve(async (req) => {
   if (!response.ok) {
     const err = await response.text();
     console.error("ElevenLabs error:", response.status, err);
-    return new Response(JSON.stringify({ error: err }), {
+    return new Response(JSON.stringify({ error: "TTS request failed" }), {
       status: response.status,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
