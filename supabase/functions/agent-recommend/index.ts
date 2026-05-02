@@ -98,7 +98,26 @@ serve(async (req) => {
   );
 
   try {
-    const { user_message, user_id, session_id } = await req.json();
+    // Require authenticated user; derive user_id from JWT (never trust client)
+    const authHeader = req.headers.get("Authorization");
+    let user_id: string | null = null;
+    if (authHeader?.startsWith("Bearer ")) {
+      try {
+        const authClient = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_ANON_KEY")!,
+        );
+        const token = authHeader.replace("Bearer ", "");
+        const { data, error } = await authClient.auth.getClaims(token);
+        if (!error && data?.claims?.sub) user_id = data.claims.sub as string;
+      } catch { /* ignore */ }
+    }
+    if (!user_id) {
+      return json({ error: "Unauthorized" }, 401);
+    }
+
+    const body = await req.json();
+    const { user_message, session_id } = body;
     if (!user_message || typeof user_message !== "string" || user_message.length > 2000) {
       return json({ error: "Invalid user_message" }, 400);
     }
@@ -261,7 +280,7 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("agent-recommend error", e);
-    return json({ error: e instanceof Error ? e.message : "Unknown error" }, 500);
+    return json({ error: "An internal error occurred" }, 500);
   }
 
   function json(body: unknown, status = 200) {

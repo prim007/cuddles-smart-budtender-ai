@@ -14,7 +14,7 @@ Deno.serve(async (req) => {
 
   try {
     const { strain_name, force_refresh = false } = await req.json();
-    if (!strain_name || typeof strain_name !== "string") {
+    if (!strain_name || typeof strain_name !== "string" || strain_name.length > 100) {
       return new Response(JSON.stringify({ error: "strain_name required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -27,8 +27,30 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
+    // For force_refresh (cache bypass = paid AI call), require authenticated user
+    let effectiveForceRefresh = force_refresh;
+    if (force_refresh) {
+      const authHeader = req.headers.get("Authorization");
+      let authed = false;
+      if (authHeader?.startsWith("Bearer ")) {
+        try {
+          const authClient = createClient(
+            Deno.env.get("SUPABASE_URL")!,
+            Deno.env.get("SUPABASE_ANON_KEY")!,
+          );
+          const token = authHeader.replace("Bearer ", "");
+          const { data, error } = await authClient.auth.getClaims(token);
+          if (!error && data?.claims) authed = true;
+        } catch { /* ignore */ }
+      }
+      if (!authed) {
+        // Silently downgrade: serve from cache only for anonymous callers
+        effectiveForceRefresh = false;
+      }
+    }
+
     // Check cache
-    if (!force_refresh) {
+    if (!effectiveForceRefresh) {
       const { data: cached } = await supabase
         .from("strain_profiles")
         .select("*")
@@ -172,7 +194,7 @@ Deno.serve(async (req) => {
   } catch (e) {
     console.error("generate-strain-profile error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ error: "An internal error occurred" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }

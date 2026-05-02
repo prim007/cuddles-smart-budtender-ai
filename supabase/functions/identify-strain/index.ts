@@ -237,7 +237,7 @@ IMPORTANT: This is for educational purposes only. Always remind users that visua
     const origin = req.headers.get('origin');
     const corsHeaders = getCorsHeaders(origin);
     return new Response(
-      JSON.stringify({ error: "Unable to process your request. Please try again later.", detail: errMsg }),
+      JSON.stringify({ error: "Unable to process your request. Please try again later." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
