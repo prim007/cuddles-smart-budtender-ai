@@ -15,3 +15,7 @@ project_id = "rcigcarkcpinnniddxcm"
     verify_jwt = false
   [functions.agent-recommend]
     verify_jwt = false
+  [functions.plant-care-tips]
+    verify_jwt = false
+  [functions.elevenlabs-tts]
+    verify_jwt = false
