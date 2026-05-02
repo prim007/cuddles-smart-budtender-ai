@@ -103,9 +103,8 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error("Error validating promo code:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
     return new Response(
-      JSON.stringify({ valid: false, error: message }),
+      JSON.stringify({ valid: false, error: "An internal error occurred" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

@@ -63,8 +63,8 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("[CHECK-SUB] Error:", error.message);
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error("[CHECK-SUB] Error:", (error as Error).message);
+    return new Response(JSON.stringify({ error: "An internal error occurred" }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
