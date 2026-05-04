@@ -272,6 +272,65 @@
   </head>
 
   <body>
+    <!-- Cuddles app launch splash (shown only when launched as installed PWA / standalone app) -->
+    <style>
+      #cuddles-splash {
+        position: fixed; inset: 0; z-index: 999999;
+        display: none;
+        align-items: center; justify-content: center; flex-direction: column;
+        background: linear-gradient(160deg, #ff7e5f 0%, #feb47b 50%, #ffd6a5 100%);
+        animation: cuddlesSplashOut 0.6s ease 2.4s forwards;
+      }
+      @media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
+        #cuddles-splash { display: flex; }
+      }
+      #cuddles-splash img {
+        width: 180px; height: 180px; border-radius: 36px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        animation: cuddlesBounce 1.2s ease-in-out infinite;
+      }
+      #cuddles-splash .label {
+        margin-top: 28px; font-family: -apple-system, system-ui, sans-serif;
+        font-size: 28px; font-weight: 700; color: #fff;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+        animation: cuddlesFadeIn 0.6s ease 0.2s both;
+      }
+      #cuddles-splash .dots { margin-top: 14px; display: flex; gap: 8px; }
+      #cuddles-splash .dots span {
+        width: 10px; height: 10px; border-radius: 50%; background: #fff;
+        animation: cuddlesDot 1s ease-in-out infinite;
+      }
+      #cuddles-splash .dots span:nth-child(2) { animation-delay: 0.15s; }
+      #cuddles-splash .dots span:nth-child(3) { animation-delay: 0.3s; }
+      @keyframes cuddlesBounce {
+        0%, 100% { transform: translateY(0) scale(1) rotate(-3deg); }
+        50% { transform: translateY(-18px) scale(1.05) rotate(3deg); }
+      }
+      @keyframes cuddlesFadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes cuddlesDot {
+        0%, 100% { opacity: 0.3; transform: scale(0.8); }
+        50% { opacity: 1; transform: scale(1.2); }
+      }
+      @keyframes cuddlesSplashOut {
+        to { opacity: 0; visibility: hidden; }
+      }
+    </style>
+    <div id="cuddles-splash" aria-hidden="true">
+      <img src="/pwa-512x512.png" alt="Cuddles AI" />
+      <div class="label">Cuddles AI</div>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+    <script>
+      // Remove splash from DOM after animation completes
+      setTimeout(() => {
+        const s = document.getElementById('cuddles-splash');
+        if (s) s.remove();
+      }, 3200);
+    </script>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
