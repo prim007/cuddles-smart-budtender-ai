@@ -128,6 +128,13 @@ const PrivacyPolicy = () => {
               </section>
 
               <section className="mb-8">
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Keep Activity</h2>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  Your chats are saved in your account for up to 72 hours, whether Cuddles Apps Activity is on or off. We use this data to provide the service, maintain its safety and security, and process your feedback.
+                </p>
+              </section>
+
+              <section className="mb-8">
                 <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Cookies and Tracking Technologies</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
                   We use cookies and similar tracking technologies to collect information about your browsing activities. You can control cookie settings through your browser preferences. Note that disabling cookies may limit your ability to use certain features of our platform.
