@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Download, Share, Plus, MoreVertical } from "lucide-react";
-import { trackEvent } from "@/components/GoogleAnalytics";
+import { trackInstallFunnel, detectInstallPlatform, type InstallPlatform } from "@/components/GoogleAnalytics";
 
 const STORAGE_KEY = "cuddles_paw_install_prompt_dismissed_at";
 const SNOOZE_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
@@ -19,32 +19,27 @@ const PawIcon = ({ className = "" }: { className?: string }) => (
 
 const PawInstallPrompt = () => {
   const [open, setOpen] = useState(false);
-  const [platform, setPlatform] = useState<"ios" | "android" | "other">("other");
+  const [platform, setPlatform] = useState<InstallPlatform>("other");
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const stepsViewedRef = useRef(new Set<number>());
 
   useEffect(() => {
-    // Skip in iframes/preview to avoid noise
     try {
       if (window.self !== window.top) return;
     } catch {
       return;
     }
 
-    // Already installed
     if (window.matchMedia("(display-mode: standalone)").matches || (navigator as any).standalone) return;
 
-    // Snoozed
     const dismissed = localStorage.getItem(STORAGE_KEY);
     if (dismissed && Date.now() - parseInt(dismissed, 10) < SNOOZE_MS) return;
 
-    const ua = navigator.userAgent;
-    const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
-    const isAndroid = /Android/i.test(ua);
-    const isMobile = isIOS || isAndroid;
+    const p = detectInstallPlatform();
+    if (p !== "ios" && p !== "android") return;
 
-    if (!isMobile) return;
-
-    setPlatform(isIOS ? "ios" : isAndroid ? "android" : "other");
+    setPlatform(p);
+    trackInstallFunnel("eligible", p);
 
     const handleBIP = (e: Event) => {
       e.preventDefault();
@@ -54,7 +49,7 @@ const PawInstallPrompt = () => {
 
     const timer = setTimeout(() => {
       setOpen(true);
-      trackEvent("paw_install_prompt_shown", "engagement", isIOS ? "ios" : "android");
+      trackInstallFunnel("shown", p);
     }, 4000);
 
     return () => {
@@ -63,26 +58,56 @@ const PawInstallPrompt = () => {
     };
   }, []);
 
-  const dismiss = () => {
+  // Track which steps the user actually saw via IntersectionObserver-lite (just on open)
+  useEffect(() => {
+    if (!open || platform === "other") return;
+    // Step 1 is automatically visible when modal opens
+    if (!stepsViewedRef.current.has(1)) {
+      stepsViewedRef.current.add(1);
+      trackInstallFunnel("step_1_viewed", platform);
+    }
+    // Step 2 + 3 considered "viewed" after a short scroll/read window
+    const t2 = setTimeout(() => {
+      if (!stepsViewedRef.current.has(2)) {
+        stepsViewedRef.current.add(2);
+        trackInstallFunnel("step_2_viewed", platform);
+      }
+    }, 1500);
+    const t3 = setTimeout(() => {
+      if (!stepsViewedRef.current.has(3)) {
+        stepsViewedRef.current.add(3);
+        trackInstallFunnel("step_3_viewed", platform);
+      }
+    }, 3500);
+    return () => {
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [open, platform]);
+
+  const dismiss = (reason: "snoozed" | "dismissed" = "dismissed") => {
     localStorage.setItem(STORAGE_KEY, Date.now().toString());
     setOpen(false);
-    trackEvent("paw_install_prompt_dismissed", "engagement", platform);
+    trackInstallFunnel(reason, platform);
   };
 
   const handleAndroidInstall = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
+    if (!deferredPrompt) return;
+    trackInstallFunnel("cta_clicked", platform);
+    deferredPrompt.prompt();
+    try {
       const { outcome } = await deferredPrompt.userChoice;
-      trackEvent("paw_install_prompt_outcome", "conversion", outcome);
-      setDeferredPrompt(null);
-      setOpen(false);
+      trackInstallFunnel(outcome === "accepted" ? "accepted" : "dismissed", platform, { outcome });
+    } catch {
+      /* noop */
     }
+    setDeferredPrompt(null);
+    setOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => (v ? setOpen(true) : dismiss())}>
+    <Dialog open={open} onOpenChange={(v) => (v ? setOpen(true) : dismiss("snoozed"))}>
       <DialogContent className="max-w-sm rounded-3xl border-hippie-coral/30 bg-gradient-to-br from-background via-hippie-peach/10 to-hippie-coral/10 p-0 overflow-hidden">
-        {/* Paw trail header */}
         <div className="relative h-28 bg-gradient-to-br from-hippie-coral/30 via-hippie-peach/30 to-hippie-amber/30 overflow-hidden">
           <div className="absolute inset-0 opacity-20 pointer-events-none">
             {[
@@ -166,7 +191,7 @@ const PawInstallPrompt = () => {
           )}
 
           <button
-            onClick={dismiss}
+            onClick={() => dismiss("dismissed")}
             className="mt-5 w-full text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Maybe later

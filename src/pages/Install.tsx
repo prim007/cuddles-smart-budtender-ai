@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Download, Smartphone, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { trackInstallFunnel, detectInstallPlatform } from "@/components/GoogleAnalytics";
 
 const Install = () => {
   const navigate = useNavigate();
@@ -31,12 +32,20 @@ const Install = () => {
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
+  useEffect(() => {
+    trackInstallFunnel("shown", detectInstallPlatform(), { surface: "install_page" });
+  }, []);
+
   const handleInstall = async () => {
     if (!deferredPrompt) return;
+    const platform = detectInstallPlatform();
+    trackInstallFunnel("cta_clicked", platform, { surface: "install_page" });
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
+    trackInstallFunnel(outcome === "accepted" ? "accepted" : "dismissed", platform, { surface: "install_page", outcome });
+
     if (outcome === 'accepted') {
       setIsInstalled(true);
     }

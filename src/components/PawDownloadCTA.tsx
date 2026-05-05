@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Download } from "lucide-react";
 import { trackEvent } from "@/components/GoogleAnalytics";
+import { trackInstallFunnel, detectInstallPlatform } from "@/components/GoogleAnalytics";
 
 /**
  * Paw-print themed call-to-action that invites users to download/install Cuddles.
@@ -50,7 +51,7 @@ const PawDownloadCTA = () => {
                 Add Cuddles to your home screen for one-tap access to your AI budtender.
                 Works offline, loads instantly, and feels just like a native app.
               </p>
-              <Link to="/install" onClick={() => trackEvent("paw_download_cta_click", "conversion", "install")}>
+              <Link to="/install" onClick={() => { trackEvent("paw_download_cta_click", "conversion", "install"); trackInstallFunnel("cta_clicked", detectInstallPlatform(), { source: "paw_download_cta" }); }}>
                 <button className="group inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-hippie-coral to-hippie-amber px-7 py-4 text-white font-display font-semibold text-lg shadow-glow hover:shadow-elevated transition-all hover:scale-105">
                   <PawIcon className="w-6 h-6 transition-transform group-hover:-rotate-12" />
                   Download Cuddles
