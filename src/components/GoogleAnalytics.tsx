@@ -283,3 +283,73 @@ export const trackLeadCaptured = (source: string, email?: string) => {
 export const trackArticleEngaged = (slug: string) => {
   trackEvent('article_engaged', 'engagement', slug);
 };
+
+// --- Install funnel events ---
+// Funnel: prompt_eligible → prompt_shown → step_viewed/cta_clicked → accepted/dismissed → installed
+export type InstallPlatform = 'ios' | 'android' | 'desktop' | 'other';
+export type InstallStep =
+  | 'eligible'
+  | 'shown'
+  | 'step_1_viewed'
+  | 'step_2_viewed'
+  | 'step_3_viewed'
+  | 'cta_clicked'
+  | 'accepted'
+  | 'dismissed'
+  | 'snoozed'
+  | 'installed'
+  | 'launched_standalone';
+
+const INSTALL_FUNNEL_KEY = 'cuddles_install_funnel_id';
+
+const getOrCreateFunnelId = (): string => {
+  try {
+    let id = sessionStorage.getItem(INSTALL_FUNNEL_KEY);
+    if (!id) {
+      id = `if_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+      sessionStorage.setItem(INSTALL_FUNNEL_KEY, id);
+    }
+    return id;
+  } catch {
+    return `if_${Date.now()}`;
+  }
+};
+
+export const trackInstallFunnel = (
+  step: InstallStep,
+  platform: InstallPlatform,
+  extra?: Record<string, any>
+) => {
+  if (!window.gtag) return;
+  const funnelId = getOrCreateFunnelId();
+  const utm = getStoredUtm();
+  window.gtag('event', `install_${step}`, {
+    event_category: step === 'installed' || step === 'accepted' ? 'conversion' : 'install_funnel',
+    event_label: platform,
+    funnel_id: funnelId,
+    platform,
+    transport_type: 'beacon',
+    ...(utm.utm_source && { campaign_source: utm.utm_source }),
+    ...extra,
+  });
+
+  // Fire GA4 standard conversion event when installed
+  if (step === 'installed' && window.gtag) {
+    window.gtag('event', 'app_install', {
+      method: platform,
+      funnel_id: funnelId,
+      currency: 'ZAR',
+      value: 0,
+      transport_type: 'beacon',
+    });
+  }
+};
+
+/** Detect platform once for funnel tagging */
+export const detectInstallPlatform = (): InstallPlatform => {
+  const ua = navigator.userAgent;
+  if (/iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream) return 'ios';
+  if (/Android/i.test(ua)) return 'android';
+  if (/Win|Mac|Linux/i.test(ua)) return 'desktop';
+  return 'other';
+};
