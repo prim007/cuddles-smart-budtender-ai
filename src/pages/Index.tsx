@@ -19,11 +19,13 @@ import Testimonials from "@/components/Testimonials";
 import YouTubeSection from "@/components/YouTubeSection";
 import PhoneShowcase from "@/components/PhoneShowcase";
 import PawDownloadCTA from "@/components/PawDownloadCTA";
+import PawInstallPrompt from "@/components/PawInstallPrompt";
 
 const Index = () => {
   return (
     <div className="min-h-screen md:pt-20">
       <VideoPopup />
+      <PawInstallPrompt />
       <SEO
         title="Cuddles AI — Buy CBD Products Online Anywhere in South Africa | AI Budtender + Same-Day Delivery"
         description="Free AI cannabis budtender for South Africa. R390 vapes, R320 oils, premium strains with same-day delivery in Joburg, Cape Town & Pretoria. Chat with Cuddles to find your perfect match — no signup required."
