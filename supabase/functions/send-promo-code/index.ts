@@ -203,7 +203,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, promo_code: promoCode }),
+      JSON.stringify({ success: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
