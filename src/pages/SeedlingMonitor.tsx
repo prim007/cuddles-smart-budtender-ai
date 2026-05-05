@@ -200,11 +200,18 @@ const SeedlingMonitor = () => {
     setAiTips("");
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        toast({ title: "Sign in required", description: "Please sign in to get AI care tips.", variant: "destructive" });
+        setAiLoading(false);
+        return;
+      }
       const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/plant-care-tips`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${session.access_token}`,
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
         },
         body: JSON.stringify({
           plantName: selectedPlant.plant_name,
