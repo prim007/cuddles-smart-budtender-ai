@@ -43,11 +43,11 @@ const PawDownloadCTA = () => {
 
             {/* Copy + CTA */}
             <div className="flex-1 text-center md:text-left">
-              <div className="pill mb-3 inline-block">🐾 Tap to install</div>
-              <h2 className="font-display font-bold text-foreground mb-3 text-2xl md:text-4xl">
+              <div className="inline-block mb-3 rounded-full bg-hippie-coral/20 text-hippie-coral px-4 py-1 text-sm font-semibold border border-hippie-coral/30">🐾 Tap to install</div>
+              <h2 className="font-display font-bold text-foreground mb-3 text-2xl md:text-4xl drop-shadow-sm">
                 Take Cuddles with you — paw-by-paw
               </h2>
-              <p className="text-muted-foreground mb-6 max-w-xl">
+              <p className="text-foreground/80 mb-6 max-w-xl">
                 Add Cuddles to your home screen for one-tap access to your AI budtender.
                 Works offline, loads instantly, and feels just like a native app.
               </p>
@@ -58,7 +58,7 @@ const PawDownloadCTA = () => {
                   <Download className="w-5 h-5 transition-transform group-hover:translate-y-0.5" />
                 </button>
               </Link>
-              <p className="text-xs text-muted-foreground mt-3">Free • No app store required • iOS + Android</p>
+              <p className="text-xs text-foreground/70 mt-3">Free • No app store required • iOS + Android</p>
             </div>
           </div>
         </div>
