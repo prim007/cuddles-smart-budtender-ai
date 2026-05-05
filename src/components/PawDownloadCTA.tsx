@@ -58,7 +58,7 @@ const PawDownloadCTA = () => {
                   <Download className="w-5 h-5 transition-transform group-hover:translate-y-0.5" />
                 </button>
               </Link>
-              <p className="text-xs text-muted-foreground mt-3">Free • No app store required • iOS + Android</p>
+              <p className="text-xs text-foreground/70 mt-3">Free • No app store required • iOS + Android</p>
             </div>
           </div>
         </div>
