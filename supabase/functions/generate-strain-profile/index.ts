@@ -79,6 +79,32 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Cache miss path → about to call paid AI. Enforce IP rate limit for unauthenticated callers.
+    const authHeader2 = req.headers.get("Authorization");
+    let isAuthed = false;
+    if (authHeader2?.startsWith("Bearer ")) {
+      try {
+        const authClient = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_ANON_KEY")!,
+        );
+        const token = authHeader2.replace("Bearer ", "");
+        const { data, error } = await authClient.auth.getClaims(token);
+        if (!error && data?.claims?.role === "authenticated") isAuthed = true;
+      } catch { /* ignore */ }
+    }
+    if (!isAuthed) {
+      const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+        || req.headers.get("cf-connecting-ip")
+        || "unknown";
+      if (!checkIpRateLimit(ip)) {
+        return new Response(
+          JSON.stringify({ error: "Rate limit exceeded. Please try again later or sign in." }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
 
