@@ -18,6 +18,7 @@ import StrainQuiz from "@/components/StrainQuiz";
 import Testimonials from "@/components/Testimonials";
 import YouTubeSection from "@/components/YouTubeSection";
 import PhoneShowcase from "@/components/PhoneShowcase";
+import PawDownloadCTA from "@/components/PawDownloadCTA";
 
 const Index = () => {
   return (
@@ -41,6 +42,7 @@ const Index = () => {
       <Testimonials />
       <StrainQuiz />
       <YouTubeSection />
+      <PawDownloadCTA />
       <CuddlesFeatures />
       <FeaturedBlogPosts />
       <Features />
