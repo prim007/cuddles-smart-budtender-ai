@@ -61,6 +61,21 @@ const BlogPost = () => {
     enabled: !!slug,
   });
 
+  const { data: relatedPosts } = useQuery({
+    queryKey: ["related-posts", slug],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("id, title, slug, excerpt, featured_image, published_at")
+        .eq("published", true)
+        .neq("slug", slug!)
+        .order("published_at", { ascending: false })
+        .limit(3);
+      return (data || []) as Array<Pick<BlogPost, "id" | "title" | "slug" | "excerpt" | "featured_image" | "published_at">>;
+    },
+    enabled: !!slug,
+  });
+
   const readingTime = (content: string) => {
     const wordsPerMinute = 200;
     const words = content.split(/\s+/).length;
