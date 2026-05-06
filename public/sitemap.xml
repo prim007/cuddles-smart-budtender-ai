@@ -4,51 +4,80 @@
   <!-- Homepage -->
   <url>
     <loc>https://cuddles-ai.com/</loc>
-    <lastmod>2026-04-23</lastmod>
+    <lastmod>2026-05-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en-za" href="https://cuddles-ai.com/" />
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://cuddles-ai.com/" />
     <xhtml:link rel="alternate" hreflang="en-gb" href="https://cuddles-ai.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://cuddles-ai.com/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cuddles-ai.com/" />
   </url>
 
-  <!-- High-intent commerce pages (matches actual converting traffic) -->
-  <url><loc>https://cuddles-ai.com/shop</loc><lastmod>2026-04-22</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>
-  <url><loc>https://cuddles-ai.com/catalog</loc><lastmod>2026-04-22</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://cuddles-ai.com/checkout</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <!-- High-intent commerce pages -->
+  <url><loc>https://cuddles-ai.com/shop</loc><lastmod>2026-05-06</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>
+  <url><loc>https://cuddles-ai.com/catalog</loc><lastmod>2026-05-06</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cuddles-ai.com/checkout</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 
   <!-- B2B SEO targets -->
-  <url><loc>https://cuddles-ai.com/ai-budtender</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
-  <url><loc>https://cuddles-ai.com/pos-integrations</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
-  <url><loc>https://cuddles-ai.com/cannabis-retail-automation</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
-  <url><loc>https://cuddles-ai.com/reduce-dispensary-wait-times</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
-  <url><loc>https://cuddles-ai.com/ai-vs-manual-budtending</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://cuddles-ai.com/how-ai-budtender-increases-basket-size</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://cuddles-ai.com/dispensary-onboarding</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://cuddles-ai.com/why-cuddles</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://cuddles-ai.com/schedule-demo</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/ai-budtender</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://cuddles-ai.com/pos-integrations</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://cuddles-ai.com/cannabis-retail-automation</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://cuddles-ai.com/reduce-dispensary-wait-times</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://cuddles-ai.com/ai-vs-manual-budtending</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cuddles-ai.com/how-ai-budtender-increases-basket-size</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cuddles-ai.com/dispensary-onboarding</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cuddles-ai.com/why-cuddles</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://cuddles-ai.com/schedule-demo</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/technology</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Consumer features -->
-  <url><loc>https://cuddles-ai.com/strains</loc><lastmod>2026-04-22</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://cuddles-ai.com/blog</loc><lastmod>2026-04-22</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://cuddles-ai.com/reviews</loc><lastmod>2026-04-22</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://cuddles-ai.com/journal</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cuddles-ai.com/scanner</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cuddles-ai.com/t-break</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cuddles-ai.com/grow</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cuddles-ai.com/premium</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://cuddles-ai.com/strains</loc><lastmod>2026-05-06</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/featured</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://cuddles-ai.com/blog</loc><lastmod>2026-05-06</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cuddles-ai.com/reviews</loc><lastmod>2026-05-06</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cuddles-ai.com/journal</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/scanner</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/t-break</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/grow</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/premium</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://cuddles-ai.com/education/chat-with-cuddles</loc><lastmod>2026-05-06</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
 
-  <!-- Blog posts -->
-  <url><loc>https://cuddles-ai.com/blog/indica-vs-sativa-vs-hybrid</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cuddles-ai.com/blog/beginners-guide-to-terpenes</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cuddles-ai.com/blog/responsible-consumption-tips</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cuddles-ai.com/blog/ghana-medicinal-cannabis-regulation-2026</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cuddles-ai.com/blog/cannabis-seedling-care-tips</loc><lastmod>2026-03-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <!-- Blog posts (all currently published) -->
+  <url><loc>https://cuddles-ai.com/blog/smoking-vs-edibles-science</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/south-africa-cannabis-2025-update</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/cannabis-around-the-world-2025</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/cannabis-seedling-care-tips</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/ghana-medicinal-cannabis-regulation-2026</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/terpenes-explained-cannabis-experience</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/cannabis-mental-health-research</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/cannabis-chronic-pain-relief-science</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/cbd-vs-thc-understanding-cannabinoids</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/responsible-cannabis-consumption-beginners-guide</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/responsible-consumption-tips</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/beginners-guide-to-terpenes</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/blog/indica-vs-sativa-vs-hybrid</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Programmatic strain pages (high-intent long-tail) -->
+  <url><loc>https://cuddles-ai.com/strains/blue-dream</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/og-kush</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/girl-scout-cookies</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/sour-diesel</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/granddaddy-purple</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/northern-lights</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/white-widow</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/gelato</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/wedding-cake</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/pineapple-express</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/jack-herer</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/durban-poison</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/runtz</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/zkittlez</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/strains/purple-haze</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Secondary pages -->
-  <url><loc>https://cuddles-ai.com/international-market</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://cuddles-ai.com/install</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://cuddles-ai.com/auth</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://cuddles-ai.com/privacy-policy</loc><lastmod>2026-04-22</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://cuddles-ai.com/international-market</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/install</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://cuddles-ai.com/auth</loc><lastmod>2026-05-06</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://cuddles-ai.com/privacy-policy</loc><lastmod>2026-05-06</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>
