@@ -337,6 +337,53 @@ const BlogPost = () => {
         </div>
       </section>
 
+      {/* Related posts — boosts internal linking, time on site, and crawl depth */}
+      {relatedPosts && relatedPosts.length > 0 && (
+        <section className="pb-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="font-display text-2xl md:text-3xl font-bold mb-8 text-foreground">
+                Continue reading
+              </h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                {relatedPosts.map((rp) => (
+                  <Link
+                    key={rp.id}
+                    to={`/blog/${rp.slug}`}
+                    className="group block rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/40 transition-colors"
+                  >
+                    {rp.featured_image && (
+                      <div className="aspect-video overflow-hidden bg-muted">
+                        <img
+                          src={rp.featured_image}
+                          alt={rp.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    <div className="p-5">
+                      <h3 className="font-display font-semibold text-card-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                        {rp.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{rp.excerpt}</p>
+                      <div className="mt-3 inline-flex items-center text-sm font-medium text-primary">
+                        Read article <ArrowRight className="w-4 h-4 ml-1" />
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-8 text-center">
+                <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground underline">
+                  Browse all articles →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       <Footer />
     </div>
   );
