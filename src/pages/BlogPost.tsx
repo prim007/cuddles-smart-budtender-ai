@@ -61,6 +61,21 @@ const BlogPost = () => {
     enabled: !!slug,
   });
 
+  const { data: relatedPosts } = useQuery({
+    queryKey: ["related-posts", slug],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("id, title, slug, excerpt, featured_image, published_at")
+        .eq("published", true)
+        .neq("slug", slug!)
+        .order("published_at", { ascending: false })
+        .limit(3);
+      return (data || []) as Array<Pick<BlogPost, "id" | "title" | "slug" | "excerpt" | "featured_image" | "published_at">>;
+    },
+    enabled: !!slug,
+  });
+
   const readingTime = (content: string) => {
     const wordsPerMinute = 200;
     const words = content.split(/\s+/).length;
@@ -131,24 +146,47 @@ const BlogPost = () => {
         type="article"
         author={post.author}
         publishedTime={post.published_at}
+        image={post.featured_image || undefined}
+        keywords={(post.tags || []).join(', ')}
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Article",
-          headline: post.title,
-          description: post.excerpt,
-          author: {
-            "@type": "Organization",
-            name: post.author,
-          },
-          datePublished: post.published_at,
-          publisher: {
-            "@type": "Organization",
-            name: "Cuddles",
-            logo: {
-              "@type": "ImageObject",
-              url: "https://cuddles-smart-budtender-ai.lovable.app/apple-touch-icon.png",
+          "@graph": [
+            {
+              "@type": "Article",
+              "@id": `https://cuddles-ai.com/blog/${post.slug}#article`,
+              headline: post.title,
+              description: post.excerpt,
+              image: post.featured_image
+                ? [post.featured_image]
+                : ["https://cuddles-ai.com/pwa-512x512.png"],
+              author: { "@type": "Organization", name: post.author, url: "https://cuddles-ai.com" },
+              datePublished: post.published_at,
+              dateModified: post.published_at,
+              keywords: (post.tags || []).join(', '),
+              articleSection: (post.tags && post.tags[0]) || "Cannabis Education",
+              wordCount: post.content.split(/\s+/).length,
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://cuddles-ai.com/blog/${post.slug}`,
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "Cuddles AI",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://cuddles-ai.com/pwa-512x512.png",
+                },
+              },
             },
-          },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://cuddles-ai.com/" },
+                { "@type": "ListItem", position: 2, name: "Blog", item: "https://cuddles-ai.com/blog" },
+                { "@type": "ListItem", position: 3, name: post.title, item: `https://cuddles-ai.com/blog/${post.slug}` },
+              ],
+            },
+          ],
         }}
       />
       <ThemeToggle />
@@ -298,6 +336,53 @@ const BlogPost = () => {
           </div>
         </div>
       </section>
+
+      {/* Related posts — boosts internal linking, time on site, and crawl depth */}
+      {relatedPosts && relatedPosts.length > 0 && (
+        <section className="pb-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="font-display text-2xl md:text-3xl font-bold mb-8 text-foreground">
+                Continue reading
+              </h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                {relatedPosts.map((rp) => (
+                  <Link
+                    key={rp.id}
+                    to={`/blog/${rp.slug}`}
+                    className="group block rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/40 transition-colors"
+                  >
+                    {rp.featured_image && (
+                      <div className="aspect-video overflow-hidden bg-muted">
+                        <img
+                          src={rp.featured_image}
+                          alt={rp.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    <div className="p-5">
+                      <h3 className="font-display font-semibold text-card-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                        {rp.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{rp.excerpt}</p>
+                      <div className="mt-3 inline-flex items-center text-sm font-medium text-primary">
+                        Read article <ArrowRight className="w-4 h-4 ml-1" />
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-8 text-center">
+                <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground underline">
+                  Browse all articles →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
