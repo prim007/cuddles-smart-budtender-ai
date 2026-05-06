@@ -131,24 +131,47 @@ const BlogPost = () => {
         type="article"
         author={post.author}
         publishedTime={post.published_at}
+        image={post.featured_image || undefined}
+        keywords={(post.tags || []).join(', ')}
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Article",
-          headline: post.title,
-          description: post.excerpt,
-          author: {
-            "@type": "Organization",
-            name: post.author,
-          },
-          datePublished: post.published_at,
-          publisher: {
-            "@type": "Organization",
-            name: "Cuddles",
-            logo: {
-              "@type": "ImageObject",
-              url: "https://cuddles-smart-budtender-ai.lovable.app/apple-touch-icon.png",
+          "@graph": [
+            {
+              "@type": "Article",
+              "@id": `https://cuddles-ai.com/blog/${post.slug}#article`,
+              headline: post.title,
+              description: post.excerpt,
+              image: post.featured_image
+                ? [post.featured_image]
+                : ["https://cuddles-ai.com/pwa-512x512.png"],
+              author: { "@type": "Organization", name: post.author, url: "https://cuddles-ai.com" },
+              datePublished: post.published_at,
+              dateModified: post.published_at,
+              keywords: (post.tags || []).join(', '),
+              articleSection: (post.tags && post.tags[0]) || "Cannabis Education",
+              wordCount: post.content.split(/\s+/).length,
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://cuddles-ai.com/blog/${post.slug}`,
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "Cuddles AI",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://cuddles-ai.com/pwa-512x512.png",
+                },
+              },
             },
-          },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://cuddles-ai.com/" },
+                { "@type": "ListItem", position: 2, name: "Blog", item: "https://cuddles-ai.com/blog" },
+                { "@type": "ListItem", position: 3, name: post.title, item: `https://cuddles-ai.com/blog/${post.slug}` },
+              ],
+            },
+          ],
         }}
       />
       <ThemeToggle />
