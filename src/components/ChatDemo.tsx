@@ -74,15 +74,16 @@ const ChatDemo = () => {
     }
   }, [messages, sessionId]);
 
-  // Show email capture after 3 messages
+  // Show email capture after 5 messages — only for logged-in users
+  // (unauthenticated users see the signup gate at 3 msgs; avoid stacking CTAs)
   useEffect(() => {
-    if (messageCount >= 3 && !showEmailCapture) {
+    if (user && messageCount >= 5 && !showEmailCapture) {
       const dismissed = localStorage.getItem("cuddles-email-dismissed");
       if (!dismissed) {
         setShowEmailCapture(true);
       }
     }
-  }, [messageCount, showEmailCapture]);
+  }, [messageCount, showEmailCapture, user]);
 
   const scrollToBottom = () => {
     // Use requestAnimationFrame to batch with next paint cycle and avoid forced reflow
