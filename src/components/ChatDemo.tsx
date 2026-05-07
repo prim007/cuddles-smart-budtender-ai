@@ -487,7 +487,7 @@ const ChatDemo = () => {
           </div>
 
           {/* Post-chat catalog nudge */}
-          {messages.filter(m => m.role === "user").length >= 2 && (
+          {messages.filter(m => m.role === "user").length >= 2 && !(!user && messageCount >= 3) && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 mb-4">
               <span className="text-2xl">🚀</span>
               <div className="flex-1">
