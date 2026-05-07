@@ -74,15 +74,16 @@ const ChatDemo = () => {
     }
   }, [messages, sessionId]);
 
-  // Show email capture after 3 messages
+  // Show email capture after 5 messages — only for logged-in users
+  // (unauthenticated users see the signup gate at 3 msgs; avoid stacking CTAs)
   useEffect(() => {
-    if (messageCount >= 3 && !showEmailCapture) {
+    if (user && messageCount >= 5 && !showEmailCapture) {
       const dismissed = localStorage.getItem("cuddles-email-dismissed");
       if (!dismissed) {
         setShowEmailCapture(true);
       }
     }
-  }, [messageCount, showEmailCapture]);
+  }, [messageCount, showEmailCapture, user]);
 
   const scrollToBottom = () => {
     // Use requestAnimationFrame to batch with next paint cycle and avoid forced reflow
@@ -486,7 +487,7 @@ const ChatDemo = () => {
           </div>
 
           {/* Post-chat catalog nudge */}
-          {messages.filter(m => m.role === "user").length >= 2 && (
+          {messages.filter(m => m.role === "user").length >= 2 && !(!user && messageCount >= 3) && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 mb-4">
               <span className="text-2xl">🚀</span>
               <div className="flex-1">
@@ -507,18 +508,23 @@ const ChatDemo = () => {
           {!user && messageCount >= 3 ? (
             <div className="pt-4 border-t border-border">
               <div className="text-center p-6 rounded-xl bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 border border-primary/20">
-                <p className="font-display font-bold text-foreground text-lg mb-1">
-                  🔒 You've used your 3 free messages
+                <p className="font-display font-bold text-foreground text-xl mb-2">
+                  🎁 Unlock 20% off + your personalized strain report
                 </p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Create a free account to continue chatting, save your strains, and get personalized recommendations.
+                <p className="text-sm text-foreground/80 mb-1">
+                  Sign up free to keep chatting and instantly get:
                 </p>
+                <ul className="text-sm text-foreground/80 mb-4 space-y-1 inline-block text-left">
+                  <li>✅ <strong>20% off</strong> your first Tripple Four Shop order</li>
+                  <li>✅ Your <strong>personalized strain report</strong> (PDF) based on this chat</li>
+                  <li>✅ Save strains, track sessions & unlimited Cuddles chat</li>
+                </ul>
                 <Link
                   to="/auth"
                   onClick={() => trackEvent("cta_click", "signup", "chat_gate")}
                 >
                   <Button className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground gap-2 font-semibold px-8 py-5 text-base rounded-xl w-full sm:w-auto">
-                    <UserPlus className="w-5 h-5" /> Sign Up Free — It Takes 10 Seconds
+                    <UserPlus className="w-5 h-5" /> Claim My 20% Off — Sign Up Free
                   </Button>
                 </Link>
                 <p className="text-xs text-muted-foreground mt-3">
