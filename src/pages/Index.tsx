@@ -11,7 +11,6 @@ import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
-import VideoPopup from "@/components/VideoPopup";
 import StickyChatFAB from "@/components/StickyChatFAB";
 import TrendingStrainsTicker from "@/components/TrendingStrainsTicker";
 import StrainQuiz from "@/components/StrainQuiz";
@@ -19,13 +18,10 @@ import Testimonials from "@/components/Testimonials";
 import YouTubeSection from "@/components/YouTubeSection";
 import PhoneShowcase from "@/components/PhoneShowcase";
 import PawDownloadCTA from "@/components/PawDownloadCTA";
-import PawInstallPrompt from "@/components/PawInstallPrompt";
 
 const Index = () => {
   return (
     <div className="min-h-screen md:pt-20">
-      <VideoPopup />
-      <PawInstallPrompt />
       <SEO
         title="Cuddles AI — Free AI Cannabis Budtender | Strain Recommendations, Reviews & Journal"
         description="Cuddles AI is the world's smartest cannabis budtender. Get free, personalized strain recommendations in seconds, scan strains with your camera, track your journal, and read community reviews. Used by thousands worldwide."
