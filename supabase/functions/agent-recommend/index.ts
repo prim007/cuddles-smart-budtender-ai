@@ -273,9 +273,139 @@ serve(async (req) => {
       }
     }
 
+    // ===== CRITIC STEP =====
+    // Reviews the draft answer for: hallucinated strains, medical claims,
+    // specific dosage prescriptions, and missing disclaimer.
+    let criticReport: any = null;
+    let revised = false;
+
+    if (finalAnswer) {
+      // Build allow-list of strain names the tools actually returned
+      const allowedStrains = new Set<string>();
+      for (const m of messages) {
+        if (m.role !== "tool") continue;
+        try {
+          const parsed = JSON.parse(m.content);
+          const collect = (arr: any[]) => arr?.forEach((s: any) => {
+            if (s?.strain_name) allowedStrains.add(String(s.strain_name).toLowerCase());
+          });
+          if (Array.isArray(parsed?.strains)) collect(parsed.strains);
+          if (parsed?.strain_name) allowedStrains.add(String(parsed.strain_name).toLowerCase());
+        } catch { /* ignore */ }
+      }
+
+      // Heuristic pre-checks (cheap, deterministic)
+      const lower = finalAnswer.toLowerCase();
+      const medicalClaimPatterns = [
+        /\b(cure|cures|treat|treats|heal|heals|diagnose|prescrib)\w*/i,
+        /\bguaranteed?\b.*\b(relief|results?)\b/i,
+        /\b(replace|instead of)\b.*\b(medication|doctor|prescription)\b/i,
+      ];
+      const dosagePatterns = [
+        /\b\d+\s?(mg|milligram|gram|grams|g)\b/i,
+        /\btake\s+\d+\b/i,
+        /\b\d+\s?(puffs?|hits?|doses?)\s+(per|a|every)\b/i,
+      ];
+
+      const claimHits = medicalClaimPatterns.filter((r) => r.test(finalAnswer)).map((r) => r.source);
+      const dosageHits = dosagePatterns.filter((r) => r.test(finalAnswer)).map((r) => r.source);
+      const missingDisclaimer = !/not medical advice/i.test(finalAnswer);
+
+      // Detect hallucinated strain names: capitalized multi-word phrases not in allow-list.
+      // Conservative — only flag obvious "Title Case Strain" mentions.
+      const candidateMentions = Array.from(
+        finalAnswer.matchAll(/\b([A-Z][a-z]+(?:\s+[A-Z][a-z0-9]+){0,3})\b/g)
+      ).map((m) => m[1]);
+      const stopWords = new Set(["This","That","The","Try","Note","Tip","Hi","Hey","Hello","Indica","Sativa","Hybrid","Cuddles","CBD","THC"]);
+      const hallucinated = candidateMentions.filter((name) => {
+        if (stopWords.has(name)) return false;
+        if (name.split(/\s+/).length < 2) return false; // require at least 2 words to reduce noise
+        return !allowedStrains.has(name.toLowerCase());
+      });
+
+      const issues = {
+        medical_claims: claimHits,
+        dosage_specifics: dosageHits,
+        hallucinated_strains: Array.from(new Set(hallucinated)),
+        missing_disclaimer: missingDisclaimer,
+      };
+
+      const hasIssues =
+        claimHits.length > 0 ||
+        dosageHits.length > 0 ||
+        issues.hallucinated_strains.length > 0 ||
+        missingDisclaimer;
+
+      criticReport = { ...issues, passed: !hasIssues };
+
+      await trace({
+        step_index: 100,
+        tool_called: "critic_heuristic",
+        payload: criticReport,
+        latency_ms: 0,
+      });
+
+      // If issues found, ask the model to revise the answer with strict guardrails
+      if (hasIssues && Date.now() - startTime < BUDGET_MS) {
+        const t0 = Date.now();
+        const allowedList = Array.from(allowedStrains).join(", ") || "(none)";
+        const revisionInstructions = `Your previous answer failed compliance review. Issues:
+${claimHits.length ? `- Medical claims detected (cure/treat/diagnose/prescribe-style language).` : ""}
+${dosageHits.length ? `- Specific dosage instructions detected (mg, grams, puff counts). REMOVE all numeric dosages. Say "start low and go slow" instead.` : ""}
+${issues.hallucinated_strains.length ? `- Strains not in our catalog: ${issues.hallucinated_strains.join(", ")}. ONLY mention strains from this allow-list: ${allowedList}` : ""}
+${missingDisclaimer ? `- Missing required disclaimer.` : ""}
+
+Rewrite your previous answer:
+- Remove medical claims (no cure/treat/diagnose/heal/prescribe).
+- Remove specific dosages — use "start low and go slow" guidance only.
+- Only reference strains from: ${allowedList}
+- End with exactly: "This is general education, not medical advice."
+Keep the friendly tone. 2-3 strain picks max.`;
+
+        const revisionMessages = [
+          ...messages,
+          { role: "assistant", content: finalAnswer },
+          { role: "user", content: revisionInstructions },
+        ];
+
+        const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ model: MODEL, messages: revisionMessages }),
+        });
+
+        if (resp.ok) {
+          const rdata = await resp.json();
+          const revisedText = rdata.choices?.[0]?.message?.content;
+          if (revisedText) {
+            finalAnswer = revisedText;
+            revised = true;
+          }
+        }
+
+        await trace({
+          step_index: 101,
+          tool_called: "critic_revision",
+          payload: { revised, ok: resp.ok },
+          tokens_in: undefined,
+          latency_ms: Date.now() - t0,
+        });
+
+        // Final safety net: ensure disclaimer is present even if model dropped it
+        if (finalAnswer && !/not medical advice/i.test(finalAnswer)) {
+          finalAnswer = finalAnswer.trim() + "\n\nThis is general education, not medical advice.";
+        }
+      }
+    }
+
     return json({
       answer: finalAnswer,
       steps_used: messages.filter((m) => m.role === "tool").length,
+      critic: criticReport,
+      revised,
       latency_ms: Date.now() - startTime,
     });
   } catch (e) {
