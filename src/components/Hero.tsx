@@ -71,7 +71,7 @@ const Hero = () => {
         <nav className="mb-10 flex items-center justify-between md:mb-16">
           <div className="flex items-center gap-2">
             <div className="h-9 w-9 overflow-hidden rounded-xl ring-2 ring-white/20">
-              <img src={cuddlesImage} alt="Cuddles" className="h-full w-full object-cover" width="36" height="36" fetchpriority="high" />
+              <img src={cuddlesImage} alt="Cuddles" className="h-full w-full object-cover" width="36" height="36" fetchPriority="high" />
             </div>
             <span className="font-display text-lg font-semibold text-white">Cuddles</span>
           </div>
