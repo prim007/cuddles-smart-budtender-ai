@@ -87,10 +87,32 @@ const StrainDetail = () => {
     tenantStrain?.primary_effect && { icon: Zap, label: "Effect", value: tenantStrain.primary_effect },
   ].filter(Boolean) as { icon: any; label: string; value: string }[];
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: displayName,
+    description,
+    category: `${displayType} Cannabis Strain`,
+    brand: { "@type": "Brand", name: "Cuddles AI" },
+    url: `https://cuddles-ai.com/strains/${slug}`,
+    ...(tenantStrain?.price != null && {
+      offers: {
+        "@type": "Offer",
+        price: tenantStrain.price,
+        priceCurrency: "ZAR",
+        availability: tenantStrain.in_stock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        url: `https://cuddles-ai.com/strains/${slug}`,
+      },
+    }),
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SEO title={title} description={description} url={`/strains/${slug}`}
-        keywords={`${displayName}, ${displayType}, cannabis strain, effects, terpenes, THC, CBD`} />
+        keywords={`${displayName}, ${displayType}, cannabis strain, effects, terpenes, THC, CBD`}
+        structuredData={productSchema} />
       <ThemeToggle />
 
       <div className="container mx-auto px-4 py-12 max-w-4xl">

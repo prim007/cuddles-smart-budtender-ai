@@ -1,0 +1,38 @@
+# Cuddles AI
+
+> Cuddles AI is a smart AI-powered cannabis budtender. Free personalized strain recommendations, strain scanner, journal, community reviews, and same-day delivery in South Africa via Tripple444.
+
+Cuddles AI helps consumers find the right cannabis strain through a chat interface and helps dispensaries sell smarter through embeddable AI budtending and POS integrations (Dutchie, Flowhub, Cova, Sweed). General cannabis education only — not medical advice.
+
+## Pages
+
+- [Home](/): AI cannabis budtender chat, strain finder, delivery.
+- [Shop](/shop): Cannabis product catalog (vapes, oils, flower) with same-day delivery.
+- [Catalog](/catalog): Browse the full Tripple444 product catalog.
+- [Strains directory](/strains): All cannabis strains with terpene, THC/CBD, and effect data.
+- [Featured strains](/strains/featured): 10 weekly hand-picked strains.
+- [Strain reviews](/reviews): Community reviews and ratings.
+- [Strain journal](/journal): Track sessions, dosage, and effects.
+- [Strain scanner](/scanner): Identify strains from a photo using AI.
+- [Tolerance break coach](/t-break): Personalized tolerance reset plan.
+- [Seedling monitor](/grow): Cultivation tracker with care logs.
+- [Premium](/premium): Cuddles Premium (R99/mo) features.
+- [Blog](/blog): Cannabis education, science, and African market updates.
+
+## For dispensaries
+
+- [AI Budtender for dispensaries](/ai-budtender): Embeddable AI budtender widget.
+- [POS Integrations](/pos-integrations): Dutchie, Flowhub, Cova, Sweed connectors.
+- [Cannabis retail automation](/cannabis-retail-automation): Operations automation use cases.
+- [AI vs manual budtending](/ai-vs-manual-budtending): Comparison and ROI.
+- [Increase basket size with AI](/how-ai-budtender-increases-basket-size): Upsell case studies.
+- [Reduce dispensary wait times](/reduce-dispensary-wait-times): Throughput improvements.
+- [Why Cuddles](/why-cuddles): Differentiation vs competitors.
+- [Schedule a demo](/schedule-demo): Book a B2B demo.
+- [Dispensary onboarding](/dispensary-onboarding): Self-serve B2B signup with 14-day free trial.
+
+## Optional
+
+- [Investor deck](/investment-deck): Investor materials.
+- [Privacy policy](/privacy): POPIA-compliant privacy policy.
+- [RAG whitepaper](/technology): Technical architecture overview.
