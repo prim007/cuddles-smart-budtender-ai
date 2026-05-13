@@ -16,8 +16,8 @@ const BASE_URL = "https://cuddles-ai.com";
 const DEFAULT_IMAGE = "https://storage.googleapis.com/gpt-engineer-file-uploads/fn4xikHtpsZcJMhE3wUXdvgxIkl2/social-images/social-1770387793477-Screenshot_2026-02-06_at_4.09.58_PM.png";
 
 const SEO = ({
-  title = "Cuddles AI - Smart Cannabis Budtender | AI-Powered Strain Recommendations",
-  description = "Cuddles AI is the world's smartest cannabis budtender. Get personalized strain recommendations powered by AI. Track your cannabis journal, scan strains, read community reviews, and more. Available worldwide.",
+  title = "Cuddles AI — Smart AI Cannabis Budtender",
+  description = "Cuddles AI is the world's smartest cannabis budtender. Personalized strain recommendations, journal, scanner, and reviews — free worldwide.",
   image = DEFAULT_IMAGE,
   url = "/",
   type = "website",
