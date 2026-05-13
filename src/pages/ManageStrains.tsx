@@ -296,7 +296,7 @@ const ManageStrains = () => {
         ) : strains.length === 0 ? (
           <Card>
             <CardContent className="p-12 text-center space-y-4">
-              <Leaf className="w-12 h-12 mx-auto text-muted-foreground/40" />
+              <Leaf className="w-12 h-12 mx-auto text-muted-foreground" />
               <h3 className="text-lg font-medium text-foreground">No strains yet</h3>
               <p className="text-muted-foreground text-sm max-w-sm mx-auto">
                 Add your dispensary's strains so Cuddles can recommend them to your customers. Click "Add Strain" to get started.
