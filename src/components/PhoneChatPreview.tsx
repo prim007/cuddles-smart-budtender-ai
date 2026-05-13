@@ -26,7 +26,7 @@ const PhoneChatPreview = ({
       <div className={`bg-gradient-to-r ${headerGradient} px-4 pt-3 pb-3`}>
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-white/40">
-            <img src={cuddlesImage} alt="Cuddles" className="h-full w-full object-cover" />
+            <img src={cuddlesImage} alt="Cuddles" className="h-full w-full object-cover" width="36" height="36" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold text-white truncate">{title}</div>
