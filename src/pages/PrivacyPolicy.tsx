@@ -9,8 +9,8 @@ const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Privacy Policy - Cuddles"
-        description="Learn about how Cuddles collects, uses, and protects your personal information in compliance with POPIA and data protection regulations."
+        title="Privacy Policy - Cuddles AI"
+        description="How Cuddles AI collects, uses, stores, and protects your personal information in compliance with POPIA, GDPR principles, and applicable data protection laws."
         url="/privacy-policy"
       />
       
@@ -35,155 +35,189 @@ const PrivacyPolicy = () => {
             </div>
             <div>
               <h1 className="text-4xl font-display font-bold text-foreground">Privacy Policy</h1>
-              <p className="text-muted-foreground mt-1">Last updated: November 27, 2025</p>
+              <p className="text-muted-foreground mt-1">Last updated: May 14, 2026</p>
             </div>
           </div>
 
           <Card className="p-8 md:p-12 bg-card/50 backdrop-blur-sm border-border/30">
             <div className="prose prose-lg max-w-none">
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Introduction</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">1. Introduction</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  Cuddles ("we," "our," or "us") is committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information in compliance with the Protection of Personal Information Act (POPIA) and other applicable data protection regulations.
+                  Cuddles AI ("Cuddles", "we", "our", or "us"), a product of Tripple444, is committed to protecting your privacy and the security of your personal information. This Privacy Policy explains how we collect, use, disclose, store, and safeguard your information when you use the Cuddles AI website, mobile applications, embeddable widgets, and related services (collectively, the "Services").
+                </p>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  This Policy is drafted to comply with the Protection of Personal Information Act, 2013 (POPIA) of South Africa, and reflects globally recognised principles drawn from the GDPR, the UK Data Protection Act, and other applicable data protection regulations. By using the Services, you acknowledge that you have read and understood this Privacy Policy.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Information We Collect</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">2. Who We Are (Responsible Party)</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  We collect information that you provide directly to us, including:
+                  For the purposes of POPIA, the Responsible Party is <strong>Tripple444</strong>, operating the Cuddles AI platform. All privacy enquiries, data subject requests, and complaints can be directed to our Information Officer at the contact details set out in Section 14.
+                </p>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">3. Information We Collect</h2>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  We collect only the information necessary to deliver and improve the Services:
                 </p>
                 <ul className="list-disc pl-6 text-foreground/80 space-y-2 mb-4">
-                  <li><strong>Contact Information:</strong> Name, email address, phone number, and company details when you schedule a demo or contact us</li>
-                  <li><strong>Chat Interactions:</strong> Conversations with our AI assistant, including preferences and questions about cannabis products</li>
-                  <li><strong>Usage Data:</strong> Information about how you interact with our platform, including pages visited and features used</li>
-                  <li><strong>Technical Information:</strong> IP address, browser type, device information, and cookies</li>
+                  <li><strong>Account Information:</strong> Name, email address, password (hashed), and optional profile details when you sign up.</li>
+                  <li><strong>Dispensary / Business Information:</strong> Business name, contact person, store details, POS provider, and billing information when you onboard as a B2B customer.</li>
+                  <li><strong>Chat Interactions:</strong> Messages exchanged with the Cuddles AI assistant, including stated preferences, questions, and uploaded images for strain identification.</li>
+                  <li><strong>Transactional Data:</strong> Orders, delivery addresses, and payment confirmations processed via PayFast (we do not store card numbers).</li>
+                  <li><strong>Usage Data:</strong> Pages visited, features used, time on page, click events, and referrer information.</li>
+                  <li><strong>Technical Data:</strong> IP address, browser type, operating system, device identifiers, and cookies.</li>
+                  <li><strong>Communications:</strong> Records of correspondence when you contact support, schedule a demo, or submit a form.</li>
                 </ul>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">How We Use Your Information</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">4. Lawful Basis for Processing</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  We use the information we collect to:
+                  We process your personal information only where we have a lawful basis to do so, including:
                 </p>
                 <ul className="list-disc pl-6 text-foreground/80 space-y-2 mb-4">
-                  <li>Provide, maintain, and improve our AI-powered recommendation services</li>
-                  <li>Respond to your requests, questions, and provide customer support</li>
-                  <li>Send you technical notices, updates, and administrative messages</li>
-                  <li>Analyze usage patterns to enhance user experience</li>
-                  <li>Comply with legal obligations and protect against fraudulent activity</li>
-                  <li>With your consent, send you marketing communications about our services</li>
+                  <li><strong>Consent</strong> — where you have actively opted in (e.g. marketing emails, optional features).</li>
+                  <li><strong>Contractual necessity</strong> — to deliver the Services you have requested.</li>
+                  <li><strong>Legal obligation</strong> — to comply with applicable laws and regulations.</li>
+                  <li><strong>Legitimate interest</strong> — to operate, secure, and improve the Services in a manner you would reasonably expect.</li>
                 </ul>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Data Sharing and Disclosure</h2>
-                <p className="text-foreground/80 leading-relaxed mb-4">
-                  We do not sell your personal information. We may share your information with:
-                </p>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">5. How We Use Your Information</h2>
                 <ul className="list-disc pl-6 text-foreground/80 space-y-2 mb-4">
-                  <li><strong>Service Providers:</strong> Third-party vendors who perform services on our behalf (e.g., hosting, analytics)</li>
-                  <li><strong>Legal Requirements:</strong> When required by law or to protect our rights and safety</li>
-                  <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets</li>
-                  <li><strong>With Your Consent:</strong> When you explicitly authorize us to share your information</li>
+                  <li>Provide, maintain, personalise, and improve the AI-powered recommendation Services.</li>
+                  <li>Authenticate users and secure accounts.</li>
+                  <li>Process transactions, deliveries, and subscription billing.</li>
+                  <li>Respond to support requests and provide customer service.</li>
+                  <li>Send service-related notices, security alerts, and administrative messages.</li>
+                  <li>Analyse usage patterns to enhance product quality and user experience.</li>
+                  <li>Detect, prevent, and address fraud, abuse, or violations of our Terms.</li>
+                  <li>Comply with legal, regulatory, and tax obligations.</li>
+                  <li>With your consent, send marketing communications which you can unsubscribe from at any time.</li>
                 </ul>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Data Security</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">6. Data Sharing and Disclosure</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. This includes:
+                  <strong>We do not sell your personal information.</strong> We may share information only with:
                 </p>
                 <ul className="list-disc pl-6 text-foreground/80 space-y-2 mb-4">
-                  <li>Encryption of data in transit and at rest</li>
-                  <li>Regular security assessments and updates</li>
-                  <li>Access controls and authentication measures</li>
-                  <li>Employee training on data protection practices</li>
+                  <li><strong>Service Providers:</strong> Vetted vendors providing hosting, database, analytics, email delivery, AI inference, and payment processing under written data-protection agreements.</li>
+                  <li><strong>Dispensary Partners:</strong> If you place an order through a partner dispensary widget, the order details necessary to fulfil that order are shared with that dispensary.</li>
+                  <li><strong>Legal Requirements:</strong> When required by law, court order, or to protect rights, property, or safety.</li>
+                  <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, financing, or sale of assets, with continued protection of your information.</li>
+                  <li><strong>With Your Consent:</strong> Any other sharing only with your explicit authorisation.</li>
                 </ul>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Your Rights</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">7. Data Security</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  Under POPIA and other applicable laws, you have the right to:
+                  We implement appropriate, reasonable technical and organisational measures to protect personal information from loss, misuse, unauthorised access, disclosure, alteration, or destruction. These include:
                 </p>
                 <ul className="list-disc pl-6 text-foreground/80 space-y-2 mb-4">
-                  <li><strong>Access:</strong> Request a copy of the personal information we hold about you</li>
-                  <li><strong>Correction:</strong> Request correction of inaccurate or incomplete information</li>
-                  <li><strong>Deletion:</strong> Request deletion of your personal information, subject to legal obligations</li>
-                  <li><strong>Objection:</strong> Object to processing of your personal information for certain purposes</li>
-                  <li><strong>Data Portability:</strong> Request transfer of your data to another service provider</li>
-                  <li><strong>Withdraw Consent:</strong> Withdraw consent for processing where consent was the basis</li>
+                  <li>TLS encryption of data in transit and AES encryption of data at rest.</li>
+                  <li>Row-Level Security (RLS) and role-based access control on our database.</li>
+                  <li>Hashed passwords, JWT-based session management, and rate limiting.</li>
+                  <li>Periodic security reviews, dependency scanning, and incident response procedures.</li>
+                  <li>Confidentiality obligations for all personnel and processors with access to data.</li>
                 </ul>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  To exercise these rights, please contact us using the information provided below.
+                  In the event of a personal information breach that creates a risk of harm, we will notify the Information Regulator and affected data subjects as required by POPIA.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Data Retention</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">8. Your Rights</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. When we no longer need your information, we will securely delete or anonymize it.
+                  Subject to applicable law, you have the right to:
+                </p>
+                <ul className="list-disc pl-6 text-foreground/80 space-y-2 mb-4">
+                  <li><strong>Access</strong> the personal information we hold about you.</li>
+                  <li><strong>Correct</strong> inaccurate or incomplete information.</li>
+                  <li><strong>Delete</strong> your personal information, subject to overriding legal obligations.</li>
+                  <li><strong>Object</strong> to processing for direct marketing or based on legitimate interest.</li>
+                  <li><strong>Restrict</strong> processing in certain circumstances.</li>
+                  <li><strong>Data portability</strong> — receive your data in a structured, machine-readable format.</li>
+                  <li><strong>Withdraw consent</strong> at any time where processing is based on consent.</li>
+                  <li><strong>Lodge a complaint</strong> with the Information Regulator (see Section 15).</li>
+                </ul>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  To exercise any of these rights, email <a href="mailto:tripple4442@gmail.com" className="text-primary underline">tripple4442@gmail.com</a>. We will respond within a reasonable period and within statutory timeframes.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Keep Activity</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">9. Data Retention</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  Your chats are saved in your account for up to 72 hours, whether Cuddles Apps Activity is on or off. We use this data to provide the service, maintain its safety and security, and process your feedback.
+                  We retain personal information only for as long as necessary to fulfil the purposes outlined in this Policy, comply with legal obligations, resolve disputes, and enforce our agreements. Chat conversations are retained in your account for up to 72 hours unless you save them. Account data is retained for the lifetime of your account plus a reasonable period after closure for legal and audit purposes, after which it is securely deleted or anonymised.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Cookies and Tracking Technologies</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">10. Cookies and Tracking Technologies</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  We use cookies and similar tracking technologies to collect information about your browsing activities. You can control cookie settings through your browser preferences. Note that disabling cookies may limit your ability to use certain features of our platform.
+                  We use cookies and similar technologies (such as local storage and analytics pixels) to operate the Services, remember preferences, measure performance, and understand usage. You can control cookies through your browser settings. Disabling cookies may limit certain features. We use Google Analytics to understand aggregate usage; you can opt out via Google's tools.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Children's Privacy</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">11. Children's Privacy</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  Our services are not intended for individuals under the age of 18 (or the legal age for cannabis consumption in your jurisdiction). We do not knowingly collect personal information from children.
+                  The Services are strictly intended for adults aged 18 or older (or the legal age of cannabis consumption in your jurisdiction, whichever is higher). We do not knowingly collect personal information from minors. If we learn we have collected information from a minor, we will delete it promptly. If you believe a minor has provided us with information, contact <a href="mailto:tripple4442@gmail.com" className="text-primary underline">tripple4442@gmail.com</a>.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">International Data Transfers</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">12. International Data Transfers</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  Your information may be transferred to and processed in countries other than your country of residence. We ensure appropriate safeguards are in place to protect your information in accordance with this Privacy Policy and applicable data protection laws.
+                  Your information may be transferred to, stored, and processed in countries outside your country of residence, including jurisdictions where our hosting and AI providers operate. Where such transfers occur, we ensure appropriate safeguards (such as standard contractual clauses or equivalent protections) are in place in line with POPIA's cross-border transfer requirements.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Changes to This Privacy Policy</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">13. Changes to This Privacy Policy</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new Privacy Policy on this page and updating the "Last updated" date. We encourage you to review this Privacy Policy periodically.
+                  We may update this Privacy Policy from time to time to reflect changes in our practices, technology, or legal requirements. Material changes will be communicated via email or in-app notice and the "Last updated" date will be revised. Continued use of the Services after changes take effect constitutes acceptance of the revised Policy.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Contact Us</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">14. Contact Us</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at:
+                  For any questions, concerns, requests, or to exercise your rights under this Policy, contact our Information Officer:
                 </p>
                 <div className="bg-muted/50 p-6 rounded-lg">
-                  <p className="text-foreground/80 mb-2"><strong>Cuddles</strong></p>
-                  <p className="text-foreground/80 mb-2">Email: privacy@cuddles.ai</p>
-                  <p className="text-foreground/80">Address: [Your Company Address]</p>
+                  <p className="text-foreground/80 mb-2"><strong>Cuddles AI — a Tripple444 product</strong></p>
+                  <p className="text-foreground/80 mb-2">Email: <a href="mailto:tripple4442@gmail.com" className="text-primary underline">tripple4442@gmail.com</a></p>
+                  <p className="text-foreground/80">Website: <a href="https://cuddles-ai.com" className="text-primary underline">https://cuddles-ai.com</a></p>
                 </div>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">Compliance with POPIA</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">15. Compliance with POPIA</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  This Privacy Policy has been drafted in accordance with the Protection of Personal Information Act (POPIA) 4 of 2013. If you believe we have not complied with POPIA, you have the right to lodge a complaint with the Information Regulator at:
+                  This Privacy Policy is drafted in accordance with the Protection of Personal Information Act, 4 of 2013 (POPIA). If you believe we have not complied with POPIA, you may lodge a complaint with the Information Regulator:
                 </p>
                 <div className="bg-muted/50 p-6 rounded-lg">
                   <p className="text-foreground/80 mb-2"><strong>Information Regulator (South Africa)</strong></p>
-                  <p className="text-foreground/80 mb-2">Email: inforeg@justice.gov.za</p>
-                  <p className="text-foreground/80">Website: www.justice.gov.za/inforeg</p>
+                  <p className="text-foreground/80 mb-2">Email: <a href="mailto:inforeg@justice.gov.za" className="text-primary underline">inforeg@justice.gov.za</a></p>
+                  <p className="text-foreground/80 mb-2">Complaints: <a href="mailto:complaints.IR@justice.gov.za" className="text-primary underline">complaints.IR@justice.gov.za</a></p>
+                  <p className="text-foreground/80">Website: <a href="https://inforegulator.org.za" target="_blank" rel="noopener noreferrer" className="text-primary underline">inforegulator.org.za</a></p>
                 </div>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">16. Disclaimer</h2>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  Cuddles AI provides general cannabis education and product discovery only. Nothing on the Services constitutes medical advice. Always consult a qualified healthcare practitioner before making decisions based on cannabis information. Use of cannabis is subject to the laws of your jurisdiction; you are responsible for compliance.
+                </p>
               </section>
             </div>
           </Card>
