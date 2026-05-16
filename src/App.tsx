@@ -86,6 +86,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <GoogleAnalytics />
+              <MicrosoftClarity />
               <InstallFunnelTracker />
               <FeatureNav />
               <ExitIntentCartReminder />
