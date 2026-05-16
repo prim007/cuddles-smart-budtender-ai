@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import MicrosoftClarity from "@/components/MicrosoftClarity";
 import InstallFunnelTracker from "@/components/InstallFunnelTracker";
 import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -85,6 +86,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <GoogleAnalytics />
+              <MicrosoftClarity />
               <InstallFunnelTracker />
               <FeatureNav />
               <ExitIntentCartReminder />
