@@ -801,6 +801,7 @@ export type Database = {
           cbd_max: number | null
           cbd_min: number | null
           created_at: string
+          embedding: string | null
           id: string
           in_stock: boolean | null
           notes: string | null
@@ -820,6 +821,7 @@ export type Database = {
           cbd_max?: number | null
           cbd_min?: number | null
           created_at?: string
+          embedding?: string | null
           id?: string
           in_stock?: boolean | null
           notes?: string | null
@@ -839,6 +841,7 @@ export type Database = {
           cbd_max?: number | null
           cbd_min?: number | null
           created_at?: string
+          embedding?: string | null
           id?: string
           in_stock?: boolean | null
           notes?: string | null
@@ -1099,6 +1102,24 @@ export type Database = {
         Returns: boolean
       }
       increment_review_helpful: { Args: { p_review_id: string }; Returns: Json }
+      match_strains: {
+        Args: {
+          match_count?: number
+          p_tenant_id?: string
+          query_embedding: string
+        }
+        Returns: {
+          category: string
+          id: string
+          price: number
+          primary_effect: string
+          primary_terpene: string
+          similarity: number
+          strain_name: string
+          strain_type: string
+          tenant_id: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
