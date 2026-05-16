@@ -36,15 +36,38 @@ serve(async (req) => {
       }
       vec = embedding;
     } else if (typeof query === "string" && query.trim().length > 0) {
-      // TODO: call your embedding model here (e.g. local Python service, OpenAI, Gemini embed).
-      // For now return 501 so the contract is clear.
-      return json(
-        {
-          error: "Server-side embedding not configured yet",
-          hint: "POST { embedding: number[768] } from your Python job, or wire an embed model here.",
+      const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+      if (!lovableKey) {
+        return json({ error: "LOVABLE_API_KEY not configured" }, 500);
+      }
+
+      const embedRes = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Lovable-API-Key": lovableKey,
         },
-        501,
-      );
+        body: JSON.stringify({
+          model: "google/text-embedding-004",
+          input: query.trim().slice(0, 2000),
+        }),
+      });
+
+      if (!embedRes.ok) {
+        const errText = await embedRes.text();
+        console.error("Embedding API error:", embedRes.status, errText);
+        if (embedRes.status === 429) return json({ error: "Rate limit exceeded, please retry" }, 429);
+        if (embedRes.status === 402) return json({ error: "AI credits exhausted" }, 402);
+        return json({ error: "Failed to generate embedding" }, 502);
+      }
+
+      const embedData = await embedRes.json();
+      const generated = embedData?.data?.[0]?.embedding;
+      if (!Array.isArray(generated) || generated.length !== EMBED_DIM) {
+        console.error("Bad embedding shape:", { len: generated?.length });
+        return json({ error: `Embedding model returned unexpected dimensions (expected ${EMBED_DIM})` }, 502);
+      }
+      vec = generated;
     } else {
       return json({ error: "Provide either `embedding` (number[768]) or `query` (string)" }, 400);
     }
