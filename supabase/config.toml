@@ -19,3 +19,5 @@ project_id = "rcigcarkcpinnniddxcm"
     verify_jwt = false
   [functions.elevenlabs-tts]
     verify_jwt = false
+  [functions.recommend-strains]
+    verify_jwt = false
