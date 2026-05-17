@@ -11,7 +11,7 @@ import { useEffect } from "react";
  *
  * View heatmaps & recordings at https://clarity.microsoft.com after ~2h of traffic.
  */
-const CLARITY_PROJECT_ID = import.meta.env.VITE_CLARITY_PROJECT_ID || "";
+const CLARITY_PROJECT_ID = import.meta.env.VITE_CLARITY_PROJECT_ID || "ws1rh983qp";
 
 declare global {
   interface Window {
