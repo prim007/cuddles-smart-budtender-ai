@@ -60,12 +60,12 @@ const Strains = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Cannabis Strain Database | AI-Powered Recommendations for Dispensaries"
+        title="Cannabis Strain Database | AI Recommendations"
         description="Browse 200+ cannabis strains with terpene profiles, THC/CBD data, and AI-powered recommendations. Used by dispensaries to help customers find their perfect strain."
         url="/strains"
         keywords="cannabis strain database, dispensary strain finder, AI strain recommendations, indica sativa hybrid, terpene profiles, THC CBD content, cannabis product catalog"
+        structuredData={jsonLd}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ThemeToggle />
 
       <div className="container mx-auto px-4 py-16 max-w-5xl">

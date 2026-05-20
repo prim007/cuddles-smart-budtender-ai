@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Camera, Upload, Sparkles, AlertCircle, Leaf, Loader2 } from "lucide-react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -94,6 +95,12 @@ const StrainScanner = () => {
 
   return (
     <div className="min-h-screen pb-20">
+      <SEO
+        title="Strain Scanner — Identify Cannabis with AI"
+        description="Snap a photo of any cannabis bud and Cuddles AI identifies the strain, terpenes, THC range, and effects in seconds."
+        url="/scanner"
+        keywords="cannabis strain scanner, AI strain identifier, weed photo recognition, identify cannabis strain"
+      />
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
         <div className="container mx-auto px-4 py-4">
           <Link to="/">

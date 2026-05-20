@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { useAuth } from "@/hooks/useAuth";
+import SEO from "@/components/SEO";
 
 interface DemoRequest {
   id: string;
@@ -112,6 +113,7 @@ const DemoRequests = () => {
 
   return (
     <div className="min-h-screen pb-20">
+      <SEO title="Demo Requests" description="Internal Cuddles AI demo request inbox." url="/demo-requests" noindex />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
         <div className="container mx-auto px-4 py-4">

@@ -165,7 +165,9 @@ const AgentTraces = () => {
     <div className="min-h-screen bg-background pt-20 pb-12 px-4">
       <SEO
         title="Agent Traces — Cuddles Admin"
-        description="Shadow-mode observability for agentic workflows"
+        description="Internal shadow-mode observability for Cuddles AI agentic workflows."
+        url="/agent-traces"
+        noindex
       />
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">

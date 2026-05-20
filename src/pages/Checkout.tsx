@@ -165,7 +165,7 @@ const Checkout = () => {
   if (items.length === 0) {
     return (
       <>
-        <SEO title="Checkout | Cuddles AI" description="Complete your cannabis delivery order." />
+        <SEO title="Checkout — Cannabis Delivery" description="Securely complete your cannabis order. Choose delivery, enter your address, and pay with PayFast for same-day delivery in South Africa." url="/checkout" noindex />
         <div className="min-h-screen bg-background pt-20 flex items-center justify-center">
           <div className="text-center">
             <ShoppingCart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
@@ -182,7 +182,7 @@ const Checkout = () => {
 
   return (
     <>
-      <SEO title="Checkout | Cuddles AI" description="Complete your cannabis delivery order." />
+      <SEO title="Checkout — Cannabis Delivery" description="Securely complete your cannabis order. Choose delivery, enter your address, and pay with PayFast for same-day delivery in South Africa." url="/checkout" noindex />
       <div className="min-h-screen bg-background pt-20">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <Link

@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import SEO from "@/components/SEO";
 
 interface ConversationStats {
   totalConversations: number;
@@ -204,6 +205,7 @@ const AnalyticsDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-hippie-purple/20 via-background to-hippie-pink/20">
+      <SEO title="Analytics Dashboard" description="Internal Cuddles AI analytics dashboard." url="/analytics-dashboard" noindex />
       <header className="border-b border-border/40 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/">

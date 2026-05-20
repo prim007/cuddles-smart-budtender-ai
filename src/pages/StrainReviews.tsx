@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Plus, Star, Search, ThumbsUp, User, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -209,8 +210,40 @@ const StrainReviews = () => {
     }))
     .sort((a, b) => b.count - a.count);
 
+  const avgRating = reviews.length
+    ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
+    : 0;
+
   return (
     <div className="min-h-screen pb-20">
+      <SEO
+        title="Cannabis Strain Reviews — Real User Feedback"
+        description="Read and write honest cannabis strain reviews. Real ratings, effects, pros & cons from a global community on Cuddles AI."
+        url="/reviews"
+        keywords="cannabis strain reviews, weed ratings, marijuana reviews, strain effects, community cannabis reviews"
+        structuredData={reviews.length > 0 ? {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: "Cannabis Strain Reviews",
+          description: "Community-submitted reviews of cannabis strains.",
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: avgRating.toFixed(2),
+            reviewCount: reviews.length,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          review: reviews.slice(0, 10).map((r) => ({
+            "@type": "Review",
+            itemReviewed: { "@type": "Product", name: r.strain_name },
+            reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+            author: { "@type": "Person", name: "Cuddles user" },
+            name: r.title,
+            reviewBody: r.review_text,
+            datePublished: r.created_at,
+          })),
+        } : undefined}
+      />
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/">

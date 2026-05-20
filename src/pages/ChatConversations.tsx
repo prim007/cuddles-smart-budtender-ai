@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { useAuth } from "@/hooks/useAuth";
+import SEO from "@/components/SEO";
 
 import {
   Dialog,
@@ -115,6 +116,7 @@ const ChatConversations = () => {
 
   return (
     <div className="min-h-screen pb-20">
+      <SEO title="Chat Conversations" description="Internal Cuddles AI chat conversation log." url="/chat-conversations" noindex />
       {/* Navigation */}
       <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-4 py-4">

@@ -76,7 +76,7 @@ const OrderTracking = () => {
 
   return (
     <>
-      <SEO title="Order Tracking | Cuddles AI" description="Track your cannabis delivery order." />
+      <SEO title="Order Tracking" description="Track your cannabis delivery in real time — see order confirmation, preparation, dispatch, and arrival updates from Tripple444." url="/order-tracking" noindex />
       <div className="min-h-screen bg-background pt-20">
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           <Link

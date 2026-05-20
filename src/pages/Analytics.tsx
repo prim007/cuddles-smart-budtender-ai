@@ -2,10 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, BarChart3, TrendingUp, Users, Package, Brain, Target, Zap, Database } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "@/components/SEO";
 
 const Analytics = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-hippie-purple/20 via-background to-hippie-pink/20">
+      <SEO
+        title="Cannabis Analytics Platform | Cuddles AI for Dispensaries"
+        description="Turn every customer conversation into actionable insight. See what Cuddles AI collects, why it matters, and how dispensaries leverage it for growth."
+        url="/analytics"
+        keywords="cannabis analytics, dispensary analytics, AI customer insights, budtender data, cannabis business intelligence"
+      />
       {/* Header */}
       <header className="border-b border-border/40 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">

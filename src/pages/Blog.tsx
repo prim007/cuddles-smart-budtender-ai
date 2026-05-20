@@ -47,10 +47,31 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Cannabis Retail Insights | AI Budtender Tips for Dispensary Owners"
-        description="Expert insights on cannabis retail automation, AI-powered budtending, terpene science, and dispensary growth strategies. Written for dispensary owners and cannabis professionals."
+        title="Cannabis Retail Blog | Cuddles AI Budtender Insights"
+        description="Expert insights on cannabis retail automation, AI budtending, terpene science, and dispensary growth — for owners and pros."
         url="/blog"
         keywords="cannabis retail blog, dispensary tips, AI budtender insights, cannabis automation, terpene guide, dispensary growth, cannabis industry trends, smart budtender"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          name: "Cuddles AI Cannabis Retail Blog",
+          description: "Insights on cannabis retail automation, AI budtending, terpene science, and dispensary growth.",
+          url: "https://cuddles-ai.com/blog",
+          publisher: {
+            "@type": "Organization",
+            name: "Cuddles AI",
+            logo: { "@type": "ImageObject", url: "https://cuddles-ai.com/pwa-512x512.png" },
+          },
+          blogPost: (posts || []).slice(0, 20).map((p) => ({
+            "@type": "BlogPosting",
+            headline: p.title,
+            url: `https://cuddles-ai.com/blog/${p.slug}`,
+            datePublished: p.published_at,
+            author: { "@type": "Person", name: p.author },
+            image: p.featured_image || undefined,
+            description: p.excerpt,
+          })),
+        }}
       />
       <ThemeToggle />
 
