@@ -8,7 +8,7 @@ const InternationalMarket = () => {
   return (
     <div className="min-h-screen pb-20">
       <SEO 
-        title="Global Cannabis Market 2026 | AI Solutions for International Dispensaries"
+        title="Global Cannabis Market 2026 | International AI Budtender"
         description="The $39.1B global cannabis market is growing at 14.5% CAGR. See how Cuddles AI serves dispensaries across the US, Canada, Europe, Africa & Asia-Pacific with AI-powered budtending."
         url="/international-market"
         type="article"
