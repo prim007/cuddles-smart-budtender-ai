@@ -145,6 +145,12 @@ const StrainJournal = () => {
 
   return (
     <div className="min-h-screen pb-20">
+      <SEO
+        title="Strain Journal — Track Your Cannabis Sessions"
+        description="Log every cannabis session — strain, dose, mood, and effects. Spot patterns over time with Cuddles AI's private strain journal."
+        url="/journal"
+        keywords="cannabis journal, strain tracker, weed diary, dosage log, mood tracking, cannabis effects journal"
+      />
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/">
