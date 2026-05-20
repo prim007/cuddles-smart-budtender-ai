@@ -97,8 +97,12 @@ const SEO = ({
       <link rel="alternate" hrefLang="en-za" href={fullUrl} />
       <link rel="alternate" hrefLang="x-default" href={fullUrl} />
 
-      {/* Robots — encourage rich previews */}
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      {/* Robots — encourage rich previews, or block indexing for private pages */}
+      {noindex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      )}
 
       {/* Structured Data */}
       <script type="application/ld+json">
