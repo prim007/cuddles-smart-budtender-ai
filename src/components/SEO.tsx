@@ -10,6 +10,7 @@ interface SEOProps {
   publishedTime?: string;
   structuredData?: object;
   keywords?: string;
+  noindex?: boolean;
 }
 
 const BASE_URL = "https://cuddles-ai.com";
