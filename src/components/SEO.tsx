@@ -26,6 +26,7 @@ const SEO = ({
   publishedTime,
   structuredData,
   keywords = "Cuddles AI, cannabis AI, smart budtender, AI budtender, strain recommendations, cannabis technology, dispensary AI",
+  noindex = false,
 }: SEOProps) => {
   const fullTitle = title.includes('Cuddles') ? title : `${title} | Cuddles AI`;
   const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
