@@ -38,13 +38,9 @@ export default defineConfig(({ mode }) => ({
         },
       },
       postProcess(renderedRoute: { route: string; html: string }) {
-        // Strip the PWA service-worker register script from prerendered HTML
-        // so crawlers see clean markup; SW still registers on hydrated client.
-        renderedRoute.html = renderedRoute.html.replace(
-          /<noscript>[\s\S]*?<\/noscript>/g,
-          (m) => m,
-        );
-        return renderedRoute;
+        // Keep noscript blocks intact for crawlers; placeholder for future
+        // HTML sanitization (e.g. removing SW boot scripts).
+        renderedRoute.html = renderedRoute.html;
       },
     }),
     VitePWA({
