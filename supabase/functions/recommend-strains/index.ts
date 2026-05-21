@@ -20,6 +20,23 @@ serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const { embedding, query, tenant_id, match_count } = body ?? {};
 
+    // Require authenticated JWT for the paid `query`-based path (calls AI embeddings).
+    // The precomputed-embedding path is also gated to prevent abuse of the similarity search.
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return json({ error: "Unauthorized" }, 401);
+    }
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return json({ error: "Unauthorized" }, 401);
+    }
+
     // Validate match_count
     const k = Math.min(Math.max(Number(match_count) || 5, 1), 20);
 
