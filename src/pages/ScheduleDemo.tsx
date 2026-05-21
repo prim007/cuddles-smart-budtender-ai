@@ -123,14 +123,30 @@ const ScheduleDemo = () => {
 
       if (error) throw error;
 
+      // Fire-and-forget admin notification email (don't block UX on failure)
+      supabase.functions.invoke('send-demo-email', {
+        body: {
+          name: data.name.trim(),
+          email: data.email.trim().toLowerCase(),
+          company: data.company.trim(),
+          phone: data.phone?.trim() || null,
+          message: [
+            data.message?.trim(),
+            `Locations: ${data.dispensaryCount}`,
+            `Current POS: ${data.currentPOS}`,
+            data.preferredDate ? `Preferred date: ${data.preferredDate.toISOString().split('T')[0]}` : null,
+          ].filter(Boolean).join('\n'),
+        },
+      }).catch((err) => console.error('send-demo-email failed:', err));
+
       toast({
         title: "Demo Scheduled! ✨",
         description: "We'll reach out within 24 hours to confirm your demo time.",
       });
 
-      // Reset form and date
+      // Reset form state without a full page reload
+      reset();
       setDate(undefined);
-      window.location.reload();
     } catch (error) {
       console.error('Error submitting demo request:', error);
       toast({
