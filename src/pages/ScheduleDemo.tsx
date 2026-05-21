@@ -78,7 +78,7 @@ const ScheduleDemo = () => {
   const [formLoadTime] = useState<number>(Date.now());
   const { toast } = useToast();
   
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors }, setValue, watch, reset } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
