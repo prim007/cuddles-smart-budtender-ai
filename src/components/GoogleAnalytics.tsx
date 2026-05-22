@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { getCookieConsent } from '@/components/CookieConsentBanner';
 
 const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID || 'G-KHJ04X5EE1';
 
