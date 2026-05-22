@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { getCookieConsent } from "@/components/CookieConsentBanner";
 
 /**
  * Microsoft Clarity — free heatmaps, click hotspots, scroll maps & session replays.
