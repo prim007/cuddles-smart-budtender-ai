@@ -41,6 +41,7 @@ export default function CookieConsentBanner() {
   const handleAcceptAll = () => {
     setCookieConsent("all");
     setVisible(false);
+    window.location.reload();
   };
 
   const handleNecessaryOnly = () => {
