@@ -40,6 +40,9 @@ const MicrosoftClarity = () => {
     if (!CLARITY_PROJECT_ID) return;
     if (document.getElementById("ms-clarity-script")) return;
 
+    // Only load analytics if user explicitly consented
+    if (getCookieConsent() !== "all") return;
+
     // Don't run inside Lovable preview iframe
     try {
       if (window.self !== window.top) return;
