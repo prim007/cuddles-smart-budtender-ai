@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download } from "lucide-react";
+import { NewsletterSignup } from "./NewsletterSignup";
 
 const features = [
   { icon: Home, title: "Home", href: "/" },
@@ -30,9 +31,13 @@ const Footer = () => {
                 <div className="text-xs text-muted-foreground">AI-Powered Budtender</div>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs">
+            <p className="text-sm text-muted-foreground max-w-xs mb-2">
               Your personal AI cannabis companion for strain recommendations, journaling, and more.
             </p>
+            <div className="mt-2 bg-card border border-border rounded-xl p-4 shadow-sm">
+              <h5 className="font-semibold text-foreground mb-2 text-sm">Join our Newsletter</h5>
+              <NewsletterSignup />
+            </div>
           </div>
           
           {/* Features */}
