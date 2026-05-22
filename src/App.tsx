@@ -15,6 +15,7 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import FeatureNav from "@/components/FeatureNav";
 import ExitIntentCartReminder from "@/components/ExitIntentCartReminder";
+import CookieConsentBanner from "@/components/CookieConsentBanner";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
