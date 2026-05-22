@@ -1,23 +1,2 @@
-project_id = "rcigcarkcpinnniddxcm"
-
-[functions]
-  [functions.auth-email-hook]
-    verify_jwt = false
-  [functions.send-promo-code]
-    verify_jwt = false
-  [functions.validate-promo-code]
-    verify_jwt = false
-  [functions.identify-strain]
-    verify_jwt = false
-  [functions.generate-strain-profile]
-    verify_jwt = false
-  [functions.rotate-weekly-strains]
-    verify_jwt = false
-  [functions.agent-recommend]
-    verify_jwt = false
-  [functions.plant-care-tips]
-    verify_jwt = false
-  [functions.elevenlabs-tts]
-    verify_jwt = false
-  [functions.recommend-strains]
-    verify_jwt = false
+[functions.process-email-queue]
+verify_jwt = true
