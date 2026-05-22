@@ -87,6 +87,9 @@ export const GoogleAnalytics = () => {
   useEffect(() => {
     if (!GA_TRACKING_ID || document.getElementById('ga-script')) return;
 
+    // Only load analytics if user explicitly consented
+    if (getCookieConsent() !== 'all') return;
+
     // Skip GA entirely for obvious bots
     if (isLikelyBot()) return;
 
