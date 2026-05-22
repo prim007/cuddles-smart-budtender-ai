@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { getCookieConsent } from '@/components/CookieConsentBanner';
 
 const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID || 'G-KHJ04X5EE1';
 
@@ -85,6 +86,9 @@ export const GoogleAnalytics = () => {
   // Load GA script once — use gtag recommended loading pattern
   useEffect(() => {
     if (!GA_TRACKING_ID || document.getElementById('ga-script')) return;
+
+    // Only load analytics if user explicitly consented
+    if (getCookieConsent() !== 'all') return;
 
     // Skip GA entirely for obvious bots
     if (isLikelyBot()) return;

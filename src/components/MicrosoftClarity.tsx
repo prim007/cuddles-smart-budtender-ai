@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { getCookieConsent } from "@/components/CookieConsentBanner";
 
 /**
  * Microsoft Clarity — free heatmaps, click hotspots, scroll maps & session replays.
@@ -38,6 +39,9 @@ const MicrosoftClarity = () => {
   useEffect(() => {
     if (!CLARITY_PROJECT_ID) return;
     if (document.getElementById("ms-clarity-script")) return;
+
+    // Only load analytics if user explicitly consented
+    if (getCookieConsent() !== "all") return;
 
     // Don't run inside Lovable preview iframe
     try {
