@@ -31,6 +31,7 @@ const AgentTraces = lazy(() => import("./pages/AgentTraces"));
 const InternationalMarket = lazy(() => import("./pages/InternationalMarket"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Install = lazy(() => import("./pages/Install"));
+const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 
 // New Cuddles features
 const StrainJournal = lazy(() => import("./pages/StrainJournal"));
