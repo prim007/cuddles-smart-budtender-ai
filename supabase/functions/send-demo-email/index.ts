@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -6,6 +7,16 @@ const corsHeaders = {
 };
 
 const RECIPIENT_EMAIL = "primncube55@gmail.com";
+
+// Escape user-provided strings before embedding into HTML email bodies.
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -33,12 +44,32 @@ serve(async (req) => {
     }
 
     // Validate field lengths
-    if (name.length > 100 || email.length > 255 || company.length > 100) {
+    if (name.length > 100 || email.length > 255 || company.length > 100 ||
+        (phone && phone.length > 50) || (message && message.length > 2000)) {
       return new Response(
         JSON.stringify({ error: "Field length exceeds maximum" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // Server-side rate limit (bypasses spoofable RLS-only enforcement)
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const adminClient = createClient(supabaseUrl, supabaseKey);
+    const normalizedEmail = email.trim().toLowerCase();
+    const { data: allowed, error: rateErr } = await adminClient.rpc("check_demo_rate_limit", {
+      p_email: normalizedEmail,
+    });
+    if (rateErr) {
+      console.error("Rate-limit check failed:", rateErr);
+    }
+    if (allowed === false) {
+      return new Response(
+        JSON.stringify({ error: "Too many demo requests. Please try again later." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
