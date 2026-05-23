@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useUserProfile, UserProfile } from "@/contexts/UserProfileContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import OnboardingStep from "./OnboardingStep";
@@ -24,6 +23,22 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import cuddlesImage from "@/assets/cuddles.png";
 
 const ONBOARDING_COMPLETE_KEY = "cuddles-onboarding-complete";
+
+const hasCompletedOnboarding = () => {
+  try {
+    return localStorage.getItem(ONBOARDING_COMPLETE_KEY) === "true";
+  } catch {
+    return false;
+  }
+};
+
+const markOnboardingComplete = () => {
+  try {
+    localStorage.setItem(ONBOARDING_COMPLETE_KEY, "true");
+  } catch {
+    // Ignore storage failures so the popup can still close.
+  }
+};
 
 const experienceOptions = [
   { value: "beginner", icon: <Leaf className="w-5 h-5" />, descKey: "New to cannabis" },
@@ -81,8 +96,7 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
     }
     
     // Check if onboarding was completed
-    const completed = localStorage.getItem(ONBOARDING_COMPLETE_KEY);
-    if (!completed) {
+    if (!hasCompletedOnboarding()) {
       // Show immediately on first visit
       setIsOpen(true);
     }
@@ -96,14 +110,14 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
       preferredEffects,
       flavorPreferences,
     });
-    localStorage.setItem(ONBOARDING_COMPLETE_KEY, "true");
     setIsOpen(false);
+    markOnboardingComplete();
     onComplete?.();
   };
 
   const handleSkip = () => {
-    localStorage.setItem(ONBOARDING_COMPLETE_KEY, "true");
     setIsOpen(false);
+    markOnboardingComplete();
     onComplete?.();
   };
 
@@ -274,18 +288,15 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleSkip(); }} modal={false}>
-      <DialogContent 
-        className="sm:max-w-md p-0 gap-0 overflow-hidden border-border/50 shadow-elevated max-h-[85vh] w-[95vw] sm:w-full [&>button:last-child]:hidden z-[110]" 
-        aria-describedby={undefined}
-        onPointerDownOutside={(e) => e.preventDefault()}
-        onEscapeKeyDown={(e) => e.preventDefault()}
-      >
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-background/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
+      <div className="max-h-[85vh] w-[95vw] overflow-hidden rounded-lg border border-border/50 bg-card shadow-elevated sm:max-w-md">
         <VisuallyHidden>
-          <DialogTitle>Onboarding</DialogTitle>
+          <h2 id="onboarding-title">Onboarding</h2>
         </VisuallyHidden>
-        <div className="relative bg-card overflow-y-auto max-h-[85vh]">
+        <div className="relative max-h-[85vh] overflow-y-auto bg-card">
           {/* Skip button */}
           <Button
             variant="ghost"
@@ -340,8 +351,8 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
             </div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 
