@@ -275,9 +275,9 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleSkip(); }}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleSkip(); }} modal={false}>
       <DialogContent 
-        className="sm:max-w-md p-0 gap-0 overflow-hidden border-border/50 shadow-elevated max-h-[85vh] w-[95vw] sm:w-full [&>button:last-child]:hidden" 
+        className="sm:max-w-md p-0 gap-0 overflow-hidden border-border/50 shadow-elevated max-h-[85vh] w-[95vw] sm:w-full [&>button:last-child]:hidden z-[110]" 
         aria-describedby={undefined}
         onPointerDownOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
