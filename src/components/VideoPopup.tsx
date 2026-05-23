@@ -44,8 +44,8 @@ const VideoPopup = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent data-video-popup={open ? "true" : undefined} className="sm:max-w-[340px] p-0 overflow-hidden bg-[hsl(270,40%,12%)] border-white/10">
+    <Dialog open={open} onOpenChange={handleOpenChange} modal={false}>
+      <DialogContent data-video-popup={open ? "true" : undefined} className="sm:max-w-[340px] p-0 overflow-hidden bg-[hsl(270,40%,12%)] border-white/10 z-[110]">
         <DialogHeader className="p-4 pb-0 flex flex-row items-center justify-between">
           <DialogTitle className="text-white text-lg font-semibold">
             Meet Cuddles 🌿
