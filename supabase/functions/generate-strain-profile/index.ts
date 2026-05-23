@@ -94,9 +94,10 @@ Deno.serve(async (req) => {
       } catch { /* ignore */ }
     }
     if (!isAuthed) {
-      const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
-        || req.headers.get("cf-connecting-ip")
+      const ip = req.headers.get("cf-connecting-ip")
+        || req.headers.get("x-real-ip")
         || "unknown";
+
       if (!checkIpRateLimit(ip)) {
         return new Response(
           JSON.stringify({ error: "Rate limit exceeded. Please try again later or sign in." }),

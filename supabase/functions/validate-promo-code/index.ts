@@ -70,6 +70,24 @@ serve(async (req) => {
 
     // Action: "validate" just checks, "redeem" marks as used
     if (action === "redeem") {
+      // Require authenticated caller to prevent attackers from burning codes
+      const authHeader = req.headers.get("Authorization") || "";
+      const token = authHeader.replace("Bearer ", "").trim();
+      if (!token) {
+        return new Response(
+          JSON.stringify({ valid: false, error: "Authentication required to redeem" }),
+          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      const authClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? supabaseServiceKey);
+      const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
+      if (claimsError || claimsData?.claims?.role !== "authenticated") {
+        return new Response(
+          JSON.stringify({ valid: false, error: "Invalid or expired session" }),
+          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       const { error: updateError } = await supabase
         .from("email_leads")
         .update({ used: true, used_at: new Date().toISOString() })

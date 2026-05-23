@@ -32,15 +32,31 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const { email } = await req.json();
-    if (!email) {
+    if (!email || typeof email !== "string") {
       return new Response(JSON.stringify({ error: "Email is required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Require the email to exist in email_leads (lead must have signed up)
     const normalizedEmail = email.trim().toLowerCase();
+
+    // Rate limit per email to prevent spam / enumeration
+    const { data: allowed, error: rateErr } = await supabase.rpc("check_email_rate_limit", {
+      p_email: normalizedEmail,
+    });
+    if (rateErr) {
+      console.error("Rate-limit check failed:", rateErr);
+    }
+    if (allowed === false) {
+      // Generic response — do not reveal registration state
+      return new Response(
+        JSON.stringify({ success: true, message: "If this email is registered, a code will be sent." }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Require the email to exist in email_leads (lead must have signed up)
     const { data: existing } = await supabase
       .from("email_leads")
       .select("id, promo_code, email")
@@ -48,11 +64,13 @@ serve(async (req) => {
       .maybeSingle();
 
     if (!existing) {
-      return new Response(JSON.stringify({ error: "Email not registered" }), {
-        status: 404,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      // Generic response to prevent email enumeration
+      return new Response(
+        JSON.stringify({ success: true, message: "If this email is registered, a code will be sent." }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
+
 
     let promoCode = existing.promo_code;
 
