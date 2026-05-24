@@ -51,11 +51,24 @@ const ImageUploadButton = ({ onImageAnalysis, disabled }: ImageUploadButtonProps
   const handleAnalyze = async () => {
     if (!selectedImage) return;
 
+    const { data: authData } = await supabase.auth.getSession();
+    const accessToken = authData.session?.access_token;
+
+    if (!accessToken) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in before scanning so Cuddles can securely analyze your image.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsAnalyzing(true);
     
     try {
       const { data, error } = await supabase.functions.invoke("identify-strain", {
         body: { imageBase64: selectedImage },
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
 
       if (error) throw error;
