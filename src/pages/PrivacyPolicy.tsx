@@ -214,11 +214,25 @@ const PrivacyPolicy = () => {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">16. Disclaimer</h2>
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">16. Licensed Supplier Verification</h2>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  All cannabis and cannabis-derived products listed in the Tripple444 online marketplace are sourced exclusively from facilities that hold valid licences issued by the South African Health Products Regulatory Authority (SAHPRA) and/or the Department of Health, in accordance with the Medicines and Related Substances Act, 101 of 1965, and applicable cannabis regulations.
+                </p>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  We maintain an internal <strong>Licensed Facilities Database</strong>, compiled and continuously updated by manually ingesting SAHPRA's published lists of licensed medicinal cannabis cultivators, manufacturers, importers, and exporters. Before any supplier is onboarded to the Tripple444 marketplace, we cross-check their company name, licence number, and licence status against this database to confirm legal compliance. Suppliers whose licences lapse, are suspended, or are revoked are removed from the marketplace.
+                </p>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  This verification process is designed to protect consumers from unregulated or illicit products and to support South Africa's lawful cannabis economy. Users may request confirmation of a specific supplier's licensed status by contacting <a href="mailto:tripple4442@gmail.com" className="text-primary underline">tripple4442@gmail.com</a>. SAHPRA's official licensing information is publicly available at <a href="https://www.sahpra.org.za" target="_blank" rel="noopener noreferrer" className="text-primary underline">sahpra.org.za</a>.
+                </p>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">17. Disclaimer</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
                   Cuddles AI provides general cannabis education and product discovery only. Nothing on the Services constitutes medical advice. Always consult a qualified healthcare practitioner before making decisions based on cannabis information. Use of cannabis is subject to the laws of your jurisdiction; you are responsible for compliance.
                 </p>
               </section>
+
             </div>
           </Card>
         </div>
