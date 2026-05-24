@@ -139,7 +139,7 @@ const App = () => (
                 
                 {/* Cuddles Features */}
                 <Route path="/journal" element={<Suspense fallback={<PageLoader />}><StrainJournal /></Suspense>} />
-                <Route path="/scanner" element={<Suspense fallback={<PageLoader />}><StrainScanner /></Suspense>} />
+                <Route path="/scanner" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><StrainScanner /></Suspense></ProtectedRoute>} />
                 <Route path="/reviews" element={<Suspense fallback={<PageLoader />}><StrainReviews /></Suspense>} />
                 <Route path="/t-break" element={<Suspense fallback={<PageLoader />}><ToleranceBreak /></Suspense>} />
                 <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />

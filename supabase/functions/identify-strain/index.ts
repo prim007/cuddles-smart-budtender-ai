@@ -6,18 +6,31 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
   'https://cuddles-smart-budtender-ai.lovable.app',
+  'https://cuddles-ai.lovable.app',
   'https://id-preview--16082a8c-a109-49a8-a05d-987a18f90c7d.lovable.app',
+  'https://16082a8c-a109-49a8-a05d-987a18f90c7d.lovableproject.com',
   'https://cuddles-ai.com',
   'https://www.cuddles-ai.com',
   'http://localhost:8080',
   'http://localhost:5173',
 ];
 
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  try {
+    const { hostname, protocol } = new URL(origin);
+    return protocol === 'https:' && hostname === '16082a8c-a109-49a8-a05d-987a18f90c7d.lovableproject.com';
+  } catch {
+    return false;
+  }
+}
+
 function getCorsHeaders(origin: string | null): Record<string, string> {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const allowedOrigin = isAllowedOrigin(origin) ? origin! : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 }
@@ -106,8 +119,8 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY")!,
     );
     const token = authHeader.replace("Bearer ", "");
-    const { data, error } = await supabaseAuth.auth.getClaims(token);
-    if (error || !data?.claims || data.claims.role !== "authenticated" || !data.claims.sub) {
+    const { data, error } = await supabaseAuth.auth.getUser(token);
+    if (error || !data?.user?.id) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

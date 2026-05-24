@@ -51,10 +51,23 @@ const StrainScanner = () => {
   const analyzeImage = async () => {
     if (!imagePreview) return;
 
+    const { data: authData } = await supabase.auth.getSession();
+    const accessToken = authData.session?.access_token;
+
+    if (!accessToken) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in before scanning so Cuddles can securely analyze your image.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsAnalyzing(true);
     try {
       const { data, error } = await supabase.functions.invoke("identify-strain", {
         body: { imageBase64: imagePreview },
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
 
       if (error) throw error;
@@ -149,13 +162,18 @@ const StrainScanner = () => {
                   <div className="relative rounded-xl overflow-hidden">
                     <img src={imagePreview} alt="Uploaded cannabis" className="w-full max-h-80 object-contain bg-black/5" />
                   </div>
+                  {!user && (
+                    <div className="rounded-lg border border-hippie-yellow/30 bg-hippie-yellow/10 p-3 text-sm text-muted-foreground">
+                      Sign in to scan images securely and save your results.
+                    </div>
+                  )}
                   <div className="flex gap-2">
                     <Button variant="outline" onClick={() => { setImagePreview(null); setResult(null); }} className="flex-1">
                       Clear
                     </Button>
                     <Button
                       onClick={analyzeImage}
-                      disabled={isAnalyzing}
+                      disabled={isAnalyzing || !user}
                       className="flex-1 bg-gradient-to-r from-hippie-purple to-hippie-pink"
                     >
                       {isAnalyzing ? (
