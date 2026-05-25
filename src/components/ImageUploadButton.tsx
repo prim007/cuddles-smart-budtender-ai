@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
+import { prepareImageForAnalysis } from "@/utils/imagePreprocessing";
 
 interface ImageUploadButtonProps {
   onImageAnalysis: (analysis: string) => void;
@@ -19,32 +20,20 @@ const ImageUploadButton = ({ onImageAnalysis, disabled }: ImageUploadButtonProps
   const { toast } = useToast();
   const { t } = useLanguage();
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (!file.type.startsWith("image/")) {
+      try {
+        const preparedImage = await prepareImageForAnalysis(file);
+        setSelectedImage(preparedImage);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Please select a valid image file";
         toast({
           title: t.error,
-          description: "Please select an image file",
+          description: message,
           variant: "destructive",
         });
-        return;
       }
-
-      if (file.size > 5 * 1024 * 1024) {
-        toast({
-          title: t.error,
-          description: "Image must be less than 5MB",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
