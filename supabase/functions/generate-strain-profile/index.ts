@@ -29,13 +29,26 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { strain_name, force_refresh = false } = await req.json();
-    if (!strain_name || typeof strain_name !== "string" || strain_name.length > 100) {
+    const { strain_name: rawName, force_refresh = false } = await req.json();
+    if (!rawName || typeof rawName !== "string" || rawName.length > 100) {
       return new Response(JSON.stringify({ error: "strain_name required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    // Sanitize: strip control chars, backticks, and reject obvious injection phrases
+    const strain_name = rawName
+      .replace(/[\u0000-\u001F\u007F`]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 80);
+    if (!strain_name || /ignore\s+(previous|above)|system\s*:|assistant\s*:/i.test(strain_name)) {
+      return new Response(JSON.stringify({ error: "Invalid strain_name" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
 
     const slug = slugify(strain_name);
     const supabase = createClient(
