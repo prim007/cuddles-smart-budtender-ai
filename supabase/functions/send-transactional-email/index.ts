@@ -25,9 +25,22 @@ function generateToken(): string {
     .join('')
 }
 
-// Auth note: this function uses verify_jwt = true in config.toml, so Supabase's
-// gateway validates the caller's JWT (anon or service_role) before the request
-// reaches this code. No in-function auth check is needed.
+// Auth: verify_jwt = true in config.toml validates JWT structure only.
+// We additionally enforce that the caller is either service_role (trusted
+// server-side caller) OR uses one of a small whitelist of templates that
+// are safe for anonymous/authenticated user-initiated flows.
+const ANON_ALLOWED_TEMPLATES = new Set(['newsletter-confirmation'])
+
+function parseJwtClaims(token: string): Record<string, any> | null {
+  try {
+    const payload = token.split('.')[1]
+    if (!payload) return null
+    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
+    return JSON.parse(json)
+  } catch {
+    return null
+  }
+}
 
 Deno.serve(async (req) => {
   // Handle CORS preflight
@@ -83,6 +96,23 @@ Deno.serve(async (req) => {
       }
     )
   }
+
+  // Role enforcement: service_role can send any template; anon/authenticated
+  // callers may only trigger whitelisted templates.
+  const authHeader = req.headers.get('Authorization') ?? ''
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+  const claims = token ? parseJwtClaims(token) : null
+  const callerRole = claims?.role
+  if (callerRole !== 'service_role' && !ANON_ALLOWED_TEMPLATES.has(templateName)) {
+    return new Response(
+      JSON.stringify({ error: 'Forbidden: this template requires a server-side caller' }),
+      {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+
 
   // 1. Look up template from registry (early — needed to resolve recipient)
   const template = TEMPLATES[templateName]
