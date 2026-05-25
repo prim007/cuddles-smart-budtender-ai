@@ -208,6 +208,10 @@ OUTPUT — Return ONLY this JSON (no markdown):
 
 RULES: Never fabricate high confidence from a bad photo. Educational only — lab testing is the only accurate measure of cannabinoids.`;
 
+    const normalizedImageUrl = imageBase64.startsWith('data:')
+      ? imageBase64.trim().replace(/\s/g, '')
+      : `data:image/jpeg;base64,${imageBase64.trim().replace(/\s/g, '')}`;
+
     const buildBody = (model: string) => JSON.stringify({
       model,
       messages: [
@@ -219,7 +223,7 @@ RULES: Never fabricate high confidence from a bad photo. Educational only — la
             {
               type: "image_url",
               image_url: {
-                url: imageBase64.startsWith('data:') ? imageBase64 : `data:image/jpeg;base64,${imageBase64}`
+                url: normalizedImageUrl
               }
             }
           ]
@@ -235,7 +239,8 @@ RULES: Never fabricate high confidence from a bad photo. Educational only — la
       response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Lovable-API-Key": LOVABLE_API_KEY,
+          "X-Lovable-AIG-SDK": "supabase-edge-function",
           "Content-Type": "application/json",
         },
         body: buildBody(model),
