@@ -97,6 +97,23 @@ Deno.serve(async (req) => {
     )
   }
 
+  // Role enforcement: service_role can send any template; anon/authenticated
+  // callers may only trigger whitelisted templates.
+  const authHeader = req.headers.get('Authorization') ?? ''
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+  const claims = token ? parseJwtClaims(token) : null
+  const callerRole = claims?.role
+  if (callerRole !== 'service_role' && !ANON_ALLOWED_TEMPLATES.has(templateName)) {
+    return new Response(
+      JSON.stringify({ error: 'Forbidden: this template requires a server-side caller' }),
+      {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+
+
   // 1. Look up template from registry (early — needed to resolve recipient)
   const template = TEMPLATES[templateName]
 
