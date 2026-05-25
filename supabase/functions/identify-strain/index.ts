@@ -20,7 +20,16 @@ function isAllowedOrigin(origin: string | null): boolean {
   if (ALLOWED_ORIGINS.includes(origin)) return true;
   try {
     const { hostname, protocol } = new URL(origin);
-    return protocol === 'https:' && hostname === '16082a8c-a109-49a8-a05d-987a18f90c7d.lovableproject.com';
+    if (protocol !== 'https:' && protocol !== 'http:') return false;
+    // Allow any Lovable preview/published subdomain and the project's custom domains
+    return (
+      hostname.endsWith('.lovable.app') ||
+      hostname.endsWith('.lovableproject.com') ||
+      hostname.endsWith('.lovable.dev') ||
+      hostname === 'cuddles-ai.com' ||
+      hostname.endsWith('.cuddles-ai.com') ||
+      hostname === 'localhost'
+    );
   } catch {
     return false;
   }
@@ -162,88 +171,97 @@ serve(async (req) => {
 
     console.log("Processing strain identification request, image size:", imageBase64.length);
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-pro",
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content: `You are Cuddles, an expert cannabis strain identifier trained on thousands of bud images. Your job is to analyze cannabis flower photos with rigorous attention to visual detail and return ONLY valid JSON.
+    const systemPrompt = `You are Cuddles, an expert cannabis identifier. You can analyze ANY cannabis-related image: flower/buds, packaging labels, pre-rolls, edibles, concentrates (rosin/shatter/wax/diamonds), vape carts, tinctures, topicals, seedlings/plants, or dispensary menu photos. Return ONLY valid JSON.
 
 ANALYSIS METHODOLOGY (follow in order):
-1. IMAGE QUALITY CHECK — Assess lighting, focus, resolution, angle. If the image is blurry, dark, too zoomed out, or NOT cannabis flower, set strain_name to "Unknown", confidence ≤ 15, and explain why in description.
-2. STRUCTURE — Bud density (dense/airy/popcorn), calyx shape, sugar leaf coverage, overall conformation (indica = dense/chunky, sativa = elongated/wispy, hybrid = mixed).
-3. COLOR PROFILE — Dominant greens (forest, lime, sage), purple/magenta hues (anthocyanin), pistil colors (white/orange/red/brown), trichome tone (clear/cloudy/amber).
-4. TRICHOME COVERAGE — Frostiness (light/moderate/heavy/extreme), head shape if visible.
-5. CROSS-REFERENCE — Match observed traits to known strain phenotypes (e.g., heavy purple + dense = Granddaddy Purple/Purple Punch family; bright orange hairs + lime green + frosty = Wedding Cake/GSC family; dark forest green + dense + amber hairs = OG Kush family; foxtail sativa structure = Durban Poison family).
+1. IMAGE QUALITY & SUBJECT CHECK — Assess lighting, focus, resolution, angle. Identify WHAT you're looking at (flower, packaging, concentrate, edible, plant, etc.). If image is unreadable or NOT cannabis-related, set strain_name to "Unknown", confidence ≤ 15, explain in description.
+2. IF PACKAGING/LABEL — Read every visible word: strain name, brand, THC/CBD %, batch, terpenes, harvest date. Prioritize printed text over visual guessing.
+3. IF FLOWER — Bud density (dense/airy/popcorn), calyx shape, sugar leaf coverage, conformation (indica = dense/chunky, sativa = elongated/wispy, hybrid = mixed).
+4. IF CONCENTRATE — Color (gold/amber/clear/dark), consistency (badder/shatter/sauce/diamonds/rosin), suggesting extraction method.
+5. IF PLANT/SEEDLING — Growth stage (seedling/veg/flower/harvest), leaf health, pest/deficiency signs.
+6. COLOR & TRICHOMES — Greens, purples (anthocyanin), pistil colors, trichome frostiness.
+7. CROSS-REFERENCE phenotypes (purple+dense = GDP/Purple Punch; orange hairs + frosty lime = Wedding Cake/GSC; dark green + amber = OG Kush; foxtail sativa = Durban Poison).
 
-CONFIDENCE RUBRIC (be honest — DO NOT inflate):
-- 85-95: Highly distinctive strain traits clearly visible, multiple matching phenotype markers
-- 65-84: Strong family/lineage match but exact cultivar uncertain
-- 40-64: General type (indica/sativa/hybrid) identifiable, strain is best-guess
-- 15-39: Image quality limits analysis, providing closest plausible match
-- 0-14: Cannot identify — poor image, non-cannabis, or no visual markers
+CONFIDENCE RUBRIC (be honest):
+- 85-95: Label clearly readable OR highly distinctive strain markers
+- 65-84: Strong family match, exact cultivar uncertain
+- 40-64: General type identifiable, best-guess strain
+- 15-39: Image quality limits analysis
+- 0-14: Cannot identify
 
-OUTPUT — Return ONLY this JSON object (no markdown, no prose):
+OUTPUT — Return ONLY this JSON (no markdown):
 {
-  "strain_name": "Specific cultivar name OR 'Unknown'",
+  "strain_name": "Specific cultivar OR 'Unknown'",
   "confidence": <integer 0-100>,
   "strain_type": "indica" | "sativa" | "hybrid" | "unknown",
+  "product_type": "flower" | "packaging" | "concentrate" | "edible" | "vape" | "pre-roll" | "plant" | "other",
   "image_quality": "excellent" | "good" | "fair" | "poor",
-  "characteristics": ["observed trait 1", "observed trait 2", ...],
-  "dominant_terpenes": ["myrcene", "limonene", ...],
+  "characteristics": ["trait 1", "trait 2"],
+  "dominant_terpenes": ["myrcene", "limonene"],
   "thc_estimate": "e.g. 18-24%",
   "cbd_estimate": "e.g. <1%",
-  "effects": ["effect 1", "effect 2", ...],
+  "effects": ["effect 1", "effect 2"],
   "similar_strains": ["strain 1", "strain 2", "strain 3"],
-  "description": "2-3 sentence analysis grounded in what you actually see in the image",
-  "reasoning": "Brief explanation of WHY you matched this strain (specific visual cues)"
+  "description": "2-3 sentence analysis grounded in what you see",
+  "reasoning": "Why you matched this (specific visual cues or label text)"
 }
 
-RULES: Never fabricate a high-confidence ID from a bad photo. Always ground claims in observable visuals. This is educational only — lab testing is the only accurate measure of cannabinoids.`
-          },
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: "Analyze this cannabis flower image step-by-step. Assess image quality first, then identify the most likely strain with honest confidence. Return only the JSON object."
-              },
-              {
-                type: "image_url",
-                image_url: {
-                  url: imageBase64.startsWith('data:') ? imageBase64 : `data:image/jpeg;base64,${imageBase64}`
-                }
-              }
-            ]
-          }
-        ],
-      }),
+RULES: Never fabricate high confidence from a bad photo. Educational only — lab testing is the only accurate measure of cannabinoids.`;
 
+    const buildBody = (model: string) => JSON.stringify({
+      model,
+      messages: [
+        { role: "system", content: systemPrompt },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "Analyze this image step-by-step. Identify product type first, read any label text, then provide strain identification with honest confidence. Return only the JSON object." },
+            {
+              type: "image_url",
+              image_url: {
+                url: imageBase64.startsWith('data:') ? imageBase64 : `data:image/jpeg;base64,${imageBase64}`
+              }
+            }
+          ]
+        }
+      ],
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      if (response.status === 429) {
+    const MODEL_FALLBACKS = ["google/gemini-2.5-pro", "google/gemini-2.5-flash", "google/gemini-2.5-flash-lite"];
+    let response: Response | null = null;
+    let lastErrorText = "";
+    for (const model of MODEL_FALLBACKS) {
+      console.log("Trying model:", model);
+      response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: buildBody(model),
+      });
+      if (response.ok) break;
+      lastErrorText = await response.text();
+      console.error(`Model ${model} failed:`, response.status, lastErrorText.slice(0, 200));
+      // Don't fall back on auth/payment/rate errors
+      if (response.status === 429 || response.status === 402 || response.status === 401) break;
+    }
+
+    if (!response || !response.ok) {
+      const status = response?.status ?? 500;
+      if (status === 429) {
         return new Response(
           JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      if (response.status === 402) {
+      if (status === 402) {
         return new Response(
           JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      throw new Error(`AI gateway returned ${response.status}: ${errorText.slice(0, 200)}`);
+      throw new Error(`AI gateway returned ${status}: ${lastErrorText.slice(0, 200)}`);
     }
 
     const data = await response.json();
