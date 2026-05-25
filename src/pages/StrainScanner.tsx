@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { prepareImageForAnalysis } from "@/utils/imagePreprocessing";
 
 interface StrainResult {
   strain_name: string;
@@ -31,21 +32,18 @@ const StrainScanner = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      toast({ title: "Invalid file", description: "Please upload an image file.", variant: "destructive" });
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImagePreview(event.target?.result as string);
+    try {
+      const preparedImage = await prepareImageForAnalysis(file);
+      setImagePreview(preparedImage);
       setResult(null);
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Please upload a valid image file.";
+      toast({ title: "Invalid image", description: message, variant: "destructive" });
+    }
   };
 
   const analyzeImage = async () => {
