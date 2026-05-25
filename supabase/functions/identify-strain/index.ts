@@ -20,7 +20,16 @@ function isAllowedOrigin(origin: string | null): boolean {
   if (ALLOWED_ORIGINS.includes(origin)) return true;
   try {
     const { hostname, protocol } = new URL(origin);
-    return protocol === 'https:' && hostname === '16082a8c-a109-49a8-a05d-987a18f90c7d.lovableproject.com';
+    if (protocol !== 'https:' && protocol !== 'http:') return false;
+    // Allow any Lovable preview/published subdomain and the project's custom domains
+    return (
+      hostname.endsWith('.lovable.app') ||
+      hostname.endsWith('.lovableproject.com') ||
+      hostname.endsWith('.lovable.dev') ||
+      hostname === 'cuddles-ai.com' ||
+      hostname.endsWith('.cuddles-ai.com') ||
+      hostname === 'localhost'
+    );
   } catch {
     return false;
   }
