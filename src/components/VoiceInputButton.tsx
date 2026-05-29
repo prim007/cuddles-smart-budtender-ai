@@ -15,6 +15,7 @@ interface VoiceInputButtonProps {
 const VoiceInputButton = ({ onTranscript, disabled, className }: VoiceInputButtonProps) => {
   const { t, language } = useLanguage();
   const { toast } = useToast();
+  const { prime } = useSpeechSynthesis();
 
   const { isListening, isSupported, startListening, stopListening } = useVoiceInput({
     language,
@@ -36,6 +37,9 @@ const VoiceInputButton = ({ onTranscript, disabled, className }: VoiceInputButto
   }
 
   const handleClick = () => {
+    // Unlock speechSynthesis inside the user gesture so Cuddles can speak the
+    // reply after the async AI roundtrip (Chrome blocks speak() otherwise).
+    prime();
     if (isListening) {
       stopListening();
     } else {
