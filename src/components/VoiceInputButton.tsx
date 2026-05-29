@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Loader2 } from "lucide-react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
+import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
