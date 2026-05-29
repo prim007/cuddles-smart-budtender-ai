@@ -150,6 +150,43 @@ Deno.serve(async (req) => {
   // Create Supabase client with service role (bypasses RLS)
   const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
+  // Anti-abuse: for anon-callable templates, verify the recipient legitimately
+  // initiated the action — otherwise this endpoint can be used to spam arbitrary
+  // addresses with the public anon key.
+  if (callerRole !== 'service_role' && templateName === 'newsletter-confirmation') {
+    const normalized = effectiveRecipient.toLowerCase()
+    const { data: subscriber, error: subLookupError } = await supabase
+      .from('newsletter_subscribers')
+      .select('id, status, created_at')
+      .eq('email', normalized)
+      .maybeSingle()
+
+    if (subLookupError || !subscriber || subscriber.status !== 'pending') {
+      // Generic response — don't leak whether the address is on the list.
+      return new Response(
+        JSON.stringify({ success: true, queued: false }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Rate-limit: at most one newsletter-confirmation per recipient per hour.
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+    const { count: recentCount } = await supabase
+      .from('email_send_log')
+      .select('id', { count: 'exact', head: true })
+      .eq('recipient_email', effectiveRecipient)
+      .eq('template_name', 'newsletter-confirmation')
+      .gte('created_at', oneHourAgo)
+
+    if ((recentCount ?? 0) >= 1) {
+      return new Response(
+        JSON.stringify({ success: true, queued: false, reason: 'rate_limited' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+  }
+
+
   // 2. Check suppression list (fail-closed: if we can't verify, don't send)
   const { data: suppressed, error: suppressionError } = await supabase
     .from('suppressed_emails')

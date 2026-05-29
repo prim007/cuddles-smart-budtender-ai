@@ -54,7 +54,11 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-  const voice = voiceId || "EXAVITQu4vr4xnSDxMaL";
+  // Validate voiceId strictly to prevent path/query injection into ElevenLabs API URL.
+  const DEFAULT_VOICE = "EXAVITQu4vr4xnSDxMaL";
+  const voice = (typeof voiceId === "string" && /^[A-Za-z0-9]{20,25}$/.test(voiceId))
+    ? voiceId
+    : DEFAULT_VOICE;
 
   const response = await fetch(
     `https://api.elevenlabs.io/v1/text-to-speech/${voice}?output_format=mp3_44100_128`,
