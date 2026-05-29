@@ -386,7 +386,12 @@ const ChatDemo = () => {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => { if (isSpeaking) stop(); setVoiceEnabled(!voiceEnabled); }}
+                  onClick={() => {
+                    if (isSpeaking) stop();
+                    const next = !voiceEnabled;
+                    setVoiceEnabled(next);
+                    if (next) prime(); // unlock TTS inside gesture
+                  }}
                   className={`bg-card/80 backdrop-blur-sm border-border hover:bg-accent ${voiceEnabled ? 'text-primary' : 'text-muted-foreground'}`}
                   title={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
                 >
