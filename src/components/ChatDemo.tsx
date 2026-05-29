@@ -39,7 +39,7 @@ const ChatDemo = () => {
   const { user } = useAuth();
   const { t, language } = useLanguage();
   const { profile, getProfileSummary } = useUserProfile();
-  const { isSpeaking, isSupported: ttsSupported, speak, stop, speakIfGreeting } = useSpeechSynthesis();
+  const { isSpeaking, isSupported: ttsSupported, speak, stop, speakIfGreeting, prime } = useSpeechSynthesis();
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   
   const INITIAL_MESSAGE: Message = {
