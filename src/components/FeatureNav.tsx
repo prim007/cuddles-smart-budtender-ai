@@ -18,7 +18,8 @@ import {
   Sprout,
   ShoppingBag,
   Crown,
-  Sparkles
+  Sparkles,
+  Globe2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -78,6 +79,12 @@ const features: Feature[] = [
     icon: Sprout,
     title: "Grow",
     href: "/grow",
+    gradient: "from-hippie-green to-hippie-amber",
+  },
+  {
+    icon: Globe2,
+    title: "Africa Map",
+    href: "/africa-cannabis-map",
     gradient: "from-hippie-green to-hippie-amber",
   },
   {
