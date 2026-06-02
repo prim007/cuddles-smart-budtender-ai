@@ -308,21 +308,26 @@ const AfricaLegislationMap = () => {
   const [query, setQuery] = useState("");
   const [hovered, setHovered] = useState<string | null>(null);
 
-  const visible = useMemo(
+  const q = query.trim().toLowerCase();
+
+  const searched = useMemo(
     () =>
       COUNTRIES.filter(
-        (c) =>
-          (filter === "all" || c.status === filter) &&
-          (query === "" || c.name.toLowerCase().includes(query.toLowerCase()))
+        (c) => q === "" || c.name.toLowerCase().includes(q)
       ),
-    [filter, query]
+    [q]
+  );
+
+  const visible = useMemo(
+    () => searched.filter((c) => filter === "all" || c.status === filter),
+    [searched, filter]
   );
 
   const counts = useMemo(() => {
-    const out: Record<string, number> = { all: COUNTRIES.length };
-    for (const c of COUNTRIES) out[c.status] = (out[c.status] ?? 0) + 1;
+    const out: Record<string, number> = { all: searched.length };
+    for (const c of searched) out[c.status] = (out[c.status] ?? 0) + 1;
     return out;
-  }, []);
+  }, [searched]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-hippie-purple/5">
