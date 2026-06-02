@@ -8,12 +8,23 @@ const corsHeaders = {
 };
 
 function generatePromoCode(): string {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let code = "CUDDLES-";
-  for (let i = 0; i < 8; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  // Use cryptographically secure RNG so codes can't be predicted from
+  // a recovered Math.random() seed. Rejection-sample to avoid modulo bias.
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // 32 chars => 5 bits/char
+  const length = 8;
+  const out: string[] = [];
+  const buf = new Uint8Array(length * 2); // extra room for rejections
+  while (out.length < length) {
+    crypto.getRandomValues(buf);
+    for (let i = 0; i < buf.length && out.length < length; i++) {
+      const b = buf[i];
+      // 256 % 32 === 0, so no bias, but keep the guard for future char-set changes.
+      if (b < 256 - (256 % chars.length)) {
+        out.push(chars[b % chars.length]);
+      }
+    }
   }
-  return code;
+  return "CUDDLES-" + out.join("");
 }
 
 serve(async (req) => {
