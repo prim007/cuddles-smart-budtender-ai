@@ -44,6 +44,7 @@ const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
 const SeedlingMonitor = lazy(() => import("./pages/SeedlingMonitor"));
+const AfricaLegislationMap = lazy(() => import("./pages/AfricaLegislationMap"));
 
 // B2B
 const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
@@ -143,6 +144,7 @@ const App = () => (
                 <Route path="/reviews" element={<Suspense fallback={<PageLoader />}><StrainReviews /></Suspense>} />
                 <Route path="/t-break" element={<Suspense fallback={<PageLoader />}><ToleranceBreak /></Suspense>} />
                 <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />
+                <Route path="/africa-cannabis-map" element={<Suspense fallback={<PageLoader />}><AfricaLegislationMap /></Suspense>} />
                 
                 {/* Blog */}
                 <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />
