@@ -329,7 +329,6 @@ const AfricaLegislationMap = () => {
       <SEO
         title="African Cannabis Legislation Map | Cuddles AI"
         description="Interactive country-by-country guide to cannabis & hemp laws across Africa — South Africa, Ghana, Malawi, Zimbabwe, Morocco and more. Curated by Cuddles."
-        canonical="https://cuddles-ai.com/africa-cannabis-map"
       />
 
       <div className="max-w-7xl mx-auto px-4 pt-24 pb-16">
