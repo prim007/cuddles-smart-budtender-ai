@@ -139,7 +139,7 @@ const FeatureNav = () => {
   return (
     <>
       {/* Mobile floating action button */}
-      <div className="fixed bottom-6 right-6 z-50 md:hidden">
+      <div className="fixed bottom-6 left-6 z-[9998] md:hidden">
         <Button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
@@ -163,7 +163,7 @@ const FeatureNav = () => {
 
       {/* Mobile menu */}
       <div className={cn(
-        "fixed bottom-24 right-6 z-50 md:hidden transition-all duration-300 origin-bottom-right",
+        "fixed bottom-24 left-6 z-[9998] md:hidden transition-all duration-300 origin-bottom-left",
         isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
       )}>
         <div className="bg-card border border-border rounded-2xl p-4 shadow-elevated space-y-2">
