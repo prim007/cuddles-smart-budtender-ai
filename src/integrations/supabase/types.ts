@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_events: {
+        Row: {
+          created_at: string
+          event_name: string
+          experiment: string
+          id: string
+          path: string | null
+          properties: Json
+          session_id: string
+          user_id: string | null
+          variant: string
+        }
+        Insert: {
+          created_at?: string
+          event_name: string
+          experiment: string
+          id?: string
+          path?: string | null
+          properties?: Json
+          session_id: string
+          user_id?: string | null
+          variant: string
+        }
+        Update: {
+          created_at?: string
+          event_name?: string
+          experiment?: string
+          id?: string
+          path?: string | null
+          properties?: Json
+          session_id?: string
+          user_id?: string | null
+          variant?: string
+        }
+        Relationships: []
+      }
       agent_trace_feedback: {
         Row: {
           created_at: string

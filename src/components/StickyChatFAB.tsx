@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { MessageCircle, X, Sparkles } from "lucide-react";
 import { trackEvent } from "@/components/GoogleAnalytics";
+import { getVariant, logAbEvent, CHAT_FAB_EXPERIMENT, CHAT_FAB_VARIANTS } from "@/lib/abTest";
 
 const ROTATING_HOOKS = [
   { emoji: "💬", text: "Ask me anything about cannabis!", sub: "Free • No signup" },
@@ -14,26 +15,35 @@ const StickyChatFAB = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [hookIdx, setHookIdx] = useState(0);
+  const variant = getVariant(CHAT_FAB_EXPERIMENT, [...CHAT_FAB_VARIANTS]);
+  const showRotatingHooks = variant === "rotating_hooks";
 
-  // Show tooltip badge after 1.5 seconds — grab attention fast
+  // Fire chat_view exposure event once per session
   useEffect(() => {
+    logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, variant, event: "chat_view" });
+  }, [variant]);
+
+  // Show tooltip badge after 1.5 seconds — grab attention fast (only in test variant)
+  useEffect(() => {
+    if (!showRotatingHooks) return;
     const timer = setTimeout(() => setShowTooltip(true), 1500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [showRotatingHooks]);
 
-  // Rotate hooks every 6s and re-pulse tooltip
+  // Rotate hooks every 6s and re-pulse tooltip (only in test variant)
   useEffect(() => {
-    if (dismissed) return;
+    if (!showRotatingHooks || dismissed) return;
     const interval = setInterval(() => {
       setHookIdx((i) => (i + 1) % ROTATING_HOOKS.length);
       setShowTooltip(false);
       setTimeout(() => setShowTooltip(true), 250);
     }, 7000);
     return () => clearInterval(interval);
-  }, [dismissed]);
+  }, [dismissed, showRotatingHooks]);
 
   const openChat = () => {
     trackEvent("chat_fab_clicked", "conversion", "sticky_fab");
+    logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, variant, event: "chat_start", properties: { source: "fab" } });
     const chatSection = document.getElementById("chat-demo");
     if (chatSection) {
       chatSection.scrollIntoView({ behavior: "smooth", block: "start" });
