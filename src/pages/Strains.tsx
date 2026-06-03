@@ -61,7 +61,7 @@ const Strains = () => {
     <div className="min-h-screen bg-background">
       <SEO
         title="Cannabis Strain Database | AI Recommendations"
-        description="Browse 200+ cannabis strains with terpene profiles, THC/CBD data, and AI-powered recommendations. Used by dispensaries to help customers find their perfect strain."
+        description="Browse 200+ cannabis strains with terpene profiles, THC/CBD data, and AI-powered recommendations from Cuddles AI."
         url="/strains"
         keywords="cannabis strain database, dispensary strain finder, AI strain recommendations, indica sativa hybrid, terpene profiles, THC CBD content, cannabis product catalog"
         structuredData={jsonLd}

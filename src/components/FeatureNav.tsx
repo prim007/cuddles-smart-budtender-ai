@@ -142,6 +142,8 @@ const FeatureNav = () => {
       <div className="fixed bottom-6 left-6 z-[9998] md:hidden">
         <Button
           onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
           className={cn(
             "w-14 h-14 rounded-full shadow-elevated transition-all duration-300",
             isOpen 
