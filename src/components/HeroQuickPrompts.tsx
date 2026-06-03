@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Moon, Zap, Heart, Leaf, Sparkles } from "lucide-react";
 import { trackEvent } from "@/components/GoogleAnalytics";
+import { logAbEvent, CHAT_FAB_EXPERIMENT } from "@/lib/abTest";
 
 interface HeroQuickPromptsProps {
   onSelect: (prompt: string) => void;

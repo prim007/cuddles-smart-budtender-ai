@@ -119,7 +119,15 @@ const ChatDemo = () => {
     setIsLoading(true);
     setMessageCount((prev) => {
       const newCount = prev + 1;
-      if (newCount === 1) trackChatInitiated(sessionId);
+      if (newCount === 1) {
+        trackChatInitiated(sessionId);
+        import("@/lib/abTest").then(({ logAbEvent, CHAT_FAB_EXPERIMENT }) => {
+          logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, event: "chat_start", properties: { source: "input" } });
+        });
+      }
+      import("@/lib/abTest").then(({ logAbEvent, CHAT_FAB_EXPERIMENT }) => {
+        logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, event: "chat_message", properties: { count: newCount } });
+      });
       return newCount;
     });
 
