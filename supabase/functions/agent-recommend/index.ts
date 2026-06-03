@@ -426,7 +426,7 @@ Keep the friendly tone. 2-3 strain picks max.`;
             Authorization: `Bearer ${LOVABLE_API_KEY}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ model: MODEL, messages: revisionMessages }),
+          body: JSON.stringify({ model: pickModel(user_message, "final"), messages: revisionMessages }),
         });
 
         if (resp.ok) {
