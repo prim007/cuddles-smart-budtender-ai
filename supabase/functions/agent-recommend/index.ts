@@ -229,11 +229,39 @@ serve(async (req) => {
       }
     };
 
+    // ===== PLAN STEP =====
+    // Use PRO model for a short upfront plan; injected as first assistant message.
+    let plan: string | null = null;
+    try {
+      const tPlan = Date.now();
+      const planResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: pickModel(user_message, "plan"),
+          messages: [
+            { role: "system", content: "You are a planning module for a cannabis recommendation agent. In 3-5 short bullets, outline: (1) the user's likely intent + effect category, (2) which tools to call and in what order, (3) what to look for in the user's memory, (4) how to frame the final answer. Be concise. No prose, just bullets." },
+            { role: "user", content: user_message },
+          ],
+        }),
+      });
+      if (planResp.ok) {
+        const pdata = await planResp.json();
+        plan = pdata.choices?.[0]?.message?.content ?? null;
+        await trace({ step_index: -2, tool_called: "plan", payload: { plan }, tokens_out: pdata.usage?.completion_tokens, latency_ms: Date.now() - tPlan });
+      }
+    } catch (e) {
+      console.error("plan step failed", e);
+    }
+
     // Agent loop
     const messages: any[] = [
       { role: "system", content: SYSTEM_PROMPT },
       { role: "user", content: user_message },
     ];
+    if (plan) {
+      messages.push({ role: "assistant", content: `Plan:\n${plan}` });
+    }
 
     let finalAnswer: string | null = null;
 
@@ -243,6 +271,10 @@ serve(async (req) => {
         break;
       }
 
+      // PRO model when nearing final synthesis; FAST during tool loop
+      const isLikelyFinal = step >= MAX_STEPS - 2;
+      const stepModel = isLikelyFinal ? pickModel(user_message, "final") : MODEL_FAST;
+
       const t0 = Date.now();
       const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
@@ -250,7 +282,7 @@ serve(async (req) => {
           Authorization: `Bearer ${LOVABLE_API_KEY}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ model: MODEL, messages, tools: TOOLS, tool_choice: "auto" }),
+        body: JSON.stringify({ model: stepModel, messages, tools: TOOLS, tool_choice: "auto" }),
       });
 
       if (!resp.ok) {
