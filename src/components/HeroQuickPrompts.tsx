@@ -64,6 +64,7 @@ const HeroQuickPrompts = ({ onSelect }: HeroQuickPromptsProps) => {
 
   const handleClick = (prompt: typeof prompts[0], index: number) => {
     trackEvent("hero_quick_prompt", "engagement", prompt.label);
+    logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, event: "chat_start", properties: { source: "hero_prompt", label: prompt.label } });
     // Scroll to chat section (correct ID is chat-demo)
     document.getElementById("chat-demo")?.scrollIntoView({ behavior: "smooth", block: "start" });
     // Small delay so user sees the chat before the prompt fires
