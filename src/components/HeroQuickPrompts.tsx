@@ -63,10 +63,13 @@ const HeroQuickPrompts = ({ onSelect }: HeroQuickPromptsProps) => {
 
   const handleClick = (prompt: typeof prompts[0], index: number) => {
     trackEvent("hero_quick_prompt", "engagement", prompt.label);
-    // Scroll to demo section first
-    document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" });
+    // Scroll to chat section (correct ID is chat-demo)
+    document.getElementById("chat-demo")?.scrollIntoView({ behavior: "smooth", block: "start" });
     // Small delay so user sees the chat before the prompt fires
-    setTimeout(() => onSelect(prompt.prompt), 600);
+    setTimeout(() => {
+      onSelect(prompt.prompt);
+      window.dispatchEvent(new CustomEvent("cuddles-quick-prompt", { detail: prompt.prompt }));
+    }, 600);
   };
 
   return (
