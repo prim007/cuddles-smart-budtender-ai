@@ -83,15 +83,15 @@ export const logAbEvent = async ({ experiment, variant, event, properties }: Log
 
   try {
     const { data: auth } = await supabase.auth.getUser();
-    await supabase.from("ab_events").insert({
+    await supabase.from("ab_events").insert([{
       session_id: sid,
-      user_id: auth.user?.id ?? null,
+      user_id: auth.user?.id ?? undefined,
       experiment,
       variant: v,
       event_name: event,
-      path: typeof window !== "undefined" ? window.location.pathname : null,
-      properties: properties ?? {},
-    });
+      path: typeof window !== "undefined" ? window.location.pathname : undefined,
+      properties: (properties ?? {}) as any,
+    }]);
   } catch (err) {
     // best-effort — never break UX for analytics
     console.warn("[abTest] log failed", err);
