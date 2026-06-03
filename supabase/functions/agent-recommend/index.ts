@@ -10,9 +10,20 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const MAX_STEPS = 6;
-const BUDGET_MS = 30_000;
-const MODEL = "google/gemini-3-flash-preview";
+const MAX_STEPS = 10;
+const BUDGET_MS = 60_000;
+// Tiered routing: fast model for tool-calling loop, pro model for planning + final synthesis
+const MODEL_FAST = "google/gemini-3-flash-preview";
+const MODEL_PRO = "google/gemini-3.1-pro-preview";
+// Heuristic: route to PRO when query suggests deeper reasoning
+function pickModel(userMessage: string, phase: "plan" | "tool" | "final"): string {
+  if (phase === "plan") return MODEL_PRO;
+  if (phase === "final") {
+    const complex = /\b(why|compare|explain|difference|interaction|tolerance|stack|combine|medical|anxiety|insomnia|chronic|cbd:thc|terpene)\b/i;
+    if (complex.test(userMessage) || userMessage.length > 200) return MODEL_PRO;
+  }
+  return MODEL_FAST;
+}
 
 const SYSTEM_PROMPT = `You are the Cuddles Personalized Recommendation Agent.
 Your job: recommend cannabis strains tailored to a user's stated goal AND their long-term memory.
