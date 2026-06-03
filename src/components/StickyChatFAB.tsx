@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { MessageCircle, X, Sparkles } from "lucide-react";
 import { trackEvent } from "@/components/GoogleAnalytics";
+import { getVariant, logAbEvent, CHAT_FAB_EXPERIMENT, CHAT_FAB_VARIANTS } from "@/lib/abTest";
 
 const ROTATING_HOOKS = [
   { emoji: "💬", text: "Ask me anything about cannabis!", sub: "Free • No signup" },
