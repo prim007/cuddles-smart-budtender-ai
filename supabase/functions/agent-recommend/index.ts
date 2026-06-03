@@ -10,24 +10,44 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const MAX_STEPS = 6;
-const BUDGET_MS = 30_000;
-const MODEL = "google/gemini-3-flash-preview";
+const MAX_STEPS = 10;
+const BUDGET_MS = 60_000;
+// Tiered routing: fast model for tool-calling loop, pro model for planning + final synthesis
+const MODEL_FAST = "google/gemini-3-flash-preview";
+const MODEL_PRO = "google/gemini-3.1-pro-preview";
+// Heuristic: route to PRO when query suggests deeper reasoning
+function pickModel(userMessage: string, phase: "plan" | "tool" | "final"): string {
+  if (phase === "plan") return MODEL_PRO;
+  if (phase === "final") {
+    const complex = /\b(why|compare|explain|difference|interaction|tolerance|stack|combine|medical|anxiety|insomnia|chronic|cbd:thc|terpene)\b/i;
+    if (complex.test(userMessage) || userMessage.length > 200) return MODEL_PRO;
+  }
+  return MODEL_FAST;
+}
 
 const SYSTEM_PROMPT = `You are the Cuddles Personalized Recommendation Agent.
 Your job: recommend cannabis strains tailored to a user's stated goal AND their long-term memory.
 
 WORKFLOW:
-1. Call get_user_memory to load preferences/history.
-2. Call recommend_by_effect with the user's intent (sleep|energy|pain|creativity|social|stress).
-3. Optionally call query_strain_profiles for deeper info on top picks.
-4. Call update_user_memory to persist new preferences you learned this turn.
-5. Return a final answer in the "content" field — friendly, 2-3 strain picks max, with WHY each fits.
+1. A short plan is provided to you in the first assistant message — follow it.
+2. Call get_user_memory to load preferences/history.
+3. Call recommend_by_effect with the user's intent (sleep|energy|pain|creativity|social|stress).
+4. Optionally call query_strain_profiles for deeper info on top picks (use this for 1-2 strains when the user asks "why" or compares options).
+5. Call update_user_memory to persist new preferences you learned this turn.
+6. Return a final answer in the "content" field.
+
+VOICE & STYLE:
+- Warm, knowledgeable friend — not a clinician, not a salesperson.
+- Lead with the WHY before the WHAT. Each pick gets 1-2 sentences on why it fits the user's goal.
+- Use the user's stored preferences explicitly ("Since you've enjoyed citrus terps before...").
+- Markdown: bold strain names, short paragraphs, no headers for <3 picks.
+- 2-3 strain picks max. Never more.
 
 RULES:
 - Cannabis education only. Always end with: "This is general education, not medical advice."
 - Never invent strains. Only recommend strains returned by tools.
-- Be concise. Markdown allowed.`;
+- No specific dosages (mg, grams, puff counts) — say "start low and go slow".
+- No medical claims (cure/treat/diagnose/heal/prescribe).`;
 
 const TOOLS = [
   {
@@ -209,11 +229,39 @@ serve(async (req) => {
       }
     };
 
+    // ===== PLAN STEP =====
+    // Use PRO model for a short upfront plan; injected as first assistant message.
+    let plan: string | null = null;
+    try {
+      const tPlan = Date.now();
+      const planResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: pickModel(user_message, "plan"),
+          messages: [
+            { role: "system", content: "You are a planning module for a cannabis recommendation agent. In 3-5 short bullets, outline: (1) the user's likely intent + effect category, (2) which tools to call and in what order, (3) what to look for in the user's memory, (4) how to frame the final answer. Be concise. No prose, just bullets." },
+            { role: "user", content: user_message },
+          ],
+        }),
+      });
+      if (planResp.ok) {
+        const pdata = await planResp.json();
+        plan = pdata.choices?.[0]?.message?.content ?? null;
+        await trace({ step_index: -2, tool_called: "plan", payload: { plan }, tokens_out: pdata.usage?.completion_tokens, latency_ms: Date.now() - tPlan });
+      }
+    } catch (e) {
+      console.error("plan step failed", e);
+    }
+
     // Agent loop
     const messages: any[] = [
       { role: "system", content: SYSTEM_PROMPT },
       { role: "user", content: user_message },
     ];
+    if (plan) {
+      messages.push({ role: "assistant", content: `Plan:\n${plan}` });
+    }
 
     let finalAnswer: string | null = null;
 
@@ -223,6 +271,10 @@ serve(async (req) => {
         break;
       }
 
+      // PRO model when nearing final synthesis; FAST during tool loop
+      const isLikelyFinal = step >= MAX_STEPS - 2;
+      const stepModel = isLikelyFinal ? pickModel(user_message, "final") : MODEL_FAST;
+
       const t0 = Date.now();
       const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
@@ -230,7 +282,7 @@ serve(async (req) => {
           Authorization: `Bearer ${LOVABLE_API_KEY}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ model: MODEL, messages, tools: TOOLS, tool_choice: "auto" }),
+        body: JSON.stringify({ model: stepModel, messages, tools: TOOLS, tool_choice: "auto" }),
       });
 
       if (!resp.ok) {
@@ -374,7 +426,7 @@ Keep the friendly tone. 2-3 strain picks max.`;
             Authorization: `Bearer ${LOVABLE_API_KEY}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ model: MODEL, messages: revisionMessages }),
+          body: JSON.stringify({ model: pickModel(user_message, "final"), messages: revisionMessages }),
         });
 
         if (resp.ok) {
