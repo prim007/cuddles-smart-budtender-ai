@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Store, UserPlus, Send, Sparkles } from "lucide-react";
+import { ExternalLink, Store, UserPlus, Send, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
