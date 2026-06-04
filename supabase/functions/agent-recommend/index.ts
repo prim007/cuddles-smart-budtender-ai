@@ -179,13 +179,14 @@ serve(async (req) => {
 
         if (name === "recommend_by_effect") {
           // Map effect → strain pool. Pulls from strain_profiles cache first.
+          // Map effect → strain pool. SA Lëf Labs strains prioritized (locally stocked).
           const effectMap: Record<string, string[]> = {
-            sleep: ["Northern Lights", "Granddaddy Purple", "Purple Punch", "Bubba Kush", "Afghan Kush"],
-            energy: ["Durban Poison", "Green Crack", "Sour Diesel", "Strawberry Cough"],
-            pain: ["ACDC", "Harlequin", "Blackberry Kush", "White Widow", "LA Confidential"],
-            creativity: ["Blue Dream", "Jack Herer", "Chemdawg", "Super Silver Haze"],
-            social: ["Super Lemon Haze", "Pineapple Express", "Tangie", "Gelato"],
-            stress: ["OG Kush", "GSC", "Wedding Cake", "Hindu Kush"],
+            sleep: ["Purple Ghost Candy", "Planet of the Grapes", "Kimbo Kush", "Northern Lights", "Granddaddy Purple", "Bubba Kush"],
+            energy: ["Lemon Silver Haze", "Jack Herer", "Durban Poison", "Green Crack", "Sour Diesel"],
+            pain: ["Kimbo Kush", "Planet of the Grapes", "ACDC", "Harlequin", "Blackberry Kush", "White Widow"],
+            creativity: ["Lemon Silver Haze", "Jack Herer", "Endgame", "Blue Dream", "Chemdawg"],
+            social: ["Guava Bomba", "Cheese", "Animal Runtz", "Super Lemon Haze", "Pineapple Express", "Tangie"],
+            stress: ["Gorilla Skittles", "Endgame", "Animal Runtz", "OG Kush", "GSC", "Wedding Cake"],
           };
           const pool = effectMap[args.effect] ?? [];
           const limit = Math.min(args.limit ?? 5, pool.length);
