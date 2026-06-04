@@ -300,7 +300,7 @@ const FeatureNav = () => {
               {!user ? (
                 <Link
                   to="/auth"
-                  className="px-4 py-2 rounded-2xl text-sm font-semibold bg-gradient-to-br from-hippie-coral to-hippie-peach text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_6px_16px_-4px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.03] transition-transform flex items-center gap-2"
+                  className="whitespace-nowrap px-4 py-2 rounded-2xl text-sm font-semibold bg-gradient-to-br from-hippie-coral to-hippie-peach text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_6px_16px_-4px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.03] transition-transform flex items-center gap-2"
                 >
                   <LogIn className="w-4 h-4" />
                   Sign In
