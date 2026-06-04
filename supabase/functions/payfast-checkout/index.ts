@@ -32,7 +32,7 @@ serve(async (req) => {
     const user = data.user;
     if (!user?.email) throw new Error("User not authenticated");
 
-    const { type } = await req.json();
+    const { type, return_path } = await req.json();
     const merchantId = Deno.env.get("PAYFAST_MERCHANT_ID");
     const merchantKey = Deno.env.get("PAYFAST_MERCHANT_KEY");
     const passphrase = Deno.env.get("PAYFAST_PASSPHRASE");
@@ -44,11 +44,17 @@ serve(async (req) => {
     const origin = req.headers.get("origin") || "https://cuddles-smart-budtender-ai.lovable.app";
     const notifyUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/payfast-itn`;
 
+    // Whitelist return paths to prevent open-redirect abuse
+    const allowedPaths = ["/premium", "/dispensary-onboarding"];
+    const safeReturnPath = typeof return_path === "string" && allowedPaths.includes(return_path)
+      ? return_path
+      : "/premium";
+
     const paymentData: Record<string, string> = {
       merchant_id: merchantId,
       merchant_key: merchantKey,
-      return_url: `${origin}/premium?success=true`,
-      cancel_url: `${origin}/premium?canceled=true`,
+      return_url: `${origin}${safeReturnPath}?subscribed=true`,
+      cancel_url: `${origin}${safeReturnPath}?canceled=true`,
       notify_url: notifyUrl,
       email_address: user.email,
       m_payment_id: `sub_${user.id}_${Date.now()}`,

@@ -13,7 +13,7 @@ interface SubscriptionContextType {
   isLoading: boolean;
   subscriptionEnd: string | null;
   checkSubscription: () => Promise<void>;
-  startCheckout: () => Promise<void>;
+  startCheckout: (returnPath?: string) => Promise<void>;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -55,11 +55,11 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     return () => clearInterval(interval);
   }, [user, checkSubscription]);
 
-  const startCheckout = async () => {
+  const startCheckout = async (returnPath?: string) => {
     try {
       setIsLoading(true);
       const { data, error } = await supabase.functions.invoke("payfast-checkout", {
-        body: { type: "subscription" },
+        body: { type: "subscription", return_path: returnPath },
       });
       if (error) throw error;
       if (data?.paymentData) {
