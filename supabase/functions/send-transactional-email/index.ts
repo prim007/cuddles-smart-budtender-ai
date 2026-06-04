@@ -169,6 +169,16 @@ Deno.serve(async (req) => {
       )
     }
 
+    // SECURITY: Ignore any client-supplied confirmationUrl/name and reconstruct
+    // server-side from the trusted canonical origin + the DB-generated subscriber id.
+    // This prevents abuse where an attacker calls this endpoint with a phishing URL
+    // in templateData to send Cuddles AI-branded emails pointing to attacker sites.
+    const CANONICAL_ORIGIN = 'https://www.cuddles-ai.com'
+    templateData = {
+      name: 'Friend',
+      confirmationUrl: `${CANONICAL_ORIGIN}/newsletter/confirm?token=${subscriber.id}`,
+    }
+
     // Rate-limit: at most one newsletter-confirmation per recipient per hour.
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
     const { count: recentCount } = await supabase
@@ -185,6 +195,7 @@ Deno.serve(async (req) => {
       )
     }
   }
+
 
 
   // 2. Check suppression list (fail-closed: if we can't verify, don't send)
