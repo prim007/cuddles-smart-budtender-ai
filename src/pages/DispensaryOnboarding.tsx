@@ -170,7 +170,7 @@ const DispensaryOnboarding = () => {
       return;
     }
     persistForm();
-    await startCheckout("/dispensary-onboarding");
+    await startCheckout({ plan: "pro", returnPath: "/dispensary-onboarding" });
   };
 
   const copyEmbedCode = () => {

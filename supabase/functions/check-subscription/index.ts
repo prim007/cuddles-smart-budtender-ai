@@ -1,9 +1,17 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+// Map Stripe product IDs -> internal plan names
+const PRODUCT_TO_PLAN: Record<string, string> = {
+  prod_UdwYiUBHBkfwK1: "premium",
+  prod_UdwZ7boiwYlVt7: "pro",
 };
 
 serve(async (req) => {
@@ -11,13 +19,15 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    { auth: { persistSession: false } }
-  );
-
   try {
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("No authorization header");
 
@@ -25,43 +35,46 @@ serve(async (req) => {
     const { data: userData, error: userError } = await supabase.auth.getUser(token);
     if (userError) throw new Error(`Auth error: ${userError.message}`);
     const user = userData.user;
-    if (!user) throw new Error("User not found");
+    if (!user?.email) throw new Error("User not authenticated");
 
-    const { data: sub, error: subError } = await supabase
-      .from("subscriptions")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("status", "active")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+    const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
+    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
 
-    if (subError) throw new Error(`DB error: ${subError.message}`);
-
-    if (!sub) {
+    if (customers.data.length === 0) {
       return new Response(JSON.stringify({ subscribed: false }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
       });
     }
 
-    if (sub.ends_at && new Date(sub.ends_at) < new Date()) {
-      await supabase
-        .from("subscriptions")
-        .update({ status: "expired" })
-        .eq("id", sub.id);
-
-      return new Response(JSON.stringify({ subscribed: false }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    return new Response(JSON.stringify({
-      subscribed: true,
-      plan: sub.plan,
-      subscription_end: sub.ends_at,
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    const customerId = customers.data[0].id;
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+      status: "active",
+      limit: 5,
     });
+
+    if (subscriptions.data.length === 0) {
+      return new Response(JSON.stringify({ subscribed: false }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
+
+    const sub = subscriptions.data[0];
+    const productId = sub.items.data[0].price.product as string;
+    const plan = PRODUCT_TO_PLAN[productId] ?? "premium";
+    const subscriptionEnd = new Date(sub.current_period_end * 1000).toISOString();
+
+    return new Response(
+      JSON.stringify({
+        subscribed: true,
+        plan,
+        product_id: productId,
+        subscription_end: subscriptionEnd,
+      }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+    );
   } catch (error) {
     console.error("[CHECK-SUB] Error:", (error as Error).message);
     return new Response(JSON.stringify({ error: "An internal error occurred" }), {
