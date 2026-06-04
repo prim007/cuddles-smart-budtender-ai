@@ -25,8 +25,13 @@ function pickModel(userMessage: string, phase: "plan" | "tool" | "final"): strin
   return MODEL_FAST;
 }
 
-const SYSTEM_PROMPT = `You are the Cuddles Personalized Recommendation Agent.
+const SYSTEM_PROMPT = `You are the Cuddles Personalized Recommendation Agent for South African cannabis users.
 Your job: recommend cannabis strains tailored to a user's stated goal AND their long-term memory.
+
+SUPPLY CONTEXT (South Africa):
+- Many strains we recommend are stocked locally by our partner Lëf Labs (Pty) Ltd via the Tripple Four Shop hub.
+- Lëf Labs strains include indoor (Animal Runtz, Lemon Silver Haze, Guava Bomba, Purple Ghost Candy) and tunnel-grown (Jack Herer, Planet of the Grapes, Gorilla Skittles, Cheese, Kimbo Kush, Endgame). Every batch is COA-tested.
+- When a Lëf Labs strain fits, briefly note "available locally via our partner Lëf Labs" — but never push the sale.
 
 WORKFLOW:
 1. A short plan is provided to you in the first assistant message — follow it.
@@ -174,13 +179,14 @@ serve(async (req) => {
 
         if (name === "recommend_by_effect") {
           // Map effect → strain pool. Pulls from strain_profiles cache first.
+          // Map effect → strain pool. SA Lëf Labs strains prioritized (locally stocked).
           const effectMap: Record<string, string[]> = {
-            sleep: ["Northern Lights", "Granddaddy Purple", "Purple Punch", "Bubba Kush", "Afghan Kush"],
-            energy: ["Durban Poison", "Green Crack", "Sour Diesel", "Strawberry Cough"],
-            pain: ["ACDC", "Harlequin", "Blackberry Kush", "White Widow", "LA Confidential"],
-            creativity: ["Blue Dream", "Jack Herer", "Chemdawg", "Super Silver Haze"],
-            social: ["Super Lemon Haze", "Pineapple Express", "Tangie", "Gelato"],
-            stress: ["OG Kush", "GSC", "Wedding Cake", "Hindu Kush"],
+            sleep: ["Purple Ghost Candy", "Planet of the Grapes", "Kimbo Kush", "Northern Lights", "Granddaddy Purple", "Bubba Kush"],
+            energy: ["Lemon Silver Haze", "Jack Herer", "Durban Poison", "Green Crack", "Sour Diesel"],
+            pain: ["Kimbo Kush", "Planet of the Grapes", "ACDC", "Harlequin", "Blackberry Kush", "White Widow"],
+            creativity: ["Lemon Silver Haze", "Jack Herer", "Endgame", "Blue Dream", "Chemdawg"],
+            social: ["Guava Bomba", "Cheese", "Animal Runtz", "Super Lemon Haze", "Pineapple Express", "Tangie"],
+            stress: ["Gorilla Skittles", "Endgame", "Animal Runtz", "OG Kush", "GSC", "Wedding Cake"],
           };
           const pool = effectMap[args.effect] ?? [];
           const limit = Math.min(args.limit ?? 5, pool.length);
