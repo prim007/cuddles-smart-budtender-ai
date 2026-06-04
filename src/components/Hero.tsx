@@ -156,22 +156,20 @@ const Hero = () => {
             </div>
 
             <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
-              <button
+              <Button
+                size="lg"
                 onClick={() => {
                   trackEvent('cta_click', 'chat', 'hero_start_chatting');
-                  sendToChat('');
+                  const chatSection = document.getElementById('chat-demo');
+                  chatSection?.scrollIntoView({ behavior: 'smooth' });
                   setTimeout(() => inputRef.current?.focus(), 700);
                 }}
-                className="w-full sm:w-auto"
+                className="h-auto w-full gap-2 rounded-2xl bg-gradient-to-r from-hippie-coral to-hippie-peach px-8 py-5 font-display text-lg font-semibold text-white shadow-[0_20px_40px_-10px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.02] hover:opacity-95 transition-transform sm:w-auto"
               >
-                <Button
-                  size="lg"
-                  asChild
-                  className="h-auto w-full gap-2 rounded-2xl bg-gradient-to-r from-hippie-coral to-hippie-peach px-8 py-5 font-display text-lg font-semibold text-white shadow-[0_20px_40px_-10px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.02] hover:opacity-95 transition-transform sm:w-auto"
-                >
-                  <span><MessageCircle className="h-5 w-5" />Start Chatting Now</span>
-                </Button>
-              </button>
+                <MessageCircle className="h-5 w-5" />
+                Start Chatting Now
+              </Button>
+
               <a
                 href="https://tripplefourshophub.online/partners/lef-labs"
                 target="_blank"
