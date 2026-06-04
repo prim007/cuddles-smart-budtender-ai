@@ -156,34 +156,42 @@ const Hero = () => {
             </div>
 
             <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
-              <a
-                href="https://tripplefourmarketplace.lovable.app"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => {
+                  trackEvent('cta_click', 'chat', 'hero_start_chatting');
+                  sendToChat('');
+                  setTimeout(() => inputRef.current?.focus(), 700);
+                }}
                 className="w-full sm:w-auto"
               >
                 <Button
                   size="lg"
-                  onClick={() => trackEvent('cta_click', 'shop', 'hero_order')}
-                  className="h-auto w-full gap-2 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-5 font-display text-lg font-semibold text-white hover:opacity-90 sm:w-auto"
+                  asChild
+                  className="h-auto w-full gap-2 rounded-2xl bg-gradient-to-r from-hippie-coral to-hippie-peach px-8 py-5 font-display text-lg font-semibold text-white shadow-[0_20px_40px_-10px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.02] hover:opacity-95 transition-transform sm:w-auto"
                 >
-                  <Store className="h-5 w-5" />
-                  Order Delivery
+                  <span><MessageCircle className="h-5 w-5" />Start Chatting Now</span>
                 </Button>
-              </a>
-              <Link to="/auth" className="w-full sm:w-auto">
+              </button>
+              <a
+                href="https://tripplefourshophub.online/partners/lef-labs"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent('cta_click', 'shop', 'hero_tripplefour_store')}
+                className="w-full sm:w-auto"
+              >
                 <Button
                   size="lg"
                   variant="outline"
-                  className="h-auto w-full gap-2 rounded-xl border-white/30 bg-white/5 px-8 py-5 font-display text-lg font-semibold text-white hover:bg-white/15 sm:w-auto"
+                  className="h-auto w-full gap-2 rounded-2xl border-white/30 bg-white/5 px-8 py-5 font-display text-lg font-semibold text-white backdrop-blur-md hover:bg-white/15 sm:w-auto"
                 >
-                  <Sparkles className="h-5 w-5" />
-                  Try the App
+                  <Store className="h-5 w-5" />
+                  View Tripple Four Store
                 </Button>
-              </Link>
+              </a>
             </div>
 
             <p className="mt-4 text-xs text-white/40">No signup required · Free forever · 2,500+ happy users</p>
+
 
             <div className="mx-auto mt-6 grid max-w-md grid-cols-3 gap-3 lg:mx-0">
               {[
