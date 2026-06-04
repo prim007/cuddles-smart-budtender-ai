@@ -13,7 +13,7 @@ interface SubscriptionContextType {
   isLoading: boolean;
   subscriptionEnd: string | null;
   checkSubscription: () => Promise<void>;
-  startCheckout: () => Promise<void>;
+  startCheckout: (returnPath?: string) => Promise<void>;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
