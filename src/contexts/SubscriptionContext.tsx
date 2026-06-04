@@ -8,12 +8,15 @@ export const PREMIUM_TIER = {
   interval: "month",
 };
 
+type Plan = "premium" | "pro";
+
 interface SubscriptionContextType {
   isPremium: boolean;
+  plan: Plan | null;
   isLoading: boolean;
   subscriptionEnd: string | null;
   checkSubscription: () => Promise<void>;
-  startCheckout: (returnPath?: string) => Promise<void>;
+  startCheckout: (opts?: { plan?: Plan; returnPath?: string }) => Promise<void>;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -21,12 +24,14 @@ const SubscriptionContext = createContext<SubscriptionContextType | undefined>(u
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [isPremium, setIsPremium] = useState(false);
+  const [plan, setPlan] = useState<Plan | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
 
   const checkSubscription = useCallback(async () => {
     if (!user) {
       setIsPremium(false);
+      setPlan(null);
       setSubscriptionEnd(null);
       return;
     }
@@ -36,10 +41,12 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       const { data, error } = await supabase.functions.invoke("check-subscription");
       if (error) throw error;
       setIsPremium(data?.subscribed ?? false);
+      setPlan((data?.plan as Plan) ?? null);
       setSubscriptionEnd(data?.subscription_end ?? null);
     } catch (err) {
       console.error("Error checking subscription:", err);
       setIsPremium(false);
+      setPlan(null);
     } finally {
       setIsLoading(false);
     }
@@ -55,37 +62,27 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     return () => clearInterval(interval);
   }, [user, checkSubscription]);
 
-  const startCheckout = async (returnPath?: string) => {
+  const startCheckout = async (opts?: { plan?: Plan; returnPath?: string }) => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.functions.invoke("payfast-checkout", {
-        body: { type: "subscription", return_path: returnPath },
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { plan: opts?.plan ?? "premium", return_path: opts?.returnPath },
       });
       if (error) throw error;
-      if (data?.paymentData) {
-        // Use form POST to avoid popup blockers
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "https://www.payfast.co.za/eng/process";
-        Object.entries(data.paymentData).forEach(([key, value]) => {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = key;
-          input.value = String(value ?? "");
-          form.appendChild(input);
-        });
-        document.body.appendChild(form);
-        form.submit();
+      if (data?.url) {
+        window.location.href = data.url;
       }
     } catch (err) {
-      console.error("Error creating PayFast checkout:", err);
+      console.error("Error creating Stripe checkout:", err);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <SubscriptionContext.Provider value={{ isPremium, isLoading, subscriptionEnd, checkSubscription, startCheckout }}>
+    <SubscriptionContext.Provider
+      value={{ isPremium, plan, isLoading, subscriptionEnd, checkSubscription, startCheckout }}
+    >
       {children}
     </SubscriptionContext.Provider>
   );
