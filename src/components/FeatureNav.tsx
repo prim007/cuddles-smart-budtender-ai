@@ -230,68 +230,95 @@ const FeatureNav = () => {
         </div>
       </div>
 
-      {/* Desktop top navigation bar */}
-      <nav className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-md border-b border-border px-4 py-2 shadow-elevated justify-center">
-        {features.map((feature) => {
-          const cls = cn(
-            "group flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200",
-            isActive(feature.href)
-              ? "bg-gradient-to-r from-hippie-purple/10 to-hippie-pink/10"
-              : "hover:bg-muted"
-          );
-          const content = (
+      {/* Desktop top navigation bar — compact pill nav */}
+      <nav className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-50 px-3 py-2 rounded-3xl border border-white/10 bg-card/60 backdrop-blur-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] items-center gap-1">
+        {(() => {
+          const primary = features.filter(f => ["Home", "Chat", "Strains", "Journal", "Shop"].includes(f.title));
+          const overflow = features.filter(f => !["Home", "Chat", "Strains", "Journal", "Shop"].includes(f.title));
+          return (
             <>
-              <div className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110 bg-gradient-to-br",
-                feature.gradient
-              )}>
-                <feature.icon className="w-5 h-5 text-white" />
-              </div>
-              <span className={cn(
-                "text-xs font-medium transition-colors",
-                isActive(feature.href) ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
-              )}>
-                {feature.title}
-              </span>
+              {primary.map((feature) => {
+                const active = isActive(feature.href);
+                const cls = cn(
+                  "px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-200 flex items-center gap-2",
+                  active
+                    ? "bg-gradient-to-br text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.25)] " + feature.gradient
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                );
+                const content = (
+                  <>
+                    <feature.icon className="w-4 h-4" />
+                    <span>{feature.title}</span>
+                  </>
+                );
+                return feature.external ? (
+                  <a key={feature.href} href={feature.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                    {content}
+                  </a>
+                ) : (
+                  <Link key={feature.href} to={feature.href} className={cls}>
+                    {content}
+                  </Link>
+                );
+              })}
+
+              <div className="h-5 w-px bg-white/10 mx-1" />
+
+              <DropdownMenu>
+                <DropdownMenuTrigger className="px-3 py-2 rounded-2xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all flex items-center gap-1.5 focus:outline-none">
+                  More
+                  <ChevronDown className="w-4 h-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 rounded-2xl border-white/10 bg-card/95 backdrop-blur-xl">
+                  {overflow.map((feature) => {
+                    const inner = (
+                      <>
+                        <div className={cn(
+                          "w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br shrink-0",
+                          feature.gradient
+                        )}>
+                          <feature.icon className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="font-medium">{feature.title}</span>
+                      </>
+                    );
+                    return (
+                      <DropdownMenuItem key={feature.href} asChild className="gap-3 cursor-pointer rounded-xl py-2">
+                        {feature.external ? (
+                          <a href={feature.href} target="_blank" rel="noopener noreferrer">{inner}</a>
+                        ) : (
+                          <Link to={feature.href}>{inner}</Link>
+                        )}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <div className="h-5 w-px bg-white/10 mx-1" />
+
+              {!user ? (
+                <Link
+                  to="/auth"
+                  className="px-4 py-2 rounded-2xl text-sm font-semibold bg-gradient-to-br from-hippie-coral to-hippie-peach text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_6px_16px_-4px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.03] transition-transform flex items-center gap-2"
+                >
+                  <LogIn className="w-4 h-4" />
+                  Sign In
+                </Link>
+              ) : (
+                <button
+                  onClick={handleSignOut}
+                  className="px-4 py-2 rounded-2xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all flex items-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+              )}
             </>
           );
-          return feature.external ? (
-            <a key={feature.href} href={feature.href} target="_blank" rel="noopener noreferrer" className={cls}>
-              {content}
-            </a>
-          ) : (
-            <Link key={feature.href} to={feature.href} className={cls}>
-              {content}
-            </Link>
-          );
-        })}
-        
-        {!user ? (
-          <Link
-            to="/auth"
-            className="group flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-all duration-200 hover:bg-muted"
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-hippie-amber to-hippie-orange transition-transform duration-200 group-hover:scale-110">
-              <LogIn className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground">
-              Sign In
-            </span>
-          </Link>
-        ) : (
-          <button
-            onClick={handleSignOut}
-            className="group flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-all duration-200 hover:bg-muted"
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-hippie-coral to-hippie-pink transition-transform duration-200 group-hover:scale-110">
-              <LogOut className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground">
-              Sign Out
-            </span>
-          </button>
-        )}
+        })()}
       </nav>
+
     </>
   );
 };
