@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Store, UserPlus, Send, Sparkles } from "lucide-react";
+import { ExternalLink, Store, UserPlus, Send, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
@@ -61,10 +61,14 @@ const Hero = () => {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(270,45%,12%)] via-[hsl(320,45%,16%)] to-[hsl(350,55%,20%)] py-10 md:py-16">
-      {/* Decorative blurred blobs */}
-      <div className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-hippie-coral/20 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-hippie-amber/15 blur-3xl" />
-      <div className="pointer-events-none absolute top-1/3 right-1/4 h-72 w-72 rounded-full bg-hippie-lavender/15 blur-3xl" />
+      {/* 3D abstract sculpted orbs */}
+      <div className="pointer-events-none absolute -top-32 -left-32 h-[36rem] w-[36rem] rounded-full bg-hippie-coral/25 blur-[120px] animate-pulse" style={{ animationDuration: '8s' }} />
+      <div className="pointer-events-none absolute -bottom-40 -right-32 h-[40rem] w-[40rem] rounded-full bg-hippie-amber/20 blur-[140px] animate-pulse" style={{ animationDuration: '10s' }} />
+      <div className="pointer-events-none absolute top-1/3 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-hippie-sage/15 blur-[100px]" />
+      {/* Floating glass orbs */}
+      <div className="pointer-events-none absolute top-24 right-1/3 hidden h-24 w-24 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl shadow-[inset_-6px_-6px_18px_rgba(255,255,255,0.08),0_20px_50px_rgba(0,0,0,0.4)] md:block animate-fade-in-up" />
+      <div className="pointer-events-none absolute bottom-32 left-1/4 hidden h-16 w-16 rounded-full border border-white/15 bg-gradient-to-br from-hippie-peach/30 to-transparent backdrop-blur-md shadow-2xl lg:block" />
+
 
       <div className="container relative z-10 mx-auto px-4">
         {/* Navigation */}
@@ -152,34 +156,40 @@ const Hero = () => {
             </div>
 
             <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
+              <Button
+                size="lg"
+                onClick={() => {
+                  trackEvent('cta_click', 'chat', 'hero_start_chatting');
+                  const chatSection = document.getElementById('chat-demo');
+                  chatSection?.scrollIntoView({ behavior: 'smooth' });
+                  setTimeout(() => inputRef.current?.focus(), 700);
+                }}
+                className="h-auto w-full gap-2 rounded-2xl bg-gradient-to-r from-hippie-coral to-hippie-peach px-8 py-5 font-display text-lg font-semibold text-white shadow-[0_20px_40px_-10px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.02] hover:opacity-95 transition-transform sm:w-auto"
+              >
+                <MessageCircle className="h-5 w-5" />
+                Start Chatting Now
+              </Button>
+
               <a
-                href="https://tripplefourmarketplace.lovable.app"
+                href="https://tripplefourshophub.online/partners/lef-labs"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent('cta_click', 'shop', 'hero_tripplefour_store')}
                 className="w-full sm:w-auto"
               >
                 <Button
                   size="lg"
-                  onClick={() => trackEvent('cta_click', 'shop', 'hero_order')}
-                  className="h-auto w-full gap-2 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-5 font-display text-lg font-semibold text-white hover:opacity-90 sm:w-auto"
+                  variant="outline"
+                  className="h-auto w-full gap-2 rounded-2xl border-white/30 bg-white/5 px-8 py-5 font-display text-lg font-semibold text-white backdrop-blur-md hover:bg-white/15 sm:w-auto"
                 >
                   <Store className="h-5 w-5" />
-                  Order Delivery
+                  View Tripple Four Store
                 </Button>
               </a>
-              <Link to="/auth" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="h-auto w-full gap-2 rounded-xl border-white/30 bg-white/5 px-8 py-5 font-display text-lg font-semibold text-white hover:bg-white/15 sm:w-auto"
-                >
-                  <Sparkles className="h-5 w-5" />
-                  Try the App
-                </Button>
-              </Link>
             </div>
 
             <p className="mt-4 text-xs text-white/40">No signup required · Free forever · 2,500+ happy users</p>
+
 
             <div className="mx-auto mt-6 grid max-w-md grid-cols-3 gap-3 lg:mx-0">
               {[
