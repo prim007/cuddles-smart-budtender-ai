@@ -162,7 +162,7 @@ const Premium = () => {
               ) : user ? (
                 <Button
                   className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-semibold"
-                  onClick={startCheckout}
+                  onClick={() => startCheckout()}
                   disabled={isLoading}
                 >
                   {isLoading ? "Loading..." : "Upgrade to Premium"}
