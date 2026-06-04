@@ -12,19 +12,52 @@ import { Sparkles, Calendar, Leaf, ArrowRight } from "lucide-react";
 
 interface WeeklyEntry { name: string; slug: string; }
 
+const STRAIN_POOL = [
+  "Blue Dream", "Wedding Cake", "Gelato", "OG Kush", "Granddaddy Purple",
+  "Sour Diesel", "Girl Scout Cookies", "Pineapple Express", "Northern Lights",
+  "White Widow", "Jack Herer", "AK-47", "Bubba Kush", "Trainwreck",
+  "Durban Poison", "Strawberry Cough", "Blueberry", "Green Crack", "Cherry Pie",
+  "Skywalker OG", "Zkittlez", "Runtz", "Purple Punch", "Do-Si-Dos",
+  "MAC", "GMO Cookies", "Mimosa", "London Pound Cake", "Sunset Sherbet",
+  "Forbidden Fruit", "Banana Kush", "Lemon Haze", "Amnesia Haze", "Maui Wowie",
+  "Cheese", "Blue Cheese", "Critical Kush", "Hindu Kush", "Headband",
+  "Tangie", "Chemdawg", "Bruce Banner", "Gorilla Glue #4", "Lemon OG",
+  "Platinum OG", "Master Kush", "Wedding Crashers", "Apple Fritter",
+];
+
+const slugify = (s: string) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+const getMonday = (d: Date) => {
+  const day = d.getUTCDay();
+  const diff = d.getUTCDate() - day + (day === 0 ? -6 : 1);
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff))
+    .toISOString().slice(0, 10);
+};
+
+const pickWeekly = (weekStart: string, count = 10): WeeklyEntry[] => {
+  const seed = weekStart.split("-").reduce((a, b) => a + parseInt(b), 0);
+  const arr = [...STRAIN_POOL];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = (seed * (i + 1)) % (i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, count).map((name) => ({ name, slug: slugify(name) }));
+};
+
 const FeaturedStrains = () => {
   const [generating, setGenerating] = useState(false);
 
-  // Ensure this week's rotation exists
+  // Compute this week's rotation client-side (deterministic by week)
   const { data: weekly, refetch } = useQuery({
     queryKey: ["weekly-featured"],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke("rotate-weekly-strains");
-      if (error) throw error;
-      return data as { week_start: string; strains: WeeklyEntry[] };
+      const week_start = getMonday(new Date());
+      return { week_start, strains: pickWeekly(week_start) };
     },
     staleTime: 1000 * 60 * 60,
   });
+
 
   const slugs = (weekly?.strains || []).map((s) => s.slug);
 
