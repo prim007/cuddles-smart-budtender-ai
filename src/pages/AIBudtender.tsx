@@ -95,7 +95,7 @@ const AIBudtender = () => {
             Stop losing sales to long wait times and undertrained staff. Cuddles AI gives every customer a personalized, knowledgeable budtender experience — instantly.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/chat">
+            <Link to="/education/chat-with-cuddles">
               <Button size="lg" className="font-display font-semibold rounded-xl gap-2 w-full">
                 <MessageCircle className="w-4 h-4" />
                 Try Cuddles Free
