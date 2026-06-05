@@ -1,0 +1,1 @@
+ALTER VIEW public.strain_reviews_public SET (security_invoker = true);
