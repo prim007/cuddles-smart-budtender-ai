@@ -55,7 +55,7 @@ const structuredData = {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "Free 14-day trial, then from R1,500/month",
+    description: "Free to try and download — no credit card required",
   },
   featureList: [
     "RAG-powered strain recommendations",
