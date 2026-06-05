@@ -216,20 +216,22 @@ const AIBudtender = () => {
         <div className="container mx-auto max-w-2xl">
           <div className="p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10 border border-border text-center">
             <h3 className="font-display text-2xl font-bold text-foreground mb-3">
-              Ready to automate your budtending?
+              Take Cuddles with you
             </h3>
             <p className="text-muted-foreground mb-6">
-              Join dispensaries already using Cuddles AI to increase sales and delight customers.
+              Install the app for one-tap access. Works offline, loads instantly, and feels like a native app.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link to="/education/chat-with-cuddles">
+              <Link to="/install">
                 <Button size="lg" className="font-display font-semibold rounded-xl gap-2 w-full">
-                  Try Cuddles Free <ArrowRight className="w-4 h-4" />
+                  <Download className="w-4 h-4" />
+                  Download the App
                 </Button>
               </Link>
-              <Link to="/ai-vs-manual-budtending">
+              <Link to="/education/chat-with-cuddles">
                 <Button size="lg" variant="outline" className="font-display font-medium rounded-xl gap-2 w-full">
-                  See AI vs Manual Comparison
+                  <MessageCircle className="w-4 h-4" />
+                  Try Cuddles Free
                 </Button>
               </Link>
             </div>
