@@ -222,9 +222,9 @@ const AIBudtender = () => {
               Join dispensaries already using Cuddles AI to increase sales and delight customers.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link to="/dispensary-onboarding">
+              <Link to="/education/chat-with-cuddles">
                 <Button size="lg" className="font-display font-semibold rounded-xl gap-2 w-full">
-                  Start Free Trial <ArrowRight className="w-4 h-4" />
+                  Try Cuddles Free <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link to="/ai-vs-manual-budtending">
