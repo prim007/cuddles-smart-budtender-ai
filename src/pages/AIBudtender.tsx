@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
-import { ArrowRight, Bot, BarChart3, Clock, ShoppingCart, Users, Brain, Zap, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Bot, BarChart3, Clock, ShoppingCart, Users, Brain, Zap, CheckCircle2, MessageCircle, Download, Sparkles } from "lucide-react";
 
 const stats = [
   { value: "35%", label: "Higher Average Order Value", icon: ShoppingCart },
