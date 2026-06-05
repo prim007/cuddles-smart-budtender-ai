@@ -300,33 +300,6 @@
     </script>
 
     <div id="root"></div>
-    <script>
-      // Kill-switch: unregister any stale service worker + clear caches so
-      // returning users don't get a blank screen from missing JS chunks.
-      (function () {
-        try {
-          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function (regs) {
-              var hadSW = regs && regs.length > 0;
-              regs.forEach(function (r) { r.unregister(); });
-              if ('caches' in window) {
-                caches.keys().then(function (keys) {
-                  return Promise.all(keys.map(function (k) { return caches.delete(k); }));
-                }).then(function () {
-                  if (hadSW && !sessionStorage.getItem('__sw_killed')) {
-                    sessionStorage.setItem('__sw_killed', '1');
-                    location.reload();
-                  }
-                });
-              } else if (hadSW && !sessionStorage.getItem('__sw_killed')) {
-                sessionStorage.setItem('__sw_killed', '1');
-                location.reload();
-              }
-            });
-          }
-        } catch (e) { /* no-op */ }
-      })();
-    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
