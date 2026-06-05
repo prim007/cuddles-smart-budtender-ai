@@ -106,12 +106,8 @@ const features: Feature[] = [
     href: "/blog",
     gradient: "from-hippie-teal to-hippie-green",
   },
-  {
-    icon: Crown,
-    title: "Premium",
-    href: "/premium",
-    gradient: "from-hippie-amber to-hippie-orange",
-  },
+  // Premium hidden for now
+
   {
     icon: ShoppingBag,
     title: "Shop",
