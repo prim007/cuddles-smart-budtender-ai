@@ -55,7 +55,7 @@ const features: Feature[] = [
   {
     icon: MessageCircle,
     title: "Chat",
-    href: "/#demo",
+    href: "/ai-budtender",
     gradient: "from-hippie-coral to-hippie-pink",
   },
   {
