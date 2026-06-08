@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, type ComponentType } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,55 +20,83 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
+const STALE_CHUNK_RELOAD_KEY = "cuddles:stale-chunk-reload";
+
+const isStaleChunkImportError = (error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error);
+  return /Importing a module script failed|Failed to fetch dynamically imported module|Loading chunk \d+ failed|Unable to preload CSS/i.test(message);
+};
+
+const lazyWithReload = <T extends ComponentType<any>>(load: () => Promise<{ default: T }>) =>
+  lazy(async () => {
+    try {
+      const module = await load();
+      if (typeof window !== "undefined") {
+        window.sessionStorage.removeItem(STALE_CHUNK_RELOAD_KEY);
+      }
+      return module;
+    } catch (error) {
+      if (typeof window !== "undefined" && isStaleChunkImportError(error)) {
+        const alreadyRetried = window.sessionStorage.getItem(STALE_CHUNK_RELOAD_KEY) === "true";
+        if (!alreadyRetried) {
+          window.sessionStorage.setItem(STALE_CHUNK_RELOAD_KEY, "true");
+          window.location.reload();
+          return new Promise<never>(() => {});
+        }
+      }
+      throw error;
+    }
+  });
+
 // Lazy load pages with heavy dependencies (recharts, etc.)
-const InvestmentDeck = lazy(() => import("./pages/InvestmentDeck"));
-const ScheduleDemo = lazy(() => import("./pages/ScheduleDemo"));
-const Analytics = lazy(() => import("./pages/Analytics"));
-const AnalyticsDashboard = lazy(() => import("./pages/AnalyticsDashboard"));
-const ABDashboard = lazy(() => import("./pages/ABDashboard"));
-const DemoRequests = lazy(() => import("./pages/DemoRequests"));
-const ChatConversations = lazy(() => import("./pages/ChatConversations"));
-const AgentTraces = lazy(() => import("./pages/AgentTraces"));
-const InternationalMarket = lazy(() => import("./pages/InternationalMarket"));
-const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
-const Install = lazy(() => import("./pages/Install"));
-const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
-const ConfirmNewsletter = lazy(() => import("./pages/ConfirmNewsletter"));
+const InvestmentDeck = lazyWithReload(() => import("./pages/InvestmentDeck"));
+const ScheduleDemo = lazyWithReload(() => import("./pages/ScheduleDemo"));
+const Analytics = lazyWithReload(() => import("./pages/Analytics"));
+const AnalyticsDashboard = lazyWithReload(() => import("./pages/AnalyticsDashboard"));
+const ABDashboard = lazyWithReload(() => import("./pages/ABDashboard"));
+const DemoRequests = lazyWithReload(() => import("./pages/DemoRequests"));
+const ChatConversations = lazyWithReload(() => import("./pages/ChatConversations"));
+const AgentTraces = lazyWithReload(() => import("./pages/AgentTraces"));
+const InternationalMarket = lazyWithReload(() => import("./pages/InternationalMarket"));
+const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
+const Install = lazyWithReload(() => import("./pages/Install"));
+const Unsubscribe = lazyWithReload(() => import("./pages/Unsubscribe"));
+const ConfirmNewsletter = lazyWithReload(() => import("./pages/ConfirmNewsletter"));
 
 // New Cuddles features
-const StrainJournal = lazy(() => import("./pages/StrainJournal"));
-const StrainScanner = lazy(() => import("./pages/StrainScanner"));
-const StrainReviews = lazy(() => import("./pages/StrainReviews"));
+const StrainJournal = lazyWithReload(() => import("./pages/StrainJournal"));
+const StrainScanner = lazyWithReload(() => import("./pages/StrainScanner"));
+const StrainReviews = lazyWithReload(() => import("./pages/StrainReviews"));
 
 // Blog
-const Blog = lazy(() => import("./pages/Blog"));
-const BlogPost = lazy(() => import("./pages/BlogPost"));
-const ToleranceBreak = lazy(() => import("./pages/ToleranceBreak"));
-const SeedlingMonitor = lazy(() => import("./pages/SeedlingMonitor"));
-const AfricaLegislationMap = lazy(() => import("./pages/AfricaLegislationMap"));
+const Blog = lazyWithReload(() => import("./pages/Blog"));
+const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
+const ToleranceBreak = lazyWithReload(() => import("./pages/ToleranceBreak"));
+const SeedlingMonitor = lazyWithReload(() => import("./pages/SeedlingMonitor"));
+const AfricaLegislationMap = lazyWithReload(() => import("./pages/AfricaLegislationMap"));
 
 // B2B
-const DispensaryOnboarding = lazy(() => import("./pages/DispensaryOnboarding"));
-const WhyCuddles = lazy(() => import("./pages/WhyCuddles"));
-const Catalog = lazy(() => import("./pages/Catalog"));
-const ManageStrains = lazy(() => import("./pages/ManageStrains"));
-const Shop = lazy(() => import("./pages/Shop"));
-const Checkout = lazy(() => import("./pages/Checkout"));
-const OrderTracking = lazy(() => import("./pages/OrderTracking"));
-const Premium = lazy(() => import("./pages/Premium"));
-const AIBudtender = lazy(() => import("./pages/AIBudtender"));
-const POSIntegrations = lazy(() => import("./pages/POSIntegrations"));
-const AIvsManualBudtending = lazy(() => import("./pages/AIvsManualBudtending"));
-const AIBasketSize = lazy(() => import("./pages/AIBasketSize"));
-const CannabisRetailAutomation = lazy(() => import("./pages/CannabisRetailAutomation"));
-const RAGWhitepaper = lazy(() => import("./pages/RAGWhitepaper"));
-const DispensaryWaitTimes = lazy(() => import("./pages/DispensaryWaitTimes"));
-const ChatWithCuddles = lazy(() => import("./pages/ChatWithCuddles"));
+const DispensaryOnboarding = lazyWithReload(() => import("./pages/DispensaryOnboarding"));
+const WhyCuddles = lazyWithReload(() => import("./pages/WhyCuddles"));
+const Catalog = lazyWithReload(() => import("./pages/Catalog"));
+const ManageStrains = lazyWithReload(() => import("./pages/ManageStrains"));
+const Shop = lazyWithReload(() => import("./pages/Shop"));
+const Checkout = lazyWithReload(() => import("./pages/Checkout"));
+const OrderTracking = lazyWithReload(() => import("./pages/OrderTracking"));
+const Premium = lazyWithReload(() => import("./pages/Premium"));
+const AIBudtender = lazyWithReload(() => import("./pages/AIBudtender"));
+const POSIntegrations = lazyWithReload(() => import("./pages/POSIntegrations"));
+const AIvsManualBudtending = lazyWithReload(() => import("./pages/AIvsManualBudtending"));
+const AIBasketSize = lazyWithReload(() => import("./pages/AIBasketSize"));
+const CannabisRetailAutomation = lazyWithReload(() => import("./pages/CannabisRetailAutomation"));
+const RAGWhitepaper = lazyWithReload(() => import("./pages/RAGWhitepaper"));
+const DispensaryWaitTimes = lazyWithReload(() => import("./pages/DispensaryWaitTimes"));
+const ChatWithCuddles = lazyWithReload(() => import("./pages/ChatWithCuddles"));
 
 // SEO pages
-const Strains = lazy(() => import("./pages/Strains"));
-const StrainDetail = lazy(() => import("./pages/StrainDetail"));
-const FeaturedStrains = lazy(() => import("./pages/FeaturedStrains"));
+const Strains = lazyWithReload(() => import("./pages/Strains"));
+const StrainDetail = lazyWithReload(() => import("./pages/StrainDetail"));
+const FeaturedStrains = lazyWithReload(() => import("./pages/FeaturedStrains"));
 
 // Loading fallback component
 const PageLoader = () => (
