@@ -597,7 +597,7 @@ const SeedlingMonitor = () => {
                                 {log.temperature != null && (
                                   <div className="flex items-center gap-1.5">
                                     <Thermometer className="w-4 h-4 text-red-400" />
-                                    <span>{log.temperature}°F</span>
+                                    <span>{toDisplayTemp(log.temperature, globalSettings.tempUnit)}{tempUnitLabel}</span>
                                   </div>
                                 )}
                                 {log.humidity != null && (
