@@ -1267,6 +1267,10 @@ export type Database = {
       }
       check_demo_rate_limit: { Args: { p_email: string }; Returns: boolean }
       check_email_rate_limit: { Args: { p_email: string }; Returns: boolean }
+      check_newsletter_rate_limit: {
+        Args: { p_email: string }
+        Returns: boolean
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean

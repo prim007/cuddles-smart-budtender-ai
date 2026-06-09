@@ -6,8 +6,13 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+import { rateLimitResponse } from "../_shared/rate-limit.ts";
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  const rl = rateLimitResponse(req, { scope: "plant-care-tips", max: 60, windowMs: 60_000 }, corsHeaders);
+  if (rl) return rl;
 
   // Require auth
   const authHeader = req.headers.get("Authorization");

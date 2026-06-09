@@ -6,10 +6,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+import { rateLimitResponse } from "../_shared/rate-limit.ts";
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // TTS is expensive per call — tight per-IP cap.
+  const rl = rateLimitResponse(req, { scope: "elevenlabs-tts", max: 30, windowMs: 60 * 60_000 }, corsHeaders);
+  if (rl) return rl;
 
   // Require auth
   const authHeader = req.headers.get("Authorization");

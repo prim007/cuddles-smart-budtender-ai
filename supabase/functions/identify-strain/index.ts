@@ -115,6 +115,11 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const { rateLimitResponse } = await import("../_shared/rate-limit.ts");
+  // Image identification is expensive — tight per-IP cap.
+  const rl = rateLimitResponse(req, { scope: "identify-strain", max: 20, windowMs: 60 * 60_000 }, corsHeaders);
+  if (rl) return rl;
+
   // Require auth
   const authHeader = req.headers.get("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
