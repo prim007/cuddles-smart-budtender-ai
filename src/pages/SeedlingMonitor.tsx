@@ -492,10 +492,11 @@ const SeedlingMonitor = () => {
                 </Card>
 
                 <Tabs defaultValue="care" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="care">Care Log</TabsTrigger>
                     <TabsTrigger value="environment">Environment</TabsTrigger>
                     <TabsTrigger value="ai">AI Tips</TabsTrigger>
+                    <TabsTrigger value="settings"><SettingsIcon className="w-4 h-4 mr-1 hidden sm:inline" />Settings</TabsTrigger>
                   </TabsList>
 
                   {/* Care Log Tab */}
