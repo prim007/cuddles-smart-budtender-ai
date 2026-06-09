@@ -14,6 +14,9 @@ import { toast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import SEO from "@/components/SEO";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
 import {
   Sprout,
   Droplets,
@@ -28,6 +31,9 @@ import {
   ArrowRightLeft,
   StickyNote,
   Loader2,
+  Settings as SettingsIcon,
+  Bell,
+  Ruler,
 } from "lucide-react";
 
 const GROWTH_STAGES = [
@@ -37,6 +43,64 @@ const GROWTH_STAGES = [
   { value: "flowering", label: "🌸 Flowering", progress: 80 },
   { value: "harvest", label: "🌾 Harvest", progress: 100 },
 ];
+
+type TempUnit = "F" | "C";
+
+interface GlobalSettings {
+  tempUnit: TempUnit;
+  notificationsEnabled: boolean;
+  weeklySummary: boolean;
+  aiAutoTips: boolean;
+}
+
+interface PlantSettings {
+  growEnvironment: "indoor" | "outdoor" | "greenhouse";
+  growMedium: "soil" | "coco" | "hydro" | "aero";
+  potSize: string; // gallons
+  lightType: "LED" | "HPS" | "CFL" | "Sun" | "Mixed";
+  lightSchedule: "18/6" | "20/4" | "12/12" | "24/0" | "Natural";
+  waterIntervalDays: number;
+  feedIntervalDays: number;
+  targetTempMin: number; // stored in °F
+  targetTempMax: number;
+  targetHumidityMin: number;
+  targetHumidityMax: number;
+  targetPhMin: number;
+  targetPhMax: number;
+}
+
+const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
+  tempUnit: "F",
+  notificationsEnabled: true,
+  weeklySummary: false,
+  aiAutoTips: false,
+};
+
+const DEFAULT_PLANT_SETTINGS: PlantSettings = {
+  growEnvironment: "indoor",
+  growMedium: "soil",
+  potSize: "5",
+  lightType: "LED",
+  lightSchedule: "18/6",
+  waterIntervalDays: 3,
+  feedIntervalDays: 7,
+  targetTempMin: 68,
+  targetTempMax: 80,
+  targetHumidityMin: 40,
+  targetHumidityMax: 65,
+  targetPhMin: 6.0,
+  targetPhMax: 6.8,
+};
+
+const GLOBAL_SETTINGS_KEY = "cuddles-grow-global-settings";
+const plantSettingsKey = (id: string) => `cuddles-grow-plant-settings-${id}`;
+
+const toDisplayTemp = (f: number | null | undefined, unit: TempUnit) => {
+  if (f == null) return null;
+  return unit === "C" ? Math.round(((f - 32) * 5) / 9 * 10) / 10 : f;
+};
+const fromInputTemp = (val: number, unit: TempUnit) =>
+  unit === "C" ? (val * 9) / 5 + 32 : val;
 
 const LOG_TYPES = [
   { value: "water", label: "Watered", icon: Droplets, color: "text-blue-500" },
@@ -94,6 +158,37 @@ const SeedlingMonitor = () => {
   const [newPlant, setNewPlant] = useState({ plant_name: "", strain_name: "", strain_type: "Hybrid", notes: "" });
   // Add env form
   const [newEnv, setNewEnv] = useState({ temperature: "", humidity: "", ph_level: "", light_hours: "", nutrient_ppm: "", notes: "" });
+
+  // Settings
+  const [globalSettings, setGlobalSettings] = useState<GlobalSettings>(() => {
+    try {
+      const raw = localStorage.getItem(GLOBAL_SETTINGS_KEY);
+      return raw ? { ...DEFAULT_GLOBAL_SETTINGS, ...JSON.parse(raw) } : DEFAULT_GLOBAL_SETTINGS;
+    } catch { return DEFAULT_GLOBAL_SETTINGS; }
+  });
+  const [plantSettings, setPlantSettings] = useState<PlantSettings>(DEFAULT_PLANT_SETTINGS);
+
+  useEffect(() => {
+    try { localStorage.setItem(GLOBAL_SETTINGS_KEY, JSON.stringify(globalSettings)); } catch {}
+  }, [globalSettings]);
+
+  useEffect(() => {
+    if (!selectedPlant) return;
+    try {
+      const raw = localStorage.getItem(plantSettingsKey(selectedPlant.id));
+      setPlantSettings(raw ? { ...DEFAULT_PLANT_SETTINGS, ...JSON.parse(raw) } : DEFAULT_PLANT_SETTINGS);
+    } catch { setPlantSettings(DEFAULT_PLANT_SETTINGS); }
+  }, [selectedPlant?.id]);
+
+  const updatePlantSettings = (patch: Partial<PlantSettings>) => {
+    setPlantSettings(prev => {
+      const next = { ...prev, ...patch };
+      if (selectedPlant) {
+        try { localStorage.setItem(plantSettingsKey(selectedPlant.id), JSON.stringify(next)); } catch {}
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (user) fetchPlants();
@@ -259,6 +354,14 @@ const SeedlingMonitor = () => {
 
   const stageInfo = GROWTH_STAGES.find(s => s.value === selectedPlant?.growth_stage) || GROWTH_STAGES[0];
 
+  // Reminders from care logs + intervals
+  const daysSince = (iso?: string) => iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : null;
+  const lastWater = careLogs.find(l => l.log_type === "water")?.log_date;
+  const lastFeed = careLogs.find(l => l.log_type === "feed")?.log_date;
+  const waterDue = lastWater ? (daysSince(lastWater) ?? 0) >= plantSettings.waterIntervalDays : true;
+  const feedDue = lastFeed ? (daysSince(lastFeed) ?? 0) >= plantSettings.feedIntervalDays : true;
+  const tempUnitLabel = globalSettings.tempUnit === "C" ? "°C" : "°F";
+
   if (!user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4 pb-32">
@@ -388,11 +491,32 @@ const SeedlingMonitor = () => {
                   </CardContent>
                 </Card>
 
+                {/* Reminders */}
+                {globalSettings.notificationsEnabled && (waterDue || feedDue) && (
+                  <Card className="border-primary/30 bg-primary/5">
+                    <CardContent className="py-3 flex items-start gap-3">
+                      <Bell className="w-5 h-5 text-primary mt-0.5" />
+                      <div className="flex-1 text-sm">
+                        <p className="font-medium mb-1">Care reminders</p>
+                        <ul className="text-muted-foreground space-y-0.5">
+                          {waterDue && (
+                            <li>💧 Water due {lastWater ? `(last watered ${daysSince(lastWater)}d ago)` : "(no log yet)"}</li>
+                          )}
+                          {feedDue && (
+                            <li>🧪 Feed due {lastFeed ? `(last fed ${daysSince(lastFeed)}d ago)` : "(no log yet)"}</li>
+                          )}
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
                 <Tabs defaultValue="care" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="care">Care Log</TabsTrigger>
                     <TabsTrigger value="environment">Environment</TabsTrigger>
                     <TabsTrigger value="ai">AI Tips</TabsTrigger>
+                    <TabsTrigger value="settings"><SettingsIcon className="w-4 h-4 mr-1 hidden sm:inline" />Settings</TabsTrigger>
                   </TabsList>
 
                   {/* Care Log Tab */}
@@ -446,8 +570,8 @@ const SeedlingMonitor = () => {
                           <DialogHeader><DialogTitle>Log Environment</DialogTitle></DialogHeader>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="text-xs text-muted-foreground">Temp (°F)</label>
-                              <Input type="number" placeholder="75" value={newEnv.temperature} onChange={e => setNewEnv({ ...newEnv, temperature: e.target.value })} />
+                              <label className="text-xs text-muted-foreground">Temp ({tempUnitLabel})</label>
+                              <Input type="number" placeholder={globalSettings.tempUnit === "C" ? "24" : "75"} value={newEnv.temperature} onChange={e => setNewEnv({ ...newEnv, temperature: e.target.value })} />
                             </div>
                             <div>
                               <label className="text-xs text-muted-foreground">Humidity (%)</label>
@@ -493,7 +617,7 @@ const SeedlingMonitor = () => {
                                 {log.temperature != null && (
                                   <div className="flex items-center gap-1.5">
                                     <Thermometer className="w-4 h-4 text-red-400" />
-                                    <span>{log.temperature}°F</span>
+                                    <span>{toDisplayTemp(log.temperature, globalSettings.tempUnit)}{tempUnitLabel}</span>
                                   </div>
                                 )}
                                 {log.humidity != null && (
@@ -554,6 +678,193 @@ const SeedlingMonitor = () => {
                         </CardContent>
                       </Card>
                     )}
+                  </TabsContent>
+                  {/* Settings Tab */}
+                  <TabsContent value="settings" className="space-y-4">
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Ruler className="w-5 h-5 text-primary" /> Grow Setup
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <Label className="text-xs">Environment</Label>
+                            <Select value={plantSettings.growEnvironment} onValueChange={(v: any) => updatePlantSettings({ growEnvironment: v })}>
+                              <SelectTrigger><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="indoor">Indoor</SelectItem>
+                                <SelectItem value="outdoor">Outdoor</SelectItem>
+                                <SelectItem value="greenhouse">Greenhouse</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Grow Medium</Label>
+                            <Select value={plantSettings.growMedium} onValueChange={(v: any) => updatePlantSettings({ growMedium: v })}>
+                              <SelectTrigger><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="soil">Soil</SelectItem>
+                                <SelectItem value="coco">Coco Coir</SelectItem>
+                                <SelectItem value="hydro">Hydroponic</SelectItem>
+                                <SelectItem value="aero">Aeroponic</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Pot Size (gallons)</Label>
+                            <Input type="number" value={plantSettings.potSize} onChange={e => updatePlantSettings({ potSize: e.target.value })} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Light Type</Label>
+                            <Select value={plantSettings.lightType} onValueChange={(v: any) => updatePlantSettings({ lightType: v })}>
+                              <SelectTrigger><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="LED">LED</SelectItem>
+                                <SelectItem value="HPS">HPS</SelectItem>
+                                <SelectItem value="CFL">CFL</SelectItem>
+                                <SelectItem value="Sun">Natural Sun</SelectItem>
+                                <SelectItem value="Mixed">Mixed</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-1 col-span-2">
+                            <Label className="text-xs">Light Schedule</Label>
+                            <Select value={plantSettings.lightSchedule} onValueChange={(v: any) => updatePlantSettings({ lightSchedule: v })}>
+                              <SelectTrigger><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="18/6">18/6 (Vegetative)</SelectItem>
+                                <SelectItem value="20/4">20/4 (Aggressive Veg)</SelectItem>
+                                <SelectItem value="12/12">12/12 (Flowering)</SelectItem>
+                                <SelectItem value="24/0">24/0 (Autoflower)</SelectItem>
+                                <SelectItem value="Natural">Natural Daylight</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Bell className="w-5 h-5 text-primary" /> Care Reminders
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-5">
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <Label className="text-xs">Water every {plantSettings.waterIntervalDays} day(s)</Label>
+                          </div>
+                          <Slider min={1} max={14} step={1} value={[plantSettings.waterIntervalDays]} onValueChange={([v]) => updatePlantSettings({ waterIntervalDays: v })} />
+                        </div>
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <Label className="text-xs">Feed every {plantSettings.feedIntervalDays} day(s)</Label>
+                          </div>
+                          <Slider min={1} max={21} step={1} value={[plantSettings.feedIntervalDays]} onValueChange={([v]) => updatePlantSettings({ feedIntervalDays: v })} />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Thermometer className="w-5 h-5 text-primary" /> Target Ranges
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <Label className="text-xs">Temp Min ({tempUnitLabel})</Label>
+                            <Input
+                              type="number"
+                              value={toDisplayTemp(plantSettings.targetTempMin, globalSettings.tempUnit) ?? ""}
+                              onChange={e => updatePlantSettings({ targetTempMin: fromInputTemp(parseFloat(e.target.value) || 0, globalSettings.tempUnit) })}
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Temp Max ({tempUnitLabel})</Label>
+                            <Input
+                              type="number"
+                              value={toDisplayTemp(plantSettings.targetTempMax, globalSettings.tempUnit) ?? ""}
+                              onChange={e => updatePlantSettings({ targetTempMax: fromInputTemp(parseFloat(e.target.value) || 0, globalSettings.tempUnit) })}
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Humidity Min (%)</Label>
+                            <Input type="number" value={plantSettings.targetHumidityMin} onChange={e => updatePlantSettings({ targetHumidityMin: parseFloat(e.target.value) || 0 })} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Humidity Max (%)</Label>
+                            <Input type="number" value={plantSettings.targetHumidityMax} onChange={e => updatePlantSettings({ targetHumidityMax: parseFloat(e.target.value) || 0 })} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">pH Min</Label>
+                            <Input type="number" step="0.1" value={plantSettings.targetPhMin} onChange={e => updatePlantSettings({ targetPhMin: parseFloat(e.target.value) || 0 })} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">pH Max</Label>
+                            <Input type="number" step="0.1" value={plantSettings.targetPhMax} onChange={e => updatePlantSettings({ targetPhMax: parseFloat(e.target.value) || 0 })} />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <SettingsIcon className="w-5 h-5 text-primary" /> Preferences
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label className="text-sm">Temperature unit</Label>
+                            <p className="text-xs text-muted-foreground">Switch between Fahrenheit and Celsius</p>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className={globalSettings.tempUnit === "F" ? "text-foreground" : "text-muted-foreground"}>°F</span>
+                            <Switch
+                              checked={globalSettings.tempUnit === "C"}
+                              onCheckedChange={c => setGlobalSettings({ ...globalSettings, tempUnit: c ? "C" : "F" })}
+                            />
+                            <span className={globalSettings.tempUnit === "C" ? "text-foreground" : "text-muted-foreground"}>°C</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label className="text-sm">Care reminders</Label>
+                            <p className="text-xs text-muted-foreground">Show watering & feeding alerts</p>
+                          </div>
+                          <Switch
+                            checked={globalSettings.notificationsEnabled}
+                            onCheckedChange={c => setGlobalSettings({ ...globalSettings, notificationsEnabled: c })}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label className="text-sm">Weekly grow summary</Label>
+                            <p className="text-xs text-muted-foreground">Email a recap of your plants every Sunday</p>
+                          </div>
+                          <Switch
+                            checked={globalSettings.weeklySummary}
+                            onCheckedChange={c => setGlobalSettings({ ...globalSettings, weeklySummary: c })}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label className="text-sm">Auto AI tips on stage change</Label>
+                            <p className="text-xs text-muted-foreground">Generate fresh tips when you advance growth stages</p>
+                          </div>
+                          <Switch
+                            checked={globalSettings.aiAutoTips}
+                            onCheckedChange={c => setGlobalSettings({ ...globalSettings, aiAutoTips: c })}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
                   </TabsContent>
                 </Tabs>
               </div>
