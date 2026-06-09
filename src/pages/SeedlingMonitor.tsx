@@ -491,6 +491,26 @@ const SeedlingMonitor = () => {
                   </CardContent>
                 </Card>
 
+                {/* Reminders */}
+                {globalSettings.notificationsEnabled && (waterDue || feedDue) && (
+                  <Card className="border-primary/30 bg-primary/5">
+                    <CardContent className="py-3 flex items-start gap-3">
+                      <Bell className="w-5 h-5 text-primary mt-0.5" />
+                      <div className="flex-1 text-sm">
+                        <p className="font-medium mb-1">Care reminders</p>
+                        <ul className="text-muted-foreground space-y-0.5">
+                          {waterDue && (
+                            <li>💧 Water due {lastWater ? `(last watered ${daysSince(lastWater)}d ago)` : "(no log yet)"}</li>
+                          )}
+                          {feedDue && (
+                            <li>🧪 Feed due {lastFeed ? `(last fed ${daysSince(lastFeed)}d ago)` : "(no log yet)"}</li>
+                          )}
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
                 <Tabs defaultValue="care" className="w-full">
                   <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="care">Care Log</TabsTrigger>
