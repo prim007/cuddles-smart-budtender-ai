@@ -130,7 +130,8 @@ function validateMessages(messages: unknown): { valid: boolean; error?: string }
     const msg = messages[i];
     if (!msg || typeof msg !== 'object') return { valid: false, error: `Message at index ${i} is invalid` };
     if (!msg.role || typeof msg.role !== 'string') return { valid: false, error: `Message at index ${i} missing valid role` };
-    if (!['user', 'assistant', 'system'].includes(msg.role)) return { valid: false, error: `Message at index ${i} has invalid role` };
+    // Only allow user/assistant from clients — reject 'system' to prevent prompt injection bypassing our guardrails
+    if (!['user', 'assistant'].includes(msg.role)) return { valid: false, error: `Message at index ${i} has invalid role` };
     if (!msg.content || typeof msg.content !== 'string') return { valid: false, error: `Message at index ${i} missing valid content` };
     if (msg.content.length > 5000) return { valid: false, error: `Message at index ${i} content too long (max 5000 chars)` };
   }
