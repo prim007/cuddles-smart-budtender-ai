@@ -44,6 +44,64 @@ const GROWTH_STAGES = [
   { value: "harvest", label: "🌾 Harvest", progress: 100 },
 ];
 
+type TempUnit = "F" | "C";
+
+interface GlobalSettings {
+  tempUnit: TempUnit;
+  notificationsEnabled: boolean;
+  weeklySummary: boolean;
+  aiAutoTips: boolean;
+}
+
+interface PlantSettings {
+  growEnvironment: "indoor" | "outdoor" | "greenhouse";
+  growMedium: "soil" | "coco" | "hydro" | "aero";
+  potSize: string; // gallons
+  lightType: "LED" | "HPS" | "CFL" | "Sun" | "Mixed";
+  lightSchedule: "18/6" | "20/4" | "12/12" | "24/0" | "Natural";
+  waterIntervalDays: number;
+  feedIntervalDays: number;
+  targetTempMin: number; // stored in °F
+  targetTempMax: number;
+  targetHumidityMin: number;
+  targetHumidityMax: number;
+  targetPhMin: number;
+  targetPhMax: number;
+}
+
+const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
+  tempUnit: "F",
+  notificationsEnabled: true,
+  weeklySummary: false,
+  aiAutoTips: false,
+};
+
+const DEFAULT_PLANT_SETTINGS: PlantSettings = {
+  growEnvironment: "indoor",
+  growMedium: "soil",
+  potSize: "5",
+  lightType: "LED",
+  lightSchedule: "18/6",
+  waterIntervalDays: 3,
+  feedIntervalDays: 7,
+  targetTempMin: 68,
+  targetTempMax: 80,
+  targetHumidityMin: 40,
+  targetHumidityMax: 65,
+  targetPhMin: 6.0,
+  targetPhMax: 6.8,
+};
+
+const GLOBAL_SETTINGS_KEY = "cuddles-grow-global-settings";
+const plantSettingsKey = (id: string) => `cuddles-grow-plant-settings-${id}`;
+
+const toDisplayTemp = (f: number | null | undefined, unit: TempUnit) => {
+  if (f == null) return null;
+  return unit === "C" ? Math.round(((f - 32) * 5) / 9 * 10) / 10 : f;
+};
+const fromInputTemp = (val: number, unit: TempUnit) =>
+  unit === "C" ? (val * 9) / 5 + 32 : val;
+
 const LOG_TYPES = [
   { value: "water", label: "Watered", icon: Droplets, color: "text-blue-500" },
   { value: "feed", label: "Fed Nutrients", icon: FlaskConical, color: "text-green-500" },
