@@ -125,11 +125,13 @@ const ChatDemo = () => {
           logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, event: "chat_start", properties: { source: "input" } });
         });
       }
+      try { sessionStorage.setItem("cuddles_chat_message_sent", "1"); } catch { /* noop */ }
       import("@/lib/abTest").then(({ logAbEvent, CHAT_FAB_EXPERIMENT }) => {
-        logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, event: "chat_message", properties: { count: newCount } });
+        logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, event: "chat_message", properties: { count: newCount, source: wasVoiceInput ? "voice" : "text" } });
       });
       return newCount;
     });
+
 
     // Shadow-mode: fire-and-forget call to the recommendation agent.
     // User never sees this response — it logs to agent_traces for accuracy review.

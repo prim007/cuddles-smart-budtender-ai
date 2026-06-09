@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Moon, Zap, Heart, Palette, Coffee, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { trackPromptClicked } from "@/components/GoogleAnalytics";
+import { logAbEvent, CHAT_FAB_EXPERIMENT } from "@/lib/abTest";
+
 
 interface QuickPromptsProps {
   onSelect: (prompt: string) => void;
@@ -71,7 +73,12 @@ const QuickPrompts = ({ onSelect, disabled }: QuickPromptsProps) => {
             key={index}
             variant="outline"
             size="sm"
-            onClick={() => { trackPromptClicked(prompt.label); onSelect(prompt.prompt); }}
+            onClick={() => {
+              trackPromptClicked(prompt.label);
+              logAbEvent({ experiment: CHAT_FAB_EXPERIMENT, event: "chat_quick_prompt_clicked", properties: { label: prompt.label } });
+              onSelect(prompt.prompt);
+            }}
+
             disabled={disabled}
             className="group relative overflow-hidden border-border/50 hover:border-primary/50 bg-card/50 hover:bg-card transition-all duration-300 rounded-full hover-scale"
           >
