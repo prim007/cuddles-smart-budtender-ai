@@ -14,6 +14,9 @@ import { toast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import SEO from "@/components/SEO";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
 import {
   Sprout,
   Droplets,
@@ -28,6 +31,9 @@ import {
   ArrowRightLeft,
   StickyNote,
   Loader2,
+  Settings as SettingsIcon,
+  Bell,
+  Ruler,
 } from "lucide-react";
 
 const GROWTH_STAGES = [
