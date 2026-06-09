@@ -159,6 +159,37 @@ const SeedlingMonitor = () => {
   // Add env form
   const [newEnv, setNewEnv] = useState({ temperature: "", humidity: "", ph_level: "", light_hours: "", nutrient_ppm: "", notes: "" });
 
+  // Settings
+  const [globalSettings, setGlobalSettings] = useState<GlobalSettings>(() => {
+    try {
+      const raw = localStorage.getItem(GLOBAL_SETTINGS_KEY);
+      return raw ? { ...DEFAULT_GLOBAL_SETTINGS, ...JSON.parse(raw) } : DEFAULT_GLOBAL_SETTINGS;
+    } catch { return DEFAULT_GLOBAL_SETTINGS; }
+  });
+  const [plantSettings, setPlantSettings] = useState<PlantSettings>(DEFAULT_PLANT_SETTINGS);
+
+  useEffect(() => {
+    try { localStorage.setItem(GLOBAL_SETTINGS_KEY, JSON.stringify(globalSettings)); } catch {}
+  }, [globalSettings]);
+
+  useEffect(() => {
+    if (!selectedPlant) return;
+    try {
+      const raw = localStorage.getItem(plantSettingsKey(selectedPlant.id));
+      setPlantSettings(raw ? { ...DEFAULT_PLANT_SETTINGS, ...JSON.parse(raw) } : DEFAULT_PLANT_SETTINGS);
+    } catch { setPlantSettings(DEFAULT_PLANT_SETTINGS); }
+  }, [selectedPlant?.id]);
+
+  const updatePlantSettings = (patch: Partial<PlantSettings>) => {
+    setPlantSettings(prev => {
+      const next = { ...prev, ...patch };
+      if (selectedPlant) {
+        try { localStorage.setItem(plantSettingsKey(selectedPlant.id), JSON.stringify(next)); } catch {}
+      }
+      return next;
+    });
+  };
+
   useEffect(() => {
     if (user) fetchPlants();
     else setLoading(false);
