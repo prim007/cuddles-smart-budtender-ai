@@ -72,7 +72,7 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error("[CREATE-CHECKOUT] Error:", (error as Error).message);
-    return new Response(JSON.stringify({ error: (error as Error).message }), {
+    return new Response(JSON.stringify({ error: "Unable to process checkout. Please try again." }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
