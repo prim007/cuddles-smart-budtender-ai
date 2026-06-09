@@ -354,6 +354,14 @@ const SeedlingMonitor = () => {
 
   const stageInfo = GROWTH_STAGES.find(s => s.value === selectedPlant?.growth_stage) || GROWTH_STAGES[0];
 
+  // Reminders from care logs + intervals
+  const daysSince = (iso?: string) => iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : null;
+  const lastWater = careLogs.find(l => l.log_type === "water")?.log_date;
+  const lastFeed = careLogs.find(l => l.log_type === "feed")?.log_date;
+  const waterDue = lastWater ? (daysSince(lastWater) ?? 0) >= plantSettings.waterIntervalDays : true;
+  const feedDue = lastFeed ? (daysSince(lastFeed) ?? 0) >= plantSettings.feedIntervalDays : true;
+  const tempUnitLabel = globalSettings.tempUnit === "C" ? "°C" : "°F";
+
   if (!user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4 pb-32">
