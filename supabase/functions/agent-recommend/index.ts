@@ -113,8 +113,13 @@ const TOOLS = [
   },
 ];
 
+import { rateLimitResponse } from "../_shared/rate-limit.ts";
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  const rl = rateLimitResponse(req, { scope: "agent-recommend", max: 30, windowMs: 60_000 }, corsHeaders);
+  if (rl) return rl;
 
   const startTime = Date.now();
   const supabase = createClient(

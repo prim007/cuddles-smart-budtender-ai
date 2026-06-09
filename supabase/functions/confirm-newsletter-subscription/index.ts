@@ -1,10 +1,14 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { rateLimitResponse } from '../_shared/rate-limit.ts'
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
+
+  const rl = rateLimitResponse(req, { scope: 'confirm-newsletter', max: 20, windowMs: 60_000 }, corsHeaders)
+  if (rl) return rl
 
   try {
     const { token } = await req.json()

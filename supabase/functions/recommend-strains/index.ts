@@ -5,6 +5,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { rateLimitResponse } from "../_shared/rate-limit.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,6 +16,11 @@ const EMBED_DIM = 768;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  const rl = rateLimitResponse(req, { scope: "recommend-strains", max: 30, windowMs: 60_000 }, corsHeaders);
+  if (rl) return rl;
+
+
 
   try {
     const body = await req.json().catch(() => ({}));

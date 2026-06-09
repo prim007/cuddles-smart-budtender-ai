@@ -108,6 +108,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const { rateLimitResponse } = await import("../_shared/rate-limit.ts");
+  const rl = rateLimitResponse(req, { scope: "tolerance-coach", max: 60, windowMs: 60_000 }, corsHeaders);
+  if (rl) return rl;
+
   // Require auth
   const authHeader = req.headers.get("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
