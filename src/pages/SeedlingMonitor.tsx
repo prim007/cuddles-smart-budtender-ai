@@ -550,8 +550,8 @@ const SeedlingMonitor = () => {
                           <DialogHeader><DialogTitle>Log Environment</DialogTitle></DialogHeader>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="text-xs text-muted-foreground">Temp (°F)</label>
-                              <Input type="number" placeholder="75" value={newEnv.temperature} onChange={e => setNewEnv({ ...newEnv, temperature: e.target.value })} />
+                              <label className="text-xs text-muted-foreground">Temp ({tempUnitLabel})</label>
+                              <Input type="number" placeholder={globalSettings.tempUnit === "C" ? "24" : "75"} value={newEnv.temperature} onChange={e => setNewEnv({ ...newEnv, temperature: e.target.value })} />
                             </div>
                             <div>
                               <label className="text-xs text-muted-foreground">Humidity (%)</label>
