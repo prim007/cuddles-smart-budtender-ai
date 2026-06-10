@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 import { RESEARCH_KNOWLEDGE_BASE } from "./research-knowledge.ts";
+import { ENCYCLOPEDIA_KNOWLEDGE_BASE } from "./encyclopedia-knowledge.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
