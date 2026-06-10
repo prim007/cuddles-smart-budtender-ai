@@ -673,7 +673,7 @@ serve(async (req) => {
     const historyContext = userHistory ? buildUserHistoryContext(userHistory) : '';
     const inventoryContext = userHistory ? buildInventoryContext(userHistory.availableStrains) : '';
     
-    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + profileContext + historyContext + inventoryContext + languageInstructions;
+    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + profileContext + historyContext + inventoryContext + languageInstructions;
 
     // Smart model routing
     const model = selectModel(messages, !!userHistory);
