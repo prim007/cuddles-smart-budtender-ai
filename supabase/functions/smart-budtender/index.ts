@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 import { RESEARCH_KNOWLEDGE_BASE } from "./research-knowledge.ts";
+import { ENCYCLOPEDIA_KNOWLEDGE_BASE } from "./encyclopedia-knowledge.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -672,7 +673,7 @@ serve(async (req) => {
     const historyContext = userHistory ? buildUserHistoryContext(userHistory) : '';
     const inventoryContext = userHistory ? buildInventoryContext(userHistory.availableStrains) : '';
     
-    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + profileContext + historyContext + inventoryContext + languageInstructions;
+    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + profileContext + historyContext + inventoryContext + languageInstructions;
 
     // Smart model routing
     const model = selectModel(messages, !!userHistory);
