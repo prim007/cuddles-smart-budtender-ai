@@ -76,7 +76,7 @@
     '  <input id="cuddles-input" type="text" placeholder="Ask me anything about cannabis..." autocomplete="off" />',
     '  <button id="cuddles-send" disabled aria-label="Send"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>',
     '</div>',
-    '<div class="cuddles-powered">Powered by <a href="https://cuddles-smart-budtender-ai.lovable.app" target="_blank">Cuddles AI</a></div>',
+    '<div class="cuddles-powered">Powered by <a href="https://cuddles-ai.com" target="_blank">Cuddles AI</a></div>',
   ].join('');
   document.body.appendChild(chat);
 

@@ -14,7 +14,7 @@ interface SEOProps {
 }
 
 const BASE_URL = "https://cuddles-ai.com";
-const DEFAULT_IMAGE = "https://storage.googleapis.com/gpt-engineer-file-uploads/fn4xikHtpsZcJMhE3wUXdvgxIkl2/social-images/social-1770387793477-Screenshot_2026-02-06_at_4.09.58_PM.png";
+const DEFAULT_IMAGE = "https://cuddles-ai.com/og-image.jpg";
 
 const SEO = ({
   title = "Cuddles AI — Smart AI Cannabis Budtender",
