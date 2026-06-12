@@ -95,6 +95,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-foreground mb-4">Company</h4>
             <div className="flex flex-col gap-2">
+              <Link to="/what-is-cuddles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                What is Cuddles?
+              </Link>
               <Link to="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Privacy Policy
               </Link>
