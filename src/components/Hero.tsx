@@ -199,7 +199,7 @@ const Hero = () => {
               ].map((stat) => (
                 <div key={stat.label} className="rounded-xl border border-white/10 bg-white/5 p-3">
                   <div className="font-display text-xl font-bold text-white">{stat.value}</div>
-                  <div className="text-xs text-white/40">{stat.label}</div>
+                  <div className="text-xs text-white/80">{stat.label}</div>
                 </div>
               ))}
             </div>
