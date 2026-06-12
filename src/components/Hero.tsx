@@ -238,9 +238,5 @@ const Hero = () => {
 
 export default Hero;
 
-      </div>
-    </section>
-  );
-};
 
 export default Hero;
