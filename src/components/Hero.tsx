@@ -131,7 +131,7 @@ const Hero = () => {
                   value={heroInput}
                   onChange={(e) => setHeroInput(e.target.value)}
                   placeholder={HERO_PROMPTS[placeholderIdx]}
-                  className="flex-1 bg-transparent py-2 text-base text-white outline-none placeholder:text-white/40"
+                  className="flex-1 bg-transparent py-2 text-base text-white outline-none placeholder:text-white/70"
                 />
                 <button
                   type="submit"
