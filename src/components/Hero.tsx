@@ -60,14 +60,17 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(270,45%,12%)] via-[hsl(320,45%,16%)] to-[hsl(350,55%,20%)] py-10 md:py-16">
-      {/* 3D abstract sculpted orbs */}
-      <div className="pointer-events-none absolute -top-32 -left-32 h-[36rem] w-[36rem] rounded-full bg-hippie-coral/25 blur-[120px] animate-pulse" style={{ animationDuration: '8s' }} />
-      <div className="pointer-events-none absolute -bottom-40 -right-32 h-[40rem] w-[40rem] rounded-full bg-hippie-amber/20 blur-[140px] animate-pulse" style={{ animationDuration: '10s' }} />
-      <div className="pointer-events-none absolute top-1/3 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-hippie-sage/15 blur-[100px]" />
-      {/* Floating glass orbs */}
-      <div className="pointer-events-none absolute top-24 right-1/3 hidden h-24 w-24 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl shadow-[inset_-6px_-6px_18px_rgba(255,255,255,0.08),0_20px_50px_rgba(0,0,0,0.4)] md:block animate-fade-in-up" />
-      <div className="pointer-events-none absolute bottom-32 left-1/4 hidden h-16 w-16 rounded-full border border-white/15 bg-gradient-to-br from-hippie-peach/30 to-transparent backdrop-blur-md shadow-2xl lg:block" />
+    <section className="relative overflow-hidden bg-[#1a0f1f] py-10 md:py-16">
+      {/* Sculptural sunset glows */}
+      <div className="pointer-events-none absolute -top-24 -left-24 h-[500px] w-[500px] rounded-full bg-hippie-coral/10 blur-[120px]" />
+      <div className="pointer-events-none absolute top-1/2 -right-48 h-[600px] w-[600px] rounded-full bg-hippie-sage/10 blur-[160px]" />
+      {/* Abstract tilted glass shards */}
+      <div className="pointer-events-none absolute top-20 right-[12%] hidden h-96 w-64 rotate-[15deg] rounded-3xl border border-white/10 bg-white/[0.04] shadow-2xl backdrop-blur-3xl md:block" />
+      <div className="pointer-events-none absolute -bottom-10 left-[8%] hidden h-40 w-80 -rotate-[5deg] rounded-3xl border border-white/10 bg-white/[0.04] shadow-2xl backdrop-blur-2xl lg:block" />
+      <div className="pointer-events-none absolute top-1/3 left-1/2 hidden h-48 w-48 -translate-x-1/2 rotate-[28deg] rounded-2xl border border-white/5 bg-gradient-to-br from-hippie-peach/10 to-transparent backdrop-blur-xl lg:block" />
+      {/* Subtle grain to prevent banding */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")" } } />
+
 
 
       <div className="container relative z-10 mx-auto px-4">
