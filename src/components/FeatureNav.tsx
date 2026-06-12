@@ -26,7 +26,8 @@ import {
   Crown,
   Sparkles,
   Globe2,
-  ChevronDown
+  ChevronDown,
+  HelpCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -51,6 +52,12 @@ const features: Feature[] = [
     title: "Why Cuddles",
     href: "/why-cuddles",
     gradient: "from-hippie-amber to-hippie-orange",
+  },
+  {
+    icon: HelpCircle,
+    title: "What is Cuddles",
+    href: "/what-is-cuddles",
+    gradient: "from-hippie-teal to-hippie-green",
   },
   {
     icon: MessageCircle,
