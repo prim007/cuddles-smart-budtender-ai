@@ -54,6 +54,12 @@ const features: Feature[] = [
     gradient: "from-hippie-amber to-hippie-orange",
   },
   {
+    icon: HelpCircle,
+    title: "What is Cuddles",
+    href: "/what-is-cuddles",
+    gradient: "from-hippie-teal to-hippie-green",
+  },
+  {
     icon: MessageCircle,
     title: "Chat",
     href: "/ai-budtender",
