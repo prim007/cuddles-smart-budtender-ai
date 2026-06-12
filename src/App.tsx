@@ -215,6 +215,7 @@ const App = () => (
                 <Route path="/technology" element={<Suspense fallback={<PageLoader />}><RAGWhitepaper /></Suspense>} />
                 <Route path="/reduce-dispensary-wait-times" element={<Suspense fallback={<PageLoader />}><DispensaryWaitTimes /></Suspense>} />
                 <Route path="/education/chat-with-cuddles" element={<Suspense fallback={<PageLoader />}><ChatWithCuddles /></Suspense>} />
+                <Route path="/guides/personalized-recommendations" element={<Suspense fallback={<PageLoader />}><PersonalizedRecommendationsGuide /></Suspense>} />
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
