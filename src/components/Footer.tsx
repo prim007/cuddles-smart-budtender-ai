@@ -24,7 +24,7 @@ const Footer = () => {
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden ring-2 ring-primary/20">
-                <img src={cuddlesImage} alt="Cuddles" className="w-full h-full object-cover" />
+                <img src={cuddlesImage} alt="Cuddles AI cannabis companion brand mark" className="w-full h-full object-cover" />
               </div>
               <div>
                 <div className="font-display font-semibold text-foreground">Cuddles</div>
