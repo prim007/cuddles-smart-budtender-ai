@@ -188,7 +188,7 @@ const Hero = () => {
               </a>
             </div>
 
-            <p className="mt-4 text-xs text-white/40">No signup required · Free forever · 2,500+ happy users</p>
+            <p className="mt-4 text-xs text-white/80">No signup required · Free forever · 2,500+ happy users</p>
 
 
             <div className="mx-auto mt-6 grid max-w-md grid-cols-3 gap-3 lg:mx-0">
