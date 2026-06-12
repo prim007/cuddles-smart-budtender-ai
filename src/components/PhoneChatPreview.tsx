@@ -62,7 +62,7 @@ const PhoneChatPreview = ({
       {/* Input bar */}
       <div className="border-t border-white/10 bg-[hsl(270,40%,16%)] px-3 py-2.5 pb-6">
         <div className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5">
-          <span className="text-[10px] text-white/40 flex-1">Ask Cuddles anything…</span>
+          <span className="text-[10px] text-white/80 flex-1">Ask Cuddles anything…</span>
           <div className="h-6 w-6 rounded-full bg-gradient-to-br from-hippie-coral to-hippie-amber" />
         </div>
       </div>
