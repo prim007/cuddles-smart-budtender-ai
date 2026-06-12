@@ -78,6 +78,7 @@ const AfricaLegislationMap = lazyWithReload(() => import("./pages/AfricaLegislat
 // B2B
 const DispensaryOnboarding = lazyWithReload(() => import("./pages/DispensaryOnboarding"));
 const WhyCuddles = lazyWithReload(() => import("./pages/WhyCuddles"));
+const WhatIsCuddles = lazyWithReload(() => import("./pages/WhatIsCuddles"));
 const Catalog = lazyWithReload(() => import("./pages/Catalog"));
 const ManageStrains = lazyWithReload(() => import("./pages/ManageStrains"));
 const Shop = lazyWithReload(() => import("./pages/Shop"));
@@ -191,6 +192,7 @@ const App = () => (
                 {/* B2B */}
                 <Route path="/dispensary-onboarding" element={<Suspense fallback={<PageLoader />}><DispensaryOnboarding /></Suspense>} />
                 <Route path="/why-cuddles" element={<Suspense fallback={<PageLoader />}><WhyCuddles /></Suspense>} />
+                <Route path="/what-is-cuddles" element={<Suspense fallback={<PageLoader />}><WhatIsCuddles /></Suspense>} />
                 <Route path="/catalog" element={<Suspense fallback={<PageLoader />}><Catalog /></Suspense>} />
                 <Route path="/manage-strains" element={<Suspense fallback={<PageLoader />}><ManageStrains /></Suspense>} />
                 <Route path="/shop" element={<Suspense fallback={<PageLoader />}><Shop /></Suspense>} />
