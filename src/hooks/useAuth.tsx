@@ -26,7 +26,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
+
+        // Strip any OAuth tokens / auth fragments from the URL so they
+        // don't linger in browser history, referrer headers, or screenshots.
+        if (event === "SIGNED_IN" && typeof window !== "undefined") {
+          const hash = window.location.hash || "";
+          if (/access_token=|refresh_token=|provider_token=|id_token=|type=recovery/i.test(hash)) {
+            window.history.replaceState(
+              {},
+              document.title,
+              window.location.pathname + window.location.search
+            );
+          }
+        }
+
         // Defer role check with setTimeout to prevent deadlock
         if (session?.user) {
           setTimeout(() => {
