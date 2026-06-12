@@ -93,6 +93,7 @@ const CannabisRetailAutomation = lazyWithReload(() => import("./pages/CannabisRe
 const RAGWhitepaper = lazyWithReload(() => import("./pages/RAGWhitepaper"));
 const DispensaryWaitTimes = lazyWithReload(() => import("./pages/DispensaryWaitTimes"));
 const ChatWithCuddles = lazyWithReload(() => import("./pages/ChatWithCuddles"));
+const PersonalizedRecommendationsGuide = lazyWithReload(() => import("./pages/PersonalizedRecommendationsGuide"));
 
 // SEO pages
 const Strains = lazyWithReload(() => import("./pages/Strains"));
