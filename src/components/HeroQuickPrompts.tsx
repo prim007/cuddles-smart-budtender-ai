@@ -80,7 +80,7 @@ const HeroQuickPrompts = ({ onSelect }: HeroQuickPromptsProps) => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <p className="text-white/50 text-xs uppercase tracking-widest mb-4 text-center">
+      <p className="text-white/80 text-xs uppercase tracking-widest mb-4 text-center">
         Tap to try instantly — no signup needed
       </p>
 
@@ -110,7 +110,7 @@ const HeroQuickPrompts = ({ onSelect }: HeroQuickPromptsProps) => {
                 <p className="text-sm font-semibold text-white truncate">
                   {prompt.label}
                 </p>
-                <p className="text-xs text-white/50 truncate">
+                <p className="text-xs text-white/80 truncate">
                   {prompt.description}
                 </p>
               </div>
