@@ -54,7 +54,7 @@ const VideoPopup = () => {
             variant="ghost"
             size="icon"
             onClick={toggleMute}
-            className="text-white/60 hover:text-white hover:bg-white/10 h-8 w-8"
+            className="text-white/80 hover:text-white hover:bg-white/10 h-8 w-8"
           >
             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </Button>
@@ -84,7 +84,7 @@ const VideoPopup = () => {
               handleOpenChange(false);
               document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="text-xs text-white/40 hover:text-white/60 underline"
+            className="text-xs text-white/80 hover:text-white underline"
           >
             Try without signing up
           </button>

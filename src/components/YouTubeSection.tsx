@@ -67,7 +67,7 @@ const YouTubeSection = () => {
                   <p className="text-white font-display font-semibold text-lg mb-1">
                     Coming Soon — Cuddles Explainer Video
                   </p>
-                  <p className="text-white/60 text-sm">
+                  <p className="text-white/85 text-sm">
                     Subscribe to our channel to get notified when it drops!
                   </p>
                 </div>
