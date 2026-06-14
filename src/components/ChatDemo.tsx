@@ -26,6 +26,7 @@ import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } from "@/components/GoogleAnalytics";
 import ReactMarkdown from "react-markdown";
 import ChatStrainCard from "./ChatStrainCard";
+import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
 
 const generateSessionId = () => crypto.randomUUID();
 
@@ -33,6 +34,30 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   orderPhone?: string;
+  dispensaries?: Dispensary[];
+}
+
+// --- Dispensary intent detection ---
+const DISPENSARY_INTENT_RE = /\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|coffee\s*shop|head\s*shop|nearest\s+(shop|store|spot)|spots?\s+(near|nearby)|stores?\s+(near|nearby|close))\b/i;
+const NEAR_ME_RE = /\b(near\s*me|nearby|close\s*by|around\s*me|my\s*area|my\s*location|closest)\b/i;
+const LOCATION_IN_MSG_RE = /\b(?:in|near|around|by|at)\s+([A-Z][A-Za-z\s,]{2,60}?)(?:[.?!]|$)/;
+
+async function getBrowserLocation(timeoutMs = 8000): Promise<{ lat: number; lng: number } | null> {
+  if (!("geolocation" in navigator)) return null;
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(null), timeoutMs);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        clearTimeout(timer);
+        resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      },
+      () => {
+        clearTimeout(timer);
+        resolve(null);
+      },
+      { enableHighAccuracy: false, timeout: timeoutMs, maximumAge: 5 * 60 * 1000 }
+    );
+  });
 }
 
 const ChatDemo = () => {
