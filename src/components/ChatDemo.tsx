@@ -231,6 +231,8 @@ const ChatDemo = () => {
     } finally {
       setIsLoading(false);
     }
+    return false;
+  };
 
   const handleSend = async (messageContent?: string, fromVoice = false) => {
     const content = messageContent || input;
