@@ -129,7 +129,7 @@ const Checkout = () => {
           driver_notes: notes || null,
           customer_phone: customerPhone,
           customer_name: customerName,
-          status: "confirmed",
+          status: "pending",
         })
         .select("id")
         .single();
