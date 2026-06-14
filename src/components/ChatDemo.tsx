@@ -81,6 +81,9 @@ const ChatDemo = () => {
   const [messageCount, setMessageCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  // When set, the next user message is treated as a city/address for dispensary lookup
+  const awaitingDispensaryLocation = useRef(false);
+
 
   // Update initial message when language changes
   useEffect(() => {
