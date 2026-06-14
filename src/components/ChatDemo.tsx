@@ -598,6 +598,9 @@ const ChatDemo = () => {
                   {message.role === "assistant" && index > 0 && (
                     <ChatStrainCard messageContent={message.content} />
                   )}
+                  {message.dispensaries && (
+                    <ChatDispensaryCards dispensaries={message.dispensaries} />
+                  )}
                   {message.orderPhone && (
                     <Button
                       className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
