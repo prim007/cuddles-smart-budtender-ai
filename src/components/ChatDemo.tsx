@@ -231,11 +231,23 @@ const ChatDemo = () => {
     } finally {
       setIsLoading(false);
     }
-    return false;
-  };
 
+  const handleSend = async (messageContent?: string, fromVoice = false) => {
+    const content = messageContent || input;
+    if (!content.trim() || isLoading) return;
+    const wasVoiceInput = fromVoice;
 
+    const userMessage: Message = { role: "user", content };
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
+
+    // Dispensary intent: handle locally with Google Places, skip the AI call
+    const handled = await tryHandleDispensaryIntent(content);
+    if (handled) {
+      setMessageCount((prev) => prev + 1);
+      return;
+    }
+
     setIsLoading(true);
     setMessageCount((prev) => {
       const newCount = prev + 1;
