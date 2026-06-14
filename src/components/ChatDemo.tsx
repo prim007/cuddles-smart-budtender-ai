@@ -134,15 +134,107 @@ const ChatDemo = () => {
     setSessionId(generateSessionId());
     setMessages([{ role: "assistant", content: t.initialMessage }]);
     setMessageCount(0);
+    awaitingDispensaryLocation.current = false;
   };
 
-  const handleSend = async (messageContent?: string, fromVoice = false) => {
-    const content = messageContent || input;
-    if (!content.trim() || isLoading) return;
-    const wasVoiceInput = fromVoice;
+  // Run dispensary search and push results as an assistant message
+  const runDispensarySearch = async (
+    args: { lat?: number; lng?: number; address?: string }
+  ) => {
+    try {
+      const { data, error } = await supabase.functions.invoke("find-dispensaries", { body: args });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      const dispensaries: Dispensary[] = data?.dispensaries || [];
+      trackEvent("dispensary_search", "engagement", args.address ? "address" : "gps");
 
-    const userMessage: Message = { role: "user", content };
-    setMessages((prev) => [...prev, userMessage]);
+      if (dispensaries.length === 0) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "I couldn't find any dispensaries nearby that location. Try a different city or a more specific area? 🌍",
+          },
+        ]);
+        return;
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `Here are the top ${dispensaries.length} dispensaries closest to you 🌿`,
+          dispensaries,
+        },
+      ]);
+    } catch (err: any) {
+      console.error("dispensary search failed", err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "Hmm, I couldn't pull up dispensaries right now. Want to try again, or share a specific city name?",
+        },
+      ]);
+    }
+  };
+
+  // Returns true if the message was handled as a dispensary intent and AI call should be skipped
+  const tryHandleDispensaryIntent = async (content: string): Promise<boolean> => {
+    const isFollowUpCity = awaitingDispensaryLocation.current;
+    const isExplicitIntent = DISPENSARY_INTENT_RE.test(content);
+    if (!isExplicitIntent && !isFollowUpCity) return false;
+
+    // Follow-up: treat whole message as the address
+    if (isFollowUpCity && !isExplicitIntent) {
+      awaitingDispensaryLocation.current = false;
+      setIsLoading(true);
+      try {
+        await runDispensarySearch({ address: content.trim() });
+      } finally {
+        setIsLoading(false);
+      }
+      return true;
+    }
+
+    setIsLoading(true);
+    try {
+      // 1) Address embedded in the message: "dispensaries in Cape Town"
+      const addrMatch = content.match(LOCATION_IN_MSG_RE);
+      if (addrMatch) {
+        await runDispensarySearch({ address: addrMatch[1].trim() });
+        return true;
+      }
+
+      // 2) "Near me" or no location → try GPS
+      const wantsGps = NEAR_ME_RE.test(content) || !addrMatch;
+      if (wantsGps) {
+        const loc = await getBrowserLocation();
+        if (loc) {
+          await runDispensarySearch({ lat: loc.lat, lng: loc.lng });
+          return true;
+        }
+        // GPS denied/unavailable → ask for city
+        awaitingDispensaryLocation.current = true;
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "I'd love to find the closest dispensaries! I couldn't get your location automatically — what **city or neighborhood** are you in? (e.g. \"Sea Point, Cape Town\")",
+          },
+        ]);
+        return true;
+      }
+    } finally {
+      setIsLoading(false);
+    }
+    return false;
+  };
+
+
     setInput("");
     setIsLoading(true);
     setMessageCount((prev) => {
