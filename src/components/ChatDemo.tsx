@@ -26,6 +26,7 @@ import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } from "@/components/GoogleAnalytics";
 import ReactMarkdown from "react-markdown";
 import ChatStrainCard from "./ChatStrainCard";
+import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
 
 const generateSessionId = () => crypto.randomUUID();
 
@@ -33,6 +34,30 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   orderPhone?: string;
+  dispensaries?: Dispensary[];
+}
+
+// --- Dispensary intent detection ---
+const DISPENSARY_INTENT_RE = /\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|coffee\s*shop|head\s*shop|nearest\s+(shop|store|spot)|spots?\s+(near|nearby)|stores?\s+(near|nearby|close))\b/i;
+const NEAR_ME_RE = /\b(near\s*me|nearby|close\s*by|around\s*me|my\s*area|my\s*location|closest)\b/i;
+const LOCATION_IN_MSG_RE = /\b(?:in|near|around|by|at)\s+([A-Z][A-Za-z\s,]{2,60}?)(?:[.?!]|$)/;
+
+async function getBrowserLocation(timeoutMs = 8000): Promise<{ lat: number; lng: number } | null> {
+  if (!("geolocation" in navigator)) return null;
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(null), timeoutMs);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        clearTimeout(timer);
+        resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      },
+      () => {
+        clearTimeout(timer);
+        resolve(null);
+      },
+      { enableHighAccuracy: false, timeout: timeoutMs, maximumAge: 5 * 60 * 1000 }
+    );
+  });
 }
 
 const ChatDemo = () => {
@@ -56,6 +81,9 @@ const ChatDemo = () => {
   const [messageCount, setMessageCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  // When set, the next user message is treated as a city/address for dispensary lookup
+  const awaitingDispensaryLocation = useRef(false);
+
 
   // Update initial message when language changes
   useEffect(() => {
@@ -106,6 +134,104 @@ const ChatDemo = () => {
     setSessionId(generateSessionId());
     setMessages([{ role: "assistant", content: t.initialMessage }]);
     setMessageCount(0);
+    awaitingDispensaryLocation.current = false;
+  };
+
+  // Run dispensary search and push results as an assistant message
+  const runDispensarySearch = async (
+    args: { lat?: number; lng?: number; address?: string }
+  ) => {
+    try {
+      const { data, error } = await supabase.functions.invoke("find-dispensaries", { body: args });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      const dispensaries: Dispensary[] = data?.dispensaries || [];
+      trackEvent("dispensary_search", "engagement", args.address ? "address" : "gps");
+
+      if (dispensaries.length === 0) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "I couldn't find any dispensaries nearby that location. Try a different city or a more specific area? 🌍",
+          },
+        ]);
+        return;
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `Here are the top ${dispensaries.length} dispensaries closest to you 🌿`,
+          dispensaries,
+        },
+      ]);
+    } catch (err: any) {
+      console.error("dispensary search failed", err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "Hmm, I couldn't pull up dispensaries right now. Want to try again, or share a specific city name?",
+        },
+      ]);
+    }
+  };
+
+  // Returns true if the message was handled as a dispensary intent and AI call should be skipped
+  const tryHandleDispensaryIntent = async (content: string): Promise<boolean> => {
+    const isFollowUpCity = awaitingDispensaryLocation.current;
+    const isExplicitIntent = DISPENSARY_INTENT_RE.test(content);
+    if (!isExplicitIntent && !isFollowUpCity) return false;
+
+    // Follow-up: treat whole message as the address
+    if (isFollowUpCity && !isExplicitIntent) {
+      awaitingDispensaryLocation.current = false;
+      setIsLoading(true);
+      try {
+        await runDispensarySearch({ address: content.trim() });
+      } finally {
+        setIsLoading(false);
+      }
+      return true;
+    }
+
+    setIsLoading(true);
+    try {
+      // 1) Address embedded in the message: "dispensaries in Cape Town"
+      const addrMatch = content.match(LOCATION_IN_MSG_RE);
+      if (addrMatch) {
+        await runDispensarySearch({ address: addrMatch[1].trim() });
+        return true;
+      }
+
+      // 2) "Near me" or no location → try GPS
+      const wantsGps = NEAR_ME_RE.test(content) || !addrMatch;
+      if (wantsGps) {
+        const loc = await getBrowserLocation();
+        if (loc) {
+          await runDispensarySearch({ lat: loc.lat, lng: loc.lng });
+          return true;
+        }
+        // GPS denied/unavailable → ask for city
+        awaitingDispensaryLocation.current = true;
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "I'd love to find the closest dispensaries! I couldn't get your location automatically — what **city or neighborhood** are you in? (e.g. \"Sea Point, Cape Town\")",
+          },
+        ]);
+        return true;
+      }
+    } finally {
+      setIsLoading(false);
+    }
+    return false;
   };
 
   const handleSend = async (messageContent?: string, fromVoice = false) => {
@@ -116,6 +242,14 @@ const ChatDemo = () => {
     const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+
+    // Dispensary intent: handle locally with Google Places, skip the AI call
+    const handled = await tryHandleDispensaryIntent(content);
+    if (handled) {
+      setMessageCount((prev) => prev + 1);
+      return;
+    }
+
     setIsLoading(true);
     setMessageCount((prev) => {
       const newCount = prev + 1;
@@ -463,6 +597,9 @@ const ChatDemo = () => {
                   </div>
                   {message.role === "assistant" && index > 0 && (
                     <ChatStrainCard messageContent={message.content} />
+                  )}
+                  {message.dispensaries && (
+                    <ChatDispensaryCards dispensaries={message.dispensaries} />
                   )}
                   {message.orderPhone && (
                     <Button
