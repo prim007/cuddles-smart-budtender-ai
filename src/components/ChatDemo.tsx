@@ -384,6 +384,18 @@ const ChatDemo = () => {
         finalContent = finalContent.replace(/\[ORDER:[^\]]+\]/, '').trim();
         trackOrderLinkClicked(`tel:${orderMatch[1]}`);
       }
+      // Strip malformed shop-link artifacts the model sometimes emits
+      // (empty bold "****", empty markdown links "[](url)", bare hub URLs)
+      finalContent = finalContent
+        .replace(/\*{2,}\s*—?\s*(This link will take you to\s*)?https?:\/\/tripplefourshophub\.online\/?/gi, '')
+        .replace(/\[\s*\]\(https?:\/\/tripplefourshophub\.online[^)]*\)/gi, '')
+        .replace(/(^|\s)\*{2,}(\s|$)/g, '$1$2')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+      // If the model talked about shopping/location but forgot the token, inject it
+      if (!orderPhone && /tripplefourshophub|shop now at tripple|nearest dispensary|shop near me/i.test(finalContent)) {
+        orderPhone = '0645436734';
+      }
 
       // Track if the AI gave a recommendation (heuristic: mentions strain-related keywords)
       if (/\b(recommend|try|suggest|strain|indica|sativa|hybrid)\b/i.test(finalContent)) {
