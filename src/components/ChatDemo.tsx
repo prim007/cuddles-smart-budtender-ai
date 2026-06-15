@@ -38,7 +38,7 @@ interface Message {
 }
 
 // --- Dispensary intent detection ---
-const DISPENSARY_INTENT_RE = /\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|coffee\s*shop|head\s*shop|physical\s+(storefront|store|shop|location)|(?:nearest|closest|nearby|local)\s+(shop|store|spot|location|dispensar(y|ies))|(?:shop|store|spot|dispensar(y|ies))s?\s+(near|nearby|close|closest|around)|where\s+(is|are|can\s+i\s+find).*(shop|store|dispensar(y|ies)|tripple\s*four|location)|find\s+(me\s+)?(a\s+)?(shop|store|dispensar(y|ies)|location)|front\s+door)\b/i;
+const DISPENSARY_INTENT_RE = /\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|coffee\s*shop|head\s*shop|physical\s+(storefront|store|shop|location)|tripple\s*four.{0,40}(location|shop|store)|(?:nearest|closest|nearby|local)\s+(shop|store|spot|location|dispensar(y|ies))|(?:shop|store|spot|dispensar(y|ies))s?\s+(near|nearby|close|closest|around)|where\s+(is|are|can\s+i\s+find).*(shop|store|dispensar(y|ies)|tripple\s*four|location)|find\s+(me\s+)?(a\s+)?(shop|store|dispensar(y|ies)|location)|front\s+door)\b/i;
 const NEAR_ME_RE = /\b(near\s*me|nearby|close\s*by|around\s*me|my\s*area|my\s*location|closest)\b/i;
 const LOCATION_TROUBLE_RE = /\b(location|gps|map|maps|near\s*me|closest)\b.{0,40}\b(not\s+working|isn'?t\s+working|doesn'?t\s+work|broken|failed|unavailable|can'?t|cannot)\b|\b(not\s+working|broken|failed|unavailable)\b.{0,40}\b(location|gps|map|maps|near\s*me|closest)\b/i;
 const LOCATION_IN_MSG_RE = /\b(?:in|near|around|by|at)\s+([A-Z][A-Za-z\s,]{2,60}?)(?:[.?!]|$)/;
