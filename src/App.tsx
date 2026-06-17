@@ -87,6 +87,7 @@ const OrderTracking = lazyWithReload(() => import("./pages/OrderTracking"));
 const Premium = lazyWithReload(() => import("./pages/Premium"));
 const AIBudtender = lazyWithReload(() => import("./pages/AIBudtender"));
 const POSIntegrations = lazyWithReload(() => import("./pages/POSIntegrations"));
+const ShopifyIntegration = lazyWithReload(() => import("./pages/ShopifyIntegration"));
 const AIvsManualBudtending = lazyWithReload(() => import("./pages/AIvsManualBudtending"));
 const AIBasketSize = lazyWithReload(() => import("./pages/AIBasketSize"));
 const CannabisRetailAutomation = lazyWithReload(() => import("./pages/CannabisRetailAutomation"));
@@ -209,6 +210,7 @@ const App = () => (
                 {/* B2B SEO Pages */}
                 <Route path="/ai-budtender" element={<Suspense fallback={<PageLoader />}><AIBudtender /></Suspense>} />
                 <Route path="/pos-integrations" element={<Suspense fallback={<PageLoader />}><POSIntegrations /></Suspense>} />
+                <Route path="/shopify-integration" element={<Suspense fallback={<PageLoader />}><ShopifyIntegration /></Suspense>} />
                 <Route path="/ai-vs-manual-budtending" element={<Suspense fallback={<PageLoader />}><AIvsManualBudtending /></Suspense>} />
                 <Route path="/how-ai-budtender-increases-basket-size" element={<Suspense fallback={<PageLoader />}><AIBasketSize /></Suspense>} />
                 <Route path="/cannabis-retail-automation" element={<Suspense fallback={<PageLoader />}><CannabisRetailAutomation /></Suspense>} />
