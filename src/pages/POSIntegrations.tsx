@@ -8,6 +8,11 @@ import { ArrowRight, CheckCircle2, Plug, Zap, Shield, RefreshCw } from "lucide-r
 
 const posPartners = [
   {
+    name: "Shopify",
+    description: "Add an AI budtender directly to your Shopify storefront. Sync your product catalog, recommend CBD, hemp & accessories, and boost conversions with embedded chat.",
+    features: ["Product catalog sync", "Embedded chat widget", "Checkout-aware upsells"],
+  },
+  {
     name: "Dutchie",
     description: "Sync your Dutchie menu in real-time. Cuddles AI recommends strains that are actually in stock and drives online orders directly through your existing Dutchie storefront.",
     features: ["Live menu sync", "Online ordering integration", "Inventory-aware recommendations"],
@@ -85,7 +90,7 @@ const POSIntegrations = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-display text-3xl font-bold text-foreground text-center mb-12">
-            Supported POS Systems
+            Supported POS & E-Commerce Systems
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {posPartners.map((pos) => (
@@ -100,6 +105,15 @@ const POSIntegrations = () => {
                     </li>
                   ))}
                 </ul>
+                {pos.name === "Shopify" && (
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <Link to="/shopify-integration">
+                      <Button variant="outline" size="sm" className="rounded-lg gap-1">
+                        Learn more <ArrowRight className="w-3 h-3" />
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </Card>
             ))}
           </div>
