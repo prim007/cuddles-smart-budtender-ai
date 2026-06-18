@@ -27,7 +27,8 @@ import {
   Sparkles,
   Globe2,
   ChevronDown,
-  HelpCircle
+  HelpCircle,
+  Code
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -127,6 +128,12 @@ const features: Feature[] = [
     title: "Dispensaries",
     href: "/dispensary-onboarding",
     gradient: "from-hippie-amber to-hippie-coral",
+  },
+  {
+    icon: Code,
+    title: "Shopify Integration",
+    href: "/shopify-integration",
+    gradient: "from-hippie-teal to-hippie-green",
   },
 ];
 
@@ -236,8 +243,8 @@ const FeatureNav = () => {
       {/* Desktop top navigation bar — compact pill nav */}
       <nav className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-50 px-3 py-2 rounded-3xl border border-white/10 bg-card/60 backdrop-blur-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] items-center gap-1">
         {(() => {
-          const primary = features.filter(f => ["Home", "Chat", "Strains", "What is Cuddles", "Shop"].includes(f.title));
-          const overflow = features.filter(f => !["Home", "Chat", "Strains", "What is Cuddles", "Shop"].includes(f.title));
+          const primary = features.filter(f => ["Home", "Chat", "Shopify Integration", "What is Cuddles", "Shop"].includes(f.title));
+          const overflow = features.filter(f => !["Home", "Chat", "Shopify Integration", "What is Cuddles", "Shop"].includes(f.title));
           return (
             <>
               {primary.map((feature) => {
