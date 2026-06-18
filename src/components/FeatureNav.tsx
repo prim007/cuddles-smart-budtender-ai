@@ -27,7 +27,8 @@ import {
   Sparkles,
   Globe2,
   ChevronDown,
-  HelpCircle
+  HelpCircle,
+  Code
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
