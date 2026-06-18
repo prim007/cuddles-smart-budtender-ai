@@ -46,6 +46,10 @@ function haversineKm(a: { lat: number; lng: number }, b: { lat: number; lng: num
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
+  const rl = rateLimitResponse(req, { scope: "find-dispensaries", max: 20, windowMs: 60_000 }, corsHeaders);
+  if (rl) return rl;
+
+
   try {
     if (!LOVABLE_API_KEY || !GOOGLE_MAPS_API_KEY) {
       throw new Error("Google Maps connector not configured");
