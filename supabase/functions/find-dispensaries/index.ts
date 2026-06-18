@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { rateLimitResponse } from "../_shared/rate-limit.ts";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -43,6 +45,10 @@ function haversineKm(a: { lat: number; lng: number }, b: { lat: number; lng: num
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  const rl = rateLimitResponse(req, { scope: "find-dispensaries", max: 20, windowMs: 60_000 }, corsHeaders);
+  if (rl) return rl;
+
 
   try {
     if (!LOVABLE_API_KEY || !GOOGLE_MAPS_API_KEY) {
