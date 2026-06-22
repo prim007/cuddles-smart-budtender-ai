@@ -50,6 +50,35 @@ serve(async (req) => {
   const rl = rateLimitResponse(req, { scope: "find-dispensaries", max: 20, windowMs: 60_000 }, corsHeaders);
   if (rl) return rl;
 
+  // Require authenticated user
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  try {
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+    );
+    const token = authHeader.replace("Bearer ", "");
+    const { data, error } = await supabase.auth.getClaims(token);
+    if (error || !data?.claims || data.claims.role !== "authenticated" || !data.claims.sub) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  } catch {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+
 
   try {
     if (!LOVABLE_API_KEY || !GOOGLE_MAPS_API_KEY) {
