@@ -15,6 +15,17 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+export const getDisplayName = (user: User | null): string | null => {
+  if (!user) return null;
+  const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+  const candidates = [meta.name, meta.full_name, meta.given_name, meta.display_name];
+  for (const c of candidates) {
+    if (typeof c === "string" && c.trim()) return c.trim().split(" ")[0];
+  }
+  if (user.email) return user.email.split("@")[0];
+  return null;
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
