@@ -62,7 +62,7 @@ async function getBrowserLocation(timeoutMs = 8000): Promise<{ lat: number; lng:
 }
 
 const ChatDemo = () => {
-  const { user } = useAuth();
+  const { user, displayName } = useAuth();
   const { t, language } = useLanguage();
   const { profile, getProfileSummary } = useUserProfile();
   const { isSpeaking, isSupported: ttsSupported, speak, stop, speakIfGreeting, prime } = useSpeechSynthesis();
