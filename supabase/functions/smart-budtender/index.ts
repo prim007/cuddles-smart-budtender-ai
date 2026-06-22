@@ -682,7 +682,10 @@ serve(async (req) => {
     const historyContext = userHistory ? buildUserHistoryContext(userHistory) : '';
     const inventoryContext = userHistory ? buildInventoryContext(userHistory.availableStrains) : '';
     
-    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + profileContext + historyContext + inventoryContext + languageInstructions;
+    const namePersona = safeUserName
+      ? `\n\n## USER IDENTITY\nThe user's name is ${safeUserName}. Address them by their first name warmly and naturally throughout the conversation — especially in your opening greeting (e.g. "Hey ${safeUserName}!" or "Groovy to see you, ${safeUserName} 🌿"). Don't overuse it (avoid every sentence), but make sure they feel personally seen.\n`
+      : '';
+    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
 
     // Smart model routing
     const model = selectModel(messages, !!userHistory);
