@@ -25,8 +25,9 @@ const BENEFITS = [
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; name?: string }>({});
   const [activeTab, setActiveTab] = useState("signup");
 
   const { user, signIn, signUp } = useAuth();
