@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { MessageCircle, X, Sparkles } from "lucide-react";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { getVariant, logAbEvent, CHAT_FAB_EXPERIMENT, CHAT_FAB_VARIANTS } from "@/lib/abTest";
+import { useAuth } from "@/hooks/useAuth";
 
 type Hook = { emoji: string; text: string; sub: string };
 
