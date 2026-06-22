@@ -157,6 +157,14 @@ const Auth = () => {
               <TabsContent value="signup">
                 <form onSubmit={handleSignUp} className="space-y-3 pt-2">
                   <div className="space-y-1.5">
+                    <Label htmlFor="signup-name">Your name</Label>
+                    <div className="relative">
+                      <UserPlus className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input id="signup-name" type="text" placeholder="What should Cuddles call you?" value={name} onChange={(e) => setName(e.target.value)} className="pl-10 h-11" disabled={isSubmitting} maxLength={50} />
+                    </div>
+                    {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
+                  </div>
+                  <div className="space-y-1.5">
                     <Label htmlFor="signup-email">Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
