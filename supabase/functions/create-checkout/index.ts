@@ -15,6 +15,13 @@ const PRICES = {
 } as const;
 
 const ALLOWED_RETURN_PATHS = ["/premium", "/dispensary-onboarding"];
+const ALLOWED_ORIGINS = [
+  "https://cuddles-ai.com",
+  "https://www.cuddles-ai.com",
+  "https://cuddles-ai.lovable.app",
+  "https://cuddles-smart-budtender-ai.lovable.app",
+];
+const DEFAULT_ORIGIN = "https://cuddles-ai.com";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
