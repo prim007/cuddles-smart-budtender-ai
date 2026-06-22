@@ -318,6 +318,7 @@ const ChatDemo = () => {
             flavorPreferences: profile.flavorPreferences,
           },
           language,
+          userName: displayName ?? undefined,
         }),
       });
 
