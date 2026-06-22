@@ -50,6 +50,7 @@ const ABANDON_AFTER_MS = 30_000;
 
 const StickyChatFAB = () => {
   const location = useLocation();
+  const { displayName } = useAuth();
   const [showTooltip, setShowTooltip] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [hookIdx, setHookIdx] = useState(0);
@@ -58,7 +59,15 @@ const StickyChatFAB = () => {
   const tooltipFiredRef = useRef(false);
   const abandonTimerRef = useRef<number | null>(null);
 
-  const hooks = useMemo(() => pickHooksForPath(location.pathname), [location.pathname]);
+  const hooks = useMemo(() => {
+    const base = pickHooksForPath(location.pathname);
+    if (!displayName) return base;
+    // Personalize the first hook with the user's name
+    return [
+      { emoji: "👋", text: `Hey ${displayName}! Need a hand?`, sub: "I'm Cuddles, your AI budtender" },
+      ...base,
+    ];
+  }, [location.pathname, displayName]);
 
   // Fire chat_view exposure event once per session
   useEffect(() => {
