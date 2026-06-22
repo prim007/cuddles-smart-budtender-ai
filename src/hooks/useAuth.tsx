@@ -126,6 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         session,
         isLoading,
         isAdmin,
+        displayName: getDisplayName(user),
         signIn,
         signUp,
         signOut,
