@@ -605,7 +605,11 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { messages, userProfile, language = 'en', sessionId } = body;
+    const { messages, userProfile, language = 'en', sessionId, userName } = body;
+    // Sanitize name: 1-50 chars, strip control chars and quotes to prevent prompt injection
+    const safeUserName = typeof userName === 'string'
+      ? userName.replace(/[\u0000-\u001F"`\n\r]/g, '').trim().slice(0, 50)
+      : '';
     
     // Rate limiting
     const clientIP = req.headers.get('cf-connecting-ip') ||
