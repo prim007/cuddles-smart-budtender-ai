@@ -25,8 +25,9 @@ const BENEFITS = [
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; name?: string }>({});
   const [activeTab, setActiveTab] = useState("signup");
 
   const { user, signIn, signUp } = useAuth();
@@ -50,12 +51,13 @@ const Auth = () => {
     if (user) navigate("/");
   }, [user, navigate]);
 
-  const validateForm = (): boolean => {
-    const newErrors: { email?: string; password?: string } = {};
+  const validateForm = (isSignup = false): boolean => {
+    const newErrors: { email?: string; password?: string; name?: string } = {};
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) newErrors.email = emailResult.error.errors[0].message;
     const passwordResult = passwordSchema.safeParse(password);
     if (!passwordResult.success) newErrors.password = passwordResult.error.errors[0].message;
+    if (isSignup && !name.trim()) newErrors.name = "Please enter your name";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -64,7 +66,7 @@ const Auth = () => {
     e.preventDefault();
     if (!validateForm()) return;
     setIsSubmitting(true);
-    const { error } = await signIn(email, password);
+    const { error, user: signedInUser } = await signIn(email, password);
     setIsSubmitting(false);
     if (error) {
       let message = "An error occurred during sign in";
@@ -72,15 +74,18 @@ const Auth = () => {
       else if (error.message.includes("Email not confirmed")) message = "Please verify your email first.";
       toast({ title: "Sign In Failed", description: message, variant: "destructive" });
     } else {
-      toast({ title: "Welcome back!", description: "You have successfully signed in." });
+      const meta = (signedInUser?.user_metadata ?? {}) as Record<string, unknown>;
+      const raw = (meta.name || meta.full_name || meta.given_name || signedInUser?.email?.split("@")[0]) as string | undefined;
+      const firstName = raw ? String(raw).trim().split(" ")[0] : "friend";
+      toast({ title: `Welcome back, ${firstName}! 🌿`, description: "You have successfully signed in." });
     }
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm(true)) return;
     setIsSubmitting(true);
-    const { error } = await signUp(email, password);
+    const { error } = await signUp(email, password, name.trim());
     setIsSubmitting(false);
     if (error) {
       let message = "An error occurred during sign up";
@@ -88,9 +93,11 @@ const Auth = () => {
       else if (error.message.includes("Password")) message = error.message;
       toast({ title: "Sign Up Failed", description: message, variant: "destructive" });
     } else {
-      toast({ title: "You're in! 🎉", description: "Check your email to verify your account." });
+      const firstName = name.trim().split(" ")[0];
+      toast({ title: `You're in, ${firstName}! 🎉`, description: "Check your email to verify your account." });
       setEmail("");
       setPassword("");
+      setName("");
     }
   };
 
@@ -149,6 +156,14 @@ const Auth = () => {
 
               <TabsContent value="signup">
                 <form onSubmit={handleSignUp} className="space-y-3 pt-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signup-name">Your name</Label>
+                    <div className="relative">
+                      <UserPlus className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input id="signup-name" type="text" placeholder="What should Cuddles call you?" value={name} onChange={(e) => setName(e.target.value)} className="pl-10 h-11" disabled={isSubmitting} maxLength={50} />
+                    </div>
+                    {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
+                  </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="signup-email">Email</Label>
                     <div className="relative">
