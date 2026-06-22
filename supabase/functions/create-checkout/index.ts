@@ -61,7 +61,10 @@ serve(async (req) => {
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     const customerId = customers.data[0]?.id;
 
-    const origin = req.headers.get("origin") || "https://cuddles-ai.lovable.app";
+    const rawOrigin = req.headers.get("origin") || "";
+    const origin = ALLOWED_ORIGINS.includes(rawOrigin)
+      ? rawOrigin
+      : (/^https:\/\/[a-z0-9-]+\.lovable\.app$/i.test(rawOrigin) ? rawOrigin : DEFAULT_ORIGIN);
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
