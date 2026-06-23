@@ -162,12 +162,11 @@ function getLanguageInstructions(language: string): string {
   return `\n\nIMPORTANT: Respond in ${languageName}. All your responses must be in ${languageName}, maintaining a friendly and educational tone.`;
 }
 
-// --- Smart Model Routing (3-tier) ---
+// --- Smart Model Routing ---
+// Greetings / acknowledgements only — these don't deserve a "brainy" model.
 const SIMPLE_PATTERNS = [
-  /^(hi|hello|hey|what'?s up|yo|sup)\b/i,
-  /^(thanks|thank you|ok|okay|cool|got it|nice)\b/i,
-  /^what (is|are) /i,
-  /^(tell me about|describe) /i,
+  /^(hi|hello|hey|hiya|yo|sup|what'?s up|howdy)[\s!.?]*$/i,
+  /^(thanks|thank you|thx|ty|ok|okay|cool|got it|nice|awesome|great|👍|🙏|❤️)[\s!.?]*$/i,
   /^(indica|sativa|hybrid)\??$/i,
 ];
 
@@ -181,7 +180,6 @@ const COMPLEX_PATTERNS = [
   /\b(why does|how does|explain the|reasoning behind|deep dive)\b/i,
 ];
 
-// Level 4: Orchestrator patterns - triggers tool-use behavior
 const ORCHESTRATOR_PATTERNS = [
   /\b(what('?s| is) (available|in stock)|inventory|menu|stock)\b/i,
   /\b(order|buy|purchase|add to cart|checkout)\b/i,
@@ -195,25 +193,25 @@ const ORCHESTRATOR_PATTERNS = [
 function selectModel(messages: { role: string; content: string }[], hasUserHistory: boolean): string {
   const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
   if (!lastUserMsg) return 'google/gemini-3-flash-preview';
-  
+
   const content = lastUserMsg.content.trim();
-  
-  // Short simple messages → use lite model
-  if (content.length < 80 && SIMPLE_PATTERNS.some(p => p.test(content))) {
+
+  // Short greetings / acks → cheap lite model
+  if (content.length < 40 && SIMPLE_PATTERNS.some(p => p.test(content))) {
     return 'google/gemini-2.5-flash-lite';
   }
-  
-  // Complex scientific/medical queries → use pro model for deep reasoning
+
+  // Complex scientific/medical queries → pro for deep reasoning
   if (content.length > 40 && COMPLEX_PATTERNS.some(p => p.test(content))) {
     return 'google/gemini-2.5-pro';
   }
-  
-  // Orchestrator queries with user history → use pro for multi-tool reasoning
+
+  // Orchestrator queries with user history → pro for multi-tool reasoning
   if (hasUserHistory && ORCHESTRATOR_PATTERNS.some(p => p.test(content))) {
     return 'google/gemini-2.5-pro';
   }
-  
-  // Standard queries → use flash
+
+  // Everything else (educational / general chat) → flash, the real brain
   return 'google/gemini-3-flash-preview';
 }
 
