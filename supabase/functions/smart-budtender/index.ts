@@ -686,9 +686,9 @@ serve(async (req) => {
     const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
 
     // Smart model routing
-    const model = selectModel(messages, !!userHistory);
+    const primaryModel = selectModel(messages, !!userHistory);
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const callGateway = (model: string) => fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,
@@ -704,19 +704,28 @@ serve(async (req) => {
       }),
     });
 
+    let response = await callGateway(primaryModel);
+
+    // Fallback: if the chosen model is rate-limited or credits are tight,
+    // retry once with the cheapest model so Cuddles keeps answering.
+    if (!response.ok && (response.status === 429 || response.status === 402) && primaryModel !== 'google/gemini-2.5-flash-lite') {
+      console.warn('Primary model failed, falling back to lite:', { primaryModel, status: response.status });
+      response = await callGateway('google/gemini-2.5-flash-lite');
+    }
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('AI gateway error:', { status: response.status, error: errorText, timestamp: new Date().toISOString() });
 
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
+        return new Response(JSON.stringify({ error: "Cuddles is getting a lot of love right now 🌿 — give it a moment and try again." }),
           { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: 'Service temporarily unavailable. Please try again later.' }),
+        return new Response(JSON.stringify({ error: "Cuddles' AI credits are running low — the workspace owner needs to top up Lovable AI credits to keep the chat going." }),
           { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      return new Response(JSON.stringify({ error: 'Unable to process your request. Please try again later.' }),
+      return new Response(JSON.stringify({ error: 'Cuddles hit a snag. Please try again in a moment.' }),
         { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
