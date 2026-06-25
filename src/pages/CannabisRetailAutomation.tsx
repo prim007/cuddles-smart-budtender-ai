@@ -167,7 +167,7 @@ const CannabisRetailAutomation = () => {
               <Card key={market.region} className="p-6">
                 <div className="font-display text-lg font-bold text-primary mb-1">{market.region}</div>
                 <div className="text-sm text-muted-foreground mb-2">{market.countries}</div>
-                <div className="text-xs text-muted-foreground/70 mb-2 italic">{market.status}</div>
+                <div className="text-xs text-muted-foreground mb-2 italic">{market.status}</div>
                 <div className="flex items-start gap-2 text-sm text-foreground">
                   <Shield className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                   {market.opportunity}
