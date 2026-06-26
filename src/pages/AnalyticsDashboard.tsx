@@ -330,9 +330,10 @@ const AnalyticsDashboard = () => {
                           cx="50%"
                           cy="50%"
                           outerRadius={100}
-                          label={({ language, percent }) => 
-                            `${language} ${(percent * 100).toFixed(0)}%`
+                          label={(props: any) => 
+                            `${props.language ?? props.name} ${((props.percent ?? 0) * 100).toFixed(0)}%`
                           }
+
                         >
                           {languageData.map((_, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
