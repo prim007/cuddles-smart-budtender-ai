@@ -73,7 +73,7 @@ const BlogPost = () => {
         .neq("slug", slug!)
         .order("published_at", { ascending: false })
         .limit(3);
-      return mergeStaticBlogPosts(data || []) as Array<Pick<BlogPost, "id" | "title" | "slug" | "excerpt" | "featured_image" | "published_at">>;
+      return mergeStaticBlogPosts(data || []).filter((post) => post.slug !== slug) as Array<Pick<BlogPost, "id" | "title" | "slug" | "excerpt" | "featured_image" | "published_at">>;
     },
     enabled: !!slug,
   });
