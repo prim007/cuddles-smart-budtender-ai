@@ -209,6 +209,15 @@ const App = () => (
                 <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
                 <Route path="/strains/featured" element={<Suspense fallback={<PageLoader />}><FeaturedStrains /></Suspense>} />
                 <Route path="/strains/:slug" element={<Suspense fallback={<PageLoader />}><StrainDetail /></Suspense>} />
+                <Route path="/dispensary-near-me/:city" element={<Suspense fallback={<PageLoader />}><CityDispensaryPage /></Suspense>} />
+                <Route
+                  path="/admin/widget-outreach"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <Suspense fallback={<PageLoader />}><WidgetOutreach /></Suspense>
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* B2B SEO Pages */}
                 <Route path="/ai-budtender" element={<Suspense fallback={<PageLoader />}><AIBudtender /></Suspense>} />
