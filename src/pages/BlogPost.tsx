@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import ReactMarkdown from "react-markdown";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { getStaticBlogPost, mergeStaticBlogPosts } from "@/data/staticBlogPosts";
 
 interface BlogPost {
   id: string;
@@ -28,6 +29,7 @@ interface BlogPost {
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const articleEngagedRef = React.useRef(false);
+  const fallbackPost = getStaticBlogPost(slug);
 
   // Track 50% scroll depth on article
   React.useEffect(() => {
@@ -45,7 +47,7 @@ const BlogPost = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [slug]);
 
-  const { data: post, isLoading, error } = useQuery({
+  const { data: fetchedPost, isLoading, error } = useQuery({
     queryKey: ["blog-post", slug],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -56,7 +58,7 @@ const BlogPost = () => {
         .maybeSingle();
 
       if (error) throw error;
-      return data as BlogPost;
+      return data as BlogPost | null;
     },
     enabled: !!slug,
   });
@@ -71,7 +73,7 @@ const BlogPost = () => {
         .neq("slug", slug!)
         .order("published_at", { ascending: false })
         .limit(3);
-      return (data || []) as Array<Pick<BlogPost, "id" | "title" | "slug" | "excerpt" | "featured_image" | "published_at">>;
+      return mergeStaticBlogPosts(data || []).filter((post) => post.slug !== slug) as Array<Pick<BlogPost, "id" | "title" | "slug" | "excerpt" | "featured_image" | "published_at">>;
     },
     enabled: !!slug,
   });
@@ -87,8 +89,8 @@ const BlogPost = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: post?.title,
-          text: post?.excerpt,
+          title: displayPost?.title,
+          text: displayPost?.excerpt,
           url,
         });
       } catch (err) {
@@ -99,6 +101,8 @@ const BlogPost = () => {
       toast.success("Link copied to clipboard!");
     }
   };
+
+  const displayPost = fetchedPost || fallbackPost;
 
   if (isLoading) {
     return (
@@ -120,7 +124,7 @@ const BlogPost = () => {
     );
   }
 
-  if (error || !post) {
+  if ((error && !fallbackPost) || !displayPost) {
     return (
       <div className="min-h-screen bg-background">
         <ThemeToggle />
@@ -140,34 +144,34 @@ const BlogPost = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title={post.title}
-        description={post.excerpt}
-        url={`/blog/${post.slug}`}
+        title={displayPost.title}
+        description={displayPost.excerpt}
+        url={`/blog/${displayPost.slug}`}
         type="article"
-        author={post.author}
-        publishedTime={post.published_at}
-        image={post.featured_image || undefined}
-        keywords={(post.tags || []).join(', ')}
+        author={displayPost.author}
+        publishedTime={displayPost.published_at}
+        image={displayPost.featured_image || undefined}
+        keywords={(displayPost.tags || []).join(', ')}
         structuredData={{
           "@context": "https://schema.org",
           "@graph": [
             {
               "@type": "Article",
-              "@id": `https://cuddles-ai.com/blog/${post.slug}#article`,
-              headline: post.title,
-              description: post.excerpt,
-              image: post.featured_image
-                ? [post.featured_image]
+              "@id": `https://cuddles-ai.com/blog/${displayPost.slug}#article`,
+              headline: displayPost.title,
+              description: displayPost.excerpt,
+              image: displayPost.featured_image
+                ? [displayPost.featured_image]
                 : ["https://cuddles-ai.com/pwa-512x512.png"],
-              author: { "@type": "Organization", name: post.author, url: "https://cuddles-ai.com" },
-              datePublished: post.published_at,
-              dateModified: post.published_at,
-              keywords: (post.tags || []).join(', '),
-              articleSection: (post.tags && post.tags[0]) || "Cannabis Education",
-              wordCount: post.content.split(/\s+/).length,
+              author: { "@type": "Organization", name: displayPost.author, url: "https://cuddles-ai.com" },
+              datePublished: displayPost.published_at,
+              dateModified: displayPost.published_at,
+              keywords: (displayPost.tags || []).join(', '),
+              articleSection: (displayPost.tags && displayPost.tags[0]) || "Cannabis Education",
+              wordCount: displayPost.content.split(/\s+/).length,
               mainEntityOfPage: {
                 "@type": "WebPage",
-                "@id": `https://cuddles-ai.com/blog/${post.slug}`,
+                "@id": `https://cuddles-ai.com/blog/${displayPost.slug}`,
               },
               publisher: {
                 "@type": "Organization",
@@ -183,7 +187,7 @@ const BlogPost = () => {
               itemListElement: [
                 { "@type": "ListItem", position: 1, name: "Home", item: "https://cuddles-ai.com/" },
                 { "@type": "ListItem", position: 2, name: "Blog", item: "https://cuddles-ai.com/blog" },
-                { "@type": "ListItem", position: 3, name: post.title, item: `https://cuddles-ai.com/blog/${post.slug}` },
+                { "@type": "ListItem", position: 3, name: displayPost.title, item: `https://cuddles-ai.com/blog/${displayPost.slug}` },
               ],
             },
           ],
@@ -209,7 +213,7 @@ const BlogPost = () => {
             </Link>
 
             <div className="flex flex-wrap gap-2 mb-4">
-              {post.tags?.map((tag) => (
+              {displayPost.tags?.map((tag) => (
                 <Badge key={tag} variant="secondary">
                   <Tag className="w-3 h-3 mr-1" />
                   {tag}
@@ -218,30 +222,30 @@ const BlogPost = () => {
             </div>
 
             <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
-              {post.title}
+              {displayPost.title}
             </h1>
 
             <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-6">
               <span className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                {format(new Date(post.published_at), "MMMM d, yyyy")}
+                {format(new Date(displayPost.published_at), "MMMM d, yyyy")}
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
-                {readingTime(post.content)} min read
+                {readingTime(displayPost.content)} min read
               </span>
-              <span>By {post.author}</span>
+              <span>By {displayPost.author}</span>
               <Button variant="ghost" size="sm" onClick={handleShare} className="ml-auto">
                 <Share2 className="w-4 h-4 mr-2" />
                 Share
               </Button>
             </div>
 
-            {post.featured_image ? (
+            {displayPost.featured_image ? (
               <div className="mb-2 overflow-hidden rounded-2xl border border-border/60">
                 <img
-                  src={post.featured_image}
-                  alt={post.title}
+                  src={displayPost.featured_image}
+                  alt={displayPost.title}
                   loading="eager"
                   className="w-full h-auto object-cover"
                 />
@@ -258,7 +262,7 @@ const BlogPost = () => {
             <ReactMarkdown
               disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
               unwrapDisallowed
-            >{post.content}</ReactMarkdown>
+            >{displayPost.content}</ReactMarkdown>
 
             {/* Disclaimer */}
             <div className="mt-12 p-6 bg-muted rounded-xl border">
@@ -283,12 +287,12 @@ const BlogPost = () => {
 
             {/* Contextual quick prompts based on article tags */}
             <div className="flex flex-wrap gap-2 justify-center mb-6">
-              {(post.tags || []).slice(0, 3).map((tag) => (
+              {(displayPost.tags || []).slice(0, 3).map((tag) => (
                 <Link key={tag} to={`/#demo`}>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => trackEvent('blog_ai_prompt', 'engagement', `${tag}_${post.slug}`)}
+                    onClick={() => trackEvent('blog_ai_prompt', 'engagement', `${tag}_${displayPost.slug}`)}
                     className="rounded-full gap-2"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
@@ -300,7 +304,7 @@ const BlogPost = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => trackEvent('blog_ai_prompt', 'engagement', `general_${post.slug}`)}
+                  onClick={() => trackEvent('blog_ai_prompt', 'engagement', `general_${displayPost.slug}`)}
                   className="rounded-full gap-2"
                 >
                   <Bot className="w-3.5 h-3.5" />

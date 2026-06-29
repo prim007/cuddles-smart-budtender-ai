@@ -11,6 +11,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
 import { format } from "date-fns";
 import SubmitArticleDialog from "@/components/SubmitArticleDialog";
+import { mergeStaticBlogPosts } from "@/data/staticBlogPosts";
 
 interface BlogPost {
   id: string;
@@ -44,6 +45,8 @@ const Blog = () => {
     return Math.ceil(words / wordsPerMinute);
   };
 
+  const visiblePosts = mergeStaticBlogPosts<BlogPost>(posts);
+
   return (
     <div className="min-h-screen bg-background">
       <SEO
@@ -62,7 +65,7 @@ const Blog = () => {
             name: "Cuddles AI",
             logo: { "@type": "ImageObject", url: "https://cuddles-ai.com/pwa-512x512.png" },
           },
-          blogPost: (posts || []).slice(0, 20).map((p) => ({
+          blogPost: visiblePosts.slice(0, 20).map((p) => ({
             "@type": "BlogPosting",
             headline: p.title,
             url: `https://cuddles-ai.com/blog/${p.slug}`,
@@ -119,9 +122,9 @@ const Blog = () => {
                 </Card>
               ))}
             </div>
-          ) : posts && posts.length > 0 ? (
+          ) : visiblePosts.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post) => (
+              {visiblePosts.map((post) => (
                 <Link key={post.id} to={`/blog/${post.slug}`}>
                   <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group overflow-hidden">
                     {post.featured_image ? (
