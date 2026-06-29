@@ -1,0 +1,1 @@
+UPDATE blog_posts SET featured_image = '/__l5e/assets-v1/fff09eef-9281-4eea-b23f-17d24f4483a2/blog-mall-dispensary-online.jpg' WHERE slug = 'south-africa-mall-dispensaries-illegal-move-online';
