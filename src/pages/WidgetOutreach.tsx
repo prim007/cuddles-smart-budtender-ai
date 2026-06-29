@@ -60,27 +60,26 @@ const WidgetOutreach = () => {
     toast({ title: "Snippet copied 🎉", description: `Paste it into ${t.business_name}'s site.` });
   };
 
-  const sendInstallEmail = async (t: Tenant) => {
+  const sendInstallEmail = (t: Tenant) => {
     if (!t.business_email) {
       toast({ title: "No email on file", variant: "destructive" });
       return;
     }
-    const { error } = await supabase.functions.invoke("send-transactional-email", {
-      body: {
-        templateName: "dispensary-welcome",
-        recipientEmail: t.business_email,
-        idempotencyKey: `widget-install-${t.id}-${Date.now()}`,
-        templateData: {
-          businessName: t.business_name ?? "there",
-          embedSnippet: snippet(t.embed_key, t.branding_color),
-        },
-      },
-    });
-    if (error) {
-      toast({ title: "Email failed", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Install email queued 📬", description: `Sent to ${t.business_email}` });
+    if (!t.embed_key) {
+      toast({ title: "No embed key yet", variant: "destructive" });
+      return;
     }
+    const subject = encodeURIComponent(`Your Cuddles AI chat widget — 2-minute install`);
+    const body = encodeURIComponent(
+      `Hi ${t.business_name ?? "there"},\n\n` +
+      `Your Cuddles AI chat widget is ready. Paste this snippet right before the closing </body> tag on your site:\n\n` +
+      `${snippet(t.embed_key, t.branding_color)}\n\n` +
+      `That's it — visitors will see a chat bubble that answers strain questions and recommends products from your inventory 24/7.\n\n` +
+      `Questions? Just reply to this email.\n\n` +
+      `— The Cuddles Team\nhttps://www.cuddles-ai.com`
+    );
+    window.location.href = `mailto:${t.business_email}?subject=${subject}&body=${body}`;
+    toast({ title: "Opening your email client ✉️", description: `Pre-filled install instructions for ${t.business_name}` });
   };
 
   const statusVariant = (status: string | null): "default" | "secondary" | "outline" | "destructive" => {
