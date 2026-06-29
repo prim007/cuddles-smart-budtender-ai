@@ -276,7 +276,7 @@ const FeatureNav = () => {
 
               <DropdownMenu>
                 <DropdownMenuTrigger className="px-3 py-2 rounded-2xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all flex items-center gap-1.5 focus:outline-none">
-                  More
+                  More Features
                   <ChevronDown className="w-4 h-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-2xl border-white/10 bg-card/95 backdrop-blur-xl">

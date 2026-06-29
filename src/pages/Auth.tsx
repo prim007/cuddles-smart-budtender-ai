@@ -104,6 +104,7 @@ const Auth = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4">
       <div className="w-full max-w-lg">
+        <h1 className="sr-only">Sign In or Sign Up to Cuddles AI</h1>
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-4">
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
         </Button>
