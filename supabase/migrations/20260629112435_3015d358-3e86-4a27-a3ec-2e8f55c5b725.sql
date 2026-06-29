@@ -1,0 +1,1 @@
+UPDATE public.blog_posts SET featured_image = '/__l5e/assets-v1/b59d3270-1253-4433-b4db-38692e7e998b/blog-smoking-vs-edibles.jpg', published = true WHERE slug = 'smoking-vs-edibles-science';
