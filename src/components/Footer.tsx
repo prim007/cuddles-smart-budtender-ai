@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
-import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download } from "lucide-react";
+import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download, MapPin } from "lucide-react";
 import { NewsletterSignup } from "./NewsletterSignup";
+import { ZA_CITIES } from "@/data/zaCities";
 
 const features = [
   { icon: Home, title: "Home", href: "/" },
@@ -118,6 +119,24 @@ const Footer = () => {
                 Install Cuddles App
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* Find a dispensary — programmatic SEO */}
+        <div className="pt-6 border-t border-border">
+          <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+            <MapPin className="w-4 h-4" /> Find a dispensary near you
+          </h4>
+          <div className="flex flex-wrap gap-2 mb-6">
+            {ZA_CITIES.map((c) => (
+              <Link
+                key={c.slug}
+                to={`/dispensary-near-me/${c.slug}`}
+                className="text-xs text-muted-foreground hover:text-foreground rounded-full border border-border bg-card px-3 py-1 transition-colors"
+              >
+                {c.name}
+              </Link>
+            ))}
           </div>
         </div>
 

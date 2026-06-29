@@ -45,7 +45,7 @@ const pickHooksForPath = (path: string): Hook[] => {
   return DEFAULT_HOOKS;
 };
 
-const TOOLTIP_DELAY_MS = 20_000; // gentle 20s auto-open
+const TOOLTIP_DELAY_MS = 8_000; // attention-grabbing 8s auto-open
 const ABANDON_AFTER_MS = 30_000;
 
 const StickyChatFAB = () => {
