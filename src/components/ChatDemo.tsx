@@ -283,12 +283,14 @@ const ChatDemo = () => {
 
 
     // Shadow-mode: fire-and-forget call to the recommendation agent.
+    // Only runs for authenticated users (function requires JWT).
     // User never sees this response — it logs to agent_traces for accuracy review.
     supabase.auth.getSession().then(({ data: { session: s } }) => {
+      if (!s?.access_token) return; // anonymous users — skip, agent requires auth
       supabase.functions.invoke("agent-recommend", {
         body: {
           user_message: content,
-          user_id: s?.user?.id ?? null,
+          user_id: s.user?.id ?? null,
           session_id: sessionId,
         },
       }).catch((e) => console.debug("[shadow agent]", e));
