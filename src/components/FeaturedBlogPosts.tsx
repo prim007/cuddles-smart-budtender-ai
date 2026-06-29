@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { trackEvent } from "@/components/GoogleAnalytics";
+import { mergeStaticBlogPosts } from "@/data/staticBlogPosts";
 
 const FeaturedBlogPosts = () => {
   const { data: posts } = useQuery({
@@ -24,7 +25,9 @@ const FeaturedBlogPosts = () => {
     },
   });
 
-  if (!posts || posts.length === 0) return null;
+  const visiblePosts = mergeStaticBlogPosts(posts).slice(0, 3);
+
+  if (visiblePosts.length === 0) return null;
 
   return (
     <section className="py-20 bg-muted/30">
@@ -43,7 +46,7 @@ const FeaturedBlogPosts = () => {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
-          {posts.map((post) => (
+          {visiblePosts.map((post) => (
             <Link
               key={post.id}
               to={`/blog/${post.slug}`}
