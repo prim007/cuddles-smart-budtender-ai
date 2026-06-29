@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
-import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download } from "lucide-react";
+import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download, MapPin } from "lucide-react";
 import { NewsletterSignup } from "./NewsletterSignup";
+import { ZA_CITIES } from "@/data/zaCities";
 
 const features = [
   { icon: Home, title: "Home", href: "/" },
