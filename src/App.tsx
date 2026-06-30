@@ -60,6 +60,7 @@ const ChatConversations = lazyWithReload(() => import("./pages/ChatConversations
 const AgentTraces = lazyWithReload(() => import("./pages/AgentTraces"));
 const InternationalMarket = lazyWithReload(() => import("./pages/InternationalMarket"));
 const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
+const Licensing = lazyWithReload(() => import("./pages/Licensing"));
 const Install = lazyWithReload(() => import("./pages/Install"));
 const Unsubscribe = lazyWithReload(() => import("./pages/Unsubscribe"));
 const ConfirmNewsletter = lazyWithReload(() => import("./pages/ConfirmNewsletter"));
