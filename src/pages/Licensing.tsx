@@ -56,7 +56,18 @@ const Licensing = () => {
               <section className="mb-8">
                 <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">3. Premium &amp; Pro Subscriptions</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  Premium (R99/month ZAR) and Pro ($1,500/month USD) subscriptions grant a personal or single-business licence to the additional features described at checkout, for the duration of the active subscription. Subscriptions are billed via Stripe and may be cancelled at any time; licences end when the subscription period ends.
+                  Premium (R99/month ZAR) and Pro (R27,750/month ZAR, ~$1,500 USD) subscriptions grant a personal or single-business licence to the additional features described at checkout, for the duration of the active subscription. Subscriptions are billed via Stripe and may be cancelled at any time; licences end when the subscription period ends.
+                </p>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  See what the Pro tier unlocks — advanced analytics, multi-location support, and white-label options — on our{" "}
+                  <a
+                    href="https://www.youtube.com/@CuddlesAI-Budtender"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    YouTube channel
+                  </a>.
                 </p>
               </section>
 
