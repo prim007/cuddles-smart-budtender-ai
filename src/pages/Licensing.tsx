@@ -63,8 +63,20 @@ const Licensing = () => {
               <section className="mb-8">
                 <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">3. Premium &amp; Pro Subscriptions</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  Premium (R99/month ZAR) and Pro (R27,750/month ZAR, ~$1,500 USD) subscriptions grant a personal or single-business licence to the additional features described at checkout, for the duration of the active subscription. Subscriptions are billed via Stripe and may be cancelled at any time; licences end when the subscription period ends.
+                  Premium (R99/month ZAR) and Pro (R27,750/month ZAR, ~$1,500 USD) subscriptions grant a personal or single-business licence to the additional features described at checkout, for the duration of the active subscription. Subscriptions may be cancelled at any time; licences end when the subscription period ends.
                 </p>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  <strong>Payment methods:</strong> We accept a range of South African and international payment options so you can pay the way that suits you best:
+                </p>
+                <ul className="list-disc pl-6 text-foreground/80 leading-relaxed mb-4 space-y-1">
+                  <li><strong>Stripe</strong> — international Visa, Mastercard, American Express &amp; Apple/Google Pay</li>
+                  <li><strong>PayFast</strong> — South African cards, Instant EFT, Snapscan &amp; Zapper</li>
+                  <li><strong>PayU</strong> — local cards and EFT for ZA customers</li>
+                  <li><strong>Yoco</strong> — card payments for small ZA businesses</li>
+                  <li><strong>Ozow</strong> — instant secure EFT directly from your bank</li>
+                  <li><strong>EFT / Bank Transfer</strong> — manual invoicing for B2B and enterprise tiers</li>
+                  <li><strong>Crypto (BTC / USDT)</strong> — available on request for international Pro customers</li>
+                </ul>
                 <p className="text-foreground/80 leading-relaxed mb-4">
                   See what the Pro tier unlocks — advanced analytics, multi-location support, and white-label options — on our{" "}
                   <a
