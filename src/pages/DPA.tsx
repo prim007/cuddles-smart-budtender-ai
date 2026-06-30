@@ -8,7 +8,7 @@ export default function DPA() {
       <SEO
         title="Data Processing Addendum | Cuddles AI"
         description="Data Processing Addendum (DPA) template for Cuddles AI business customers, aligned with POPIA and GDPR."
-        canonicalUrl="https://cuddles-ai.com/legal/dpa"
+        url="/legal/dpa"
       />
 
       <main className="container mx-auto max-w-3xl px-4 py-16">
