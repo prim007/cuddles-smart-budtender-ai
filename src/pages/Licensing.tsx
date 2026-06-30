@@ -28,14 +28,20 @@ const Licensing = () => {
 
       <main className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-blue to-hippie-purple flex items-center justify-center">
-              <FileText className="w-6 h-6 text-white" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-blue to-hippie-purple flex items-center justify-center">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-4xl font-display font-bold text-foreground">Licensing</h1>
+                <p className="text-muted-foreground mt-1">Last updated: June 30, 2026</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-4xl font-display font-bold text-foreground">Licensing</h1>
-              <p className="text-muted-foreground mt-1">Last updated: June 30, 2026</p>
-            </div>
+            <Button onClick={generateInvestorPdf} variant="outline" className="gap-2 shrink-0">
+              <Download className="w-4 h-4" />
+              Download Investor Summary (PDF)
+            </Button>
           </div>
 
           <Card className="p-8 md:p-12 bg-card/50 backdrop-blur-sm border-border/30">
