@@ -77,7 +77,7 @@ export const generateInvestorPdf = () => {
 
   addDivider();
   addText("For licensing calls, custom enterprise deals, or investor enquiries:", 10, { color: [100, 100, 100] });
-  addText("Email: tripple4442@gmail.com  |  Website: cuddles-ai.com", 10, { bold: true, color: [15, 23, 42] });
+  addText("Email: admin@cuddles-ai.com  |  Website: cuddles-ai.com", 10, { bold: true, color: [15, 23, 42] });
 
   doc.save("Cuddles-AI_Investor-Summary.pdf");
 };

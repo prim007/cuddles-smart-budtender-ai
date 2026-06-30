@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const RECIPIENT_EMAIL = "primncube55@gmail.com";
+const RECIPIENT_EMAIL = "admin@cuddles-ai.com";
 
 // Escape user-provided strings before embedding into HTML email bodies.
 function escapeHtml(s: string): string {
@@ -136,7 +136,7 @@ serve(async (req) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Cuddles AI <onboarding@resend.dev>",
+        from: "Cuddles AI <admin@cuddles-ai.com>",
         to: [RECIPIENT_EMAIL],
         subject: `New Demo Request: ${safeCompany} - ${safeName}`,
         html: emailHtml,

@@ -142,8 +142,8 @@ const Licensing = () => {
                 </p>
                 <p className="text-foreground/80 leading-relaxed mb-4 flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  <a href="mailto:tripple4442@gmail.com" className="text-primary hover:underline">
-                    tripple4442@gmail.com
+                  <a href="mailto:admin@cuddles-ai.com" className="text-primary hover:underline">
+                    admin@cuddles-ai.com
                   </a>
                 </p>
                 <Link to="/schedule-demo">

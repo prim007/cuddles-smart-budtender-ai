@@ -149,7 +149,7 @@ const PrivacyPolicy = () => {
                   <li><strong>Lodge a complaint</strong> with the Information Regulator (see Section 15).</li>
                 </ul>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  To exercise any of these rights, email <a href="mailto:tripple4442@gmail.com" className="text-primary underline">tripple4442@gmail.com</a>. We will respond within a reasonable period and within statutory timeframes.
+                  To exercise any of these rights, email <a href="mailto:admin@cuddles-ai.com" className="text-primary underline">admin@cuddles-ai.com</a>. We will respond within a reasonable period and within statutory timeframes.
                 </p>
               </section>
 
@@ -170,7 +170,7 @@ const PrivacyPolicy = () => {
               <section className="mb-8">
                 <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">11. Children's Privacy</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  The Services are strictly intended for adults aged 18 or older (or the legal age of cannabis consumption in your jurisdiction, whichever is higher). We do not knowingly collect personal information from minors. If we learn we have collected information from a minor, we will delete it promptly. If you believe a minor has provided us with information, contact <a href="mailto:tripple4442@gmail.com" className="text-primary underline">tripple4442@gmail.com</a>.
+                  The Services are strictly intended for adults aged 18 or older (or the legal age of cannabis consumption in your jurisdiction, whichever is higher). We do not knowingly collect personal information from minors. If we learn we have collected information from a minor, we will delete it promptly. If you believe a minor has provided us with information, contact <a href="mailto:admin@cuddles-ai.com" className="text-primary underline">admin@cuddles-ai.com</a>.
                 </p>
               </section>
 
@@ -195,7 +195,7 @@ const PrivacyPolicy = () => {
                 </p>
                 <div className="bg-muted/50 p-6 rounded-lg">
                   <p className="text-foreground/80 mb-2"><strong>Cuddles AI — a Tripple444 product</strong></p>
-                  <p className="text-foreground/80 mb-2">Email: <a href="mailto:tripple4442@gmail.com" className="text-primary underline">tripple4442@gmail.com</a></p>
+                  <p className="text-foreground/80 mb-2">Email: <a href="mailto:admin@cuddles-ai.com" className="text-primary underline">admin@cuddles-ai.com</a></p>
                   <p className="text-foreground/80">Website: <a href="https://cuddles-ai.com" className="text-primary underline">https://cuddles-ai.com</a></p>
                 </div>
               </section>
@@ -222,7 +222,7 @@ const PrivacyPolicy = () => {
                   We maintain an internal <strong>Licensed Facilities Database</strong>, compiled and continuously updated by manually ingesting SAHPRA's published lists of licensed medicinal cannabis cultivators, manufacturers, importers, and exporters. Before any supplier is onboarded to the Tripple444 marketplace, we cross-check their company name, licence number, and licence status against this database to confirm legal compliance. Suppliers whose licences lapse, are suspended, or are revoked are removed from the marketplace.
                 </p>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  This verification process is designed to protect consumers from unregulated or illicit products and to support South Africa's lawful cannabis economy. Users may request confirmation of a specific supplier's licensed status by contacting <a href="mailto:tripple4442@gmail.com" className="text-primary underline">tripple4442@gmail.com</a>. SAHPRA's official licensing information is publicly available at <a href="https://www.sahpra.org.za" target="_blank" rel="noopener noreferrer" className="text-primary underline">sahpra.org.za</a>.
+                  This verification process is designed to protect consumers from unregulated or illicit products and to support South Africa's lawful cannabis economy. Users may request confirmation of a specific supplier's licensed status by contacting <a href="mailto:admin@cuddles-ai.com" className="text-primary underline">admin@cuddles-ai.com</a>. SAHPRA's official licensing information is publicly available at <a href="https://www.sahpra.org.za" target="_blank" rel="noopener noreferrer" className="text-primary underline">sahpra.org.za</a>.
                 </p>
               </section>
 
