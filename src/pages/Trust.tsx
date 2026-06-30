@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SEO } from "@/components/SEO";
+import SEO from "@/components/SEO";
 import { Card } from "@/components/ui/card";
 import { Shield, Lock, Database, Users, Mail, FileText } from "lucide-react";
 
