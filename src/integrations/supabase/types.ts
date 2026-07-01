@@ -155,6 +155,45 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_user_id: string | null
+          created_at: string
+          id: string
+          ip_address: string | null
+          metadata: Json
+          target_id: string | null
+          target_type: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_user_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json
+          target_id?: string | null
+          target_type?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_user_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json
+          target_id?: string | null
+          target_type?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
@@ -1288,6 +1327,17 @@ export type Database = {
         Returns: boolean
       }
       increment_review_helpful: { Args: { p_review_id: string }; Returns: Json }
+      log_audit_event: {
+        Args: {
+          _action: string
+          _ip_address?: string
+          _metadata?: Json
+          _target_id?: string
+          _target_type?: string
+          _user_agent?: string
+        }
+        Returns: string
+      }
       match_strains: {
         Args: {
           match_count?: number
