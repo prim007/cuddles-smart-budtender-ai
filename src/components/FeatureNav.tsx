@@ -7,13 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { 
-  BookOpen, 
-  Camera, 
-  Star, 
-  Heart, 
-  Menu, 
-  X, 
+import {
+  BookOpen,
+  Camera,
+  Heart,
+  Menu,
+  X,
   Home,
   MessageCircle,
   LogIn,
