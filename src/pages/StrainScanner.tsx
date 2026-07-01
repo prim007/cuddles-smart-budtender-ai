@@ -80,6 +80,15 @@ const StrainScanner = () => {
       setResult(data.data);
       setDisclaimer(data.disclaimer);
 
+      if (data.data?.strain_name) {
+        trackScanComplete(data.data.strain_name, data.data.confidence);
+        trackRecommendationView('strain', data.data.strain_name, {
+          confidence: data.data.confidence,
+          strain_type: data.data.strain_type,
+        });
+      }
+
+
       // Save scan to history if user is logged in
       if (user && data.data) {
         await supabase.from("strain_scans").insert({
