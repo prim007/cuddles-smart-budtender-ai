@@ -21,6 +21,9 @@ import {
 } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import cuddlesImage from "@/assets/cuddles.png";
+import { trackQuestionnaireStep, trackQuestionnaireComplete } from "@/components/GoogleAnalytics";
+
+const STEP_NAMES = ['welcome', 'experience', 'tolerance', 'consumption', 'effects', 'flavors'];
 
 const ONBOARDING_COMPLETE_KEY = "cuddles-onboarding-complete";
 
@@ -102,6 +105,12 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
     }
   }, [forceOpen]);
 
+  // Track each step view (including welcome) while the flow is open.
+  useEffect(() => {
+    if (!isOpen) return;
+    trackQuestionnaireStep(currentStep, STEP_NAMES[currentStep]);
+  }, [isOpen, currentStep]);
+
   const handleComplete = () => {
     updateProfile({
       experienceLevel,
@@ -112,12 +121,14 @@ const OnboardingFlow = ({ forceOpen, onComplete }: OnboardingFlowProps) => {
     });
     setIsOpen(false);
     markOnboardingComplete();
+    trackQuestionnaireComplete(totalSteps, totalSteps, false);
     onComplete?.();
   };
 
   const handleSkip = () => {
     setIsOpen(false);
     markOnboardingComplete();
+    trackQuestionnaireComplete(currentStep, totalSteps, true);
     onComplete?.();
   };
 

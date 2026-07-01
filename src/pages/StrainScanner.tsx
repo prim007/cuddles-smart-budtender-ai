@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { prepareImageForAnalysis } from "@/utils/imagePreprocessing";
+import { trackScanStart, trackScanComplete, trackRecommendationView } from "@/components/GoogleAnalytics";
 
 interface StrainResult {
   strain_name: string;
@@ -62,6 +63,7 @@ const StrainScanner = () => {
     }
 
     setIsAnalyzing(true);
+    trackScanStart('upload');
     try {
       const { data, error } = await supabase.functions.invoke("identify-strain", {
         body: { imageBase64: imagePreview },
@@ -77,6 +79,15 @@ const StrainScanner = () => {
 
       setResult(data.data);
       setDisclaimer(data.disclaimer);
+
+      if (data.data?.strain_name) {
+        trackScanComplete(data.data.strain_name, data.data.confidence);
+        trackRecommendationView('strain', data.data.strain_name, {
+          confidence: data.data.confidence,
+          strain_type: data.data.strain_type,
+        });
+      }
+
 
       // Save scan to history if user is logged in
       if (user && data.data) {
