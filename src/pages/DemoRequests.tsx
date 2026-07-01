@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { useAuth } from "@/hooks/useAuth";
+import { logAuditEvent } from "@/lib/auditLog";
 import SEO from "@/components/SEO";
 
 interface DemoRequest {
@@ -75,6 +76,13 @@ const DemoRequests = () => {
         .eq('id', id);
 
       if (error) throw error;
+
+      await logAuditEvent({
+        action: "demo_request.status_change",
+        targetType: "demo_request",
+        targetId: id,
+        metadata: { new_status: newStatus },
+      });
 
       toast({
         title: "Status Updated",
