@@ -26,8 +26,8 @@ const TESTIMONIALS = [
 
 const TRUST_BADGES = [
   { icon: Shield, label: "Private & Secure", desc: "No data sold" },
-  { icon: Award, label: "AI-Powered", desc: "2,400+ strains" },
-  { icon: Users, label: "2,400+ Users", desc: "Growing daily" },
+  { icon: Award, label: "AI-Powered", desc: "36+ strains" },
+  { icon: Users, label: "Growing Community", desc: "Join today" },
 ];
 
 const Testimonials = () => {
