@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { prepareImageForAnalysis } from "@/utils/imagePreprocessing";
+import { trackScanStart, trackScanComplete, trackRecommendationView } from "@/components/GoogleAnalytics";
 
 interface StrainResult {
   strain_name: string;
