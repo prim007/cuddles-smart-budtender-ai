@@ -63,6 +63,7 @@ const StrainScanner = () => {
     }
 
     setIsAnalyzing(true);
+    trackScanStart('upload');
     try {
       const { data, error } = await supabase.functions.invoke("identify-strain", {
         body: { imageBase64: imagePreview },
