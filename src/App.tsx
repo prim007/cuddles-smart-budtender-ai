@@ -71,8 +71,6 @@ const DPA = lazyWithReload(() => import("./pages/DPA"));
 // New Cuddles features
 const StrainJournal = lazyWithReload(() => import("./pages/StrainJournal"));
 const StrainScanner = lazyWithReload(() => import("./pages/StrainScanner"));
-const StrainReviews = lazyWithReload(() => import("./pages/StrainReviews"));
-
 // Blog
 const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
@@ -193,7 +191,6 @@ const App = () => (
                 {/* Cuddles Features */}
                 <Route path="/journal" element={<Suspense fallback={<PageLoader />}><StrainJournal /></Suspense>} />
                 <Route path="/scanner" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><StrainScanner /></Suspense></ProtectedRoute>} />
-                <Route path="/reviews" element={<Suspense fallback={<PageLoader />}><StrainReviews /></Suspense>} />
                 <Route path="/t-break" element={<Suspense fallback={<PageLoader />}><ToleranceBreak /></Suspense>} />
                 <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />
                 <Route path="/africa-cannabis-map" element={<Suspense fallback={<PageLoader />}><AfricaLegislationMap /></Suspense>} />

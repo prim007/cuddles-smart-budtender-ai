@@ -7,13 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { 
-  BookOpen, 
-  Camera, 
-  Star, 
-  Heart, 
-  Menu, 
-  X, 
+import {
+  BookOpen,
+  Camera,
+  Heart,
+  Menu,
+  X,
   Home,
   MessageCircle,
   LogIn,
@@ -77,12 +76,6 @@ const features: Feature[] = [
     title: "Scanner",
     href: "/scanner",
     gradient: "from-hippie-pink to-hippie-coral",
-  },
-  {
-    icon: Star,
-    title: "Reviews",
-    href: "/reviews",
-    gradient: "from-hippie-orange to-hippie-amber",
   },
   {
     icon: Heart,
