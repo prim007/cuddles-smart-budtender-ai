@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
-import { BookOpen, Camera, Star, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download, MapPin } from "lucide-react";
+import { BookOpen, Camera, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download, MapPin } from "lucide-react";
 import { NewsletterSignup } from "./NewsletterSignup";
 import { ZA_CITIES } from "@/data/zaCities";
 
@@ -11,7 +11,7 @@ const features = [
   { icon: FileText, title: "Blog", href: "/blog" },
   { icon: BookOpen, title: "Strain Journal", href: "/journal" },
   { icon: Camera, title: "Strain Scanner", href: "/scanner" },
-  { icon: Star, title: "Community Reviews", href: "/reviews" },
+  
   { icon: Heart, title: "T-Break Coach", href: "/t-break" },
   { icon: Sprout, title: "Seedling Monitor", href: "/grow" },
 ];
