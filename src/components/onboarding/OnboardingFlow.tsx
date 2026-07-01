@@ -21,6 +21,9 @@ import {
 } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import cuddlesImage from "@/assets/cuddles.png";
+import { trackQuestionnaireStep, trackQuestionnaireComplete } from "@/components/GoogleAnalytics";
+
+const STEP_NAMES = ['welcome', 'experience', 'tolerance', 'consumption', 'effects', 'flavors'];
 
 const ONBOARDING_COMPLETE_KEY = "cuddles-onboarding-complete";
 
