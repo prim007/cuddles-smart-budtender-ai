@@ -288,6 +288,87 @@ export const trackArticleEngaged = (slug: string) => {
   trackEvent('article_engaged', 'engagement', slug);
 };
 
+// --- Product funnel: scan → questionnaire → recommendation ---
+// Shared funnel_id lets GA4 stitch a user's journey across events.
+const PRODUCT_FUNNEL_KEY = 'cuddles_product_funnel_id';
+
+const getOrCreateProductFunnelId = (): string => {
+  try {
+    let id = sessionStorage.getItem(PRODUCT_FUNNEL_KEY);
+    if (!id) {
+      id = `pf_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+      sessionStorage.setItem(PRODUCT_FUNNEL_KEY, id);
+    }
+    return id;
+  } catch {
+    return `pf_${Date.now()}`;
+  }
+};
+
+const fireFunnelEvent = (
+  event: string,
+  category: string,
+  extra?: Record<string, any>
+) => {
+  if (!window.gtag) return;
+  const funnelId = getOrCreateProductFunnelId();
+  const utm = getStoredUtm();
+  window.gtag('event', event, {
+    event_category: category,
+    funnel_id: funnelId,
+    transport_type: 'beacon',
+    ...(utm.utm_source && { campaign_source: utm.utm_source }),
+    ...extra,
+  });
+};
+
+/** Fired when a user initiates a strain scan (clicks Analyze). */
+export const trackScanStart = (source: 'upload' | 'camera' | 'other' = 'other') => {
+  fireFunnelEvent('scan_start', 'product_funnel', { source });
+};
+
+/** Fired when a strain scan returns a successful result. */
+export const trackScanComplete = (strainName: string, confidence?: number) => {
+  fireFunnelEvent('scan_complete', 'product_funnel', {
+    strain: strainName,
+    confidence,
+  });
+};
+
+/** Fired each time a step of the onboarding questionnaire is viewed. */
+export const trackQuestionnaireStep = (stepIndex: number, stepName?: string) => {
+  fireFunnelEvent('questionnaire_step_viewed', 'product_funnel', {
+    step_index: stepIndex,
+    step_name: stepName,
+  });
+};
+
+/** Fired when the onboarding questionnaire finishes (completed or skipped). */
+export const trackQuestionnaireComplete = (
+  stepsAnswered: number,
+  totalSteps: number,
+  skipped = false
+) => {
+  fireFunnelEvent('questionnaire_complete', 'product_funnel', {
+    steps_answered: stepsAnswered,
+    total_steps: totalSteps,
+    skipped,
+  });
+};
+
+/** Fired when a recommendation (strain, product, dosage, chat) is shown. */
+export const trackRecommendationView = (
+  kind: 'strain' | 'product' | 'dosage' | 'chat',
+  label: string,
+  extra?: Record<string, any>
+) => {
+  fireFunnelEvent('recommendation_view', 'product_funnel', {
+    recommendation_kind: kind,
+    recommendation_label: label,
+    ...extra,
+  });
+};
+
 // --- Install funnel events ---
 // Funnel: prompt_eligible → prompt_shown → step_viewed/cta_clicked → accepted/dismissed → installed
 export type InstallPlatform = 'ios' | 'android' | 'desktop' | 'other';
