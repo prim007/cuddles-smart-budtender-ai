@@ -106,10 +106,14 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
 
 /** Returns the matching menu if the user's message mentions a dispensary + "menu"/"prices". */
 export function matchMenuIntent(text: string): DispensaryMenu | null {
-  const lower = text.toLowerCase();
-  if (!/\b(menu|catalog|catalogue|price\s*list|prices|pricing)\b/i.test(lower)) return null;
+  // Normalize: lowercase + strip diacritics (so "Lëf" matches "lef")
+  const normalize = (s: string) =>
+    s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const lower = normalize(text);
+  if (!/\b(menu|catalog|catalogue|price\s*list|prices|pricing|list)\b/.test(lower)) return null;
   for (const m of DISPENSARY_MENUS) {
-    if (m.aliases.some((a) => lower.includes(a))) return m;
+    if (m.aliases.some((a) => lower.includes(normalize(a)))) return m;
   }
   return null;
 }
+
