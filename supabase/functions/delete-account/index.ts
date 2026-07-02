@@ -39,12 +39,20 @@ serve(async (req) => {
     const tables = [
       "user_memory",
       "user_roles",
-      "profiles",
-      "conversations",
-      "chat_messages",
-      "strain_journal_entries",
+      "strain_journal",
       "strain_reviews",
-      "orders",
+      "review_votes",
+      "plants",
+      "plant_care_logs",
+      "plant_environment_logs",
+      "strain_scans",
+      "tolerance_breaks",
+      "delivery_order_items",
+      "delivery_orders",
+      "subscriptions",
+      "agent_traces",
+      "agent_trace_feedback",
+      "chat_conversations",
     ];
     const errors: Record<string, string> = {};
     for (const t of tables) {

@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { rateLimitResponse } from "../_shared/rate-limit.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,6 +32,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Per-IP send-specific rate limit to prevent flooding an existing lead's inbox.
+  const rl = rateLimitResponse(req, { scope: "send-promo-code", max: 3, windowMs: 60 * 60_000 }, corsHeaders);
+  if (rl) return rl;
 
   try {
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
