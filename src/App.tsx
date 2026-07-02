@@ -18,6 +18,7 @@ import ExitIntentCartReminder from "@/components/ExitIntentCartReminder";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 import UserNamePrompt from "@/components/UserNamePrompt";
 import NdebeleBackground from "@/components/NdebeleBackground";
+import StickyMobileSignupBar from "@/components/StickyMobileSignupBar";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
