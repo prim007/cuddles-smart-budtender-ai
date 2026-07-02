@@ -261,7 +261,7 @@ const ChatDemo = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    // Menu intent: display dispensary PDF inline, skip the AI call
+    // Menu intent: display dispensary menu (with prices) inline, skip the AI call
     const menu = matchMenuIntent(content);
     if (menu) {
       setMessageCount((prev) => prev + 1);
@@ -269,11 +269,11 @@ const ChatDemo = () => {
         ...prev,
         {
           role: "assistant",
-          content: `Here's the **${menu.label}** — browse it right here 👇`,
-          menuPdf: { url: menu.pdfUrl, label: menu.label },
+          content: `Here's the **${menu.label}** — tap **PDF** to download 👇`,
+          menuId: menu.id,
         },
       ]);
-      trackEvent("menu_pdf_shown", "engagement", menu.id);
+      trackEvent("menu_shown", "engagement", menu.id);
       return;
     }
 
