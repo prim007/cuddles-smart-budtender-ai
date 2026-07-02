@@ -261,6 +261,22 @@ const ChatDemo = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
+    // Menu intent: display dispensary PDF inline, skip the AI call
+    const menu = matchMenuIntent(content);
+    if (menu) {
+      setMessageCount((prev) => prev + 1);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `Here's the **${menu.label}** — browse it right here 👇`,
+          menuPdf: { url: menu.pdfUrl, label: menu.label },
+        },
+      ]);
+      trackEvent("menu_pdf_shown", "engagement", menu.id);
+      return;
+    }
+
     // Dispensary intent: handle locally with Google Places, skip the AI call
     const handled = await tryHandleDispensaryIntent(content);
     if (handled) {
