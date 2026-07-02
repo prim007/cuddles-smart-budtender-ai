@@ -705,7 +705,7 @@ const ChatDemo = () => {
                 </div>
               ));
             })()}
-            {isLoading && (
+            {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="flex gap-3">
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-hippie-lavender to-hippie-teal shadow-soft">
                   <img
