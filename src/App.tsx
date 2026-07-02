@@ -105,6 +105,7 @@ const StrainDetail = lazyWithReload(() => import("./pages/StrainDetail"));
 const FeaturedStrains = lazyWithReload(() => import("./pages/FeaturedStrains"));
 const CityDispensaryPage = lazyWithReload(() => import("./pages/CityDispensaryPage"));
 const WidgetOutreach = lazyWithReload(() => import("./pages/WidgetOutreach"));
+const EmailQueueStatus = lazyWithReload(() => import("./pages/EmailQueueStatus"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -220,6 +221,14 @@ const App = () => (
                   element={
                     <ProtectedRoute requireAdmin>
                       <Suspense fallback={<PageLoader />}><WidgetOutreach /></Suspense>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/email-queue"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <Suspense fallback={<PageLoader />}><EmailQueueStatus /></Suspense>
                     </ProtectedRoute>
                   }
                 />
