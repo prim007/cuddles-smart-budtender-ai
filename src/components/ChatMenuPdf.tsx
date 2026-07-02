@@ -27,15 +27,14 @@ const ChatMenuPdf = ({ url, label }: Props) => {
           </a>
         </div>
       </div>
-      <object data={url} type="application/pdf" className="w-full h-[420px] bg-white">
-        <div className="p-4 text-sm text-muted-foreground">
-          Your browser can't display this PDF inline.{" "}
-          <a href={url} target="_blank" rel="noopener noreferrer" className="text-primary underline">
-            Tap to open {label}
-          </a>
-          .
-        </div>
-      </object>
+      <iframe
+        src={url}
+        title={label}
+        className="w-full h-[420px] bg-white"
+      />
+      <noscript>
+        <a href={url}>Open {label}</a>
+      </noscript>
     </div>
   );
 };
