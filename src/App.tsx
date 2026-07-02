@@ -253,6 +253,7 @@ const App = () => (
               </Routes>
               <CookieConsentBanner />
               <UserNamePrompt />
+              <StickyMobileSignupBar />
             </BrowserRouter>
           </TooltipProvider>
           </SubscriptionProvider>
