@@ -138,6 +138,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/claim" element={<Suspense fallback={<PageLoader />}><Claim /></Suspense>} />
                 <Route path="/investment-deck" element={<Suspense fallback={<PageLoader />}><InvestmentDeck /></Suspense>} />
                 <Route path="/schedule-demo" element={<Suspense fallback={<PageLoader />}><ScheduleDemo /></Suspense>} />
                 <Route path="/analytics" element={<Suspense fallback={<PageLoader />}><Analytics /></Suspense>} />
