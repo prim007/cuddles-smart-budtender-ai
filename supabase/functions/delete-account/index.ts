@@ -75,7 +75,10 @@ serve(async (req) => {
 
     // Delete the auth user (this removes the auth.users row).
     const { error: delErr } = await admin.auth.admin.deleteUser(userId);
-    if (delErr) return json({ error: "Failed to delete account", details: delErr.message }, 500);
+    if (delErr) {
+      console.error("deleteUser error:", delErr.message);
+      return json({ error: "Failed to delete account. Please contact support." }, 500);
+    }
 
     return json({ success: true, partial_errors: errors });
   } catch (e) {
