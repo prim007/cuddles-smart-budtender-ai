@@ -27,7 +27,7 @@ import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } f
 import ReactMarkdown from "react-markdown";
 import ChatStrainCard from "./ChatStrainCard";
 import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
-import ChatMenuPdf from "./ChatMenuPdf";
+import ChatMenuCard from "./ChatMenuCard";
 import { matchMenuIntent, DISPENSARY_MENUS } from "@/data/dispensaryMenus";
 
 const generateSessionId = () => crypto.randomUUID();
@@ -37,7 +37,7 @@ interface Message {
   content: string;
   orderPhone?: string;
   dispensaries?: Dispensary[];
-  menuPdf?: { url: string; label: string };
+  menuId?: string;
 }
 
 // --- Dispensary intent detection ---
@@ -261,7 +261,7 @@ const ChatDemo = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    // Menu intent: display dispensary PDF inline, skip the AI call
+    // Menu intent: display dispensary menu (with prices) inline, skip the AI call
     const menu = matchMenuIntent(content);
     if (menu) {
       setMessageCount((prev) => prev + 1);
@@ -269,11 +269,11 @@ const ChatDemo = () => {
         ...prev,
         {
           role: "assistant",
-          content: `Here's the **${menu.label}** — browse it right here 👇`,
-          menuPdf: { url: menu.pdfUrl, label: menu.label },
+          content: `Here's the **${menu.label}** — tap **PDF** to download 👇`,
+          menuId: menu.id,
         },
       ]);
-      trackEvent("menu_pdf_shown", "engagement", menu.id);
+      trackEvent("menu_shown", "engagement", menu.id);
       return;
     }
 
@@ -655,9 +655,10 @@ const ChatDemo = () => {
                       {message.dispensaries && (
                         <ChatDispensaryCards dispensaries={message.dispensaries} />
                       )}
-                      {message.menuPdf && (
-                        <ChatMenuPdf url={message.menuPdf.url} label={message.menuPdf.label} />
-                      )}
+                      {message.menuId && (() => {
+                        const m = DISPENSARY_MENUS.find((x) => x.id === message.menuId);
+                        return m ? <ChatMenuCard menu={m} /> : null;
+                      })()}
                       {message.orderPhone && (
                         <Button
                           className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
