@@ -64,7 +64,28 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
       { category: "CBD",     name: "CBD Balm",         size: "50ml (750mg)", price: 380, notes: "Topical" },
     ],
   },
+  {
+    id: "dirty-vapes",
+    label: "Dirty Vapes Menu",
+    currency: "R",
+    aliases: ["dirty vapes", "dirtyvapes", "dirty vape"],
+    contact: "88 Vape Avenue, Rosebank, Johannesburg · +27 11 876 5432 · dirtyvapes.co.za",
+    disclaimer: "Prices in ZAR. Indicative pricing — confirm in-store. 18+ only. Not medical advice.",
+    items: [
+      { category: "Pod Systems", name: "Starter Pod Kit",       size: "1 device", price: 350, notes: "Refillable" },
+      { category: "Pod Systems", name: "Advanced Pod Mod",      size: "1 device", price: 650, notes: "Adjustable wattage" },
+      { category: "Pod Systems", name: "Replacement Pods",      size: "3-pack",   price: 180 },
+      { category: "E-Liquids",   name: "Fruit Blend E-Liquid",  size: "30ml",     price: 180, notes: "3-12mg nic" },
+      { category: "E-Liquids",   name: "Dessert E-Liquid",      size: "60ml",     price: 280 },
+      { category: "E-Liquids",   name: "Menthol E-Liquid",      size: "30ml",     price: 180 },
+      { category: "E-Liquids",   name: "Nic Salt E-Liquid",     size: "30ml",     price: 220, notes: "20-50mg salt nic" },
+      { category: "Accessories", name: "Replacement Coils",     size: "5-pack",   price: 200 },
+      { category: "Accessories", name: "Battery / Charger",     size: "1 unit",   price: 250 },
+      { category: "Accessories", name: "Drip Tip",              size: "1 unit",   price: 80 },
+    ],
+  },
 ];
+
 
 /** Returns the matching menu if the user's message mentions a dispensary + "menu"/"prices". */
 export function matchMenuIntent(text: string): DispensaryMenu | null {
