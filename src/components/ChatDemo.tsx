@@ -27,6 +27,8 @@ import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } f
 import ReactMarkdown from "react-markdown";
 import ChatStrainCard from "./ChatStrainCard";
 import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
+import ChatMenuPdf from "./ChatMenuPdf";
+import { matchMenuIntent, DISPENSARY_MENUS } from "@/data/dispensaryMenus";
 
 const generateSessionId = () => crypto.randomUUID();
 
@@ -35,6 +37,7 @@ interface Message {
   content: string;
   orderPhone?: string;
   dispensaries?: Dispensary[];
+  menuPdf?: { url: string; label: string };
 }
 
 // --- Dispensary intent detection ---
@@ -257,6 +260,22 @@ const ChatDemo = () => {
     const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+
+    // Menu intent: display dispensary PDF inline, skip the AI call
+    const menu = matchMenuIntent(content);
+    if (menu) {
+      setMessageCount((prev) => prev + 1);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `Here's the **${menu.label}** — browse it right here 👇`,
+          menuPdf: { url: menu.pdfUrl, label: menu.label },
+        },
+      ]);
+      trackEvent("menu_pdf_shown", "engagement", menu.id);
+      return;
+    }
 
     // Dispensary intent: handle locally with Google Places, skip the AI call
     const handled = await tryHandleDispensaryIntent(content);
@@ -635,6 +654,9 @@ const ChatDemo = () => {
                       )}
                       {message.dispensaries && (
                         <ChatDispensaryCards dispensaries={message.dispensaries} />
+                      )}
+                      {message.menuPdf && (
+                        <ChatMenuPdf url={message.menuPdf.url} label={message.menuPdf.label} />
                       )}
                       {message.orderPhone && (
                         <Button
