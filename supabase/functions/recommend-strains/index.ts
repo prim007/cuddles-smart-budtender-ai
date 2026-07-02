@@ -42,6 +42,9 @@ serve(async (req) => {
     if (claimsError || !claimsData?.claims) {
       return json({ error: "Unauthorized" }, 401);
     }
+    if (claimsData.claims.role !== "authenticated" || !claimsData.claims.sub) {
+      return json({ error: "Unauthorized" }, 401);
+    }
 
     // Validate match_count
     const k = Math.min(Math.max(Number(match_count) || 5, 1), 20);
