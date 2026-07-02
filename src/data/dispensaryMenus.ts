@@ -1,33 +1,75 @@
-// Registry of dispensary menu PDFs shown inline in the chat.
-// Drop the PDF into `public/menus/` and add an entry here.
-// Match triggers on the user typing e.g. "tripple444 menu", "leaf labs menu".
+// Dispensary menus shown inline in the chat.
+// Add a new partner by pushing to DISPENSARY_MENUS.
+// Prices are in ZAR unless the entry says otherwise.
+
+export interface MenuItem {
+  name: string;
+  category?: string;   // e.g. "Flower", "Edibles", "Concentrates"
+  size?: string;       // e.g. "1g", "3.5g", "100mg"
+  price: number;       // numeric price
+  notes?: string;      // optional short note (THC%, effect)
+}
 
 export interface DispensaryMenu {
   id: string;
   label: string;
-  pdfUrl: string;      // public path or absolute URL
-  aliases: string[];   // lowercase name variants (without the word "menu")
+  currency: string;         // "R", "$", etc
+  aliases: string[];        // lowercase name variants (without "menu")
+  contact?: string;         // phone / WhatsApp
+  disclaimer?: string;
+  items: MenuItem[];
 }
 
 export const DISPENSARY_MENUS: DispensaryMenu[] = [
   {
     id: "tripple444",
-    label: "Tripple444 Menu",
-    pdfUrl: "/menus/tripple444-menu.pdf",
+    label: "Tripple444 Shop Menu",
+    currency: "R",
     aliases: ["tripple444", "tripple 444", "triple444", "triple 444", "tripple four", "triple four"],
+    contact: "WhatsApp 064 543 6734 · tripplefourshophub.online",
+    disclaimer: "Prices in ZAR. Delivery calculated at checkout. Not medical advice.",
+    items: [
+      { category: "Flower", name: "Runtz",             size: "1g",   price: 180, notes: "Hybrid · sweet" },
+      { category: "Flower", name: "Gelato",            size: "1g",   price: 180, notes: "Hybrid · relaxing" },
+      { category: "Flower", name: "Zkittlez",          size: "1g",   price: 170, notes: "Indica · calm" },
+      { category: "Flower", name: "Durban Poison",     size: "1g",   price: 150, notes: "Sativa · uplifting" },
+      { category: "Flower", name: "OG Kush",           size: "3.5g", price: 550, notes: "Hybrid · classic" },
+      { category: "Pre-Rolls", name: "House Blend Joint", size: "1g",  price: 80 },
+      { category: "Pre-Rolls", name: "Infused Pre-Roll",  size: "1.2g", price: 180, notes: "Kief-coated" },
+      { category: "Edibles", name: "Gummies",          size: "100mg THC", price: 220 },
+      { category: "Edibles", name: "Chocolate Bar",    size: "150mg THC", price: 250 },
+      { category: "Concentrates", name: "Live Resin",  size: "1g",   price: 450 },
+      { category: "Concentrates", name: "Hash",        size: "1g",   price: 180 },
+      { category: "Vapes",   name: "510 Cartridge",    size: "0.5g", price: 380 },
+      { category: "CBD",     name: "CBD Oil Tincture", size: "30ml (500mg)", price: 420, notes: "Wellness" },
+    ],
   },
   {
     id: "leaf-labs",
     label: "Leaf Labs Menu",
-    pdfUrl: "/menus/leaf-labs-menu.pdf",
-    aliases: ["leaf labs", "leaflabs", "leaf-labs"],
+    currency: "R",
+    aliases: ["leaf labs", "leaflabs", "leaf-labs", "leaf lab"],
+    contact: "Partner dispensary",
+    disclaimer: "Prices in ZAR. Availability may vary. Not medical advice.",
+    items: [
+      { category: "Flower", name: "Blue Dream",        size: "1g",   price: 160, notes: "Sativa-hybrid" },
+      { category: "Flower", name: "Wedding Cake",      size: "1g",   price: 190, notes: "Indica-hybrid" },
+      { category: "Flower", name: "Sour Diesel",       size: "1g",   price: 170, notes: "Sativa · energetic" },
+      { category: "Flower", name: "Northern Lights",   size: "3.5g", price: 580, notes: "Indica · sleep" },
+      { category: "Edibles", name: "Micro-dose Mints", size: "5mg × 20", price: 260 },
+      { category: "Edibles", name: "Fruit Chews",      size: "10mg × 10", price: 240 },
+      { category: "Concentrates", name: "Rosin",       size: "1g",   price: 520, notes: "Solventless" },
+      { category: "Vapes",   name: "Disposable Vape",  size: "0.5g", price: 350 },
+      { category: "CBD",     name: "CBD Softgels",     size: "25mg × 30", price: 480 },
+      { category: "CBD",     name: "CBD Balm",         size: "50ml (750mg)", price: 380, notes: "Topical" },
+    ],
   },
 ];
 
-/** Returns the matching menu if the user's message mentions a dispensary + "menu". */
+/** Returns the matching menu if the user's message mentions a dispensary + "menu"/"prices". */
 export function matchMenuIntent(text: string): DispensaryMenu | null {
   const lower = text.toLowerCase();
-  if (!/\bmenu|catalog|catalogue|price\s*list\b/i.test(lower)) return null;
+  if (!/\b(menu|catalog|catalogue|price\s*list|prices|pricing)\b/i.test(lower)) return null;
   for (const m of DISPENSARY_MENUS) {
     if (m.aliases.some((a) => lower.includes(a))) return m;
   }
