@@ -169,7 +169,7 @@ serve(async (req) => {
   } catch (err: any) {
     console.error("find-dispensaries error:", err);
     return new Response(
-      JSON.stringify({ error: err.message || "Internal error" }),
+      JSON.stringify({ error: "Unable to retrieve dispensary data. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
