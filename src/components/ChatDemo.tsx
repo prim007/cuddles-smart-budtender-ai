@@ -117,16 +117,18 @@ const ChatDemo = () => {
     }
   }, [messageCount, showEmailCapture, user]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = (smooth = true) => {
     // Use requestAnimationFrame to batch with next paint cycle and avoid forced reflow
     requestAnimationFrame(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "end" });
     });
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    // Use instant scroll while streaming to avoid jitter from token-by-token smooth scrolls
+    scrollToBottom(!isLoading);
+  }, [messages, isLoading]);
+
 
   const handleLoadSession = useCallback((loadedSessionId: string, loadedMessages: Message[]) => {
     setSessionId(loadedSessionId);
@@ -703,7 +705,7 @@ const ChatDemo = () => {
                 </div>
               ));
             })()}
-            {isLoading && (
+            {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="flex gap-3">
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-hippie-lavender to-hippie-teal shadow-soft">
                   <img
