@@ -157,7 +157,7 @@ serve(async (req) => {
             <td style="padding:0 28px 24px;">
               <div style="background:linear-gradient(135deg,hsl(350,65%,55%),hsl(25,90%,60%));border-radius:16px;padding:24px;text-align:center;">
                 <p style="margin:0 0 8px;font-size:13px;color:rgba(255,255,255,0.85);font-family:'Outfit',Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;">Your Promo Code</p>
-                <p style="margin:0;font-family:'Space Grotesk',monospace;font-size:32px;font-weight:bold;color:#ffffff;letter-spacing:3px;">\${promoCode}</p>
+                <p style="margin:0;font-family:'Space Grotesk',monospace;font-size:32px;font-weight:bold;color:#ffffff;letter-spacing:3px;">${promoCode}</p>
               </div>
             </td>
           </tr>
