@@ -33,6 +33,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Per-IP send-specific rate limit to prevent flooding an existing lead's inbox.
+  const rl = rateLimitResponse(req, { scope: "send-promo-code", max: 3, windowMs: 60 * 60_000 }, corsHeaders);
+  if (rl) return rl;
+
   try {
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (!RESEND_API_KEY) {
