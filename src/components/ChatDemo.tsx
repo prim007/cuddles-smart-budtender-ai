@@ -655,9 +655,10 @@ const ChatDemo = () => {
                       {message.dispensaries && (
                         <ChatDispensaryCards dispensaries={message.dispensaries} />
                       )}
-                      {message.menuPdf && (
-                        <ChatMenuPdf url={message.menuPdf.url} label={message.menuPdf.label} />
-                      )}
+                      {message.menuId && (() => {
+                        const m = DISPENSARY_MENUS.find((x) => x.id === message.menuId);
+                        return m ? <ChatMenuCard menu={m} /> : null;
+                      })()}
                       {message.orderPhone && (
                         <Button
                           className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
