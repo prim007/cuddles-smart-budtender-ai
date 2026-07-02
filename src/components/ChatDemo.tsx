@@ -27,6 +27,8 @@ import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } f
 import ReactMarkdown from "react-markdown";
 import ChatStrainCard from "./ChatStrainCard";
 import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
+import ChatMenuPdf from "./ChatMenuPdf";
+import { matchMenuIntent, DISPENSARY_MENUS } from "@/data/dispensaryMenus";
 
 const generateSessionId = () => crypto.randomUUID();
 
@@ -35,6 +37,7 @@ interface Message {
   content: string;
   orderPhone?: string;
   dispensaries?: Dispensary[];
+  menuPdf?: { url: string; label: string };
 }
 
 // --- Dispensary intent detection ---
