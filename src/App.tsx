@@ -107,6 +107,7 @@ const FeaturedStrains = lazyWithReload(() => import("./pages/FeaturedStrains"));
 const CityDispensaryPage = lazyWithReload(() => import("./pages/CityDispensaryPage"));
 const WidgetOutreach = lazyWithReload(() => import("./pages/WidgetOutreach"));
 const EmailQueueStatus = lazyWithReload(() => import("./pages/EmailQueueStatus"));
+const Claim = lazyWithReload(() => import("./pages/Claim"));
 
 // Loading fallback component
 const PageLoader = () => (
