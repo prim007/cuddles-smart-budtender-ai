@@ -117,7 +117,7 @@ const Install = () => {
         <div className="pt-6 border-t space-y-2 text-sm text-muted-foreground">
           <h3 className="font-semibold text-foreground">Benefits:</h3>
           <ul className="space-y-1">
-            <li>✓ Works offline</li>
+            <li>✓ Always gets the latest version</li>
             <li>✓ Faster loading</li>
             <li>✓ Easy access from home screen</li>
             <li>✓ Native app experience</li>
