@@ -18,6 +18,7 @@ import ExitIntentCartReminder from "@/components/ExitIntentCartReminder";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 import UserNamePrompt from "@/components/UserNamePrompt";
 import NdebeleBackground from "@/components/NdebeleBackground";
+import StickyMobileSignupBar from "@/components/StickyMobileSignupBar";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -106,6 +107,7 @@ const FeaturedStrains = lazyWithReload(() => import("./pages/FeaturedStrains"));
 const CityDispensaryPage = lazyWithReload(() => import("./pages/CityDispensaryPage"));
 const WidgetOutreach = lazyWithReload(() => import("./pages/WidgetOutreach"));
 const EmailQueueStatus = lazyWithReload(() => import("./pages/EmailQueueStatus"));
+const Claim = lazyWithReload(() => import("./pages/Claim"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -136,6 +138,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/claim" element={<Suspense fallback={<PageLoader />}><Claim /></Suspense>} />
                 <Route path="/investment-deck" element={<Suspense fallback={<PageLoader />}><InvestmentDeck /></Suspense>} />
                 <Route path="/schedule-demo" element={<Suspense fallback={<PageLoader />}><ScheduleDemo /></Suspense>} />
                 <Route path="/analytics" element={<Suspense fallback={<PageLoader />}><Analytics /></Suspense>} />
@@ -250,6 +253,7 @@ const App = () => (
               </Routes>
               <CookieConsentBanner />
               <UserNamePrompt />
+              <StickyMobileSignupBar />
             </BrowserRouter>
           </TooltipProvider>
           </SubscriptionProvider>

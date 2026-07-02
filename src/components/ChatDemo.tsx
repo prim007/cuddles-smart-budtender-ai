@@ -588,67 +588,104 @@ const ChatDemo = () => {
 
           {/* Messages */}
           <div className="h-[400px] overflow-y-auto mb-4 space-y-4 pr-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex gap-3 animate-fade-in ${
-                  message.role === "user" ? "flex-row-reverse" : "flex-row"
-                }`}
-              >
-                <div
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden shadow-soft ${
-                    message.role === "user"
-                      ? "bg-gradient-to-br from-hippie-coral to-hippie-amber"
-                      : "bg-gradient-to-br from-hippie-lavender to-hippie-teal"
-                  }`}
-                >
-                  {message.role === "user" ? (
-                    <User className="w-5 h-5 text-white" />
-                  ) : (
-                    <img 
-                      src={processedImage} 
-                      alt="Cuddles" 
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                </div>
-                <div
-                  className={`px-4 py-3 rounded-2xl max-w-[80%] ${
-                    message.role === "user"
-                      ? "bg-gradient-to-br from-hippie-coral to-hippie-peach text-white"
-                      : "bg-card border border-border text-foreground shadow-soft"
-                  }`}
-                >
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <ReactMarkdown
-                      disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
-                      unwrapDisallowed
-                    >{message.content}</ReactMarkdown>
-                  </div>
-                  {message.role === "assistant" && index > 0 && (
-                    <ChatStrainCard messageContent={message.content} />
-                  )}
-                  {message.dispensaries && (
-                    <ChatDispensaryCards dispensaries={message.dispensaries} />
-                  )}
-                  {message.orderPhone && (
-                    <Button
-                      className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
-                      onClick={() => window.open('https://tripplefourshophub.online', '_blank')}
+            {(() => {
+              const RECO_RE = /\b(recommend|try|suggest|strain|indica|sativa|hybrid|terpene|dose|dosage)\b/i;
+              const firstRecoIdx = !user
+                ? messages.findIndex((m, i) => i > 0 && m.role === "assistant" && RECO_RE.test(m.content))
+                : -1;
+              return messages.map((message, index) => (
+                <div key={index}>
+                  <div
+                    className={`flex gap-3 animate-fade-in ${
+                      message.role === "user" ? "flex-row-reverse" : "flex-row"
+                    }`}
+                  >
+                    <div
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden shadow-soft ${
+                        message.role === "user"
+                          ? "bg-gradient-to-br from-hippie-coral to-hippie-amber"
+                          : "bg-gradient-to-br from-hippie-lavender to-hippie-teal"
+                      }`}
                     >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Shop Now at Tripple Four
-                    </Button>
+                      {message.role === "user" ? (
+                        <User className="w-5 h-5 text-white" />
+                      ) : (
+                        <img
+                          src={processedImage}
+                          alt="Cuddles"
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                    <div
+                      className={`px-4 py-3 rounded-2xl max-w-[80%] ${
+                        message.role === "user"
+                          ? "bg-gradient-to-br from-hippie-coral to-hippie-peach text-white"
+                          : "bg-card border border-border text-foreground shadow-soft"
+                      }`}
+                    >
+                      <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <ReactMarkdown
+                          disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
+                          unwrapDisallowed
+                        >{message.content}</ReactMarkdown>
+                      </div>
+                      {message.role === "assistant" && index > 0 && (
+                        <ChatStrainCard messageContent={message.content} />
+                      )}
+                      {message.dispensaries && (
+                        <ChatDispensaryCards dispensaries={message.dispensaries} />
+                      )}
+                      {message.orderPhone && (
+                        <Button
+                          className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
+                          onClick={() => window.open('https://tripplefourshophub.online', '_blank')}
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Shop Now at Tripple Four
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Contextual signup nudge after the first real recommendation (anonymous only) */}
+                  {index === firstRecoIdx && messageCount < 3 && (
+                    <div className="mt-3 rounded-xl border border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10 p-3 animate-in fade-in">
+                      <div className="flex items-start gap-3">
+                        <div className="shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                          <UserPlus className="h-4 w-4 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-foreground leading-tight">
+                            Save this pick to your journal 🌿
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            Free account — Cuddles remembers what worked for you.
+                          </p>
+                          <Link
+                            to="/auth"
+                            onClick={() => trackEvent("cta_click", "signup", "chat_contextual_reco")}
+                          >
+                            <Button
+                              size="sm"
+                              className="mt-2 h-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground gap-1.5 text-xs"
+                            >
+                              <UserPlus className="h-3.5 w-3.5" /> Save & Sign Up Free
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </div>
-              </div>
-            ))}
+              ));
+            })()}
             {isLoading && (
               <div className="flex gap-3">
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-hippie-lavender to-hippie-teal shadow-soft">
-                  <img 
-                    src={processedImage} 
-                    alt="Cuddles" 
+                  <img
+                    src={processedImage}
+                    alt="Cuddles"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -667,6 +704,7 @@ const ChatDemo = () => {
             )}
             <div ref={messagesEndRef} />
           </div>
+
 
           {/* Post-chat catalog nudge */}
           {messages.filter(m => m.role === "user").length >= 2 && !(!user && messageCount >= 3) && (

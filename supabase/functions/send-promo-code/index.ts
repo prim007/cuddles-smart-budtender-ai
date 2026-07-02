@@ -157,7 +157,7 @@ serve(async (req) => {
             <td style="padding:0 28px 24px;">
               <div style="background:linear-gradient(135deg,hsl(350,65%,55%),hsl(25,90%,60%));border-radius:16px;padding:24px;text-align:center;">
                 <p style="margin:0 0 8px;font-size:13px;color:rgba(255,255,255,0.85);font-family:'Outfit',Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;">Your Promo Code</p>
-                <p style="margin:0;font-family:'Space Grotesk',monospace;font-size:32px;font-weight:bold;color:#ffffff;letter-spacing:3px;">\${promoCode}</p>
+                <p style="margin:0;font-family:'Space Grotesk',monospace;font-size:32px;font-weight:bold;color:#ffffff;letter-spacing:3px;">${promoCode}</p>
               </div>
             </td>
           </tr>
@@ -175,10 +175,15 @@ serve(async (req) => {
 
           <!-- CTA Button -->
           <tr>
-            <td style="padding:0 28px 28px;">
-              <a href="https://tripplefourshophub.online" style="display:inline-block;background-color:hsl(350,65%,55%);color:#ffffff;font-family:'Space Grotesk',Arial,sans-serif;font-size:15px;font-weight:bold;text-decoration:none;border-radius:12px;padding:14px 28px;">
-                Shop Now 🛒
+            <td style="padding:0 28px 16px;">
+              <a href="https://cuddles-ai.com/claim?email=${encodeURIComponent(normalizedEmail)}&code=${encodeURIComponent(promoCode)}" style="display:inline-block;background-color:hsl(350,65%,55%);color:#ffffff;font-family:'Space Grotesk',Arial,sans-serif;font-size:15px;font-weight:bold;text-decoration:none;border-radius:12px;padding:14px 28px;">
+                Claim My Free Account →
               </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 28px 20px;font-size:13px;color:#999;">
+              Claim your account in one click to save this code, unlock your AI budtender, and track your favourite strains. Or <a href="https://tripplefourshophub.online" style="color:hsl(350,65%,55%);text-decoration:underline;">shop now</a> without an account.
             </td>
           </tr>
 

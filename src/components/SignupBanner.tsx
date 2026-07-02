@@ -53,17 +53,25 @@ const SignupBanner = () => {
   };
 
   if (submitted) {
+    const claimHref = `/claim?email=${encodeURIComponent(email.trim().toLowerCase())}`;
     return (
       <section className="py-12 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10">
         <div className="container mx-auto px-4 text-center space-y-4">
           <CheckCircle className="h-10 w-10 text-primary mx-auto" />
           <h3 className="text-2xl font-display font-bold text-foreground">You're on the list! 🎉</h3>
-          <p className="text-muted-foreground">Check your email for your exclusive discount code.</p>
-          <a href={SHOP_URL} target="_blank" rel="noopener noreferrer">
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2 mt-2">
-              Shop Now <ArrowRight className="h-4 w-4" />
-            </Button>
-          </a>
+          <p className="text-muted-foreground">Check your email for your 15% code — then claim your free account to save it.</p>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+            <a href={claimHref}>
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2 font-semibold">
+                Claim My Free Account <ArrowRight className="h-4 w-4" />
+              </Button>
+            </a>
+            <a href={SHOP_URL} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" className="gap-2">
+                Shop Now <ArrowRight className="h-4 w-4" />
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
     );
