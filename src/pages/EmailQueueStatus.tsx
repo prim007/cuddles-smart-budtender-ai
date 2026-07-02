@@ -58,7 +58,7 @@ const EmailQueueStatus = () => {
       const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
       const [metricsRes, logsRes, errorsRes, sentRes] = await Promise.all([
-        supabase.rpc("get_email_queue_metrics" as never),
+        (supabase.rpc as unknown as (fn: string) => Promise<{ data: QueueMetric[] | null }>)("get_email_queue_metrics"),
         supabase
           .from("email_send_log")
           .select("status")
@@ -76,11 +76,11 @@ const EmailQueueStatus = () => {
           .limit(25),
       ]);
 
-      if (metricsRes.data) setMetrics(metricsRes.data as QueueMetric[]);
+      if (metricsRes.data) setMetrics(metricsRes.data);
 
       const c: StatusCounts = { sent: 0, failed: 0, dlq: 0, rate_limited: 0, pending: 0 };
       (logsRes.data ?? []).forEach((r: { status: string }) => {
-        if (r.status in c) (c as Record<string, number>)[r.status]++;
+        if (r.status in c) (c as unknown as Record<string, number>)[r.status]++;
       });
       setCounts24h(c);
       setRecentErrors((errorsRes.data ?? []) as LogRow[]);
