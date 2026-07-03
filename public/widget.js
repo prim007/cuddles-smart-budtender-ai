@@ -132,6 +132,18 @@
     '.cuddles-msg.user{background:' + BRAND_COLOR + ';color:#fff;border-bottom-right-radius:4px;align-self:flex-end}',
     '.cuddles-msg a{color:' + BRAND_COLOR + ';text-decoration:underline}',
     '.cuddles-msg.user a{color:#fff}',
+    '.cuddles-menu{max-width:92%;align-self:flex-start;background:#20203a;color:#eaeaf2;border:1px solid rgba(255,255,255,.12);border-radius:16px;overflow:hidden;font-size:12px;line-height:1.35}',
+    '.cuddles-menu-head{background:rgba(255,255,255,.06);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}',
+    '.cuddles-menu-title{font-weight:700;font-size:13px;color:#fff}',
+    '.cuddles-menu-pdf{border:1px solid rgba(255,255,255,.18);background:' + BRAND_COLOR + ';color:#fff;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}',
+    '.cuddles-menu-body{padding:10px 12px;max-height:300px;overflow:auto}',
+    '.cuddles-menu-cat{font-size:11px;font-weight:800;color:' + BRAND_COLOR + ';text-transform:uppercase;margin:8px 0 4px;letter-spacing:.04em}',
+    '.cuddles-menu-row{display:flex;justify-content:space-between;gap:10px;border-top:1px solid rgba(255,255,255,.08);padding:6px 0}',
+    '.cuddles-menu-name{font-weight:650;color:#fff}',
+    '.cuddles-menu-meta{opacity:.72;font-size:11px}',
+    '.cuddles-menu-price{font-weight:800;color:#fff;white-space:nowrap}',
+    '.cuddles-menu-foot{border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:8px;opacity:.72;font-size:11px}',
+    '.cuddles-menu-disclaimer{opacity:.62;font-size:10px;margin-top:4px;font-style:italic}',
     '#cuddles-input-area{padding:12px;border-top:1px solid rgba(255,255,255,.1);display:flex;gap:8px;background:#1a1a2e}',
     '#cuddles-input{flex:1;border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:10px 16px;font-size:13px;background:rgba(255,255,255,.05);color:#e0e0e0;outline:none}',
     '#cuddles-input:focus{border-color:' + BRAND_COLOR + '}',
@@ -210,6 +222,82 @@
     return div;
   }
 
+  function escapeHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+    });
+  }
+
+  function groupMenuItems(menu) {
+    var groups = {};
+    menu.items.forEach(function(item) {
+      var category = item.category || 'Menu';
+      if (!groups[category]) groups[category] = [];
+      groups[category].push(item);
+    });
+    return groups;
+  }
+
+  function addMenuCard(menu) {
+    messages.push({ role: 'assistant', content: menu.label + ' displayed', menuId: menu.id });
+    var card = document.createElement('div');
+    card.className = 'cuddles-menu';
+    var groups = groupMenuItems(menu);
+    var html = '<div class="cuddles-menu-head"><div class="cuddles-menu-title">📋 ' + escapeHtml(menu.label) + '</div><button type="button" class="cuddles-menu-pdf">PDF</button></div><div class="cuddles-menu-body">';
+    Object.keys(groups).forEach(function(category) {
+      html += '<div class="cuddles-menu-cat">' + escapeHtml(category) + '</div>';
+      groups[category].forEach(function(item) {
+        html += '<div class="cuddles-menu-row"><div><div class="cuddles-menu-name">' + escapeHtml(item.name) + '</div>';
+        if (item.size || item.notes) html += '<div class="cuddles-menu-meta">' + escapeHtml([item.size, item.notes].filter(Boolean).join(' · ')) + '</div>';
+        html += '</div><div class="cuddles-menu-price">' + escapeHtml(menu.currency) + escapeHtml(item.price) + '</div></div>';
+      });
+    });
+    if (menu.contact) html += '<div class="cuddles-menu-foot">' + escapeHtml(menu.contact) + '</div>';
+    if (menu.disclaimer) html += '<div class="cuddles-menu-disclaimer">' + escapeHtml(menu.disclaimer) + '</div>';
+    html += '</div>';
+    card.innerHTML = html;
+    card.querySelector('.cuddles-menu-pdf').onclick = function() { downloadMenuPdf(menu); };
+    messagesEl.appendChild(card);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return card;
+  }
+
+  function downloadMenuPdf(menu) {
+    var groups = groupMenuItems(menu);
+    var lines = [menu.label, menu.contact || '', ''];
+    Object.keys(groups).forEach(function(category) {
+      lines.push(category.toUpperCase());
+      groups[category].forEach(function(item) {
+        lines.push(item.name + (item.size ? ' · ' + item.size : '') + ' — ' + menu.currency + item.price + (item.notes ? ' · ' + item.notes : ''));
+      });
+      lines.push('');
+    });
+    if (menu.disclaimer) lines.push(menu.disclaimer);
+    var html = '<!doctype html><html><head><meta charset="utf-8"><title>' + escapeHtml(menu.label) + '</title><style>body{font-family:Arial,sans-serif;padding:32px;color:#171521}h1{font-size:22px;margin:0 0 8px}.contact,.disclaimer{color:#666;font-size:12px}.cat{font-weight:700;margin-top:18px;border-bottom:1px solid #ddd;padding-bottom:6px}.row{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #eee;padding:7px 0}.meta{color:#666;font-size:12px}.price{font-weight:700;white-space:nowrap}@media print{button{display:none}}</style></head><body><button onclick="window.print()">Save as PDF</button><h1>' + escapeHtml(menu.label) + '</h1>';
+    if (menu.contact) html += '<div class="contact">' + escapeHtml(menu.contact) + '</div>';
+    Object.keys(groups).forEach(function(category) {
+      html += '<div class="cat">' + escapeHtml(category) + '</div>';
+      groups[category].forEach(function(item) {
+        html += '<div class="row"><div><strong>' + escapeHtml(item.name) + '</strong>';
+        if (item.size || item.notes) html += '<div class="meta">' + escapeHtml([item.size, item.notes].filter(Boolean).join(' · ')) + '</div>';
+        html += '</div><div class="price">' + escapeHtml(menu.currency) + escapeHtml(item.price) + '</div></div>';
+      });
+    });
+    if (menu.disclaimer) html += '<p class="disclaimer">' + escapeHtml(menu.disclaimer) + '</p>';
+    html += '</body></html>';
+    var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var win = window.open(url, '_blank');
+    if (win) setTimeout(function() { URL.revokeObjectURL(url); }, 10000);
+    else {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }));
+      a.download = menu.id + '-menu.txt';
+      a.click();
+      setTimeout(function() { URL.revokeObjectURL(a.href); }, 10000);
+    }
+  }
+
   function showTyping() {
     var div = document.createElement('div');
     div.className = 'cuddles-typing';
@@ -233,6 +321,16 @@
     isStreaming = true;
 
     addMessage('user', text);
+
+    var menu = matchMenuIntent(text);
+    if (menu) {
+      addMessage('assistant', "Here's the " + menu.label + ' — tap PDF to download.');
+      addMenuCard(menu);
+      isStreaming = false;
+      sendBtn.disabled = !inputEl.value.trim();
+      return;
+    }
+
     showTyping();
 
     try {
