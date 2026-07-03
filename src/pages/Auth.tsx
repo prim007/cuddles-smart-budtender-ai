@@ -54,9 +54,9 @@ const Auth = () => {
   const validateForm = (isSignup = false): boolean => {
     const newErrors: { email?: string; password?: string; name?: string } = {};
     const emailResult = emailSchema.safeParse(email);
-    if (!emailResult.success) newErrors.email = emailResult.error.errors[0].message;
+    if (!emailResult.success) newErrors.email = emailResult.error.issues[0].message;
     const passwordResult = passwordSchema.safeParse(password);
-    if (!passwordResult.success) newErrors.password = passwordResult.error.errors[0].message;
+    if (!passwordResult.success) newErrors.password = passwordResult.error.issues[0].message;
     if (isSignup && !name.trim()) newErrors.name = "Please enter your name";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
