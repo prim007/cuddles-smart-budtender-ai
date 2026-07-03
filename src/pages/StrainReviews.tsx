@@ -115,7 +115,7 @@ const StrainReviews = () => {
 
     const result = reviewSchema.safeParse(formData);
     if (!result.success) {
-      toast({ title: "Validation Error", description: result.error.errors[0].message, variant: "destructive" });
+      toast({ title: "Validation Error", description: result.error.issues[0].message, variant: "destructive" });
       return;
     }
 
