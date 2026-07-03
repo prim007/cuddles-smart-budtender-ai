@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import prerender from "@prerenderer/rollup-plugin";
+import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/supabase/vite";
 
 // Routes prerendered at build time so Google can index content instantly.
 // Auth-gated pages (/journal, /scanner) still render — they show signed-out
@@ -24,6 +25,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
+    mcpPlugin(),
     mode === "development" && componentTagger(),
     mode === "production" && prerender({
       routes: PRERENDER_ROUTES,

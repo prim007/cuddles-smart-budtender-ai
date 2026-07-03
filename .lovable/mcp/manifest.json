@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "cuddles-ai-mcp",
+      "version": "0.1.0",
+      "title": "Cuddles AI"
+    },
+    "tools": [
+      {
+        "name": "list_dispensary_menus",
+        "title": "List dispensary menus",
+        "description": "List the partner dispensaries whose menus are available on Cuddles AI.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_dispensary_menu",
+        "title": "Get dispensary menu",
+        "description": "Get the full product menu (items, prices, categories) for a partner dispensary by id or name alias (e.g. 'tripple444', 'lef labs', 'dirty vapes').",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "dispensary": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Dispensary id or a name alias, e.g. 'tripple444', 'lef labs'."
+            }
+          },
+          "required": [
+            "dispensary"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_strains",
+        "title": "Search cannabis strains",
+        "description": "Search the Cuddles AI public strain catalog. Filter by category (e.g. sleep, energy, creativity, stress, pain, social) or free-text query on strain name.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Optional strain name substring.",
+              "type": "string"
+            },
+            "category": {
+              "description": "Optional effect category: sleep, energy, creativity, stress, pain, social.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Max rows (default 10).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
