@@ -459,8 +459,29 @@ const ChatDemo = () => {
         }
       }
 
-      // Save conversation
+      // Save conversation with enriched metadata (IP, UA, is_test flag)
       try {
+        // Detect test mode: ?test=1 in URL sets localStorage flag permanently
+        try {
+          const params = new URLSearchParams(window.location.search);
+          if (params.get('test') === '1') localStorage.setItem('cuddles_test_mode', '1');
+          if (params.get('test') === '0') localStorage.removeItem('cuddles_test_mode');
+        } catch {}
+        const isTest = typeof window !== 'undefined' && localStorage.getItem('cuddles_test_mode') === '1';
+
+        // Fetch client IP once per session (cached in sessionStorage)
+        let ip: string | null = null;
+        try {
+          ip = sessionStorage.getItem('cuddles_client_ip');
+          if (!ip) {
+            const r = await fetch('https://api.ipify.org?format=json');
+            if (r.ok) {
+              ip = (await r.json())?.ip ?? null;
+              if (ip) sessionStorage.setItem('cuddles_client_ip', ip);
+            }
+          }
+        } catch { /* IP lookup is best-effort */ }
+
         await supabase.from('chat_conversations').insert({
           session_id: sessionId,
           user_message: userMessage.content,
@@ -469,6 +490,13 @@ const ChatDemo = () => {
           user_metadata: {
             timestamp: new Date().toISOString(),
             language,
+            is_test: isTest,
+            ip,
+            user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            referrer: typeof document !== 'undefined' ? document.referrer || null : null,
+            path: typeof window !== 'undefined' ? window.location.pathname : null,
+            screen: typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : null,
           }
         });
       } catch (dbError) {
