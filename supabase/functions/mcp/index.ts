@@ -152,8 +152,9 @@ import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z2 } from "npm:zod@^4.4.3";
 import { createClient } from "npm:@supabase/supabase-js@^2.108.2";
 function supabase() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY;
+  const env = globalThis.process?.env ?? {};
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_PUBLISHABLE_KEY ?? env.SUPABASE_ANON_KEY;
   if (!url || !key) throw new Error("Supabase env not configured");
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
