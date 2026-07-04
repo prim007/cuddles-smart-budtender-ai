@@ -3,8 +3,9 @@ import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 
 function supabase() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY;
+  const env = (globalThis as any).process?.env ?? {};
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_PUBLISHABLE_KEY ?? env.SUPABASE_ANON_KEY;
   if (!url || !key) throw new Error("Supabase env not configured");
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
