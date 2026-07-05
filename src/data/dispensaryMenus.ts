@@ -90,7 +90,18 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
     id: "dirty-vapes",
     label: "Dirty Vapes Menu",
     currency: "R",
-    aliases: ["dirty vapes", "dirtyvapes", "dirty vape"],
+    aliases: [
+      "dirty vapes",
+      "dirtyvapes",
+      "dirty vape",
+      "dirty vapes sa",
+      "dirtyvapes sa",
+      "dirty vape sa",
+      "dirty vapes menu",
+      "dirty vapes pdf",
+      "dirty vapes prices",
+      "dirty vapes catalogue",
+    ],
     contact: "074 262 4491 · dirtyvapessa@gmail.com · tripplefourshophub.online/partners/dirty-vapes",
     disclaimer: "Prices in ZAR (May 2026). 18+ only. Not medical advice.",
     items: [
@@ -104,7 +115,7 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
 
 
 
-/** Returns the matching menu if the user's message mentions a dispensary + "menu"/"prices". */
+/** Returns the matching menu if the user's message mentions a known dispensary/brand. */
 export function matchMenuIntent(text: string): DispensaryMenu | null {
   // Normalize: lowercase + strip diacritics (so "Lëf" matches "lef")
   const normalize = (s: string) =>

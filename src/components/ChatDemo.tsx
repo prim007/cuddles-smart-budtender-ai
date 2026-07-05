@@ -417,6 +417,19 @@ const ChatDemo = () => {
 
       // Process order phone from complete response
       let finalContent = assistantSoFar || "";
+      const finalMenu = matchMenuIntent(content) || matchMenuIntent(finalContent);
+      if (finalMenu) {
+        setMessages((prev) => {
+          const last = prev[prev.length - 1];
+          const menuMessage: Message = { role: "assistant", content: "", menuId: finalMenu.id };
+          if (last?.role === "assistant") {
+            return prev.map((m, i) => i === prev.length - 1 ? menuMessage : m);
+          }
+          return [...prev, menuMessage];
+        });
+        trackEvent("menu_shown", "engagement", finalMenu.id);
+        return;
+      }
       let orderPhone: string | undefined;
       const orderMatch = finalContent.match(/\[ORDER:([0-9]+)\]/);
       if (orderMatch) {
