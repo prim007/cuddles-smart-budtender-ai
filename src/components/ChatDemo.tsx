@@ -271,7 +271,7 @@ const ChatDemo = () => {
         ...prev,
         {
           role: "assistant",
-          content: `Here's the **${menu.label}** — tap **PDF** to download 👇`,
+          content: "",
           menuId: menu.id,
         },
       ]);
