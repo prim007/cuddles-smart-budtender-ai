@@ -250,6 +250,12 @@ const App = () => (
                 <Route path="/guides/personalized-recommendations" element={<Suspense fallback={<PageLoader />}><PersonalizedRecommendationsGuide /></Suspense>} />
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="/dirty-vapes" element={<Suspense fallback={<PageLoader />}><MenuPage slug="dirty-vapes" /></Suspense>} />
+                <Route path="/tripple-four" element={<Suspense fallback={<PageLoader />}><MenuPage slug="tripple-four" /></Suspense>} />
+                <Route path="/tripple444" element={<Suspense fallback={<PageLoader />}><MenuPage slug="tripple444" /></Suspense>} />
+                <Route path="/lef-labs" element={<Suspense fallback={<PageLoader />}><MenuPage slug="lef-labs" /></Suspense>} />
+                <Route path="/leaf-labs" element={<Suspense fallback={<PageLoader />}><MenuPage slug="leaf-labs" /></Suspense>} />
+                <Route path="/menu/:slug" element={<Suspense fallback={<PageLoader />}><MenuPage /></Suspense>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <CookieConsentBanner />
