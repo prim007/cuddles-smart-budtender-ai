@@ -106,14 +106,6 @@ const ChatMenuCard = ({ menu }: Props) => {
             </ul>
           </div>
         ))}
-        {menu.contact && (
-          <p className="text-xs text-muted-foreground border-t border-border pt-2 mt-2">
-            {menu.contact}
-          </p>
-        )}
-        {menu.disclaimer && (
-          <p className="text-[10px] text-muted-foreground/80 mt-1 italic">{menu.disclaimer}</p>
-        )}
       </div>
     </div>
   );
