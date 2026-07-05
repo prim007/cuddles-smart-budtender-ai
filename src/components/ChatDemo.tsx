@@ -263,7 +263,8 @@ const ChatDemo = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    // Menu intent: display dispensary menu (with prices) inline, skip the AI call
+    // Menu intent: display the requested menu inline and bypass the AI completely.
+    // This keeps live menu requests as a simple menu card, with no generated text.
     const menu = matchMenuIntent(content);
     if (menu) {
       setMessageCount((prev) => prev + 1);
@@ -673,13 +674,15 @@ const ChatDemo = () => {
                           : "bg-card border border-border text-foreground shadow-soft"
                       }`}
                     >
-                      <div className="prose prose-sm dark:prose-invert max-w-none">
-                        <ReactMarkdown
-                          disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
-                          unwrapDisallowed
-                        >{message.content}</ReactMarkdown>
-                      </div>
-                      {message.role === "assistant" && index > 0 && (
+                      {message.content && (
+                        <div className="prose prose-sm dark:prose-invert max-w-none">
+                          <ReactMarkdown
+                            disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
+                            unwrapDisallowed
+                          >{message.content}</ReactMarkdown>
+                        </div>
+                      )}
+                      {message.role === "assistant" && index > 0 && message.content && (
                         <ChatStrainCard messageContent={message.content} />
                       )}
                       {message.dispensaries && (
