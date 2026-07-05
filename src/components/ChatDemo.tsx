@@ -417,7 +417,7 @@ const ChatDemo = () => {
 
       // Process order phone from complete response
       let finalContent = assistantSoFar || "";
-      const finalMenu = matchMenuIntent(content) || matchMenuIntent(finalContent);
+      const finalMenu = matchMenuIntent(content);
       if (finalMenu) {
         setMessages((prev) => {
           const last = prev[prev.length - 1];
