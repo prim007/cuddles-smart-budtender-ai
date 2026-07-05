@@ -97,7 +97,6 @@
 
   function matchMenuIntent(text) {
     var lower = normalizeText(text);
-    if (!/\b(display|show|open|pull|send|get|view)?\s*(menu|catalog|catalogue|price\s*list|prices|pricing|list)\b/.test(lower)) return null;
     for (var i = 0; i < DISPENSARY_MENUS.length; i++) {
       var menu = DISPENSARY_MENUS[i];
       for (var j = 0; j < menu.aliases.length; j++) {
@@ -324,7 +323,6 @@
 
     var menu = matchMenuIntent(text);
     if (menu) {
-      addMessage('assistant', "Here's the " + menu.label + ' — tap PDF to download.');
       addMenuCard(menu);
       isStreaming = false;
       sendBtn.disabled = !inputEl.value.trim();

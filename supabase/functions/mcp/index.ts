@@ -79,7 +79,18 @@ var DISPENSARY_MENUS = [
     id: "dirty-vapes",
     label: "Dirty Vapes Menu",
     currency: "R",
-    aliases: ["dirty vapes", "dirtyvapes", "dirty vape"],
+    aliases: [
+      "dirty vapes",
+      "dirtyvapes",
+      "dirty vape",
+      "dirty vapes sa",
+      "dirtyvapes sa",
+      "dirty vape sa",
+      "dirty vapes menu",
+      "dirty vapes pdf",
+      "dirty vapes prices",
+      "dirty vapes catalogue"
+    ],
     contact: "074 262 4491 \xB7 dirtyvapessa@gmail.com \xB7 tripplefourshophub.online/partners/dirty-vapes",
     disclaimer: "Prices in ZAR (May 2026). 18+ only. Not medical advice.",
     items: [
