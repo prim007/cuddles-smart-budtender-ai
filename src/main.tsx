@@ -5,7 +5,7 @@ import "./index.css";
 
 const STALE_MODULE_RELOAD_KEY = "cuddles:stale-module-reload";
 const STALE_MODULE_ERROR_PATTERN = /Importing a module script failed|Failed to fetch dynamically imported module|Loading chunk \d+ failed|Unable to preload CSS/i;
-const SERVICE_WORKER_CLEANUP_KEY = "cuddles:service-worker-cleanup:v6-menu-card-live";
+const SERVICE_WORKER_CLEANUP_KEY = "cuddles:service-worker-cleanup:v7-menu-alias-live";
 const SERVICE_WORKER_RELOAD_KEY = "cuddles:service-worker-cleanup-reload";
 
 const isCuddlesWebHost = () => {
