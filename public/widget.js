@@ -97,6 +97,8 @@
 
   function matchMenuIntent(text) {
     var lower = normalizeText(text);
+    // Location/hours queries should not be hijacked by menu cards.
+    if (/\b(where|near\s*me|nearby|closest|nearest|location|address|directions?|open(ing)?|hours?|store|shop\s*(near|around|close)|find)\b/.test(lower)) return null;
     for (var i = 0; i < DISPENSARY_MENUS.length; i++) {
       var menu = DISPENSARY_MENUS[i];
       for (var j = 0; j < menu.aliases.length; j++) {
