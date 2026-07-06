@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { rateLimitResponse } from "../_shared/rate-limit.ts";
 
 
@@ -44,41 +43,24 @@ function haversineKm(a: { lat: number; lng: number }, b: { lat: number; lng: num
   return 2 * R * Math.asin(Math.sqrt(x));
 }
 
+function isValidCoordinate(lat: unknown, lng: unknown): lat is number {
+  return (
+    typeof lat === "number" &&
+    typeof lng === "number" &&
+    Number.isFinite(lat) &&
+    Number.isFinite(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180
+  );
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   const rl = rateLimitResponse(req, { scope: "find-dispensaries", max: 20, windowMs: 60_000 }, corsHeaders);
   if (rl) return rl;
-
-  // Require authenticated user
-  const authHeader = req.headers.get("Authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
-  try {
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-    );
-    const token = authHeader.replace("Bearer ", "");
-    const { data, error } = await supabase.auth.getClaims(token);
-    if (error || !data?.claims || data.claims.role !== "authenticated" || !data.claims.sub) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-  } catch {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
-
-
 
   try {
     if (!LOVABLE_API_KEY || !GOOGLE_MAPS_API_KEY) {
@@ -100,7 +82,7 @@ serve(async (req) => {
       lng = geo.lng;
     }
 
-    if (typeof lat !== "number" || typeof lng !== "number") {
+    if (!isValidCoordinate(lat, lng)) {
       return new Response(
         JSON.stringify({ error: "Provide either lat/lng or an address." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
