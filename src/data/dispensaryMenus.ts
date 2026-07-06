@@ -121,9 +121,13 @@ export function matchMenuIntent(text: string): DispensaryMenu | null {
   const normalize = (s: string) =>
     s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const lower = normalize(text);
-  // If a known dispensary/brand alias is mentioned, always show its menu card —
-  // no need to also say "menu". This handles "dirty vapes pdf", "show me dirty vapes",
-  // "tripple444", "lef labs", etc.
+  // If the user is asking for a location/hours ("where is …", "near me",
+  // "open", "hours", "address", etc.) let the dispensary handler answer
+  // instead of hijacking the reply with a price menu.
+  const LOCATION_INTENT_RE =
+    /\b(where|near\s*me|nearby|closest|nearest|location|address|directions?|open(ing)?|hours?|store|shop\s*(near|around|close)|find)\b/;
+  if (LOCATION_INTENT_RE.test(lower)) return null;
+  // Otherwise, if a known dispensary/brand alias is mentioned, show its menu.
   for (const m of DISPENSARY_MENUS) {
     if (m.aliases.some((a) => lower.includes(normalize(a)))) return m;
   }
