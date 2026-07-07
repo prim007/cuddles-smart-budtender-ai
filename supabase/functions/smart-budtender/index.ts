@@ -3,6 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 import { RESEARCH_KNOWLEDGE_BASE } from "./research-knowledge.ts";
 import { ENCYCLOPEDIA_KNOWLEDGE_BASE } from "./encyclopedia-knowledge.ts";
 import { BOTANY_KNOWLEDGE_BASE } from "./botany-knowledge.ts";
+import { WIKIPEDIA_KNOWLEDGE_BASE } from "./wikipedia-knowledge.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
