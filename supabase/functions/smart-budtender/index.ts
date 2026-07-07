@@ -699,7 +699,7 @@ ANSWER QUALITY DIRECTIVES (apply to every response)
 7. IF UNCERTAIN, say so — "the evidence here is preliminary" beats a confident guess.
 8. USE THE KNOWLEDGE BASES actively (research, encyclopedia, botany/hemp/terpene). Pull the specific mechanism or number instead of paraphrasing generically.
 `;
-    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + BOTANY_KNOWLEDGE_BASE + ANSWER_QUALITY_DIRECTIVES + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
+    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + BOTANY_KNOWLEDGE_BASE + WIKIPEDIA_KNOWLEDGE_BASE + ANSWER_QUALITY_DIRECTIVES + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
 
     // Smart model routing
     const primaryModel = selectModel(messages, !!userHistory);
