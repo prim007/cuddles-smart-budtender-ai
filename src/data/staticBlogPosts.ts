@@ -170,6 +170,94 @@ If your store is still in a mall, you are running out of time. If you are planni
     published_at: "2026-06-29T11:07:25.861817+00:00",
     featured_image: "/__l5e/assets-v1/fff09eef-9281-4eea-b23f-17d24f4483a2/blog-mall-dispensary-online.jpg",
   },
+  {
+    id: "static-indica-vs-sativa-for-sleep",
+    title: "Indica vs Sativa for Sleep: Which Actually Helps You Fall Asleep?",
+    slug: "indica-vs-sativa-for-sleep",
+    excerpt:
+      "A no-fluff guide to using cannabis for sleep — why indica gets the credit, why terpenes like myrcene matter more than the label, and which strains people reach for when insomnia hits.",
+    content: `### Indica vs Sativa for Sleep: Which Actually Helps You Fall Asleep?
+
+If you have ever asked a budtender "what's the best strain for sleep?" you have almost certainly been handed an indica. It is the industry's default answer — and it is only half right.
+
+The indica-vs-sativa split is a useful shortcut, but modern cannabis science tells us the plant chemistry underneath matters far more than the label on the jar. Here is what actually helps you fall asleep, and how to pick the right strain for insomnia.
+
+---
+
+### Why Indica Gets the Sleep Credit
+
+Indica strains are traditionally associated with a heavy, body-focused, sedating effect — the classic "couch-lock". Sativas, by contrast, tend to feel more heady, energising, and creative. So on paper, indica wins the sleep argument.
+
+But the indica/sativa distinction is really about plant morphology (short and bushy vs tall and lanky), not a reliable predictor of effect. What actually makes a strain sedating is its **terpene and cannabinoid profile** — and those cross indica/sativa lines all the time.
+
+---
+
+### The Terpene That Actually Matters: Myrcene
+
+If you only remember one thing from this guide, remember this word: **myrcene**.
+
+Myrcene is the earthy, musky terpene found in mango, hops, and thyme — and it is the terpene most consistently linked to a sedating, muscle-relaxing effect. Strains high in myrcene tend to feel "heavier" regardless of whether they are labelled indica or sativa.
+
+Other terpenes worth knowing for sleep:
+
+- **Linalool** — the same terpene in lavender; calming and anti-anxiety
+- **Terpinolene** — in smaller amounts, contributes to a mellow, dreamy feel
+- **Caryophyllene** — pairs with CBD for pain relief that stops sleep-disrupting discomfort
+
+A strain marketed as "indica" that happens to be low in myrcene will feel far less sedating than a "sativa" loaded with it. Always ask for the terpene profile, not just the category.
+
+---
+
+### Cannabinoids: THC, CBD, and CBN
+
+**THC** helps you fall asleep faster but can suppress REM sleep in higher doses. A moderate dose is usually more helpful than a huge one.
+
+**CBD** on its own is not sedating, but it takes the edge off anxiety and pain — both major causes of insomnia. A 1:1 THC:CBD strain often outperforms high-THC alone for sleep quality.
+
+**CBN** is the cannabinoid produced when THC degrades, and it is the one most closely associated with sedation. Older flower, or products specifically labelled as CBN-rich, can be a genuine sleep aid.
+
+---
+
+### Best Indica-Leaning Strains for Sleep
+
+These are the strains people consistently reach for when insomnia hits. All are high in myrcene and heavy on the body:
+
+- **Granddaddy Purple** — grape and berry notes, deeply relaxing, a classic bedtime pick
+- **Northern Lights** — the industry benchmark for "puts you to sleep"
+- **Purple Kush** — pure indica, heavy body effect, short-lasting so you actually wake up rested
+- **Bubba Kush** — earthy and sweet, sedating without knocking you out cold
+
+---
+
+### Sativa-Leaning Strains That Still Help You Sleep
+
+Yes, these exist — because myrcene does not care what the label says:
+
+- **Harlequin** — high CBD, low THC, calms racing thoughts before bed
+- **Blue Dream** (in higher doses) — often labelled sativa-dominant but heavy in myrcene
+
+---
+
+### What to Avoid Before Bed
+
+Skip anything that leans hard on **limonene** (citrusy, energising) or **pinene** (piney, alertness-boosting) — these terpenes are found in most daytime sativas like Sour Diesel, Jack Herer, and Green Crack. They will fight your body's wind-down instead of helping it.
+
+---
+
+### The Bottom Line
+
+Ask for indica if you want a shortcut. Ask for **myrcene, CBN, and a moderate THC dose** if you want to actually sleep. The best strain for insomnia is the one whose chemistry matches how your body responds — and that is exactly the kind of match an AI budtender is built to find.
+
+If you are not sure where to start, tell Cuddles what your sleep problem actually is — trouble falling asleep, waking up at 3am, or pain keeping you up — and it will match you to a strain based on the terpene science, not just a category label.
+
+---
+
+*This article is for general educational purposes and is not medical advice. Cannabis affects everyone differently; consult a qualified healthcare professional for persistent sleep issues.*`,
+    author: "Cuddles AI Editorial",
+    tags: ["indica vs sativa", "sleep", "insomnia", "myrcene", "terpenes", "CBN", "cannabis education"],
+    published_at: "2026-07-07T09:00:00.000000+00:00",
+    featured_image: null,
+  },
 ];
 
 export const getStaticBlogPost = (slug?: string | null) =>
