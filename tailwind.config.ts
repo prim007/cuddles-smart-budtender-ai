@@ -16,7 +16,7 @@ export default {
       fontFamily: {
         'sans': ['Outfit', 'system-ui', 'sans-serif'],
         'display': ['Space Grotesk', 'system-ui', 'sans-serif'],
-        'groovy': ['Pacifico', 'cursive'],
+        'groovy': ['Space Grotesk', 'system-ui', 'sans-serif'],
         'retro': ['Space Grotesk', 'sans-serif'],
         'bubble': ['Outfit', 'sans-serif'],
       },
