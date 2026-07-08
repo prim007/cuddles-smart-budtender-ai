@@ -63,7 +63,8 @@ serve(async (req) => {
   const rl = rateLimitResponse(req, { scope: "find-dispensaries", max: 20, windowMs: 60_000 }, corsHeaders);
   if (rl) return rl;
 
-  // Require authenticated user (protects paid Google Maps API quota)
+  // Accept anon or authenticated JWT (rate limit protects quota).
+  // Requiring sign-in broke the homepage chat demo for logged-out visitors.
   const authHeader = req.headers.get("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -78,7 +79,8 @@ serve(async (req) => {
     );
     const token = authHeader.replace("Bearer ", "");
     const { data, error } = await authClient.auth.getClaims(token);
-    if (error || !data?.claims || data.claims.role !== "authenticated" || !data.claims.sub) {
+    const role = data?.claims?.role;
+    if (error || !data?.claims || (role !== "authenticated" && role !== "anon")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -90,6 +92,7 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
+
 
   try {
     if (!LOVABLE_API_KEY || !GOOGLE_MAPS_API_KEY) {
