@@ -156,7 +156,7 @@ const Checkout = () => {
       navigate(`/orders/${order.id}`);
     } catch (error: any) {
       console.error("Order error:", error);
-      toast({ title: "Order failed", description: error.message || "Please try again.", variant: "destructive" });
+      toast({ title: "Order failed", description: "We couldn't place your order. Please try again or contact support.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
