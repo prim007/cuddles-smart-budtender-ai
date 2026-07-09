@@ -31,13 +31,18 @@ const Auth = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string; name?: string }>({});
   const [activeTab, setActiveTab] = useState("signup");
 
-  const { user, signIn, signUp } = useAuth();
+  const { user, signIn } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
+
+  // Sanitize `next` — only same-origin relative paths starting with a single slash.
+  const rawNext = searchParams.get("next") ?? "";
+  const nextPath = /^\/(?!\/)[^\s]*$/.test(rawNext) ? rawNext : "/";
 
   const handleGoogleSignIn = async () => {
     const { error } = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}${nextPath}`,
     });
     if (error) {
       toast({
@@ -49,8 +54,8 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
+    if (user) navigate(nextPath);
+  }, [user, navigate, nextPath]);
 
   const validateForm = (isSignup = false): boolean => {
     const newErrors: { email?: string; password?: string; name?: string } = {};
