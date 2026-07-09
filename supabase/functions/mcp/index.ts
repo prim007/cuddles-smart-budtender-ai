@@ -3,7 +3,7 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // src/lib/mcp/index.ts
-import { defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
+import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
 
 // src/lib/mcp/tools/list-dispensary-menus.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
@@ -196,11 +196,16 @@ var search_strains_default = defineTool3({
 });
 
 // src/lib/mcp/index.ts
+var projectRef = "rcigcarkcpinnniddxcm";
 var mcp_default = defineMcp({
   name: "cuddles-ai-mcp",
   title: "Cuddles AI",
   version: "0.1.0",
   instructions: "Cuddles AI tools for cannabis education and South African dispensary menus. Use list_dispensary_menus and get_dispensary_menu to look up partner dispensary menus (Tripple444, L\xEBf Labs, Dirty Vapes). Use search_strains to browse the public cannabis strain catalog by effect category (sleep, energy, creativity, stress, pain, social) or name. Educational information only \u2014 not medical advice.",
+  auth: auth.oauth.issuer({
+    issuer: `https://${projectRef}.supabase.co/auth/v1`,
+    acceptedAudiences: "authenticated"
+  }),
   tools: [list_dispensary_menus_default, get_dispensary_menu_default, search_strains_default]
 });
 
