@@ -22,6 +22,7 @@ import StickyMobileSignupBar from "@/components/StickyMobileSignupBar";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
 const STALE_CHUNK_RELOAD_KEY = "cuddles:stale-chunk-reload";
 
@@ -139,6 +140,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/.lovable/oauth/consent" element={<Suspense fallback={<PageLoader />}><OAuthConsent /></Suspense>} />
                 <Route path="/claim" element={<Suspense fallback={<PageLoader />}><Claim /></Suspense>} />
                 <Route path="/investment-deck" element={<Suspense fallback={<PageLoader />}><InvestmentDeck /></Suspense>} />
                 <Route path="/schedule-demo" element={<Suspense fallback={<PageLoader />}><ScheduleDemo /></Suspense>} />

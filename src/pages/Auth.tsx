@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -32,11 +33,16 @@ const Auth = () => {
 
   const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
+
+  // Sanitize `next` — only same-origin relative paths starting with a single slash.
+  const rawNext = searchParams.get("next") ?? "";
+  const nextPath = /^\/(?!\/)[^\s]*$/.test(rawNext) ? rawNext : "/";
 
   const handleGoogleSignIn = async () => {
     const { error } = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}${nextPath}`,
     });
     if (error) {
       toast({
@@ -48,8 +54,8 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
+    if (user) navigate(nextPath);
+  }, [user, navigate, nextPath]);
 
   const validateForm = (isSignup = false): boolean => {
     const newErrors: { email?: string; password?: string; name?: string } = {};
@@ -85,7 +91,7 @@ const Auth = () => {
     e.preventDefault();
     if (!validateForm(true)) return;
     setIsSubmitting(true);
-    const { error } = await signUp(email, password, name.trim());
+    const { error } = await signUp(email, password, name.trim(), nextPath);
     setIsSubmitting(false);
     if (error) {
       let message = "An error occurred during sign up";
