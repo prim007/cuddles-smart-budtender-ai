@@ -29,7 +29,7 @@ const Index = () => {
         keywords="AI budtender, cannabis AI, strain recommendations, weed strain finder, indica vs sativa, terpene guide, strain scanner, cannabis journal, strain reviews, smart budtender, Cuddles AI, dispensary AI, cannabis education, THC CBD guide"
       />
       <ThemeToggle />
-      <OnboardingFlow />
+      
       <Hero />
       <PhoneShowcase />
       <div id="chat-demo">
