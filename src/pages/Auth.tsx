@@ -31,7 +31,7 @@ const Auth = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string; name?: string }>({});
   const [activeTab, setActiveTab] = useState("signup");
 
-  const { user, signIn } = useAuth();
+  const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
