@@ -11,7 +11,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
-import StickyChatFAB from "@/components/StickyChatFAB";
+
 import TrendingStrainsTicker from "@/components/TrendingStrainsTicker";
 import StrainQuiz from "@/components/StrainQuiz";
 import Testimonials from "@/components/Testimonials";
@@ -35,7 +35,7 @@ const Index = () => {
       <div id="chat-demo">
         <ChatDemo />
       </div>
-      <StickyChatFAB />
+      
       <TrendingStrainsTicker />
       <Testimonials />
       <StrainQuiz />
