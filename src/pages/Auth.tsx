@@ -91,7 +91,7 @@ const Auth = () => {
     e.preventDefault();
     if (!validateForm(true)) return;
     setIsSubmitting(true);
-    const { error } = await signUp(email, password, name.trim());
+    const { error } = await signUp(email, password, name.trim(), nextPath);
     setIsSubmitting(false);
     if (error) {
       let message = "An error occurred during sign up";
