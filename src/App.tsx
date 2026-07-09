@@ -22,6 +22,7 @@ import StickyMobileSignupBar from "@/components/StickyMobileSignupBar";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
 const STALE_CHUNK_RELOAD_KEY = "cuddles:stale-chunk-reload";
 
