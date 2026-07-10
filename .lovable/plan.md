@@ -1,57 +1,132 @@
-# Growth Plan: 4 Levers to Increase Chat Volume
+# Dispensary Network Routing Layer — Technical Spec
 
-Goal: turn the current ~3 chats/week into a steady stream by improving acquisition, activation, retention, and B2B distribution.
+Goal: turn the current per-tenant `tenant_strains` silo into a **network** where a single query ("nearest in-stock Blue Dream under R250") is fanned out across every eligible dispensary, ranked, and returned as a routed result the chat / widget can act on.
 
-## 1. Acquisition — Programmatic SEO city pages
+## 1. What the routing layer does
 
-Create dynamic landing pages for South African cannabis searches.
+Given a request `{ intent, strain?, category?, effect?, location, filters }`, it:
 
-- New route `/dispensary-near-me/:city` rendered by a single `CityDispensaryPage` component
-- Seed list of 12 ZA cities: Johannesburg, Cape Town, Durban, Pretoria, Port Elizabeth, Bloemfontein, East London, Polokwane, Nelspruit, Kimberley, Pietermaritzburg, Stellenbosch
-- Each page: unique H1, intro copy mentioning the city, embedded `DispensaryFinder` pre-set to that city, FAQ section, JSON-LD `LocalBusiness`/`FAQPage`
-- Add all 12 URLs to `public/sitemap.xml`
-- Cross-link from Footer "Popular searches"
+1. Resolves candidate tenants (active, subscribed, geo-eligible).
+2. Queries `tenant_strains` across those tenants for matches.
+3. Scores each hit on: distance, price, stock, rating, tenant priority (paid tier), freshness of last inventory sync.
+4. Returns a ranked list of `{ tenant, strain, score, reasons[] }` plus a `routing_id` for analytics.
+5. Logs the routing decision so we can tune weights and prove ROI to dispensaries.
 
-## 2. Activation — Make the chat impossible to miss
+## 2. New database objects
 
-- `StickyChatFAB`: auto-open after 8 s of idle on first visit (sessionStorage flag so it doesn't nag on every page)
-- Rotating teaser bubble above the FAB cycling through: "Try: 'strain for anxiety'", "Try: 'dispensary near me'", "Try: 'help me sleep'"
-- Promote `HeroQuickPrompts` above the fold and make each chip a one-click chat-open with the prompt pre-filled
+### `tenant_service_areas`
+Which geographic areas each tenant serves (delivery radius or pickup city).
+Fields: `tenant_id`, `center_lat`, `center_lng`, `radius_km`, `mode` (`pickup` | `delivery`), `active`.
 
-## 3. Retention — Welcome-back email for existing leads
+### `tenant_priority`
+Paid boost + fairness caps per tenant.
+Fields: `tenant_id`, `tier` (`standard` | `boosted` | `premium`), `boost_weight` (0–1), `daily_impression_cap`, `active`.
 
-Note: Lovable Emails policy forbids bulk/marketing blasts. We will instead wire a **transactional welcome-back email** that fires when an existing `email_leads` row gets a new chat session — a legitimate per-recipient event.
+### `routing_decisions`
+Every routing call, for analytics + billing.
+Fields: `id`, `query` (jsonb — intent, filters, location), `candidate_count`, `winner_tenant_id`, `winner_strain_id`, `score`, `latency_ms`, `session_id`, `created_at`.
 
-- New template `welcome-back.tsx` in `_shared/transactional-email-templates/`
-- Edge function trigger: when `chat_conversations` insert matches a known `email_leads.email`, enqueue the email once per 7-day window (dedupe in `email_send_log`)
-- Template: "Cuddles remembered you 🌿 — 3 new strains matched to your last question" + CTA to open chat
+### `routing_impressions`
+Which tenants were shown for a given decision (impression billing).
+Fields: `routing_decision_id`, `tenant_id`, `strain_id`, `rank`, `score`.
 
-## 4. B2B amplification — Dispensary widget outreach surface
+### Extensions to existing tables
+- `tenant_strains`: add `last_synced_at`, `stock_level` (int, nullable), `sync_source` (`manual` | `dutchie` | `flowhub` | ...). Enables freshness weighting.
+- `tenants`: add `default_lat`, `default_lng` (fallback when no service area rows).
 
-- New admin-only page `/admin/widget-outreach` listing all `tenants` with status, embed-key copy button, and a "Send install email" action that triggers the existing onboarding email
-- Public marketing block on the homepage: "Are you a dispensary? Add Cuddles to your site in 2 minutes" linking to `/dispensary-onboarding`
-- Track widget impressions: add a `widget_view` event to `ab_events` from `widget.js` so we can see which tenants are actually embedding
+### RLS summary (plain English)
+- Service areas & priority: readable by anyone (needed for routing), writable only by the owning tenant or admin.
+- Routing decisions & impressions: insertable by the routing function (service role), readable by admin + the tenant whose rows they involve.
+- No anon writes anywhere.
 
-## Technical Section
+## 3. Edge function: `route-dispensary-query`
 
-| Lever | Files touched |
-|---|---|
-| 1 | New `src/pages/CityDispensaryPage.tsx`, new `src/data/zaCities.ts`, `src/App.tsx` route, `public/sitemap.xml`, `src/components/Footer.tsx` |
-| 2 | `src/components/StickyChatFAB.tsx`, `src/components/HeroQuickPrompts.tsx`, `src/components/Hero.tsx` |
-| 3 | New `supabase/functions/_shared/transactional-email-templates/welcome-back.tsx`, update `registry.ts`, new `supabase/functions/trigger-welcome-back/index.ts` (DB-trigger callable), one migration for the `pg_net` trigger on `chat_conversations` |
-| 4 | New `src/pages/WidgetOutreach.tsx` (admin-gated), `src/App.tsx` route, `public/widget.js` (add fetch to log `widget_view`), `src/components/Hero.tsx` (B2B block) |
+Path: `supabase/functions/route-dispensary-query/index.ts`
+Auth: accepts both `authenticated` and `anon` (rate-limited per IP; chat needs to work logged-out).
 
-## Out of scope (cannot be done in code)
+### Request
+```json
+{
+  "intent": "find_strain" | "find_category" | "find_effect" | "find_nearest",
+  "strain_name": "Blue Dream",
+  "category": null,
+  "effect": null,
+  "location": { "lat": -26.20, "lng": 28.04 },
+  "max_distance_km": 25,
+  "max_price": 250,
+  "mode": "pickup" | "delivery" | "any",
+  "limit": 5,
+  "session_id": "uuid"
+}
+```
 
-- Paid Google/Meta ads — you'd need to fund and run those in the ad consoles
-- TikTok/Instagram Reels publishing — Remotion can render the videos but posting is manual
-- Actual dispensary cold-outreach — the page makes outreach easier but you/team still send the emails
+### Response
+```json
+{
+  "routing_id": "uuid",
+  "results": [
+    {
+      "tenant": { "id", "name", "slug", "phone", "maps_url" },
+      "strain": { "id", "name", "price", "stock_level", "category" },
+      "distance_km": 3.2,
+      "score": 0.87,
+      "reasons": ["in stock", "1.8km closer", "R30 cheaper"]
+    }
+  ]
+}
+```
 
-## Order of execution
+### Scoring formula (v1)
+```text
+score = 0.35 * distance_norm      (closer = higher)
+      + 0.20 * price_norm         (cheaper within budget)
+      + 0.20 * stock_norm         (in-stock > low > unknown)
+      + 0.10 * freshness_norm     (synced <24h > <7d > older)
+      + 0.10 * rating_norm
+      + 0.05 * tenant.boost_weight
+```
+All `*_norm` values clamped to [0,1]. Boost is capped at 5% so paid priority never overrides a materially better match — this is the fairness guarantee we can quote to dispensaries.
 
-1. Lever 2 (activation) — fastest impact, ~30 min, no schema changes
-2. Lever 1 (SEO city pages) — biggest long-term lever, ~1 hour
-3. Lever 4 (B2B page + widget tracking) — ~45 min
-4. Lever 3 (welcome-back email) — last, requires migration + edge function deploy
+### Side effects
+- Insert one `routing_decisions` row.
+- Insert one `routing_impressions` row per returned result.
+- Respect `tenant_priority.daily_impression_cap` (skip capped tenants for the day).
 
-Reply **"go"** to execute all four, or name the lever(s) to skip.
+## 4. Chat / widget integration
+
+- `smart-budtender` and `public/widget.js` gain a client helper `routeDispensaryQuery(...)` called when the intent classifier detects "find / near me / cheapest / in stock".
+- Results render through the existing `ChatDispensaryCards` component with an added "Why this pick?" chip that expands the `reasons[]` array.
+- Menu-card intent (existing `matchMenuIntent`) stays first — a direct "show Dirty Vapes menu" keeps its deterministic path and never touches the router.
+
+## 5. Analytics surface
+
+New admin page `/network-analytics` (admin-gated) showing:
+- Routing volume by day
+- Win rate per tenant (impressions vs. winner)
+- Avg distance / price of winners
+- Cap utilization per tenant tier
+
+Feeds directly from `routing_decisions` + `routing_impressions`.
+
+## 6. Rollout order
+
+1. Migration: new tables, RLS, column additions, GRANTs.
+2. Backfill: default `tenant_service_areas` rows from existing tenant addresses; default `tenant_priority` = `standard` for all.
+3. Edge function `route-dispensary-query` + unit-style test via `curl_edge_functions`.
+4. Wire into `widget.js` behind a `network_routing_enabled` flag (per-tenant boolean on `tenants`) so we can pilot with Tripple444 first.
+5. Ship `/network-analytics`.
+6. Turn the flag on for Lëf Labs and Dirty Vapes once weights look sane.
+
+## 7. What this unlocks (business framing)
+
+- **For users**: one question → best match across every dispensary, not just the one they happened to land on.
+- **For dispensaries**: transparent, capped paid priority + real impression data = a defensible reason to pay for the Premium tier.
+- **For Cuddles**: every routed query becomes a training signal (which weights actually convert) and a billing event.
+
+## 8. Out of scope for v1
+
+- Real-time POS webhook ingestion (covered by the earlier POS adapter spec; router just reads whatever `tenant_strains` currently holds).
+- Cross-border routing / currency conversion.
+- Auction-style bidding for placement — starts as fixed tiers, revisited once we have volume.
+
+Reply **"build it"** to execute the migration + edge function, or name sections to change first.
