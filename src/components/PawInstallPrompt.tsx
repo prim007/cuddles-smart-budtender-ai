@@ -116,13 +116,13 @@ const PawInstallPrompt = () => {
                 className="absolute animate-paw-walk"
                 style={{ top: p.top, left: p.left, transform: `rotate(${p.rotate})`, animationDelay: p.delay }}
               >
-                <PawIcon className="w-8 h-8 text-hippie-coral" />
+                <CuddlesMark className="w-8 h-8" />
               </div>
             ))}
           </div>
           <div className="relative z-10 flex items-center justify-center h-full">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-hippie-coral to-hippie-amber flex items-center justify-center shadow-glow animate-paw-bounce">
-              <PawIcon className="w-12 h-12 text-white" />
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-hippie-coral to-hippie-amber flex items-center justify-center shadow-glow animate-paw-bounce p-2">
+              <CuddlesMark className="w-20 h-20 rounded-full" />
             </div>
           </div>
         </div>
