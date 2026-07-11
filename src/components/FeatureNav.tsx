@@ -91,8 +91,8 @@ const features: Feature[] = [
   },
   {
     icon: Globe2,
-    title: "Africa Map",
-    href: "/africa-cannabis-map",
+    title: "World Map",
+    href: "/international-cannabis-map",
     gradient: "from-hippie-green to-hippie-amber",
   },
   {
