@@ -130,10 +130,10 @@ const PawInstallPrompt = () => {
         <div className="p-6 pt-4">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl text-center">
-              🐾 Add Cuddles to your home screen
+              Add Cuddles AI to your home screen
             </DialogTitle>
             <DialogDescription className="text-center">
-              One tap. No app store. Your AI budtender, always a paw away.
+              One tap. No app store. Your AI budtender, always one tap away.
             </DialogDescription>
           </DialogHeader>
 
