@@ -3,18 +3,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Download, Share, Plus, MoreVertical } from "lucide-react";
 import { trackInstallFunnel, detectInstallPlatform, type InstallPlatform } from "@/components/GoogleAnalytics";
+import cuddlesMascot from "@/assets/cuddles.png";
 
 const STORAGE_KEY = "cuddles_paw_install_prompt_dismissed_at";
 const SNOOZE_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
 
-const PawIcon = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" fill="currentColor" className={className} aria-hidden="true">
-    <ellipse cx="32" cy="44" rx="14" ry="12" />
-    <ellipse cx="14" cy="28" rx="6" ry="8" />
-    <ellipse cx="24" cy="14" rx="5.5" ry="7.5" />
-    <ellipse cx="40" cy="14" rx="5.5" ry="7.5" />
-    <ellipse cx="50" cy="28" rx="6" ry="8" />
-  </svg>
+const CuddlesMark = ({ className = "" }: { className?: string }) => (
+  <img src={cuddlesMascot} alt="Cuddles AI mascot" className={`${className} object-contain`} />
 );
 
 const PawInstallPrompt = () => {
@@ -121,13 +116,13 @@ const PawInstallPrompt = () => {
                 className="absolute animate-paw-walk"
                 style={{ top: p.top, left: p.left, transform: `rotate(${p.rotate})`, animationDelay: p.delay }}
               >
-                <PawIcon className="w-8 h-8 text-hippie-coral" />
+                <CuddlesMark className="w-8 h-8" />
               </div>
             ))}
           </div>
           <div className="relative z-10 flex items-center justify-center h-full">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-hippie-coral to-hippie-amber flex items-center justify-center shadow-glow animate-paw-bounce">
-              <PawIcon className="w-12 h-12 text-white" />
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-hippie-coral to-hippie-amber flex items-center justify-center shadow-glow animate-paw-bounce p-2">
+              <CuddlesMark className="w-20 h-20 rounded-full" />
             </div>
           </div>
         </div>
@@ -135,10 +130,10 @@ const PawInstallPrompt = () => {
         <div className="p-6 pt-4">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl text-center">
-              🐾 Add Cuddles to your home screen
+              Add Cuddles AI to your home screen
             </DialogTitle>
             <DialogDescription className="text-center">
-              One tap. No app store. Your AI budtender, always a paw away.
+              One tap. No app store. Your AI budtender, always one tap away.
             </DialogDescription>
           </DialogHeader>
 
