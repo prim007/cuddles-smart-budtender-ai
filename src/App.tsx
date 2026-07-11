@@ -78,7 +78,7 @@ const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazyWithReload(() => import("./pages/ToleranceBreak"));
 const SeedlingMonitor = lazyWithReload(() => import("./pages/SeedlingMonitor"));
-const AfricaLegislationMap = lazyWithReload(() => import("./pages/AfricaLegislationMap"));
+const InternationalCannabisMap = lazyWithReload(() => import("./pages/InternationalCannabisMap"));
 
 // B2B
 const DispensaryOnboarding = lazyWithReload(() => import("./pages/DispensaryOnboarding"));
