@@ -3,18 +3,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Download, Share, Plus, MoreVertical } from "lucide-react";
 import { trackInstallFunnel, detectInstallPlatform, type InstallPlatform } from "@/components/GoogleAnalytics";
+import cuddlesMascot from "@/assets/cuddles.png";
 
 const STORAGE_KEY = "cuddles_paw_install_prompt_dismissed_at";
 const SNOOZE_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
 
-const PawIcon = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" fill="currentColor" className={className} aria-hidden="true">
-    <ellipse cx="32" cy="44" rx="14" ry="12" />
-    <ellipse cx="14" cy="28" rx="6" ry="8" />
-    <ellipse cx="24" cy="14" rx="5.5" ry="7.5" />
-    <ellipse cx="40" cy="14" rx="5.5" ry="7.5" />
-    <ellipse cx="50" cy="28" rx="6" ry="8" />
-  </svg>
+const CuddlesMark = ({ className = "" }: { className?: string }) => (
+  <img src={cuddlesMascot} alt="Cuddles AI mascot" className={`${className} object-contain`} />
 );
 
 const PawInstallPrompt = () => {
