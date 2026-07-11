@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import MicrosoftClarity from "@/components/MicrosoftClarity";
 import InstallFunnelTracker from "@/components/InstallFunnelTracker";
@@ -78,7 +78,7 @@ const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazyWithReload(() => import("./pages/ToleranceBreak"));
 const SeedlingMonitor = lazyWithReload(() => import("./pages/SeedlingMonitor"));
-const AfricaLegislationMap = lazyWithReload(() => import("./pages/AfricaLegislationMap"));
+const InternationalCannabisMap = lazyWithReload(() => import("./pages/InternationalCannabisMap"));
 
 // B2B
 const DispensaryOnboarding = lazyWithReload(() => import("./pages/DispensaryOnboarding"));
@@ -200,7 +200,8 @@ const App = () => (
                 <Route path="/scanner" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><StrainScanner /></Suspense></ProtectedRoute>} />
                 <Route path="/t-break" element={<Suspense fallback={<PageLoader />}><ToleranceBreak /></Suspense>} />
                 <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />
-                <Route path="/africa-cannabis-map" element={<Suspense fallback={<PageLoader />}><AfricaLegislationMap /></Suspense>} />
+                <Route path="/international-cannabis-map" element={<Suspense fallback={<PageLoader />}><InternationalCannabisMap /></Suspense>} />
+                <Route path="/africa-cannabis-map" element={<Navigate to="/international-cannabis-map?region=Africa" replace />} />
                 
                 {/* Blog */}
                 <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />
