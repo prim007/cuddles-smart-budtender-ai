@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Search, MapPin, Scale, Leaf, ShieldAlert, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -304,9 +304,16 @@ const STATUS_FILTERS: { id: LegalStatus | "all"; label: string }[] = [
 const REGIONS = ["All", "Americas", "Europe", "Africa", "Middle East", "Asia-Pacific", "Oceania"];
 
 const InternationalCannabisMap = () => {
+  const [searchParams] = useSearchParams();
+  const initialRegion = (() => {
+    const r = searchParams.get("region");
+    if (!r) return "All";
+    const match = REGIONS.find((x) => x.toLowerCase() === r.toLowerCase());
+    return match ?? "All";
+  })();
   const [active, setActive] = useState<CountryNode | null>(null);
   const [filter, setFilter] = useState<LegalStatus | "all">("all");
-  const [region, setRegion] = useState<string>("All");
+  const [region, setRegion] = useState<string>(initialRegion);
   const [query, setQuery] = useState("");
   const [hovered, setHovered] = useState<string | null>(null);
 
