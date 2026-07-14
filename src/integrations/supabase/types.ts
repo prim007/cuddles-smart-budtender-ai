@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "13.0.5"
   }
   public: {
     Tables: {
@@ -1314,19 +1314,10 @@ export type Database = {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
       }
+      email_queue_dispatch: { Args: never; Returns: undefined }
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
-      }
-      get_email_queue_metrics: {
-        Args: never
-        Returns: {
-          newest_msg_age_sec: number
-          oldest_msg_age_sec: number
-          queue_length: number
-          queue_name: string
-          total_messages: number
-        }[]
       }
       get_my_embed_key: { Args: never; Returns: string }
       has_role: {
