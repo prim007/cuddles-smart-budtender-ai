@@ -160,8 +160,7 @@ const Auth = () => {
               Continue with Google — fastest way in
             </Button>
 
-              Continue with Google — fastest way in
-            </Button>
+
 
             {/* Apple */}
             <Button variant="outline" className="w-full h-12 text-base" onClick={handleAppleSignIn}>
