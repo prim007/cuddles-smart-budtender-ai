@@ -53,6 +53,20 @@ const Auth = () => {
     }
   };
 
+  const handleAppleSignIn = async () => {
+    const { error } = await lovable.auth.signInWithOAuth("apple", {
+      redirect_uri: `${window.location.origin}${nextPath}`,
+    });
+    if (error) {
+      toast({
+        title: "Apple Sign-In Failed",
+        description: "Could not sign in with Apple. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+
   useEffect(() => {
     if (user) navigate(nextPath);
   }, [user, navigate, nextPath]);
