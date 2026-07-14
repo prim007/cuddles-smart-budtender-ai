@@ -196,7 +196,7 @@ var search_strains_default = defineTool3({
 });
 
 // src/lib/mcp/index.ts
-var projectRef = "rcigcarkcpinnniddxcm";
+var projectRef = "vfcoctqnohlljuxualwl";
 var mcp_default = defineMcp({
   name: "cuddles-ai-mcp",
   title: "Cuddles AI",
