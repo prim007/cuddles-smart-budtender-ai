@@ -31,10 +31,10 @@ const Index = () => {
       <ThemeToggle />
       
       <Hero />
-      <PhoneShowcase />
       <div id="chat-demo">
         <ChatDemo />
       </div>
+      <PhoneShowcase />
       
       <TrendingStrainsTicker />
       <Testimonials />
