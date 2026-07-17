@@ -122,9 +122,11 @@ const PhoneShowcase = () => {
 
               {/* Phone */}
               <div className="flex justify-center lg:justify-end">
-                <PhoneFrame>
-                  <PhoneChatPreview bubbles={s.bubbles} headerGradient={s.headerGradient} />
-                </PhoneFrame>
+                <Phone3D index={i}>
+                  <PhoneFrame>
+                    <PhoneChatPreview bubbles={s.bubbles} headerGradient={s.headerGradient} />
+                  </PhoneFrame>
+                </Phone3D>
               </div>
             </div>
           </div>
