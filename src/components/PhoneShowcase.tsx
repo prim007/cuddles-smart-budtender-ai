@@ -1,5 +1,6 @@
 import PhoneFrame from "@/components/PhoneFrame";
 import PhoneChatPreview from "@/components/PhoneChatPreview";
+import Phone3D from "@/components/Phone3D";
 import { Check } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -122,9 +123,11 @@ const PhoneShowcase = () => {
 
               {/* Phone */}
               <div className="flex justify-center lg:justify-end">
-                <PhoneFrame>
-                  <PhoneChatPreview bubbles={s.bubbles} headerGradient={s.headerGradient} />
-                </PhoneFrame>
+                <Phone3D index={i}>
+                  <PhoneFrame>
+                    <PhoneChatPreview bubbles={s.bubbles} headerGradient={s.headerGradient} />
+                  </PhoneFrame>
+                </Phone3D>
               </div>
             </div>
           </div>
