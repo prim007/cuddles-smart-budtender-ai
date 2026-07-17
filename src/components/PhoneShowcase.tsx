@@ -1,5 +1,6 @@
 import PhoneFrame from "@/components/PhoneFrame";
 import PhoneChatPreview from "@/components/PhoneChatPreview";
+import Phone3D from "@/components/Phone3D";
 import { Check } from "lucide-react";
 import { ReactNode } from "react";
 
