@@ -240,7 +240,7 @@ const WhatIsCuddles = () => {
                   <div className="text-4xl md:text-5xl font-display font-bold gradient-text mb-2">
                     {stat.value}
                   </div>
-                  <p className="text-sm text-foreground/75 leading-snug">{stat.label}</p>
+                  <p className="text-sm text-muted-foreground leading-snug">{stat.label}</p>
                 </div>
               </TiltCard>
             ))}
@@ -256,7 +256,7 @@ const WhatIsCuddles = () => {
             <h2 className="font-display font-bold text-foreground mb-4 text-3xl md:text-5xl">
               Your Personal <span className="gradient-text">Cannabis Companion</span>
             </h2>
-            <p className="text-lg text-foreground/75 max-w-xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
               A complete suite of free AI-powered tools designed to enhance your cannabis journey
             </p>
           </div>
@@ -270,9 +270,9 @@ const WhatIsCuddles = () => {
                   </div>
                   <h3 className="text-lg font-display font-semibold text-foreground mb-3 flex items-center gap-2">
                     {feature.title}
-                    <ArrowRight className="w-4 h-4 text-foreground/40" />
+                    <ArrowRight className="w-4 h-4 text-muted-foreground" />
                   </h3>
-                  <p className="text-foreground/75 leading-relaxed text-sm">{feature.description}</p>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{feature.description}</p>
                 </TiltCard>
               </Link>
             ))}
@@ -296,7 +296,7 @@ const WhatIsCuddles = () => {
                 <div className="text-center">
                   <div className="text-6xl font-display font-bold gradient-text mb-4 opacity-80">{step.step}</div>
                   <h3 className="text-lg font-display font-semibold text-foreground mb-3">{step.title}</h3>
-                  <p className="text-foreground/75 leading-relaxed text-sm">{step.description}</p>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{step.description}</p>
                 </div>
               </TiltCard>
             ))}
@@ -312,7 +312,7 @@ const WhatIsCuddles = () => {
             <h2 className="font-display font-bold text-foreground mb-4 text-3xl md:text-5xl">
               AI That <span className="gradient-text">Pays for Itself</span>
             </h2>
-            <p className="text-lg text-foreground/75 max-w-xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
               Dispensaries and suppliers use our AI to sell more, waste less, and understand their customers better.
             </p>
           </div>
@@ -326,9 +326,9 @@ const WhatIsCuddles = () => {
                   </div>
                   <h3 className="text-lg font-display font-semibold text-foreground mb-3 flex items-center gap-2">
                     {feature.title}
-                    <ArrowRight className="w-4 h-4 text-foreground/40" />
+                    <ArrowRight className="w-4 h-4 text-muted-foreground" />
                   </h3>
-                  <p className="text-foreground/75 leading-relaxed text-sm">{feature.description}</p>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{feature.description}</p>
                 </TiltCard>
               </Link>
             ))}
@@ -354,7 +354,7 @@ const WhatIsCuddles = () => {
               <h2 className="font-display font-bold text-foreground mb-4 text-2xl md:text-3xl">
                 Built in South Africa. Used Worldwide.
               </h2>
-              <p className="text-lg text-foreground/75 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                 Cuddles was born in South Africa to serve the growing legal cannabis market. Same-day delivery available in South Africa via Tripple Four Shop Hub.
               </p>
             </div>
@@ -365,7 +365,7 @@ const WhatIsCuddles = () => {
                   <CheckCircle2 className="w-5 h-5 text-primary" />
                   For Consumers
                 </h3>
-                <ul className="space-y-2 text-sm text-foreground/75">
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>• Free AI strain recommendations</li>
                   <li>• Strain scanner from photos</li>
                   <li>• Personal journal & community reviews</li>
@@ -378,7 +378,7 @@ const WhatIsCuddles = () => {
                   <CheckCircle2 className="w-5 h-5 text-primary" />
                   For Dispensaries
                 </h3>
-                <ul className="space-y-2 text-sm text-foreground/75">
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>• Embeddable AI budtender widget</li>
                   <li>• POS integration (Dutchie, Flowhub, etc.)</li>
                   <li>• Real-time sales analytics</li>
