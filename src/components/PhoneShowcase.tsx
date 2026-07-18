@@ -91,7 +91,7 @@ const PhoneShowcase = () => {
   return (
     <div className="space-y-0">
       {SECTIONS.map((s, i) => (
-        <section key={i} className={`${s.bg} py-16 md:py-24 text-zinc-900`}>
+        <section key={i} className={`${s.bg} py-16 md:py-24 text-zinc-900 relative overflow-hidden`}>
           <div className="container mx-auto px-4">
             <div
               className={`grid items-center gap-10 md:gap-16 lg:grid-cols-2 ${
