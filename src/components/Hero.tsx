@@ -83,7 +83,7 @@ const Hero = () => {
             <span className="font-display text-lg font-semibold text-white">Cuddles</span>
           </div>
           <div className="flex items-center gap-2">
-            <a href="https://tripplefourmarketplace.lovable.app" target="_blank" rel="noopener noreferrer">
+            <a href="https://tripplefourmarketplace.lovable.app" target="_blank" rel="noopener noreferrer" aria-label="Open the Tripple Four Marketplace in a new tab">
               <Button variant="ghost" size="sm" className="gap-2 font-medium text-white/80 hover:bg-white/10 hover:text-white">
                 <ExternalLink className="h-4 w-4" />
                 <span className="hidden sm:inline">Marketplace</span>
