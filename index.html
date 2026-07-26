@@ -33,8 +33,9 @@
     <link rel="preconnect" href="https://rcigcarkcpinnniddxcm.supabase.co" crossorigin />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
-    <!-- Canonical -->
-    <link rel="canonical" href="https://cuddles-ai.com/" />
+    <!-- Canonical is set per-route by src/components/SEO.tsx -->
+
+
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#9b87f5" />
@@ -52,7 +53,7 @@
     <meta property="og:title" content="Cuddles AI — Free AI Cannabis Budtender" />
     <meta property="og:description" content="Free AI cannabis budtender. Personalized strain picks, scanner, reviews & journal. Same-day delivery in South Africa." />
     <meta property="og:image" content="https://cuddles-ai.com/og-image.jpg" />
-    <meta property="og:url" content="https://cuddles-ai.com/" />
+    <!-- og:url is set per-route by src/components/SEO.tsx -->
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="en_GB" />
     <meta property="og:locale:alternate" content="en_ZA" />
@@ -116,65 +117,9 @@
     }
     </script>
 
-    <!-- LocalBusiness Schema for Google Business visibility -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "@id": "https://cuddles-ai.com/#business",
-      "name": "Tripple444",
-      "alternateName": ["Tripple 444", "Cuddles AI by Tripple444", "Tripple444 Cannabis"],
-      "description": "Tripple444 is a cannabis business powered by Cuddles AI — offering AI-powered strain recommendations, product catalog, and delivery via WhatsApp.",
-      "url": "https://cuddles-ai.com",
-      "logo": "https://cuddles-ai.com/pwa-512x512.png",
-      "image": "https://cuddles-ai.com/og-image.jpg",
-      "telephone": "+27645436734",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Cape Town",
-        "addressRegion": "Western Cape",
-        "addressCountry": "ZA"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "-33.9249",
-        "longitude": "18.4241"
-      },
-      "priceRange": "$$",
-      "currenciesAccepted": "ZAR",
-      "paymentAccepted": "Cash, EFT, WhatsApp Order",
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-        "opens": "08:00",
-        "closes": "22:00"
-      },
-      "sameAs": [
-        "https://wa.me/c/27645436734"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+27645436734",
-        "contactType": "sales",
-        "areaServed": "ZA",
-        "availableLanguage": ["English", "Afrikaans"]
-      },
-      "serviceArea": {
-        "@type": "Place",
-        "name": "Cape Town, South Africa"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Tripple444 Products & Services",
-        "itemListElement": [
-          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "AI Strain Recommendations by Cuddles"}},
-          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Cannabis Product Catalog"}},
-          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "WhatsApp Ordering & Delivery"}},
-          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Cannabis Strain Journal & Tracking"}}
-        ]
-      }
-    }
-    </script>
+    <!-- LocalBusiness schema moved to the homepage component (src/pages/Index.tsx) -->
+
+
 
     <!-- WebSite Schema for Sitelinks Search -->
     <script type="application/ld+json">
@@ -193,55 +138,7 @@
     }
     </script>
 
-    <!-- FAQPage Schema for rich snippets in Google search -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Can I buy cannabis online in South Africa?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Cuddles AI helps you find premium cannabis products — vapes from R390, oils from R320, and curated strains — with same-day delivery in Johannesburg, Cape Town and Pretoria via our partner Tripple444."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does the Cuddles AI budtender work?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Just chat with Cuddles. Tell it how you want to feel — relaxed, focused, pain-free, sleepy — and it recommends the right strain, vape or oil instantly. No signup required to start."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How fast is cannabis delivery in South Africa?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Same-day delivery is available in Johannesburg, Cape Town and Pretoria for orders placed before cut-off. Other regions ship within 1–3 business days."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is Cuddles AI free to use?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, the AI budtender is 100% free. Cuddles Premium (R99/month) unlocks advanced features like the strain journal, tolerance break coach, and seedling monitor."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much does a vape cost on Cuddles AI?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "All vapes are R390 and cannabis oils are R320 across the Tripple444 catalog, with same-day delivery in major South African cities."
-          }
-        }
-      ]
-    }
-    </script>
+    <!-- FAQPage schema moved to the homepage component (src/pages/Index.tsx) -->
   </head>
 
   <body>
