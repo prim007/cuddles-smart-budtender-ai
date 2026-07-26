@@ -77,6 +77,7 @@ const StrainScanner = lazyWithReload(() => import("./pages/StrainScanner"));
 const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
 const ToleranceBreak = lazyWithReload(() => import("./pages/ToleranceBreak"));
+const TBreakChallenge = lazyWithReload(() => import("./pages/TBreakChallenge"));
 const SeedlingMonitor = lazyWithReload(() => import("./pages/SeedlingMonitor"));
 const InternationalCannabisMap = lazyWithReload(() => import("./pages/InternationalCannabisMap"));
 
@@ -199,6 +200,7 @@ const App = () => (
                 <Route path="/journal" element={<Suspense fallback={<PageLoader />}><StrainJournal /></Suspense>} />
                 <Route path="/scanner" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><StrainScanner /></Suspense></ProtectedRoute>} />
                 <Route path="/t-break" element={<Suspense fallback={<PageLoader />}><ToleranceBreak /></Suspense>} />
+                <Route path="/t-break-challenge" element={<Suspense fallback={<PageLoader />}><TBreakChallenge /></Suspense>} />
                 <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />
                 <Route path="/international-cannabis-map" element={<Suspense fallback={<PageLoader />}><InternationalCannabisMap /></Suspense>} />
                 <Route path="/africa-cannabis-map" element={<Navigate to="/international-cannabis-map?region=Africa" replace />} />
