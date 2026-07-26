@@ -68,7 +68,7 @@ const Strains = () => {
       />
       <ThemeToggle />
 
-      <div className="container mx-auto px-4 py-16 max-w-5xl">
+      <main className="container mx-auto px-4 py-16 max-w-5xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
             <Leaf className="w-4 h-4" /> Strain Directory
@@ -80,6 +80,12 @@ const Strains = () => {
             Explore {strains?.length || "our"} strains with detailed terpene profiles, effects, and AI-powered recommendations.
           </p>
         </div>
+
+        <h2 className="text-2xl font-display font-semibold text-foreground mb-6">
+          Browse all strains
+        </h2>
+
+
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -96,9 +102,9 @@ const Strains = () => {
                 className="group relative p-5 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all duration-200"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h2 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                  <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                     {strain.strain_name}
-                  </h2>
+                  </h3>
                   <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors mt-1" />
                 </div>
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -125,7 +131,7 @@ const Strains = () => {
             <p className="text-lg">No strains available yet. Check back soon!</p>
           </div>
         )}
-      </div>
+      </main>
       <Footer />
     </div>
   );
