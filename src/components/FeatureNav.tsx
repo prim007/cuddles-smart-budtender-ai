@@ -268,7 +268,7 @@ const FeatureNav = () => {
               <div className="h-5 w-px bg-white/10 mx-1" />
 
               <DropdownMenu>
-                <DropdownMenuTrigger className="px-3 py-2 rounded-2xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all flex items-center gap-1.5 focus:outline-none">
+                <DropdownMenuTrigger aria-label="More features menu" className="px-3 py-2 rounded-2xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all flex items-center gap-1.5 focus:outline-none">
                   More Features
                   <ChevronDown className="w-4 h-4" />
                 </DropdownMenuTrigger>
