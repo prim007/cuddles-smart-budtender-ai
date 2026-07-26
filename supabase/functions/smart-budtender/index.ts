@@ -4,6 +4,7 @@ import { RESEARCH_KNOWLEDGE_BASE } from "./research-knowledge.ts";
 import { ENCYCLOPEDIA_KNOWLEDGE_BASE } from "./encyclopedia-knowledge.ts";
 import { BOTANY_KNOWLEDGE_BASE } from "./botany-knowledge.ts";
 import { WIKIPEDIA_KNOWLEDGE_BASE } from "./wikipedia-knowledge.ts";
+import { STRAIN_MATCHING_KNOWLEDGE } from "./strain-matching.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -697,9 +698,10 @@ ANSWER QUALITY DIRECTIVES (apply to every response)
 5. GROUND health-adjacent claims in the research knowledge base's evidence tiers ("strong evidence base", "emerging evidence") — never fabricate studies, authors, or p-values.
 6. DEFAULT TO SAFETY: start low / go slow, never encourage BHO at home, no medical/legal advice, always add "general education, not medical advice" for health or dosing questions.
 7. IF UNCERTAIN, say so — "the evidence here is preliminary" beats a confident guess.
-8. USE THE KNOWLEDGE BASES actively (research, encyclopedia, botany/hemp/terpene). Pull the specific mechanism or number instead of paraphrasing generically.
+8. FOR ANY strain request phrased as a description of a feeling, symptom, occasion or vibe, run the STRAIN MATCHING ENGINE protocol and answer in its presentation shape.
+9. USE THE KNOWLEDGE BASES actively (research, encyclopedia, botany/hemp/terpene). Pull the specific mechanism or number instead of paraphrasing generically.
 `;
-    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + BOTANY_KNOWLEDGE_BASE + WIKIPEDIA_KNOWLEDGE_BASE + ANSWER_QUALITY_DIRECTIVES + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
+    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + BOTANY_KNOWLEDGE_BASE + WIKIPEDIA_KNOWLEDGE_BASE + STRAIN_MATCHING_KNOWLEDGE + ANSWER_QUALITY_DIRECTIVES + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
 
     // Smart model routing
     const primaryModel = selectModel(messages, !!userHistory);
