@@ -91,6 +91,7 @@ const Shop = lazyWithReload(() => import("./pages/Shop"));
 const Checkout = lazyWithReload(() => import("./pages/Checkout"));
 const OrderTracking = lazyWithReload(() => import("./pages/OrderTracking"));
 const Premium = lazyWithReload(() => import("./pages/Premium"));
+const Membership = lazyWithReload(() => import("./pages/Membership"));
 const AIBudtender = lazyWithReload(() => import("./pages/AIBudtender"));
 const POSIntegrations = lazyWithReload(() => import("./pages/POSIntegrations"));
 const ShopifyIntegration = lazyWithReload(() => import("./pages/ShopifyIntegration"));
@@ -218,6 +219,7 @@ const App = () => (
                 <Route path="/shop" element={<Suspense fallback={<PageLoader />}><Shop /></Suspense>} />
                 <Route path="/checkout" element={<Suspense fallback={<PageLoader />}><Checkout /></Suspense>} />
                 <Route path="/orders/:orderId" element={<Suspense fallback={<PageLoader />}><OrderTracking /></Suspense>} />
+                <Route path="/membership" element={<Suspense fallback={<PageLoader />}><Membership /></Suspense>} />
                 <Route path="/premium" element={<Suspense fallback={<PageLoader />}><Premium /></Suspense>} />
 
                 {/* Strain SEO Pages */}
