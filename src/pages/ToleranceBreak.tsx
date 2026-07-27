@@ -512,6 +512,47 @@ const ToleranceBreak = () => {
                 </Card>
               )}
 
+              {/* Insights */}
+              {activeBreak.daily_logs.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Your Break Insights</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                      {([
+                        { key: "mood", label: "Avg mood" },
+                        { key: "sleep", label: "Avg sleep" },
+                        { key: "cravings", label: "Avg cravings" },
+                        { key: "energy", label: "Avg energy" },
+                      ] as const).map(({ key, label }) => {
+                        const values = activeBreak.daily_logs.map(l => l[key]).filter((v): v is number => typeof v === "number");
+                        const avg = values.length ? (values.reduce((a, b) => a + b, 0) / values.length).toFixed(1) : "–";
+                        return (
+                          <div key={key} className="p-3 rounded-lg bg-muted">
+                            <div className="text-xl font-bold">{avg}</div>
+                            <div className="text-xs text-muted-foreground">{label}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {(() => {
+                      const counts = new Map<string, number>();
+                      activeBreak.daily_logs.forEach(l => (l.triggers || []).forEach(t => counts.set(t, (counts.get(t) || 0) + 1)));
+                      const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4);
+                      return top.length > 0 ? (
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-2">Most common triggers</p>
+                          <div className="flex flex-wrap gap-2">
+                            {top.map(([t, c]) => <Badge key={t} variant="secondary">{t} · {c}</Badge>)}
+                          </div>
+                        </div>
+                      ) : null;
+                    })()}
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Check-in History */}
               {activeBreak.daily_logs.length > 0 && (
                 <Card>
@@ -521,16 +562,30 @@ const ToleranceBreak = () => {
                   <CardContent>
                     <div className="space-y-2">
                       {activeBreak.daily_logs.slice().reverse().map((log, i) => (
-                        <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted">
-                          <span className="text-sm font-medium">Day {log.day}</span>
-                          <span>{["😔", "😕", "😐", "🙂", "😄"][log.mood - 1]}</span>
-                          {log.symptoms && <span className="text-xs text-muted-foreground truncate max-w-[150px]">{log.symptoms}</span>}
+                        <div key={i} className="p-3 rounded-lg bg-muted space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium">Day {log.day}</span>
+                            <span>{["😔", "😕", "😐", "🙂", "😄"][log.mood - 1]}</span>
+                          </div>
+                          <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                            {typeof log.sleep === "number" && <span>Sleep {log.sleep}/5</span>}
+                            {typeof log.cravings === "number" && <span>Cravings {log.cravings}/5</span>}
+                            {typeof log.energy === "number" && <span>Energy {log.energy}/5</span>}
+                            {typeof log.appetite === "number" && <span>Appetite {log.appetite}/5</span>}
+                          </div>
+                          {log.triggers && log.triggers.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {log.triggers.map(t => <Badge key={t} variant="outline" className="text-[10px]">{t}</Badge>)}
+                            </div>
+                          )}
+                          {log.symptoms && <p className="text-xs text-muted-foreground">{log.symptoms}</p>}
                         </div>
                       ))}
                     </div>
                   </CardContent>
                 </Card>
               )}
+
             </div>
           ) : (
             /* No Active Break */
