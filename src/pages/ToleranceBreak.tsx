@@ -14,6 +14,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { differenceInDays, format, addDays } from "date-fns";
 
+interface DailyLog {
+  day: number;
+  mood: number;
+  sleep?: number;
+  cravings?: number;
+  energy?: number;
+  appetite?: number;
+  triggers?: string[];
+  symptoms: string;
+  date: string;
+}
+
 interface ToleranceBreak {
   id: string;
   start_date: string;
@@ -21,10 +33,14 @@ interface ToleranceBreak {
   end_date: string | null;
   status: string;
   reason: string | null;
-  daily_logs: Array<{ day: number; mood: number; symptoms: string; date: string }>;
+  daily_logs: DailyLog[];
   motivation_notes: string[] | null;
   created_at: string;
 }
+
+const TRIGGER_OPTIONS = ["Stress", "Boredom", "Social", "Sleep", "Pain", "Habit", "Anxiety", "Celebration"];
+const MILESTONE_DAYS = [3, 7, 14, 21, 30];
+const REWARD_CODE = "TBREAK15";
 
 const ToleranceBreak = () => {
   const [breaks, setBreaks] = useState<ToleranceBreak[]>([]);
@@ -44,8 +60,14 @@ const ToleranceBreak = () => {
 
   const [checkinData, setCheckinData] = useState({
     mood: 3,
+    sleep: 3,
+    cravings: 3,
+    energy: 3,
+    appetite: 3,
+    triggers: [] as string[],
     symptoms: "",
   });
+
 
   useEffect(() => {
     if (user) fetchBreaks();
