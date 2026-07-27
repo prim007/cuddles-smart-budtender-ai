@@ -14,6 +14,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { differenceInDays, format, addDays } from "date-fns";
 
+interface DailyLog {
+  day: number;
+  mood: number;
+  sleep?: number;
+  cravings?: number;
+  energy?: number;
+  appetite?: number;
+  triggers?: string[];
+  symptoms: string;
+  date: string;
+}
+
 interface ToleranceBreak {
   id: string;
   start_date: string;
@@ -21,10 +33,14 @@ interface ToleranceBreak {
   end_date: string | null;
   status: string;
   reason: string | null;
-  daily_logs: Array<{ day: number; mood: number; symptoms: string; date: string }>;
+  daily_logs: DailyLog[];
   motivation_notes: string[] | null;
   created_at: string;
 }
+
+const TRIGGER_OPTIONS = ["Stress", "Boredom", "Social", "Sleep", "Pain", "Habit", "Anxiety", "Celebration"];
+const MILESTONE_DAYS = [3, 7, 14, 21, 30];
+const REWARD_CODE = "TBREAK15";
 
 const ToleranceBreak = () => {
   const [breaks, setBreaks] = useState<ToleranceBreak[]>([]);
@@ -44,8 +60,14 @@ const ToleranceBreak = () => {
 
   const [checkinData, setCheckinData] = useState({
     mood: 3,
+    sleep: 3,
+    cravings: 3,
+    energy: 3,
+    appetite: 3,
+    triggers: [] as string[],
     symptoms: "",
   });
+
 
   useEffect(() => {
     if (user) fetchBreaks();
@@ -99,15 +121,56 @@ const ToleranceBreak = () => {
     }
   };
 
+  const notifyMilestone = async (
+    brk: ToleranceBreak,
+    dayNumber: number,
+    completed: boolean
+  ) => {
+    if (!user?.email) return;
+    const key = completed ? "notified:completed" : `notified:day${dayNumber}`;
+    const notes = brk.motivation_notes || [];
+    if (notes.includes(key)) return;
+
+    try {
+      await supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "t-break-milestone",
+          recipientEmail: user.email,
+          idempotencyKey: `tbreak-${brk.id}-${key}`,
+          templateData: {
+            milestone: completed ? "the finish line" : `day ${dayNumber}`,
+            dayNumber,
+            targetDays: brk.target_days,
+            completed,
+            ...(completed ? { rewardCode: REWARD_CODE } : {}),
+            appUrl: `${window.location.origin}/t-break`,
+          },
+        },
+      });
+
+      await supabase
+        .from("tolerance_breaks")
+        .update({ motivation_notes: [...notes, key] })
+        .eq("id", brk.id);
+    } catch (err) {
+      console.error("Milestone notification failed:", err);
+    }
+  };
+
   const dailyCheckin = async () => {
     if (!activeBreak) return;
 
     const dayNumber = differenceInDays(new Date(), new Date(activeBreak.start_date)) + 1;
 
     try {
-      const newLog = {
+      const newLog: DailyLog = {
         day: dayNumber,
         mood: checkinData.mood,
+        sleep: checkinData.sleep,
+        cravings: checkinData.cravings,
+        energy: checkinData.energy,
+        appetite: checkinData.appetite,
+        triggers: checkinData.triggers,
         symptoms: checkinData.symptoms,
         date: new Date().toISOString(),
       };
@@ -116,17 +179,22 @@ const ToleranceBreak = () => {
 
       const { error } = await supabase
         .from("tolerance_breaks")
-        .update({ daily_logs: updatedLogs })
+        .update({ daily_logs: updatedLogs as unknown as never })
         .eq("id", activeBreak.id);
 
       if (error) throw error;
+
+      // Milestone email (day 3/7/14/21/30, only within the target)
+      if (MILESTONE_DAYS.includes(dayNumber) && dayNumber < activeBreak.target_days) {
+        await notifyMilestone(activeBreak, dayNumber, false);
+      }
 
       // Get coaching message
       await getCoachingMessage("daily_checkin", dayNumber, activeBreak.target_days, checkinData.mood, checkinData.symptoms);
 
       toast({ title: "Check-in recorded! 📝" });
       setIsCheckinOpen(false);
-      setCheckinData({ mood: 3, symptoms: "" });
+      setCheckinData({ mood: 3, sleep: 3, cravings: 3, energy: 3, appetite: 3, triggers: [], symptoms: "" });
       fetchBreaks();
     } catch (error) {
       toast({ title: "Error", description: "Failed to record check-in.", variant: "destructive" });
@@ -144,14 +212,19 @@ const ToleranceBreak = () => {
 
       if (error) throw error;
 
+      await notifyMilestone(activeBreak, activeBreak.target_days, true);
       await getCoachingMessage("completed", activeBreak.target_days, activeBreak.target_days);
 
-      toast({ title: "Congratulations! 🎉", description: "You completed your tolerance break!" });
+      toast({
+        title: "Congratulations! 🎉",
+        description: `You completed your tolerance break — reward code ${REWARD_CODE} is on its way to your inbox.`,
+      });
       fetchBreaks();
     } catch (error) {
       toast({ title: "Error", description: "Failed to complete break.", variant: "destructive" });
     }
   };
+
 
   const cancelBreak = async () => {
     if (!activeBreak) return;
@@ -326,7 +399,7 @@ const ToleranceBreak = () => {
                           <CheckCircle className="w-4 h-4 mr-2" />Daily Check-in
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="max-h-[85vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle>Day {daysPassed} Check-in</DialogTitle>
                         </DialogHeader>
@@ -341,10 +414,57 @@ const ToleranceBreak = () => {
                               ))}
                             </div>
                           </div>
+                          {([
+                            { key: "sleep", label: "Sleep quality last night", low: "Poor", high: "Great" },
+                            { key: "cravings", label: "Craving intensity today", low: "None", high: "Intense" },
+                            { key: "energy", label: "Energy levels", low: "Flat", high: "Buzzing" },
+                            { key: "appetite", label: "Appetite", low: "None", high: "Strong" },
+                          ] as const).map(({ key, label, low, high }) => (
+                            <div key={key}>
+                              <Label>{label}</Label>
+                              <div className="flex gap-2 mt-2">
+                                {[1, 2, 3, 4, 5].map(n => (
+                                  <Button
+                                    key={n}
+                                    type="button"
+                                    size="sm"
+                                    variant={checkinData[key] === n ? "default" : "outline"}
+                                    onClick={() => setCheckinData(p => ({ ...p, [key]: n }))}
+                                    className="flex-1"
+                                  >
+                                    {n}
+                                  </Button>
+                                ))}
+                              </div>
+                              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                                <span>{low}</span><span>{high}</span>
+                              </div>
+                            </div>
+                          ))}
+                          <div>
+                            <Label>What triggered cravings today?</Label>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {TRIGGER_OPTIONS.map(t => (
+                                <Button
+                                  key={t}
+                                  type="button"
+                                  size="sm"
+                                  variant={checkinData.triggers.includes(t) ? "default" : "outline"}
+                                  onClick={() => setCheckinData(p => ({
+                                    ...p,
+                                    triggers: p.triggers.includes(t) ? p.triggers.filter(x => x !== t) : [...p.triggers, t],
+                                  }))}
+                                >
+                                  {t}
+                                </Button>
+                              ))}
+                            </div>
+                          </div>
                           <div>
                             <Label>Any symptoms or thoughts?</Label>
                             <Textarea value={checkinData.symptoms} onChange={e => setCheckinData(p => ({ ...p, symptoms: e.target.value }))} placeholder="e.g., Trouble sleeping, feeling irritable, cravings..." rows={3} />
                           </div>
+
                           <Button onClick={dailyCheckin} className="w-full">Save Check-in</Button>
                         </div>
                       </DialogContent>
@@ -392,6 +512,47 @@ const ToleranceBreak = () => {
                 </Card>
               )}
 
+              {/* Insights */}
+              {activeBreak.daily_logs.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Your Break Insights</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                      {([
+                        { key: "mood", label: "Avg mood" },
+                        { key: "sleep", label: "Avg sleep" },
+                        { key: "cravings", label: "Avg cravings" },
+                        { key: "energy", label: "Avg energy" },
+                      ] as const).map(({ key, label }) => {
+                        const values = activeBreak.daily_logs.map(l => l[key]).filter((v): v is number => typeof v === "number");
+                        const avg = values.length ? (values.reduce((a, b) => a + b, 0) / values.length).toFixed(1) : "–";
+                        return (
+                          <div key={key} className="p-3 rounded-lg bg-muted">
+                            <div className="text-xl font-bold">{avg}</div>
+                            <div className="text-xs text-muted-foreground">{label}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {(() => {
+                      const counts = new Map<string, number>();
+                      activeBreak.daily_logs.forEach(l => (l.triggers || []).forEach(t => counts.set(t, (counts.get(t) || 0) + 1)));
+                      const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4);
+                      return top.length > 0 ? (
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-2">Most common triggers</p>
+                          <div className="flex flex-wrap gap-2">
+                            {top.map(([t, c]) => <Badge key={t} variant="secondary">{t} · {c}</Badge>)}
+                          </div>
+                        </div>
+                      ) : null;
+                    })()}
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Check-in History */}
               {activeBreak.daily_logs.length > 0 && (
                 <Card>
@@ -401,16 +562,30 @@ const ToleranceBreak = () => {
                   <CardContent>
                     <div className="space-y-2">
                       {activeBreak.daily_logs.slice().reverse().map((log, i) => (
-                        <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted">
-                          <span className="text-sm font-medium">Day {log.day}</span>
-                          <span>{["😔", "😕", "😐", "🙂", "😄"][log.mood - 1]}</span>
-                          {log.symptoms && <span className="text-xs text-muted-foreground truncate max-w-[150px]">{log.symptoms}</span>}
+                        <div key={i} className="p-3 rounded-lg bg-muted space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium">Day {log.day}</span>
+                            <span>{["😔", "😕", "😐", "🙂", "😄"][log.mood - 1]}</span>
+                          </div>
+                          <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                            {typeof log.sleep === "number" && <span>Sleep {log.sleep}/5</span>}
+                            {typeof log.cravings === "number" && <span>Cravings {log.cravings}/5</span>}
+                            {typeof log.energy === "number" && <span>Energy {log.energy}/5</span>}
+                            {typeof log.appetite === "number" && <span>Appetite {log.appetite}/5</span>}
+                          </div>
+                          {log.triggers && log.triggers.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {log.triggers.map(t => <Badge key={t} variant="outline" className="text-[10px]">{t}</Badge>)}
+                            </div>
+                          )}
+                          {log.symptoms && <p className="text-xs text-muted-foreground">{log.symptoms}</p>}
                         </div>
                       ))}
                     </div>
                   </CardContent>
                 </Card>
               )}
+
             </div>
           ) : (
             /* No Active Break */
