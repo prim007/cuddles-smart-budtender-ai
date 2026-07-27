@@ -9,18 +9,20 @@ import walker from "@/assets/cuddles-walker.png";
 const CuddlesWalker = () => (
   <div
     aria-hidden="true"
-    className="pointer-events-none fixed bottom-0 left-0 z-30 hidden w-full overflow-hidden md:block motion-reduce:hidden"
-    style={{ height: 72 }}
+    className="pointer-events-none fixed bottom-0 left-0 z-30 hidden w-full overflow-hidden md:block"
+    style={{ height: 76 }}
   >
-    <img
-      src={walker}
-      alt=""
-      width={56}
-      height={64}
-      loading="lazy"
-      decoding="async"
-      className="cuddles-walker absolute bottom-1 left-0 h-16 w-auto opacity-80 drop-shadow-md"
-    />
+    <div className="cuddles-walker absolute bottom-1 left-0">
+      <img
+        src={walker}
+        alt=""
+        width={56}
+        height={64}
+        loading="lazy"
+        decoding="async"
+        className="cuddles-bob h-16 w-auto opacity-80 drop-shadow-md"
+      />
+    </div>
   </div>
 );
 
