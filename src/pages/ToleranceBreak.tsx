@@ -399,7 +399,7 @@ const ToleranceBreak = () => {
                           <CheckCircle className="w-4 h-4 mr-2" />Daily Check-in
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="max-h-[85vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle>Day {daysPassed} Check-in</DialogTitle>
                         </DialogHeader>
@@ -414,10 +414,57 @@ const ToleranceBreak = () => {
                               ))}
                             </div>
                           </div>
+                          {([
+                            { key: "sleep", label: "Sleep quality last night", low: "Poor", high: "Great" },
+                            { key: "cravings", label: "Craving intensity today", low: "None", high: "Intense" },
+                            { key: "energy", label: "Energy levels", low: "Flat", high: "Buzzing" },
+                            { key: "appetite", label: "Appetite", low: "None", high: "Strong" },
+                          ] as const).map(({ key, label, low, high }) => (
+                            <div key={key}>
+                              <Label>{label}</Label>
+                              <div className="flex gap-2 mt-2">
+                                {[1, 2, 3, 4, 5].map(n => (
+                                  <Button
+                                    key={n}
+                                    type="button"
+                                    size="sm"
+                                    variant={checkinData[key] === n ? "default" : "outline"}
+                                    onClick={() => setCheckinData(p => ({ ...p, [key]: n }))}
+                                    className="flex-1"
+                                  >
+                                    {n}
+                                  </Button>
+                                ))}
+                              </div>
+                              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                                <span>{low}</span><span>{high}</span>
+                              </div>
+                            </div>
+                          ))}
+                          <div>
+                            <Label>What triggered cravings today?</Label>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {TRIGGER_OPTIONS.map(t => (
+                                <Button
+                                  key={t}
+                                  type="button"
+                                  size="sm"
+                                  variant={checkinData.triggers.includes(t) ? "default" : "outline"}
+                                  onClick={() => setCheckinData(p => ({
+                                    ...p,
+                                    triggers: p.triggers.includes(t) ? p.triggers.filter(x => x !== t) : [...p.triggers, t],
+                                  }))}
+                                >
+                                  {t}
+                                </Button>
+                              ))}
+                            </div>
+                          </div>
                           <div>
                             <Label>Any symptoms or thoughts?</Label>
                             <Textarea value={checkinData.symptoms} onChange={e => setCheckinData(p => ({ ...p, symptoms: e.target.value }))} placeholder="e.g., Trouble sleeping, feeling irritable, cravings..." rows={3} />
                           </div>
+
                           <Button onClick={dailyCheckin} className="w-full">Save Check-in</Button>
                         </div>
                       </DialogContent>
