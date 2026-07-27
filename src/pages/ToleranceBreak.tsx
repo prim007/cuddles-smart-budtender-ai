@@ -121,15 +121,56 @@ const ToleranceBreak = () => {
     }
   };
 
+  const notifyMilestone = async (
+    brk: ToleranceBreak,
+    dayNumber: number,
+    completed: boolean
+  ) => {
+    if (!user?.email) return;
+    const key = completed ? "notified:completed" : `notified:day${dayNumber}`;
+    const notes = brk.motivation_notes || [];
+    if (notes.includes(key)) return;
+
+    try {
+      await supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "t-break-milestone",
+          recipientEmail: user.email,
+          idempotencyKey: `tbreak-${brk.id}-${key}`,
+          templateData: {
+            milestone: completed ? "the finish line" : `day ${dayNumber}`,
+            dayNumber,
+            targetDays: brk.target_days,
+            completed,
+            ...(completed ? { rewardCode: REWARD_CODE } : {}),
+            appUrl: `${window.location.origin}/t-break`,
+          },
+        },
+      });
+
+      await supabase
+        .from("tolerance_breaks")
+        .update({ motivation_notes: [...notes, key] })
+        .eq("id", brk.id);
+    } catch (err) {
+      console.error("Milestone notification failed:", err);
+    }
+  };
+
   const dailyCheckin = async () => {
     if (!activeBreak) return;
 
     const dayNumber = differenceInDays(new Date(), new Date(activeBreak.start_date)) + 1;
 
     try {
-      const newLog = {
+      const newLog: DailyLog = {
         day: dayNumber,
         mood: checkinData.mood,
+        sleep: checkinData.sleep,
+        cravings: checkinData.cravings,
+        energy: checkinData.energy,
+        appetite: checkinData.appetite,
+        triggers: checkinData.triggers,
         symptoms: checkinData.symptoms,
         date: new Date().toISOString(),
       };
@@ -138,17 +179,22 @@ const ToleranceBreak = () => {
 
       const { error } = await supabase
         .from("tolerance_breaks")
-        .update({ daily_logs: updatedLogs })
+        .update({ daily_logs: updatedLogs as unknown as never })
         .eq("id", activeBreak.id);
 
       if (error) throw error;
+
+      // Milestone email (day 3/7/14/21/30, only within the target)
+      if (MILESTONE_DAYS.includes(dayNumber) && dayNumber < activeBreak.target_days) {
+        await notifyMilestone(activeBreak, dayNumber, false);
+      }
 
       // Get coaching message
       await getCoachingMessage("daily_checkin", dayNumber, activeBreak.target_days, checkinData.mood, checkinData.symptoms);
 
       toast({ title: "Check-in recorded! 📝" });
       setIsCheckinOpen(false);
-      setCheckinData({ mood: 3, symptoms: "" });
+      setCheckinData({ mood: 3, sleep: 3, cravings: 3, energy: 3, appetite: 3, triggers: [], symptoms: "" });
       fetchBreaks();
     } catch (error) {
       toast({ title: "Error", description: "Failed to record check-in.", variant: "destructive" });
@@ -166,14 +212,19 @@ const ToleranceBreak = () => {
 
       if (error) throw error;
 
+      await notifyMilestone(activeBreak, activeBreak.target_days, true);
       await getCoachingMessage("completed", activeBreak.target_days, activeBreak.target_days);
 
-      toast({ title: "Congratulations! 🎉", description: "You completed your tolerance break!" });
+      toast({
+        title: "Congratulations! 🎉",
+        description: `You completed your tolerance break — reward code ${REWARD_CODE} is on its way to your inbox.`,
+      });
       fetchBreaks();
     } catch (error) {
       toast({ title: "Error", description: "Failed to complete break.", variant: "destructive" });
     }
   };
+
 
   const cancelBreak = async () => {
     if (!activeBreak) return;
