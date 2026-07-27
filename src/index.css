@@ -183,11 +183,12 @@ body {
   animation: cuddles-stroll 44s linear infinite;
 }
 
-.cuddles-walker img,
-.cuddles-walker > * {
+.cuddles-bob {
   will-change: transform;
+  animation: cuddles-bob 0.9s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cuddles-walker { animation: none; }
+  .cuddles-walker,
+  .cuddles-bob { animation: none; }
 }
