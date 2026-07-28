@@ -730,6 +730,7 @@ const ChatDemo = () => {
                         const m = DISPENSARY_MENUS.find((x) => x.id === message.menuId);
                         return m ? <ChatMenuCard menu={m} /> : null;
                       })()}
+                      {message.uiFeedback && <ChatUIFeedbackPrompt />}
                       {message.orderPhone && (
                         <Button
                           className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
