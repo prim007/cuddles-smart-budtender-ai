@@ -28,6 +28,7 @@ import ReactMarkdown from "react-markdown";
 import ChatStrainCard from "./ChatStrainCard";
 import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
 import ChatMenuCard from "./ChatMenuCard";
+import ChatUIFeedbackPrompt from "./ChatUIFeedbackPrompt";
 import { matchMenuIntent, DISPENSARY_MENUS } from "@/data/dispensaryMenus";
 
 const generateSessionId = () => crypto.randomUUID();
@@ -38,7 +39,15 @@ interface Message {
   orderPhone?: string;
   dispensaries?: Dispensary[];
   menuId?: string;
+  uiFeedback?: boolean;
 }
+
+// --- UI / look-and-feel roast detection ---
+// Only fires when someone comments on the design AND is being critical/funny about it.
+const UI_TOPIC_RE = /\b(ui|ux|design|layout|interface|website|web\s*site|site|app|page|theme|colou?rs?|font|fonts|typography|button|buttons|icon|icons|logo|look(s|ing)?(\s*and\s*feel)?|feel|styling|style|graphics|animation)\b/i;
+const UI_ROAST_RE = /\b(mess(y)?|ugly|awful|terrible|horrible|bad|trash|rubbish|kak|mid|cringe|dated|outdated|old\s*school|boring|bland|cluttered|confusing|clunky|broken|weird|hideous|eyesore|lol|lmao|haha+|😂|🤣|💀|joke|funny|meme|roast|yikes|needs?\s+(a\s+)?(redesign|work|help|makeover)|looks?\s+like|1990s?|90s|2000s?|amateur|cheap|tacky)\b|\bnot\s+(nice|great|good|pretty)\b/i;
+
+const isUiRoast = (text: string) => UI_TOPIC_RE.test(text) && UI_ROAST_RE.test(text);
 
 // --- Dispensary intent detection ---
 const DISPENSARY_INTENT_RE = /\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|coffee\s*shop|head\s*shop|physical\s+(storefront|store|shop|location)|tripple\s*four.{0,40}(location|shop|store)|(?:nearest|closest|nearby|local|closer)\s+(shop|store|spot|location|dispensar(y|ies)|weed|cannabis)|(?:shop|store|spot|dispensar(y|ies))s?\s+(near|nearby|close|closest|around)|where\s+(is|are|can\s+i\s+(find|buy|get))\b.*(shop|store|dispensar(y|ies)|tripple\s*four|location|weed|cannabis)|(?:find|locate|show|get)\s+(me\s+)?(a\s+|the\s+)?(nearest|closest|nearby|local)?\s*(shop|store|dispensar(y|ies)|location|weed|cannabis)|front\s+door)\b/i;
@@ -262,6 +271,22 @@ const ChatDemo = () => {
     const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    // UI roast / look-and-feel comment: ask them what they'd change instead of guessing.
+    if (isUiRoast(content)) {
+      setMessageCount((prev) => prev + 1);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "Okay okay, I hear you on the look and feel 😄 — you're the one using it, so tell me what you'd change and I'll pass it on.",
+          uiFeedback: true,
+        },
+      ]);
+      trackEvent("ui_feedback_prompt_shown", "engagement", "chat");
+      return;
+    }
+
 
     // Menu intent: display the requested menu inline and bypass the AI completely.
     // This keeps live menu requests as a simple menu card, with no generated text.
@@ -705,6 +730,7 @@ const ChatDemo = () => {
                         const m = DISPENSARY_MENUS.find((x) => x.id === message.menuId);
                         return m ? <ChatMenuCard menu={m} /> : null;
                       })()}
+                      {message.uiFeedback && <ChatUIFeedbackPrompt />}
                       {message.orderPhone && (
                         <Button
                           className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
