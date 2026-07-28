@@ -30,6 +30,8 @@ import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
 import ChatMenuCard from "./ChatMenuCard";
 import ChatUIFeedbackPrompt from "./ChatUIFeedbackPrompt";
 import { matchMenuIntent, DISPENSARY_MENUS } from "@/data/dispensaryMenus";
+// UI / look-and-feel roast detection (tested in src/lib/uiRoast.test.ts)
+import { isUiRoast } from "@/lib/uiRoast";
 
 const generateSessionId = () => crypto.randomUUID();
 
@@ -41,9 +43,6 @@ interface Message {
   menuId?: string;
   uiFeedback?: boolean;
 }
-
-// --- UI / look-and-feel roast detection (tested in src/lib/uiRoast.test.ts) ---
-import { isUiRoast } from "@/lib/uiRoast";
 
 // --- Dispensary intent detection ---
 const DISPENSARY_INTENT_RE = /\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|coffee\s*shop|head\s*shop|physical\s+(storefront|store|shop|location)|tripple\s*four.{0,40}(location|shop|store)|(?:nearest|closest|nearby|local|closer)\s+(shop|store|spot|location|dispensar(y|ies)|weed|cannabis)|(?:shop|store|spot|dispensar(y|ies))s?\s+(near|nearby|close|closest|around)|where\s+(is|are|can\s+i\s+(find|buy|get))\b.*(shop|store|dispensar(y|ies)|tripple\s*four|location|weed|cannabis)|(?:find|locate|show|get)\s+(me\s+)?(a\s+|the\s+)?(nearest|closest|nearby|local)?\s*(shop|store|dispensar(y|ies)|location|weed|cannabis)|front\s+door)\b/i;
