@@ -271,6 +271,22 @@ const ChatDemo = () => {
     const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    // UI roast / look-and-feel comment: ask them what they'd change instead of guessing.
+    if (isUiRoast(content)) {
+      setMessageCount((prev) => prev + 1);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "Okay okay, I hear you on the look and feel 😄 — you're the one using it, so tell me what you'd change and I'll pass it on.",
+          uiFeedback: true,
+        },
+      ]);
+      trackEvent("ui_feedback_prompt_shown", "engagement", "chat");
+      return;
+    }
+
 
     // Menu intent: display the requested menu inline and bypass the AI completely.
     // This keeps live menu requests as a simple menu card, with no generated text.
