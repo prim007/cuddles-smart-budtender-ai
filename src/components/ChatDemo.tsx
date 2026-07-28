@@ -42,12 +42,8 @@ interface Message {
   uiFeedback?: boolean;
 }
 
-// --- UI / look-and-feel roast detection ---
-// Only fires when someone comments on the design AND is being critical/funny about it.
-const UI_TOPIC_RE = /\b(ui|ux|design|layout|interface|website|web\s*site|site|app|page|theme|colou?rs?|font|fonts|typography|button|buttons|icon|icons|logo|look(s|ing)?(\s*and\s*feel)?|feel|styling|style|graphics|animation)\b/i;
-const UI_ROAST_RE = /\b(mess(y)?|ugly|awful|terrible|horrible|bad|trash|rubbish|kak|mid|cringe|dated|outdated|old\s*school|boring|bland|cluttered|confusing|clunky|broken|weird|hideous|eyesore|lol|lmao|haha+|😂|🤣|💀|joke|funny|meme|roast|yikes|needs?\s+(a\s+)?(redesign|work|help|makeover)|looks?\s+like|1990s?|90s|2000s?|amateur|cheap|tacky)\b|\bnot\s+(nice|great|good|pretty)\b/i;
-
-const isUiRoast = (text: string) => UI_TOPIC_RE.test(text) && UI_ROAST_RE.test(text);
+// --- UI / look-and-feel roast detection (tested in src/lib/uiRoast.test.ts) ---
+import { isUiRoast } from "@/lib/uiRoast";
 
 // --- Dispensary intent detection ---
 const DISPENSARY_INTENT_RE = /\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|coffee\s*shop|head\s*shop|physical\s+(storefront|store|shop|location)|tripple\s*four.{0,40}(location|shop|store)|(?:nearest|closest|nearby|local|closer)\s+(shop|store|spot|location|dispensar(y|ies)|weed|cannabis)|(?:shop|store|spot|dispensar(y|ies))s?\s+(near|nearby|close|closest|around)|where\s+(is|are|can\s+i\s+(find|buy|get))\b.*(shop|store|dispensar(y|ies)|tripple\s*four|location|weed|cannabis)|(?:find|locate|show|get)\s+(me\s+)?(a\s+|the\s+)?(nearest|closest|nearby|local)?\s*(shop|store|dispensar(y|ies)|location|weed|cannabis)|front\s+door)\b/i;
