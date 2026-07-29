@@ -1178,6 +1178,36 @@ export type Database = {
         }
         Relationships: []
       }
+      ui_feedback: {
+        Row: {
+          created_at: string
+          id: string
+          ideas: string[]
+          note: string | null
+          path: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ideas?: string[]
+          note?: string | null
+          path?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ideas?: string[]
+          note?: string | null
+          path?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_memory: {
         Row: {
           created_at: string
