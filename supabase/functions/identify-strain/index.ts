@@ -236,7 +236,14 @@ RULES: Never fabricate high confidence from a bad photo. Educational only — la
       ],
     });
 
+    // Dedicated OCR pass runs in parallel with the vision analysis.
+    const ocrPromise = runLabelOcr(normalizedImageUrl, LOVABLE_API_KEY).catch((e) => {
+      console.error("OCR pass failed:", e instanceof Error ? e.message : String(e));
+      return null;
+    });
+
     const MODEL_FALLBACKS = ["google/gemini-2.5-pro", "google/gemini-2.5-flash", "google/gemini-2.5-flash-lite"];
+
     let response: Response | null = null;
     let lastErrorText = "";
     for (const model of MODEL_FALLBACKS) {
