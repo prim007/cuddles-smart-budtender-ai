@@ -313,14 +313,27 @@ RULES: Never fabricate high confidence from a bad photo. Educational only — la
       };
     }
 
-    console.log("Strain identification completed:", strainData.strain_name);
+    const ocr = await ocrPromise;
+
+    // Printed label text is authoritative — override AI visual estimates when present.
+    if (ocr?.has_text) {
+      if (ocr.thc_percent) strainData.thc_estimate = ocr.thc_percent;
+      if (ocr.cbd_percent) strainData.cbd_estimate = ocr.cbd_percent;
+      if (ocr.strain_name && (!strainData.strain_name || strainData.strain_name === "Unknown")) {
+        strainData.strain_name = ocr.strain_name;
+      }
+    }
+
+    console.log("Strain identification completed:", strainData.strain_name, "| OCR text:", ocr?.has_text ? "yes" : "no");
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         data: strainData,
+        label_ocr: ocr?.has_text ? ocr : null,
         disclaimer: "This identification is based on visual analysis only and is for educational purposes. Actual strain identity and cannabinoid content can only be confirmed through lab testing."
       }),
+
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
