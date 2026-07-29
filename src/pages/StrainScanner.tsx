@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Camera, Upload, Sparkles, AlertCircle, Leaf, Loader2 } from "lucide-react";
+import { ArrowLeft, Camera, Upload, Sparkles, AlertCircle, Leaf, Loader2, ScanText } from "lucide-react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -201,7 +201,7 @@ const StrainScanner = () => {
                     </div>
                   )}
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => { setImagePreview(null); setResult(null); }} className="flex-1">
+                    <Button variant="outline" onClick={() => { setImagePreview(null); setResult(null); setLabelOcr(null); }} className="flex-1">
                       Clear
                     </Button>
                     <Button
