@@ -137,6 +137,8 @@ const Index = () => {
           <ChatDemo />
         </div>
         <PhoneShowcase />
+        <SeeItInAction />
+
 
         <TrendingStrainsTicker />
         <Testimonials />
