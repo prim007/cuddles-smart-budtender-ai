@@ -49,6 +49,8 @@ const StrainScanner = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<StrainResult | null>(null);
   const [disclaimer, setDisclaimer] = useState<string>("");
+  const [labelOcr, setLabelOcr] = useState<LabelOcr | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const { toast } = useToast();
