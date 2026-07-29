@@ -23,21 +23,40 @@ const ChatUIFeedbackPrompt = () => {
   const [picked, setPicked] = useState<string[]>([]);
   const [note, setNote] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const toggle = (idea: string) =>
     setPicked((prev) => (prev.includes(idea) ? prev.filter((i) => i !== idea) : [...prev, idea]));
 
-  const submit = () => {
-    const payload = { ideas: picked, note: note.trim(), at: new Date().toISOString() };
-    try {
-      const prev = JSON.parse(localStorage.getItem("cuddles-ui-feedback") || "[]");
-      localStorage.setItem("cuddles-ui-feedback", JSON.stringify([...prev, payload]));
-    } catch {
-      /* noop */
+  const submit = async () => {
+    setSending(true);
+    const trimmedNote = note.trim().slice(0, 500);
+
+    const { data: authData } = await supabase.auth.getUser();
+    const { error } = await supabase.from("ui_feedback").insert({
+      user_id: authData?.user?.id ?? null,
+      ideas: picked,
+      note: trimmedNote || null,
+      path: typeof window !== "undefined" ? window.location.pathname : null,
+      user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 300) : null,
+    });
+
+    setSending(false);
+
+    if (error) {
+      console.error("UI feedback submit failed:", error);
+      toast({
+        title: "Couldn't send that",
+        description: "Something went wrong on our side — please try again in a moment.",
+        variant: "destructive",
+      });
+      return;
     }
+
     trackEvent("ui_feedback_submitted", "engagement", picked.join("|") || "note_only");
     setSent(true);
   };
+
 
   if (sent) {
     return (
