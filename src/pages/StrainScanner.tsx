@@ -12,6 +12,25 @@ import { useToast } from "@/hooks/use-toast";
 import { prepareImageForAnalysis } from "@/utils/imagePreprocessing";
 import { trackScanStart, trackScanComplete, trackRecommendationView } from "@/components/GoogleAnalytics";
 
+interface LabelOcr {
+  has_text: boolean;
+  raw_text: string;
+  brand?: string;
+  product_name?: string;
+  batch_number?: string;
+  lab_name?: string;
+  test_date?: string;
+  packaged_date?: string;
+  expiry_date?: string;
+  net_weight?: string;
+  thc_percent?: string;
+  cbd_percent?: string;
+  total_cannabinoids?: string;
+  terpenes?: string[];
+  warnings?: string[];
+  confidence: number;
+}
+
 interface StrainResult {
   strain_name: string;
   confidence: number;
@@ -23,6 +42,7 @@ interface StrainResult {
   similar_strains: string[];
   description: string;
 }
+
 
 const StrainScanner = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
