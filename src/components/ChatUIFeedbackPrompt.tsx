@@ -111,10 +111,11 @@ const ChatUIFeedbackPrompt = () => {
           <Button
             size="sm"
             className="mt-2 h-8 text-xs bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90"
-            disabled={picked.length === 0 && !note.trim()}
+            disabled={sending || (picked.length === 0 && !note.trim())}
             onClick={submit}
           >
-            Send my suggestion
+            {sending && <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />}
+            {sending ? "Sending..." : "Send my suggestion"}
           </Button>
         </div>
       </div>
