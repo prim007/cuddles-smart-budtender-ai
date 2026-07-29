@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Check, Palette } from "lucide-react";
+import { Check, Palette, Loader2 } from "lucide-react";
 import { trackEvent } from "@/components/GoogleAnalytics";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 const QUICK_IDEAS = [
   "Cleaner, less clutter",
