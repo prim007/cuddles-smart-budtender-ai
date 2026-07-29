@@ -100,9 +100,27 @@ const ImageUploadButton = ({ onImageAnalysis, disabled }: ImageUploadButtonProps
         analysis += `**Similar Strains:** ${result.similar_strains.join(", ")}\n\n`;
       }
 
+      const ocr = data.label_ocr;
+      if (ocr?.has_text) {
+        analysis += `**📄 Label Text Read:**\n`;
+        const fields: [string, string | undefined][] = [
+          ["Brand", ocr.brand],
+          ["Batch No.", ocr.batch_number],
+          ["Lab", ocr.lab_name],
+          ["Tested", ocr.test_date],
+          ["Net Weight", ocr.net_weight],
+          ["Total Cannabinoids", ocr.total_cannabinoids],
+        ];
+        for (const [label, value] of fields) {
+          if (value) analysis += `- ${label}: ${value}\n`;
+        }
+        analysis += `\n`;
+      }
+
       if (disclaimer) {
         analysis += `⚠️ _${disclaimer}_`;
       }
+
 
       onImageAnalysis(analysis);
       setIsOpen(false);

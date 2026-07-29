@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Camera, Upload, Sparkles, AlertCircle, Leaf, Loader2 } from "lucide-react";
+import { ArrowLeft, Camera, Upload, Sparkles, AlertCircle, Leaf, Loader2, ScanText } from "lucide-react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,6 +11,25 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { prepareImageForAnalysis } from "@/utils/imagePreprocessing";
 import { trackScanStart, trackScanComplete, trackRecommendationView } from "@/components/GoogleAnalytics";
+
+interface LabelOcr {
+  has_text: boolean;
+  raw_text: string;
+  brand?: string;
+  product_name?: string;
+  batch_number?: string;
+  lab_name?: string;
+  test_date?: string;
+  packaged_date?: string;
+  expiry_date?: string;
+  net_weight?: string;
+  thc_percent?: string;
+  cbd_percent?: string;
+  total_cannabinoids?: string;
+  terpenes?: string[];
+  warnings?: string[];
+  confidence: number;
+}
 
 interface StrainResult {
   strain_name: string;
@@ -24,11 +43,14 @@ interface StrainResult {
   description: string;
 }
 
+
 const StrainScanner = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<StrainResult | null>(null);
   const [disclaimer, setDisclaimer] = useState<string>("");
+  const [labelOcr, setLabelOcr] = useState<LabelOcr | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const { toast } = useToast();
@@ -79,6 +101,8 @@ const StrainScanner = () => {
 
       setResult(data.data);
       setDisclaimer(data.disclaimer);
+      setLabelOcr(data.label_ocr ?? null);
+
 
       if (data.data?.strain_name) {
         trackScanComplete(data.data.strain_name, data.data.confidence);
@@ -177,7 +201,7 @@ const StrainScanner = () => {
                     </div>
                   )}
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => { setImagePreview(null); setResult(null); }} className="flex-1">
+                    <Button variant="outline" onClick={() => { setImagePreview(null); setResult(null); setLabelOcr(null); }} className="flex-1">
                       Clear
                     </Button>
                     <Button
@@ -295,6 +319,71 @@ const StrainScanner = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Label OCR */}
+          {labelOcr?.has_text && (
+            <Card className="mt-6 overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-hippie-blue/10 to-hippie-green/10">
+                <CardTitle className="flex items-center gap-2 text-lg font-display">
+                  <ScanText className="w-5 h-5 text-hippie-blue" />
+                  Label Text Extracted
+                  <Badge variant="outline" className="ml-auto">{labelOcr.confidence}% legible</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  {([
+                    ["Brand", labelOcr.brand],
+                    ["Product", labelOcr.product_name],
+                    ["Batch No.", labelOcr.batch_number],
+                    ["Lab", labelOcr.lab_name],
+                    ["THC", labelOcr.thc_percent],
+                    ["CBD", labelOcr.cbd_percent],
+                    ["Total Cannabinoids", labelOcr.total_cannabinoids],
+                    ["Net Weight", labelOcr.net_weight],
+                    ["Tested", labelOcr.test_date],
+                    ["Packaged", labelOcr.packaged_date],
+                    ["Expires", labelOcr.expiry_date],
+                  ] as const)
+                    .filter(([, value]) => !!value)
+                    .map(([label, value]) => (
+                      <div key={label} className="p-3 rounded-lg bg-muted/50">
+                        <span className="text-xs text-muted-foreground">{label}</span>
+                        <p className="font-medium text-sm break-words">{value}</p>
+                      </div>
+                    ))}
+                </div>
+
+                {labelOcr.terpenes?.length > 0 && (
+                  <div>
+                    <h4 className="font-medium mb-2">Terpenes on Label</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {labelOcr.terpenes.map((terp, i) => (
+                        <Badge key={i} variant="secondary">{terp}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {labelOcr.warnings?.length > 0 && (
+                  <div>
+                    <h4 className="font-medium mb-2">Printed Warnings</h4>
+                    <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+                      {labelOcr.warnings.map((warning, i) => <li key={i}>{warning}</li>)}
+                    </ul>
+                  </div>
+                )}
+
+                <div>
+                  <h4 className="font-medium mb-2">Raw Transcription</h4>
+                  <pre className="text-xs whitespace-pre-wrap font-mono p-3 rounded-lg bg-muted/50 text-muted-foreground max-h-64 overflow-y-auto">
+                    {labelOcr.raw_text}
+                  </pre>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
         </div>
       </section>
     </div>
