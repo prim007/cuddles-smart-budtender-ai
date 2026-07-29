@@ -195,9 +195,9 @@ const SeeItInAction = () => {
 
               <div className="md:col-span-2 text-center">
                 <Button asChild>
-                  <Link to="/chat" aria-label="Chat with the Cuddles AI budtender">
+                  <a href="#chat-demo" aria-label="Chat with the Cuddles AI budtender">
                     Ask Cuddles yourself <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </div>
