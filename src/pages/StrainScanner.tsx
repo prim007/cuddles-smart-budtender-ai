@@ -101,6 +101,8 @@ const StrainScanner = () => {
 
       setResult(data.data);
       setDisclaimer(data.disclaimer);
+      setLabelOcr(data.label_ocr ?? null);
+
 
       if (data.data?.strain_name) {
         trackScanComplete(data.data.strain_name, data.data.confidence);
