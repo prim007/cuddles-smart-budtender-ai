@@ -103,5 +103,20 @@
   <url><loc>https://cuddles-ai.com/blog/south-africa-mall-dispensaries-illegal-move-online</loc><lastmod>2026-06-29</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cuddles-ai.com/blog/cannabis-data-breaches-protect-your-dispensary</loc><lastmod>2026-06-19</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cuddles-ai.com/blog/cannabis-transport-protocol-south-africa</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Additional public routes -->
+  <url><loc>https://cuddles-ai.com/international-cannabis-map</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/membership</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/t-break-challenge</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/what-is-cuddles</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/shopify-integration</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cuddles-ai.com/licensing</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://cuddles-ai.com/trust</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://cuddles-ai.com/legal/dpa</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://cuddles-ai.com/journal</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/dirty-vapes</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/tripple-four</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cuddles-ai.com/leaf-labs</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
 </urlset>
+
 
