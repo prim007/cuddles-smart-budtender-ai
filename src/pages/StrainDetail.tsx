@@ -113,14 +113,31 @@ const StrainDetail = () => {
     }),
   };
 
+  const faqs = buildStrainFaqs({
+    name: displayName,
+    type: displayType,
+    thcRange: profile?.thc_range,
+    cbdRange: profile?.cbd_range,
+    effects: Array.isArray(profile?.effects) ? (profile!.effects as string[]) : [],
+    flavors: Array.isArray(profile?.flavors) ? (profile!.flavors as string[]) : [],
+    medicalUses: Array.isArray(profile?.medical_uses) ? (profile!.medical_uses as string[]) : [],
+    negatives: Array.isArray(profile?.negatives) ? (profile!.negatives as string[]) : [],
+    bestTime: profile?.best_time_of_day,
+    lineage: profile?.lineage,
+    terpene: tenantStrain?.primary_terpene,
+  });
+
+  const graph = [productSchema, faqSchema(faqs), breadcrumbSchema(displayName, slug || "")];
+
   return (
     <div className="min-h-screen bg-background">
       <SEO title={title} description={description} url={`/strains/${slug}`}
-        keywords={`${displayName}, ${displayType}, cannabis strain, effects, terpenes, THC, CBD`}
-        structuredData={productSchema} />
+        keywords={`${displayName} strain, ${displayName} effects, ${displayName} thc, ${displayName} ${displayType.toLowerCase()}, ${displayName} south africa, cannabis strain`}
+        structuredData={graph as unknown as object} />
       <ThemeToggle />
 
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <main className="container mx-auto px-4 py-12 max-w-4xl">
+
         <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
           <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
           <span>/</span>
