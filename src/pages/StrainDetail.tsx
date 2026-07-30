@@ -70,9 +70,12 @@ const StrainDetail = () => {
   const displayName = profile?.strain_name || tenantStrain?.strain_name || (slug ? titleCase(slug) : "Strain");
   const displayType = profile?.strain_type || tenantStrain?.strain_type || "Hybrid";
 
-  const title = `${displayName} – ${displayType} Cannabis Strain | Cuddles AI`;
-  const description = profile?.short_description ||
-    `Learn about ${displayName}, a ${displayType.toLowerCase()} cannabis strain. Effects, terpenes, THC/CBD, lineage and growing tips.`;
+  // Keyword-first title: "<Strain> Strain: Effects, THC & Terpenes"
+  const title = `${displayName} Strain: Effects, THC Level & Terpenes`;
+  const description = profile?.short_description
+    ? `${profile.short_description.slice(0, 110)} ${displayName} effects, THC level, terpenes and where to find it in South Africa.`.slice(0, 158)
+    : `${displayName} is a ${displayType.toLowerCase()} cannabis strain. Effects, THC level, terpene profile, flavours and where to find it in South Africa.`;
+
 
   const typeGradient = displayType.toLowerCase().includes("indica")
     ? "from-purple-500/20 to-indigo-500/10"
