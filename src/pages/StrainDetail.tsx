@@ -71,7 +71,7 @@ const StrainDetail = () => {
   const displayType = profile?.strain_type || tenantStrain?.strain_type || "Hybrid";
 
   // Keyword-first title: "<Strain> Strain: Effects, THC & Terpenes"
-  const title = `${displayName} Strain: Effects, THC Level & Terpenes`;
+  const title = `${displayName} Strain: Effects, THC & Terpenes`;
   const description = profile?.short_description
     ? `${profile.short_description.slice(0, 110)} ${displayName} effects, THC level, terpenes and where to find it in South Africa.`.slice(0, 158)
     : `${displayName} is a ${displayType.toLowerCase()} cannabis strain. Effects, THC level, terpene profile, flavours and where to find it in South Africa.`;
@@ -150,7 +150,7 @@ const StrainDetail = () => {
         <div className={`rounded-3xl bg-gradient-to-br ${typeGradient} border border-border p-8 md:p-12 mb-8`}>
           <Badge variant="outline" className="mb-4 text-sm">{displayType}</Badge>
           <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-3">
-            {displayName}
+            {displayName} Strain
           </h1>
           {profile?.short_description && (
             <p className="text-lg text-muted-foreground">{profile.short_description}</p>
