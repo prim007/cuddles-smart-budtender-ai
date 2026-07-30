@@ -9,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft, Leaf, MessageCircle, Beaker, Wind, Zap, Sparkles, Sun,
-  Heart, AlertTriangle, Soup, Dna, Sprout, Loader2,
+  Heart, AlertTriangle, Soup, Dna, Sprout, Loader2, HelpCircle, MapPin,
 } from "lucide-react";
+import { buildStrainFaqs, faqSchema, breadcrumbSchema } from "@/lib/strainSeo";
+
 
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -68,9 +70,12 @@ const StrainDetail = () => {
   const displayName = profile?.strain_name || tenantStrain?.strain_name || (slug ? titleCase(slug) : "Strain");
   const displayType = profile?.strain_type || tenantStrain?.strain_type || "Hybrid";
 
-  const title = `${displayName} – ${displayType} Cannabis Strain | Cuddles AI`;
-  const description = profile?.short_description ||
-    `Learn about ${displayName}, a ${displayType.toLowerCase()} cannabis strain. Effects, terpenes, THC/CBD, lineage and growing tips.`;
+  // Keyword-first title: "<Strain> Strain: Effects, THC & Terpenes"
+  const title = `${displayName} Strain: Effects, THC & Terpenes`;
+  const description = profile?.short_description
+    ? `${profile.short_description.slice(0, 110)} ${displayName} effects, THC level, terpenes and where to find it in South Africa.`.slice(0, 158)
+    : `${displayName} is a ${displayType.toLowerCase()} cannabis strain. Effects, THC level, terpene profile, flavours and where to find it in South Africa.`;
+
 
   const typeGradient = displayType.toLowerCase().includes("indica")
     ? "from-purple-500/20 to-indigo-500/10"
@@ -108,14 +113,31 @@ const StrainDetail = () => {
     }),
   };
 
+  const faqs = buildStrainFaqs({
+    name: displayName,
+    type: displayType,
+    thcRange: profile?.thc_range,
+    cbdRange: profile?.cbd_range,
+    effects: Array.isArray(profile?.effects) ? (profile!.effects as string[]) : [],
+    flavors: Array.isArray(profile?.flavors) ? (profile!.flavors as string[]) : [],
+    medicalUses: Array.isArray(profile?.medical_uses) ? (profile!.medical_uses as string[]) : [],
+    negatives: Array.isArray(profile?.negatives) ? (profile!.negatives as string[]) : [],
+    bestTime: profile?.best_time_of_day,
+    lineage: profile?.lineage,
+    terpene: tenantStrain?.primary_terpene,
+  });
+
+  const graph = [productSchema, faqSchema(faqs), breadcrumbSchema(displayName, slug || "")];
+
   return (
     <div className="min-h-screen bg-background">
       <SEO title={title} description={description} url={`/strains/${slug}`}
-        keywords={`${displayName}, ${displayType}, cannabis strain, effects, terpenes, THC, CBD`}
-        structuredData={productSchema} />
+        keywords={`${displayName} strain, ${displayName} effects, ${displayName} thc, ${displayName} ${displayType.toLowerCase()}, ${displayName} south africa, cannabis strain`}
+        structuredData={graph as unknown as object} />
       <ThemeToggle />
 
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <main className="container mx-auto px-4 py-12 max-w-4xl">
+
         <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
           <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
           <span>/</span>
@@ -128,7 +150,7 @@ const StrainDetail = () => {
         <div className={`rounded-3xl bg-gradient-to-br ${typeGradient} border border-border p-8 md:p-12 mb-8`}>
           <Badge variant="outline" className="mb-4 text-sm">{displayType}</Badge>
           <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-3">
-            {displayName}
+            {displayName} Strain
           </h1>
           {profile?.short_description && (
             <p className="text-lg text-muted-foreground">{profile.short_description}</p>
@@ -261,6 +283,42 @@ const StrainDetail = () => {
           </section>
         )}
 
+        {/* FAQ — targets long-tail "is X indica", "X thc level", "where to buy X" queries */}
+        <section className="mb-8" aria-labelledby="faq-heading">
+          <h2 id="faq-heading" className="text-2xl font-display font-semibold text-foreground mb-4 flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-primary" /> {displayName} — frequently asked questions
+          </h2>
+          <div className="space-y-3">
+            {faqs.map((f) => (
+              <div key={f.question} className="p-5 rounded-2xl border border-border bg-card">
+                <h3 className="font-semibold text-foreground mb-2">{f.question}</h3>
+                <p className="text-sm text-foreground/80 leading-relaxed">{f.answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Local intent block */}
+        <section className="mb-8 p-6 rounded-2xl border border-primary/20 bg-primary/5">
+          <h2 className="text-xl font-display font-semibold text-foreground mb-2 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-primary" /> Finding {displayName} in South Africa
+          </h2>
+          <p className="text-sm text-foreground/80 leading-relaxed mb-3">
+            Stock of {displayName} moves fast between clubs and dispensaries in Johannesburg, Cape Town, Durban and Pretoria.
+            Rather than phoning around, tell Cuddles what you're after and it checks live dispensary menus for {displayName} —
+            or the nearest match by effect and terpene profile — and shows you what's actually on the shelf right now.
+          </p>
+          <div className="flex flex-wrap gap-2 text-sm">
+            <Link to="/strains" className="text-primary hover:underline">All cannabis strains</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/strains/featured" className="text-primary hover:underline">Strains of the week</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/shop" className="text-primary hover:underline">Shop available products</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/blog" className="text-primary hover:underline">Cannabis guides</Link>
+          </div>
+        </section>
+
         {/* Disclaimer */}
         <p className="text-xs text-muted-foreground text-center mb-6 max-w-xl mx-auto">
           AI-generated for general cannabis education only. Not medical advice. Consult a qualified professional for medical guidance.
@@ -279,7 +337,8 @@ const StrainDetail = () => {
             </Button>
           </Link>
         </div>
-      </div>
+      </main>
+
       <Footer />
     </div>
   );
