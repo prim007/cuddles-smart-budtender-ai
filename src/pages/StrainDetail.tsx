@@ -9,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft, Leaf, MessageCircle, Beaker, Wind, Zap, Sparkles, Sun,
-  Heart, AlertTriangle, Soup, Dna, Sprout, Loader2,
+  Heart, AlertTriangle, Soup, Dna, Sprout, Loader2, HelpCircle, MapPin,
 } from "lucide-react";
+import { buildStrainFaqs, faqSchema, breadcrumbSchema } from "@/lib/strainSeo";
+
 
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
