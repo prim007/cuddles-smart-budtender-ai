@@ -283,6 +283,42 @@ const StrainDetail = () => {
           </section>
         )}
 
+        {/* FAQ — targets long-tail "is X indica", "X thc level", "where to buy X" queries */}
+        <section className="mb-8" aria-labelledby="faq-heading">
+          <h2 id="faq-heading" className="text-2xl font-display font-semibold text-foreground mb-4 flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-primary" /> {displayName} — frequently asked questions
+          </h2>
+          <div className="space-y-3">
+            {faqs.map((f) => (
+              <div key={f.question} className="p-5 rounded-2xl border border-border bg-card">
+                <h3 className="font-semibold text-foreground mb-2">{f.question}</h3>
+                <p className="text-sm text-foreground/80 leading-relaxed">{f.answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Local intent block */}
+        <section className="mb-8 p-6 rounded-2xl border border-primary/20 bg-primary/5">
+          <h2 className="text-xl font-display font-semibold text-foreground mb-2 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-primary" /> Finding {displayName} in South Africa
+          </h2>
+          <p className="text-sm text-foreground/80 leading-relaxed mb-3">
+            Stock of {displayName} moves fast between clubs and dispensaries in Johannesburg, Cape Town, Durban and Pretoria.
+            Rather than phoning around, tell Cuddles what you're after and it checks live dispensary menus for {displayName} —
+            or the nearest match by effect and terpene profile — and shows you what's actually on the shelf right now.
+          </p>
+          <div className="flex flex-wrap gap-2 text-sm">
+            <Link to="/strains" className="text-primary hover:underline">All cannabis strains</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/strains/featured" className="text-primary hover:underline">Strains of the week</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/shop" className="text-primary hover:underline">Shop available products</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/blog" className="text-primary hover:underline">Cannabis guides</Link>
+          </div>
+        </section>
+
         {/* Disclaimer */}
         <p className="text-xs text-muted-foreground text-center mb-6 max-w-xl mx-auto">
           AI-generated for general cannabis education only. Not medical advice. Consult a qualified professional for medical guidance.
@@ -301,7 +337,8 @@ const StrainDetail = () => {
             </Button>
           </Link>
         </div>
-      </div>
+      </main>
+
       <Footer />
     </div>
   );
