@@ -5,6 +5,7 @@ import { ENCYCLOPEDIA_KNOWLEDGE_BASE } from "./encyclopedia-knowledge.ts";
 import { BOTANY_KNOWLEDGE_BASE } from "./botany-knowledge.ts";
 import { WIKIPEDIA_KNOWLEDGE_BASE } from "./wikipedia-knowledge.ts";
 import { STRAIN_MATCHING_KNOWLEDGE } from "./strain-matching.ts";
+import { PLANT_KNOWLEDGE_BASE } from "./plant-knowledge.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
