@@ -47,8 +47,26 @@ interface Message {
 // --- Dispensary intent detection ---
 const DISPENSARY_INTENT_RE = /\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|coffee\s*shop|head\s*shop|physical\s+(storefront|store|shop|location)|tripple\s*four.{0,40}(location|shop|store)|(?:nearest|closest|nearby|local|closer)\s+(shop|store|spot|location|dispensar(y|ies)|weed|cannabis)|(?:shop|store|spot|dispensar(y|ies))s?\s+(near|nearby|close|closest|around)|where\s+(is|are|can\s+i\s+(find|buy|get))\b.*(shop|store|dispensar(y|ies)|tripple\s*four|location|weed|cannabis)|(?:find|locate|show|get)\s+(me\s+)?(a\s+|the\s+)?(nearest|closest|nearby|local)?\s*(shop|store|dispensar(y|ies)|location|weed|cannabis)|front\s+door)\b/i;
 const NEAR_ME_RE = /\b(near\s*me|nearby|close\s*by|around\s*me|my\s*area|my\s*location|closest|nearest|where\s+i\s+am|based\s+on\s+where\s+i)\b/i;
+// Purchase intent: "where can I buy Durban Poison", "Durban Poison for sale", "I want to score some weed"
+const BUY_INTENT_RE = /\b(for\s+sale|on\s+sale|who\s+sells?|where\s+(can|do)\s+i\s+(buy|get|score|cop|purchase|find)|want\s+to\s+(buy|get|score|cop|purchase)|looking\s+to\s+(buy|get|score|cop|purchase)|need\s+to\s+(buy|get|find|score)|i\s+need\s+to\s+find|buy\s+(some\s+)?(weed|bud|flower|cannabis|dagga|zol|grams?|edibles?|vapes?|pre-?rolls?)|score\s+(some\s+)?(weed|bud|dagga|zol)|price\s+of\s+(weed|cannabis|bud)|stock(ists?|ed)?\s+near)\b/i;
 const LOCATION_TROUBLE_RE = /\b(location|gps|map|maps|near\s*me|closest)\b.{0,40}\b(not\s+working|isn'?t\s+working|doesn'?t\s+work|broken|failed|unavailable|can'?t|cannot)\b|\b(not\s+working|broken|failed|unavailable)\b.{0,40}\b(location|gps|map|maps|near\s*me|closest)\b/i;
 const LOCATION_IN_MSG_RE = /\b(?:in|near|around|by|at)\s+([A-Z][A-Za-z\s,]{2,60}?)(?:[.?!]|$)/;
+
+// Pull the product/strain the user is hunting for, e.g. "find Durban Poison for sale"
+const extractProduct = (content: string): string | null => {
+  const patterns = [
+    /\b(?:buy|get|find|score|cop|purchase|sells?|stock(?:s|ing)?)\s+(?:some\s+|any\s+|me\s+)?(?:the\s+)?([A-Za-z][A-Za-z0-9'\-\s]{2,30}?)(?=\s+(?:for\s+sale|near|nearby|around|in|at|close|today|please)\b|[.?!,]|$)/i,
+    /\b([A-Za-z][A-Za-z0-9'\-\s]{2,30}?)\s+for\s+sale\b/i,
+  ];
+  const generic = /^(weed|bud|buds|flower|cannabis|dagga|zol|grams?|it|some|something|stuff|product|products|edibles?|vapes?)$/i;
+  for (const re of patterns) {
+    const m = content.match(re);
+    const raw = m?.[1]?.trim().replace(/\s+/g, " ");
+    if (raw && !generic.test(raw)) return raw;
+  }
+  return null;
+};
+
 
 async function getBrowserLocation(timeoutMs = 8000): Promise<{ lat: number; lng: number } | null> {
   if (!("geolocation" in navigator)) return null;
@@ -91,6 +109,9 @@ const ChatDemo = () => {
   const { toast } = useToast();
   // When set, the next user message is treated as a city/address for dispensary lookup
   const awaitingDispensaryLocation = useRef(false);
+  // Strain/product the user is hunting for, carried across the location follow-up
+  const pendingProduct = useRef<string | null>(null);
+
 
 
   // Update initial message when language changes
@@ -145,14 +166,19 @@ const ChatDemo = () => {
     setMessages([{ role: "assistant", content: t.initialMessage }]);
     setMessageCount(0);
     awaitingDispensaryLocation.current = false;
+    pendingProduct.current = null;
+
   };
 
   // Run dispensary search and push results as an assistant message
   const runDispensarySearch = async (
-    args: { lat?: number; lng?: number; address?: string }
+    args: { lat?: number; lng?: number; address?: string; product?: string }
   ) => {
+    const { product, ...searchArgs } = args;
     try {
-      const { data, error } = await supabase.functions.invoke("find-dispensaries", { body: args });
+      const { data, error } = await supabase.functions.invoke("find-dispensaries", {
+        body: { ...searchArgs, query: product ? `${product} cannabis dispensary` : "cannabis dispensary" },
+      });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       const dispensaries: Dispensary[] = data?.dispensaries || [];
@@ -174,11 +200,15 @@ const ChatDemo = () => {
         ...prev,
         {
           role: "assistant",
-          content: `Here are the top ${dispensaries.length} dispensaries closest to you 🌿`,
+          content: product
+            ? `Here are the ${dispensaries.length} closest spots to ask for **${product}** 🌿 — stock changes daily, so call ahead to confirm they have it. You can also order delivery from Tripple Four below. Not medical advice.`
+            : `Here are the top ${dispensaries.length} dispensaries closest to you 🌿`,
           dispensaries,
+          ...(product ? { orderPhone: "0645436734" } : {}),
         },
       ]);
     } catch (err: any) {
+
       console.error("dispensary search failed", err);
       setMessages((prev) => [
         ...prev,
@@ -208,27 +238,33 @@ const ChatDemo = () => {
     }
 
     const isFollowUpCity = awaitingDispensaryLocation.current;
-    const isExplicitIntent = DISPENSARY_INTENT_RE.test(content);
+    const isExplicitIntent = DISPENSARY_INTENT_RE.test(content) || BUY_INTENT_RE.test(content);
     if (!isExplicitIntent && !isFollowUpCity) return false;
 
     // Follow-up: treat whole message as the address
     if (isFollowUpCity && !isExplicitIntent) {
       awaitingDispensaryLocation.current = false;
+      const product = pendingProduct.current;
+      pendingProduct.current = null;
       setIsLoading(true);
       try {
-        await runDispensarySearch({ address: content.trim() });
+        await runDispensarySearch({ address: content.trim(), product: product ?? undefined });
       } finally {
         setIsLoading(false);
       }
       return true;
     }
 
+    const product = extractProduct(content);
+    pendingProduct.current = product;
+
     setIsLoading(true);
     try {
       // 1) Address embedded in the message: "dispensaries in Cape Town"
       const addrMatch = content.match(LOCATION_IN_MSG_RE);
       if (addrMatch) {
-        await runDispensarySearch({ address: addrMatch[1].trim() });
+        pendingProduct.current = null;
+        await runDispensarySearch({ address: addrMatch[1].trim(), product: product ?? undefined });
         return true;
       }
 
@@ -237,7 +273,8 @@ const ChatDemo = () => {
       if (wantsGps) {
         const loc = await getBrowserLocation();
         if (loc) {
-          await runDispensarySearch({ lat: loc.lat, lng: loc.lng });
+          pendingProduct.current = null;
+          await runDispensarySearch({ lat: loc.lat, lng: loc.lng, product: product ?? undefined });
           return true;
         }
         // GPS denied/unavailable → ask for city
@@ -246,12 +283,14 @@ const ChatDemo = () => {
           ...prev,
           {
             role: "assistant",
-            content:
-              "I'd love to find the closest dispensaries! I couldn't get your location automatically — what **city or neighborhood** are you in? (e.g. \"Sea Point, Cape Town\")",
+            content: product
+              ? `Let's track down **${product}** for you 🌿 I couldn't get your location automatically — what **city or neighborhood** are you in? (e.g. "Sea Point, Cape Town")`
+              : "I'd love to find the closest dispensaries! I couldn't get your location automatically — what **city or neighborhood** are you in? (e.g. \"Sea Point, Cape Town\")",
           },
         ]);
         return true;
       }
+
     } finally {
       setIsLoading(false);
     }
