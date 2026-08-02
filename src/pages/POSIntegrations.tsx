@@ -109,7 +109,7 @@ const POSIntegrations = () => {
                   <div className="mt-4 pt-4 border-t border-border">
                     <Link to="/shopify-integration">
                       <Button variant="outline" size="sm" className="rounded-lg gap-1">
-                        Learn more <ArrowRight className="w-3 h-3" />
+                        Learn more about the Shopify integration <ArrowRight className="w-3 h-3" aria-hidden="true" />
                       </Button>
                     </Link>
                   </div>

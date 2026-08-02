@@ -222,19 +222,21 @@ const Shop = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          className="rounded-xl"
+                          className="rounded-xl min-h-11 min-w-11"
+                          aria-label={`Decrease quantity of ${strain.strain_name}`}
                           onClick={() => updateQuantity(strain.id, qty - 1)}
                         >
-                          <Minus className="w-4 h-4" />
+                          <Minus className="w-4 h-4" aria-hidden="true" />
                         </Button>
                         <span className="font-semibold text-foreground">{qty}</span>
                         <Button
                           variant="outline"
                           size="icon"
-                          className="rounded-xl"
+                          className="rounded-xl min-h-11 min-w-11"
+                          aria-label={`Increase quantity of ${strain.strain_name}`}
                           onClick={() => updateQuantity(strain.id, qty + 1)}
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="w-4 h-4" aria-hidden="true" />
                         </Button>
                       </div>
                     )}

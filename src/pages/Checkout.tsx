@@ -216,19 +216,21 @@ const Checkout = () => {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded-lg"
+                      className="h-11 w-11 rounded-lg"
+                      aria-label={`Decrease quantity of ${item.strainName}`}
                       onClick={() => updateQuantity(item.strainId, item.quantity - 1)}
                     >
-                      <Minus className="w-3 h-3" />
+                      <Minus className="w-3 h-3" aria-hidden="true" />
                     </Button>
                     <span className="w-8 text-center font-semibold">{item.quantity}</span>
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded-lg"
+                      className="h-11 w-11 rounded-lg"
+                      aria-label={`Increase quantity of ${item.strainName}`}
                       onClick={() => updateQuantity(item.strainId, item.quantity + 1)}
                     >
-                      <Plus className="w-3 h-3" />
+                      <Plus className="w-3 h-3" aria-hidden="true" />
                     </Button>
                   </div>
                   <p className="font-bold text-foreground w-20 text-right">
@@ -237,10 +239,11 @@ const Checkout = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-destructive h-8 w-8"
+                    className="text-destructive h-11 w-11"
+                    aria-label={`Remove ${item.strainName} from cart`}
                     onClick={() => removeItem(item.strainId)}
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-4 h-4" aria-hidden="true" />
                   </Button>
                 </div>
               ))}
