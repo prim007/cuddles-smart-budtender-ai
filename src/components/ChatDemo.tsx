@@ -175,9 +175,29 @@ const ChatDemo = () => {
     args: { lat?: number; lng?: number; address?: string; product?: string }
   ) => {
     const { product, ...searchArgs } = args;
+    const searchLabel = product ? `${product} cannabis dispensary` : "cannabis dispensary";
+    const locationLabel = args.address ?? (
+      typeof args.lat === "number" && typeof args.lng === "number"
+        ? `${args.lat},${args.lng}`
+        : "South Africa"
+    );
+    const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${searchLabel} near ${locationLabel}`)}`;
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: `I found your location. [See ${product ? `${product} sellers` : "dispensaries"} near **${args.address ?? "you"}** on Google Maps](${mapsSearchUrl}). Sign in for Cuddles to rank the closest results here in chat. Stock changes daily, so call ahead to confirm. Not medical advice.`,
+            ...(product ? { orderPhone: "0645436734" } : {}),
+          },
+        ]);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke("find-dispensaries", {
-        body: { ...searchArgs, query: product ? `${product} cannabis dispensary` : "cannabis dispensary" },
+        body: { ...searchArgs, query: searchLabel },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
@@ -207,15 +227,14 @@ const ChatDemo = () => {
           ...(product ? { orderPhone: "0645436734" } : {}),
         },
       ]);
-    } catch (err: any) {
-
+    } catch (err: unknown) {
       console.error("dispensary search failed", err);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content:
-            "Hmm, I couldn't pull up dispensaries right now. Want to try again, or share a specific city name?",
+          content: `I couldn't load the ranked list, but you can still [search Google Maps for ${product ? `${product} sellers` : "dispensaries"} near **${args.address ?? "you"}**](${mapsSearchUrl}). Stock changes daily, so call ahead to confirm. Not medical advice.`,
+          ...(product ? { orderPhone: "0645436734" } : {}),
         },
       ]);
     }
