@@ -166,6 +166,8 @@ const ChatDemo = () => {
     setMessages([{ role: "assistant", content: t.initialMessage }]);
     setMessageCount(0);
     awaitingDispensaryLocation.current = false;
+    pendingProduct.current = null;
+
   };
 
   // Run dispensary search and push results as an assistant message
