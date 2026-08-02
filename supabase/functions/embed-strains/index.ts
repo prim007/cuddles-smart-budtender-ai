@@ -7,7 +7,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-embed-secret",
 };
 
 const EMBED_DIM = 768;
@@ -50,25 +50,42 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) return json({ error: "Unauthorized" }, 401);
-
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const authClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(
-      authHeader.replace("Bearer ", ""),
-    );
-    const userId = claimsData?.claims?.sub as string | undefined;
-    if (claimsError || !userId) return json({ error: "Unauthorized" }, 401);
-
     const admin = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-    const { data: isAdmin, error: roleErr } = await admin.rpc("has_role", {
-      _user_id: userId,
-      _role: "admin",
-    });
-    if (roleErr || !isAdmin) return json({ error: "Forbidden" }, 403);
+
+    // Two callers are allowed:
+    //  1. The database trigger, which presents a shared hook secret stored in
+    //     public.internal_hook_secrets (readable only by the service role).
+    //  2. An admin user with a valid JWT (manual backfill).
+    const hookSecret = req.headers.get("x-embed-secret");
+    let authorized = false;
+
+    if (hookSecret) {
+      const { data: secretRow } = await admin
+        .from("internal_hook_secrets")
+        .select("secret")
+        .eq("name", "embed_strains")
+        .maybeSingle();
+      authorized = !!secretRow?.secret && secretRow.secret === hookSecret;
+      if (!authorized) return json({ error: "Unauthorized" }, 401);
+    } else {
+      const authHeader = req.headers.get("Authorization");
+      if (!authHeader?.startsWith("Bearer ")) return json({ error: "Unauthorized" }, 401);
+      const authClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(
+        authHeader.replace("Bearer ", ""),
+      );
+      const userId = claimsData?.claims?.sub as string | undefined;
+      if (claimsError || !userId) return json({ error: "Unauthorized" }, 401);
+
+      const { data: isAdmin, error: roleErr } = await admin.rpc("has_role", {
+        _user_id: userId,
+        _role: "admin",
+      });
+      if (roleErr || !isAdmin) return json({ error: "Forbidden" }, 403);
+    }
 
     const lovableKey = Deno.env.get("LOVABLE_API_KEY");
     if (!lovableKey) return json({ error: "LOVABLE_API_KEY not configured" }, 500);
@@ -76,6 +93,9 @@ serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const force = body?.force === true;
     const tenantId = typeof body?.tenant_id === "string" ? body.tenant_id : null;
+    const strainIds: string[] | null = Array.isArray(body?.strain_ids)
+      ? body.strain_ids.filter((v: unknown) => typeof v === "string").slice(0, MAX_BATCH)
+      : null;
     const limit = Math.min(Math.max(Number(body?.limit) || MAX_BATCH, 1), MAX_BATCH);
 
     let q = admin
@@ -84,8 +104,13 @@ serve(async (req) => {
         "id, strain_name, strain_type, category, primary_effect, primary_terpene, secondary_terpene, notes",
       )
       .limit(limit);
-    if (!force) q = q.is("embedding", null);
-    if (tenantId) q = q.eq("tenant_id", tenantId);
+    if (strainIds && strainIds.length > 0) {
+      q = q.in("id", strainIds);
+    } else {
+      if (!force) q = q.is("embedding", null);
+      if (tenantId) q = q.eq("tenant_id", tenantId);
+    }
+
 
     const { data: rows, error: fetchErr } = await q;
     if (fetchErr) {
