@@ -109,6 +109,9 @@ const ChatDemo = () => {
   const { toast } = useToast();
   // When set, the next user message is treated as a city/address for dispensary lookup
   const awaitingDispensaryLocation = useRef(false);
+  // Strain/product the user is hunting for, carried across the location follow-up
+  const pendingProduct = useRef<string | null>(null);
+
 
 
   // Update initial message when language changes
