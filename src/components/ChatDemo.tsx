@@ -167,10 +167,13 @@ const ChatDemo = () => {
 
   // Run dispensary search and push results as an assistant message
   const runDispensarySearch = async (
-    args: { lat?: number; lng?: number; address?: string }
+    args: { lat?: number; lng?: number; address?: string; product?: string }
   ) => {
+    const { product, ...searchArgs } = args;
     try {
-      const { data, error } = await supabase.functions.invoke("find-dispensaries", { body: args });
+      const { data, error } = await supabase.functions.invoke("find-dispensaries", {
+        body: { ...searchArgs, query: product ? `${product} cannabis dispensary` : "cannabis dispensary" },
+      });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       const dispensaries: Dispensary[] = data?.dispensaries || [];
@@ -192,11 +195,15 @@ const ChatDemo = () => {
         ...prev,
         {
           role: "assistant",
-          content: `Here are the top ${dispensaries.length} dispensaries closest to you 🌿`,
+          content: product
+            ? `Here are the ${dispensaries.length} closest spots to ask for **${product}** 🌿 — stock changes daily, so call ahead to confirm they have it. You can also order delivery from Tripple Four below. Not medical advice.`
+            : `Here are the top ${dispensaries.length} dispensaries closest to you 🌿`,
           dispensaries,
+          ...(product ? { orderPhone: "0645436734" } : {}),
         },
       ]);
     } catch (err: any) {
+
       console.error("dispensary search failed", err);
       setMessages((prev) => [
         ...prev,
