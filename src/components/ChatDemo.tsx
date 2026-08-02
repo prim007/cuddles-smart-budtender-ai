@@ -233,27 +233,33 @@ const ChatDemo = () => {
     }
 
     const isFollowUpCity = awaitingDispensaryLocation.current;
-    const isExplicitIntent = DISPENSARY_INTENT_RE.test(content);
+    const isExplicitIntent = DISPENSARY_INTENT_RE.test(content) || BUY_INTENT_RE.test(content);
     if (!isExplicitIntent && !isFollowUpCity) return false;
 
     // Follow-up: treat whole message as the address
     if (isFollowUpCity && !isExplicitIntent) {
       awaitingDispensaryLocation.current = false;
+      const product = pendingProduct.current;
+      pendingProduct.current = null;
       setIsLoading(true);
       try {
-        await runDispensarySearch({ address: content.trim() });
+        await runDispensarySearch({ address: content.trim(), product: product ?? undefined });
       } finally {
         setIsLoading(false);
       }
       return true;
     }
 
+    const product = extractProduct(content);
+    pendingProduct.current = product;
+
     setIsLoading(true);
     try {
       // 1) Address embedded in the message: "dispensaries in Cape Town"
       const addrMatch = content.match(LOCATION_IN_MSG_RE);
       if (addrMatch) {
-        await runDispensarySearch({ address: addrMatch[1].trim() });
+        pendingProduct.current = null;
+        await runDispensarySearch({ address: addrMatch[1].trim(), product: product ?? undefined });
         return true;
       }
 
@@ -262,7 +268,8 @@ const ChatDemo = () => {
       if (wantsGps) {
         const loc = await getBrowserLocation();
         if (loc) {
-          await runDispensarySearch({ lat: loc.lat, lng: loc.lng });
+          pendingProduct.current = null;
+          await runDispensarySearch({ lat: loc.lat, lng: loc.lng, product: product ?? undefined });
           return true;
         }
         // GPS denied/unavailable → ask for city
@@ -271,12 +278,14 @@ const ChatDemo = () => {
           ...prev,
           {
             role: "assistant",
-            content:
-              "I'd love to find the closest dispensaries! I couldn't get your location automatically — what **city or neighborhood** are you in? (e.g. \"Sea Point, Cape Town\")",
+            content: product
+              ? `Let's track down **${product}** for you 🌿 I couldn't get your location automatically — what **city or neighborhood** are you in? (e.g. "Sea Point, Cape Town")`
+              : "I'd love to find the closest dispensaries! I couldn't get your location automatically — what **city or neighborhood** are you in? (e.g. \"Sea Point, Cape Town\")",
           },
         ]);
         return true;
       }
+
     } finally {
       setIsLoading(false);
     }
