@@ -64,7 +64,7 @@ const extractProduct = (content: string): string | null => {
     /\b(?:buy|get|find|score|cop|purchase|sells?|stock(?:s|ing)?)\s+(?:some\s+|any\s+|me\s+)?(?:the\s+)?([A-Za-z][A-Za-z0-9'\-\s]{2,30}?)(?=\s+(?:for\s+sale|near|nearby|around|in|at|close|today|please)\b|[.?!,]|$)/i,
     /\b([A-Za-z][A-Za-z0-9'\-\s]{2,30}?)\s+for\s+sale\b/i,
   ];
-  const generic = /^(weed|bud|buds|flower|cannabis|dagga|zol|grams?|it|some|something|stuff|product|products|edibles?|vapes?)$/i;
+  const generic = /^(weed|bud|buds|flower|cannabis|dagga|zol|grams?|it|some|something|anything|stuff|product|products|edibles?|vapes?|relief|help|advice|info|information|tips?|a\s+strain|the\s+best|strains?)$/i;
   for (const re of patterns) {
     const m = content.match(re);
     const raw = m?.[1]?.trim().replace(/\s+/g, " ");
@@ -263,7 +263,7 @@ const ChatDemo = () => {
     }
 
     const isFollowUpCity = awaitingDispensaryLocation.current;
-    const isExplicitIntent = DISPENSARY_INTENT_RE.test(content) || BUY_INTENT_RE.test(content);
+    const isExplicitIntent = DISPENSARY_INTENT_RE.test(content) || hasBuyIntent(content);
     if (!isExplicitIntent && !isFollowUpCity) return false;
 
     // Follow-up: treat whole message as the address
