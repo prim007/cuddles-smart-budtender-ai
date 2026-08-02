@@ -1,7 +1,7 @@
 // recommend-strains: vector similarity search over tenant_strains.embedding
-// Stub: accepts either a precomputed `embedding` (number[]) OR a `query` string.
-// When only `query` is provided, returns 501 until your Python embedding pipeline
-// is wired in (or you swap in an embedding API call here).
+// Accepts either a precomputed `embedding` (number[768]) OR a `query` string.
+// Query strings are embedded via the Lovable AI Gateway using
+// openai/text-embedding-3-small with dimensions=768 to match the pgvector column.
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -74,8 +74,9 @@ serve(async (req) => {
           "Lovable-API-Key": lovableKey,
         },
         body: JSON.stringify({
-          model: "google/text-embedding-004",
+          model: "openai/text-embedding-3-small",
           input: query.trim().slice(0, 2000),
+          dimensions: EMBED_DIM,
         }),
       });
 
