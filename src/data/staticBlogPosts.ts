@@ -88,7 +88,7 @@ AI budtending is not about replacing the person behind the counter. It is about 
     author: "Cuddles AI Editorial",
     tags: ["AI budtender", "virtual budtender", "dispensary automation", "retail AI", "cannabis technology"],
     published_at: "2026-06-30T10:00:00.000000+00:00",
-    featured_image: null,
+    featured_image: "/blog/ai-vs-human-budtending.jpg",
   },
   {
     id: "static-south-africa-mall-dispensaries-illegal-move-online",
@@ -256,7 +256,119 @@ If you are not sure where to start, tell Cuddles what your sleep problem actuall
     author: "Cuddles AI Editorial",
     tags: ["indica vs sativa", "sleep", "insomnia", "myrcene", "terpenes", "CBN", "cannabis education"],
     published_at: "2026-07-07T09:00:00.000000+00:00",
-    featured_image: null,
+    featured_image: "/blog/indica-vs-sativa-sleep.jpg",
+  },
+  {
+    id: "static-sa-cannabis-bill-2027-timeline",
+    title: "South Africa's Cannabis Bill Is Coming by 2027 — What It Means for Dispensaries Right Now",
+    slug: "south-africa-cannabis-bill-2027-timeline",
+    excerpt:
+      "Government told Parliament in March 2026 it plans to table a Cannabis Bill by mid-2027, while licensed operators warn the grey market is eating the industry. Here is where the law actually stands and how to prepare.",
+    content: `### South Africa's Cannabis Bill Is Coming by 2027 — What It Means for Dispensaries Right Now
+
+Eight years after the Constitutional Court's 2018 *Prince* judgment decriminalised private adult use, South Africa still has no commercial framework for cannabis. That gap is finally being addressed — slowly.
+
+---
+
+### What changed in 2026
+
+In March 2026, the Portfolio Committee on Trade, Industry and Competition received briefings from the Departments of Trade, Industry and Competition (DTIC), Agriculture, Health, and Justice. The headline: government intends to **introduce a Cannabis Bill to Parliament by mid-2027**, as part of a coordinated push to industrialise and commercialise cannabis and hemp under the National Cannabis Master Plan.
+
+Justice has also called for public comment on **draft regulations under the Cannabis for Private Purposes Act**, which deals with private cultivation and possession limits rather than trade.
+
+---
+
+### The gap that is hurting operators
+
+Licensed growers and retailers have spent years in consultation without a commercial licence regime. In June 2026, industry legal strategists wrote directly to four Directors-General and two parliamentary committees, arguing that more than 60 submissions over two years had gone unanswered — and that the unregulated grey market is capturing the revenue that compliant businesses cannot legally chase.
+
+In practice, that means:
+
+- **Private use is protected.** Adults may grow and possess cannabis privately within prescribed limits.
+- **Commercial sale is still not licensed** outside of the medicinal (SAHPRA) and hemp pathways.
+- **"Club" and gifting models remain legally exposed**, and landlords — especially shopping centres — have been enforcing lease terms against dispensaries.
+
+---
+
+### How to prepare before the Bill lands
+
+1. **Get your records clean now.** Whatever the licence regime looks like, applicants with documented supply chains, lab results and stock records will move first.
+2. **Build an online presence you own.** Physical-space risk (mall enforcement, lease clauses) is the single biggest disruption South African retailers have faced. A website, catalogue and AI budtender are not dependent on a lease.
+3. **Separate medicinal claims from lifestyle marketing.** Health claims without SAHPRA registration remain the fastest way to attract enforcement.
+4. **Track terpene and effect data, not just THC%.** Regulated markets everywhere have moved past potency-only labelling; your catalogue should already reflect that.
+5. **Submit comment.** Draft regulations under the Cannabis for Private Purposes Act are open to public input — industry silence is how bad definitions become law.
+
+---
+
+### The Cuddles view
+
+The direction of travel is clear even if the timeline is not: South Africa is heading toward a licensed, taxed, quality-controlled cannabis sector, with government explicitly framing it as a rural-jobs and export opportunity. The operators who survive the waiting period will be the ones who built a digital storefront, a clean product catalogue, and customer trust before the paperwork existed.
+
+---
+
+*This article summarises publicly reported legislative developments as of August 2026 and is general information, not legal or medical advice. Confirm current requirements with a qualified attorney before making commercial decisions.*`,
+    author: "Cuddles AI Editorial",
+    tags: ["South Africa", "Cannabis Bill", "cannabis law", "regulation", "National Cannabis Master Plan", "dispensary"],
+    published_at: "2026-08-02T09:00:00.000000+00:00",
+    featured_image: "/blog/sa-cannabis-bill-2026.jpg",
+  },
+  {
+    id: "static-global-cannabis-shifts-2026",
+    title: "Global Cannabis Shifts in 2026: US Rescheduling, Germany's Reversal, Thailand's Clampdown",
+    slug: "global-cannabis-shifts-2026",
+    excerpt:
+      "Three of the biggest cannabis markets in the world moved in different directions this year. A plain-English rundown of what changed in the US, Germany and Thailand — and why it matters in South Africa.",
+    content: `### Global Cannabis Shifts in 2026
+
+2026 has been the most eventful year for cannabis policy since 2018 — and not all of it points the same way. Here is what actually happened.
+
+---
+
+### 1. United States: medical cannabis moved to Schedule III
+
+In April 2026, the acting Attorney General signed an order **reclassifying state-licensed medical marijuana from Schedule I to Schedule III** of the Controlled Substances Act. Schedule I is reserved for substances deemed to have no accepted medical use; Schedule III sits alongside far less restricted medicines.
+
+What it does: eases research restrictions and — critically for operators — changes the tax position that has crushed licensed US dispensaries for a decade.
+
+What it does **not** do: legalise cannabis federally, or make recreational use lawful under federal law. Interstate commerce remains prohibited.
+
+---
+
+### 2. Germany: flower drops out of statutory health cover
+
+Germany legalised adult possession and home cultivation in 2024 and built the largest medical flower market in Europe. In 2026 that market changed shape sharply.
+
+The SHI Contribution Rate Stabilisation Act, published on **29 July 2026**, removed dried cannabis flower from the statutory entitlement under Section 31(6) of Social Code Book V, effective 30 July. Roughly **65,000 statutory patients** moved to self-pay for flower overnight, with licensed finished medicinal products now prioritised over pharmacy-compounded preparations.
+
+The lesson: legalisation and *reimbursement* are two separate battles. Markets built on insurance coverage can be reshaped with a single budget act.
+
+---
+
+### 3. Thailand: from the world's loosest market to medical-only
+
+Thailand decriminalised cannabis in 2022 and became the region's cannabis tourism hub almost by accident, with thousands of dispensaries opening in the absence of a control law. In mid-2026 ministers prepared a **Cannabis Control Bill** confining use to medical purposes, imposing licensing across the supply chain, banning promotion, and introducing significantly tougher penalties for unlicensed sale.
+
+The lesson runs the other way from Germany's: a market that grows without a regulatory framework invites a hard reset later.
+
+---
+
+### What this means for South Africa
+
+South Africa is currently in the pre-framework phase that Thailand went through — private use protected, commercial trade unlicensed. The global pattern in 2026 offers three transferable lessons:
+
+- **Structure beats speed.** Thailand's rollback came from having no control law, not from having legal cannabis.
+- **Medical access does not guarantee affordability.** Germany shows that payer policy determines who actually gets product.
+- **Tax treatment is the real unlock.** The US Schedule III change matters commercially far more than any symbolic reform.
+
+For South African retailers, the practical takeaway is the same as it has been all year: build compliant, well-documented, digitally reachable businesses now, so that whichever framework arrives, you qualify for it.
+
+---
+
+*General information as of August 2026, based on publicly reported policy developments. Not legal or medical advice — cannabis laws differ by country and change quickly.*`,
+    author: "Cuddles AI Editorial",
+    tags: ["global cannabis", "rescheduling", "Schedule III", "Germany", "Thailand", "cannabis law 2026"],
+    published_at: "2026-08-01T09:00:00.000000+00:00",
+    featured_image: "/blog/global-cannabis-shifts-2026.jpg",
   },
 ];
 
