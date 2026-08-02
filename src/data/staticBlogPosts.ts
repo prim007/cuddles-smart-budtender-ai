@@ -12,6 +12,93 @@ export interface StaticBlogPost {
 
 export const staticBlogPosts: StaticBlogPost[] = [
   {
+    id: "static-best-strains-for-anxiety",
+    title: "Best Cannabis Strains for Anxiety: A Terpene-First Guide",
+    slug: "best-strains-for-anxiety",
+    excerpt:
+      "Which cannabis strains actually help with anxiety — and which make it worse? A terpene-first guide covering Granddaddy Purple, Jack Herer, myrcene, limonene, linalool and how to dose low and slow.",
+    content: `### Best Cannabis Strains for Anxiety: A Terpene-First Guide
+
+*Educational only — this is not medical advice. Anxiety is a medical condition. Speak to a qualified healthcare professional before using cannabis to manage it, especially if you take other medication.*
+
+Cannabis has a complicated relationship with anxiety. The same plant that calms one person can send another into a spiral. The difference usually is not "indica vs sativa" — it is **dose, THC level, and terpene profile**.
+
+Here is how to think about it properly.
+
+---
+
+### Why high-THC strains can backfire
+
+THC follows a biphasic curve: low doses tend to be calming, high doses tend to be activating and can trigger the exact racing-heart, racing-thoughts response you were trying to avoid.
+
+If anxiety is your concern:
+
+- Stay in the **low-to-moderate THC range** (roughly 10–15%), not the 25%+ shelf.
+- Look for meaningful **CBD** content. CBD blunts some of THC's anxiogenic edge, which is why balanced 1:1 products are so widely recommended for anxious users.
+- Start with a single inhalation, or 2.5mg of an edible, and wait. Edibles take 45–120 minutes; impatience is the most common cause of a bad experience.
+
+---
+
+### The terpenes that matter
+
+Terpenes are the aromatic compounds that shape how a strain feels. Three are consistently associated with calm:
+
+**Myrcene** — earthy, musky, herbal. The most common terpene in cannabis and the one most associated with a heavy, body-relaxing, sedating effect. High-myrcene strains are the classic "couch" strains.
+
+**Linalool** — floral, lavender-like. The same terpene that makes lavender a bedtime staple. Associated with relaxation and stress relief.
+
+**Limonene** — bright and citrusy. Associated with mood elevation rather than sedation. Useful when your anxiety comes with low mood and you do not want to be flattened during the day.
+
+A fourth worth knowing is **caryophyllene**, peppery and unusual in that it binds directly to CB2 receptors — commonly reported for stress and physical tension.
+
+---
+
+### Strains commonly chosen for anxiety
+
+**Granddaddy Purple** — a myrcene- and linalool-rich indica, grape-sweet and heavily relaxing. An evening strain. Frequently chosen for anxiety that shows up as physical tension or as trouble switching off at night. Not a daytime pick.
+
+**Jack Herer** — a limonene- and terpinolene-forward sativa-dominant hybrid. Clear-headed and uplifting rather than sedating, which suits daytime anxiety where being knocked out is not an option. Keep the dose low; pushed too hard, sativa-leaning strains are the most likely to tip into overstimulation.
+
+**ACDC** — a high-CBD, very low-THC strain. Roughly 20:1 CBD:THC, so there is minimal intoxication. Often the safest starting point for someone who has had a bad THC experience before.
+
+**Northern Lights** — myrcene-heavy, reliably sedating, a long-standing evening choice.
+
+**Blue Dream** — a middle path: myrcene plus a sativa lift. Popular precisely because it is moderate, but its THC can run high, so check the label.
+
+---
+
+### Strains and situations to be careful with
+
+- Very high-THC concentrates and dabs.
+- Strains dominated by **pinene** at high doses, which some people find sharpening rather than calming.
+- Any new strain in an unfamiliar environment. Set and setting genuinely change the outcome.
+
+---
+
+### A practical starting protocol
+
+1. Pick a **balanced or CBD-dominant** product first.
+2. Take the **smallest realistic dose** and wait the full onset time.
+3. Note what you took, how much, and how you felt — a written record beats memory.
+4. Adjust one variable at a time.
+
+That fourth point is the whole game. Anxiety response to cannabis is deeply individual, and the only reliable dataset is your own.
+
+---
+
+### Let Cuddles do the matching
+
+Cuddles reads terpene profiles, cannabinoid ratios and your own logged sessions to suggest strains that suit how *you* respond — not how the average person does. The [strain journal](/journal) records mood before and after each session, so recommendations sharpen over time.
+
+[Ask Cuddles about calming strains →](/education/chat-with-cuddles)
+
+*Cuddles provides general cannabis education, not medical advice.*`,
+    author: "Cuddles AI",
+    tags: ["Anxiety", "Terpenes", "Strain Guide", "Education"],
+    published_at: "2026-08-02T09:00:00Z",
+    featured_image: "/blog/best-strains-for-anxiety.jpg",
+  },
+  {
     id: "static-ai-vs-human-budtending",
     title: "AI vs Human Budtending: Why Virtual Budtenders Are Winning in 2026",
     slug: "ai-vs-human-budtending",

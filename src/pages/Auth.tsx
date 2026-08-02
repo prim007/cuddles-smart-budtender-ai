@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Lock, LogIn, UserPlus, ArrowLeft, Leaf, BookOpen, Star, Shield } from "lucide-react";
 import { lovable } from "@/integrations/lovable/index";
 import { Separator } from "@/components/ui/separator";
+import SEO from "@/components/SEO";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(8, "Password must be at least 8 characters");
@@ -123,6 +124,13 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4">
+      <SEO
+        title="Sign In or Create Your Cuddles AI Account"
+        description="Sign in to Cuddles AI to save personalised strain recommendations, keep a private session journal, review strains and track your seedlings."
+        url="/auth"
+        keywords="Cuddles AI sign in, cannabis app login, create cannabis journal account"
+        noindex
+      />
       <div className="w-full max-w-lg">
         <h1 className="sr-only">Sign In or Sign Up to Cuddles AI</h1>
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-4">

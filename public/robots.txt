@@ -29,6 +29,11 @@ Disallow: /demo-requests
 Disallow: /chat-conversations
 Disallow: /agent-traces
 Disallow: /ab-dashboard
+Disallow: /.lovable/
+Disallow: /auth
+Disallow: /order-tracking
+Disallow: /manage-strains
+Disallow: /email-queue-status
 
 Sitemap: https://cuddles-ai.com/sitemap.xml
 
