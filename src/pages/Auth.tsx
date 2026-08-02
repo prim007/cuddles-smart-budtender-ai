@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Lock, LogIn, UserPlus, ArrowLeft, Leaf, BookOpen, Star, Shield } from "lucide-react";
 import { lovable } from "@/integrations/lovable/index";
 import { Separator } from "@/components/ui/separator";
+import SEO from "@/components/SEO";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(8, "Password must be at least 8 characters");
