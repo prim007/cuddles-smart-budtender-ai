@@ -219,6 +219,7 @@ const App = () => (
                 <Route path="/what-is-cuddles" element={<Suspense fallback={<PageLoader />}><WhatIsCuddles /></Suspense>} />
                 <Route path="/catalog" element={<Suspense fallback={<PageLoader />}><Catalog /></Suspense>} />
                 <Route path="/manage-strains" element={<Suspense fallback={<PageLoader />}><ManageStrains /></Suspense>} />
+                <Route path="/insights" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><TenantInsights /></Suspense></ProtectedRoute>} />
                 <Route path="/shop" element={<Suspense fallback={<PageLoader />}><Shop /></Suspense>} />
                 <Route path="/checkout" element={<Suspense fallback={<PageLoader />}><Checkout /></Suspense>} />
                 <Route path="/orders/:orderId" element={<Suspense fallback={<PageLoader />}><OrderTracking /></Suspense>} />
