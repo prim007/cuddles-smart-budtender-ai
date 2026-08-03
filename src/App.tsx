@@ -88,6 +88,7 @@ const WhyCuddles = lazyWithReload(() => import("./pages/WhyCuddles"));
 const WhatIsCuddles = lazyWithReload(() => import("./pages/WhatIsCuddles"));
 const Catalog = lazyWithReload(() => import("./pages/Catalog"));
 const ManageStrains = lazyWithReload(() => import("./pages/ManageStrains"));
+const TenantInsights = lazyWithReload(() => import("./pages/TenantInsights"));
 const Shop = lazyWithReload(() => import("./pages/Shop"));
 const Checkout = lazyWithReload(() => import("./pages/Checkout"));
 const OrderTracking = lazyWithReload(() => import("./pages/OrderTracking"));
