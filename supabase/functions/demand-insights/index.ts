@@ -143,7 +143,8 @@ serve(async (req) => {
       tenant = data ?? null;
     }
 
-    if (!tenant && !isAdmin) return json({ error: "Forbidden" }, 403);
+    // No tenant linked and not an admin: still return the platform-wide
+    // aggregated (cohort-suppressed) view, just without stock coverage.
 
     const since = new Date(Date.now() - days * 86_400_000).toISOString();
     const { data: rows, error: rowsError } = await admin
