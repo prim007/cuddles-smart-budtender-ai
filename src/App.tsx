@@ -88,6 +88,7 @@ const WhyCuddles = lazyWithReload(() => import("./pages/WhyCuddles"));
 const WhatIsCuddles = lazyWithReload(() => import("./pages/WhatIsCuddles"));
 const Catalog = lazyWithReload(() => import("./pages/Catalog"));
 const ManageStrains = lazyWithReload(() => import("./pages/ManageStrains"));
+const TenantInsights = lazyWithReload(() => import("./pages/TenantInsights"));
 const Shop = lazyWithReload(() => import("./pages/Shop"));
 const Checkout = lazyWithReload(() => import("./pages/Checkout"));
 const OrderTracking = lazyWithReload(() => import("./pages/OrderTracking"));
@@ -218,6 +219,7 @@ const App = () => (
                 <Route path="/what-is-cuddles" element={<Suspense fallback={<PageLoader />}><WhatIsCuddles /></Suspense>} />
                 <Route path="/catalog" element={<Suspense fallback={<PageLoader />}><Catalog /></Suspense>} />
                 <Route path="/manage-strains" element={<Suspense fallback={<PageLoader />}><ManageStrains /></Suspense>} />
+                <Route path="/insights" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><TenantInsights /></Suspense></ProtectedRoute>} />
                 <Route path="/shop" element={<Suspense fallback={<PageLoader />}><Shop /></Suspense>} />
                 <Route path="/checkout" element={<Suspense fallback={<PageLoader />}><Checkout /></Suspense>} />
                 <Route path="/orders/:orderId" element={<Suspense fallback={<PageLoader />}><OrderTracking /></Suspense>} />
