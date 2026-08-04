@@ -248,6 +248,14 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/admin/brevo"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <Suspense fallback={<PageLoader />}><BrevoSync /></Suspense>
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* B2B SEO Pages */}
                 <Route path="/ai-budtender" element={<Suspense fallback={<PageLoader />}><AIBudtender /></Suspense>} />
