@@ -143,8 +143,14 @@ serve(async (req) => {
       tenant = data ?? null;
     }
 
-    // No tenant linked and not an admin: still return the platform-wide
-    // aggregated (cohort-suppressed) view, just without stock coverage.
+    // Proprietary analytics: only admins or dispensary tenant owners may read.
+    if (!isAdmin && !tenant) {
+      return json(
+        { error: "This dashboard is available to dispensary partners only." },
+        403,
+      );
+    }
+
 
     const since = new Date(Date.now() - days * 86_400_000).toISOString();
     const { data: rows, error: rowsError } = await admin
