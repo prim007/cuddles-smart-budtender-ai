@@ -714,7 +714,23 @@ ANSWER QUALITY DIRECTIVES (apply to every response)
 8. FOR ANY strain request phrased as a description of a feeling, symptom, occasion or vibe, run the STRAIN MATCHING ENGINE protocol and answer in its presentation shape.
 9. USE THE KNOWLEDGE BASES actively (research, encyclopedia, botany/hemp/terpene). Pull the specific mechanism or number instead of paraphrasing generically.
 `;
-    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + BOTANY_KNOWLEDGE_BASE + PLANT_KNOWLEDGE_BASE + WIKIPEDIA_KNOWLEDGE_BASE + STRAIN_MATCHING_KNOWLEDGE + ANSWER_QUALITY_DIRECTIVES + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
+
+    // --- RAG: retrieve curated knowledge for this specific question ---
+    const lastUserMessage = [...truncatedMessages].reverse().find((m: { role: string }) => m.role === 'user')?.content ?? '';
+    let retrievalContext = '';
+    try {
+      const ragClient = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      );
+      const docs = await retrieveKnowledge(ragClient, LOVABLE_API_KEY, lastUserMessage, 6);
+      retrievalContext = buildRetrievalContext(docs);
+    } catch (err) {
+      console.error('RAG retrieval skipped:', err instanceof Error ? err.message : err);
+    }
+
+    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + BOTANY_KNOWLEDGE_BASE + PLANT_KNOWLEDGE_BASE + WIKIPEDIA_KNOWLEDGE_BASE + STRAIN_MATCHING_KNOWLEDGE + ANSWER_QUALITY_DIRECTIVES + retrievalContext + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
+
 
     // Smart model routing
     const primaryModel = selectModel(messages, !!userHistory);
