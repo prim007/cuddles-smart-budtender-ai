@@ -557,6 +557,45 @@ export type Database = {
         }
         Relationships: []
       }
+      knowledge_documents: {
+        Row: {
+          category: string
+          content: string
+          content_hash: string
+          created_at: string
+          embedding: string | null
+          id: string
+          source: string | null
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          content: string
+          content_hash: string
+          created_at?: string
+          embedding?: string | null
+          id?: string
+          source?: string | null
+          tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          content_hash?: string
+          created_at?: string
+          embedding?: string | null
+          id?: string
+          source?: string | null
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           created_at: string
@@ -1396,6 +1435,21 @@ export type Database = {
           _user_agent?: string
         }
         Returns: string
+      }
+      match_knowledge: {
+        Args: {
+          match_count?: number
+          min_similarity?: number
+          query_embedding: string
+        }
+        Returns: {
+          category: string
+          content: string
+          id: string
+          similarity: number
+          source: string
+          title: string
+        }[]
       }
       match_strains: {
         Args: {
