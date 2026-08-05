@@ -4,6 +4,55 @@
 export const EMBED_MODEL = "openai/text-embedding-3-small";
 export const EMBED_DIM = 768;
 
+// ── In-isolate caches ────────────────────────────────────────────────
+// Edge isolates stay warm between requests, so caching embeddings and
+// retrieval results removes a gateway round-trip (cost) and a pgvector
+// scan (latency) for repeated / similar questions.
+const EMBED_TTL_MS = 60 * 60 * 1000; // 1h — embeddings are deterministic
+const RETRIEVAL_TTL_MS = 10 * 60 * 1000; // 10m — corpus can change
+const EMBED_MAX = 500;
+const RETRIEVAL_MAX = 300;
+
+type Entry<T> = { value: T; expires: number };
+
+class TtlCache<T> {
+  private map = new Map<string, Entry<T>>();
+  constructor(private max: number, private ttl: number) {}
+
+  get(key: string): T | undefined {
+    const hit = this.map.get(key);
+    if (!hit) return undefined;
+    if (hit.expires < Date.now()) {
+      this.map.delete(key);
+      return undefined;
+    }
+    // refresh LRU recency
+    this.map.delete(key);
+    this.map.set(key, hit);
+    return hit.value;
+  }
+
+  set(key: string, value: T) {
+    if (this.map.has(key)) this.map.delete(key);
+    this.map.set(key, { value, expires: Date.now() + this.ttl });
+    while (this.map.size > this.max) {
+      const oldest = this.map.keys().next().value as string | undefined;
+      if (oldest === undefined) break;
+      this.map.delete(oldest);
+    }
+  }
+}
+
+const embedCache = new TtlCache<number[]>(EMBED_MAX, EMBED_TTL_MS);
+const retrievalCache = new TtlCache<RetrievedDoc[]>(RETRIEVAL_MAX, RETRIEVAL_TTL_MS);
+/** De-dupes concurrent identical retrievals (same question from many users). */
+const inFlight = new Map<string, Promise<RetrievedDoc[]>>();
+
+/** Normalize a query so trivial variations share a cache slot. */
+export function cacheKeyFor(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, " ").replace(/[?!.,;:'"]+/g, "").trim();
+}
+
 export async function sha256Hex(text: string): Promise<string> {
   const bytes = new TextEncoder().encode(text);
   const digest = await crypto.subtle.digest("SHA-256", bytes);
@@ -11,6 +60,7 @@ export async function sha256Hex(text: string): Promise<string> {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 }
+
 
 /** Embed one or more strings. Returns vectors in input order. */
 export async function embedTexts(
