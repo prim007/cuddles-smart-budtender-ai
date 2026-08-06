@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
-import {
 import ComplianceSection from "@/components/ComplianceSection";
+import {
   Brain,
   Camera,
   BookOpen,
