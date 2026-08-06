@@ -195,7 +195,7 @@ const WhatIsCuddles = () => {
               What is <span className="gradient-text">Cuddles AI</span>?
             </h1>
             <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed mb-8">
-              Your personal AI-powered cannabis budtender — a smart companion that helps you discover strains, track experiences, and make informed decisions. Built for consumers. Powering dispensaries.
+              Your personal AI plant companion — a plant expert first and cannabis specialist second. Cuddles helps you care for anything you grow, discover the right strains, track experiences, and make informed decisions. Built for consumers. Powering dispensaries.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/education/chat-with-cuddles">
