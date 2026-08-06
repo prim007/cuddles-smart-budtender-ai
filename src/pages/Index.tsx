@@ -121,10 +121,11 @@ const Index = () => {
   return (
     <div className="min-h-screen md:pt-20">
       <SEO
-        title="Cuddles AI — Free AI Cannabis Budtender"
-        description="Free AI cannabis budtender. Personalized strain picks in seconds, scan strains with your camera, track your journal, read reviews. Used worldwide."
+        title="Cuddles AI — Free AI Plant Expert & Cannabis Budtender"
+        description="Free AI plant companion and cannabis budtender. Plant care and grow help, personalized strain picks in seconds, photo scanning, journal and reviews. Used worldwide."
         url="/"
-        keywords="AI budtender, cannabis AI, strain recommendations, weed strain finder, indica vs sativa, terpene guide, strain scanner, cannabis journal, strain reviews, smart budtender, Cuddles AI, dispensary AI, cannabis education, THC CBD guide"
+        keywords="AI plant expert, plant care AI, AI budtender, cannabis AI, strain recommendations, houseplant help, grow assistant, weed strain finder, indica vs sativa, terpene guide, strain scanner, cannabis journal, Cuddles AI, dispensary AI"
+
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(localBusinessSchema)}</script>
