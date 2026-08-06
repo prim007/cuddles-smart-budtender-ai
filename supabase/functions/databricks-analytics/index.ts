@@ -81,7 +81,7 @@ async function databricks(path: string, init: { method: string; body?: unknown }
 async function runSql(warehouseId: string, statement: string) {
   const result = await databricks("/2.0/sql/statements", {
     method: "POST",
-    body: { warehouse_id: warehouseId, statement, wait_timeout: "30s" },
+    body: { warehouse_id: warehouseId, statement, wait_timeout: "50s", on_wait_timeout: "CANCEL" },
   });
   const state = result?.status?.state;
   if (state === "FAILED" || state === "CANCELED") {
