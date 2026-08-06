@@ -1,7 +1,7 @@
 {
   "name": "Cuddles Smart Budtender AI",
   "short_name": "Cuddles AI",
-  "description": "AI-powered cannabis product recommendations",
+  "description": "AI-powered plant care and cannabis product recommendations",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

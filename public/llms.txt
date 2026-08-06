@@ -1,8 +1,8 @@
 # Cuddles AI
 
-> Cuddles AI is a smart AI-powered cannabis budtender. Free personalized strain recommendations, strain scanner, journal, community reviews, and same-day delivery in South Africa via Tripple444.
+> Cuddles AI is a plant expert first and an AI-powered cannabis budtender second — it helps with houseplants, herbs, vegetables and indigenous species as well as cannabis. Free personalized strain recommendations, strain scanner, journal, community reviews, and same-day delivery in South Africa via Tripple444.
 
-Cuddles AI helps consumers find the right cannabis strain through a chat interface and helps dispensaries sell smarter through embeddable AI budtending and POS integrations (Dutchie, Flowhub, Cova, Sweed). General cannabis education only — not medical advice.
+Cuddles AI helps consumers care for any plant and find the right cannabis strain through a chat interface and helps dispensaries sell smarter through embeddable AI budtending and POS integrations (Dutchie, Flowhub, Cova, Sweed). General cannabis education only — not medical advice.
 
 ## Pages
 
