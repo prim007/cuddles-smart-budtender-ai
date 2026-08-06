@@ -103,7 +103,7 @@ const faqSchema = {
       name: "Is Cuddles AI free to use?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes, the AI budtender is 100% free. Cuddles Premium (R99/month) unlocks advanced features like the strain journal, tolerance break coach, and seedling monitor.",
+        text: "Yes, the AI plant expert and budtender is 100% free. Cuddles Premium (R99/month) unlocks advanced features like the strain journal, tolerance break coach, and seedling monitor.",
       },
     },
     {
