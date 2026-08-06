@@ -161,10 +161,11 @@ const WhatIsCuddles = () => {
   return (
     <div className="relative min-h-screen overflow-hidden pb-20">
       <SEO
-        title="What is Cuddles AI? — Your AI Cannabis Budtender"
-        description="Cuddles AI is a free AI-powered cannabis budtender that gives personalized strain recommendations, scans strains from photos, tracks your journal, and helps dispensaries sell smarter."
-        keywords="what is Cuddles AI, AI cannabis budtender, strain recommendation app, cannabis AI assistant, smart budtender, cannabis journal app, strain scanner"
+        title="What is Cuddles AI? — Your AI Plant & Cannabis Companion"
+        description="Cuddles AI is a free AI plant expert and cannabis specialist: personalised strain recommendations, plant care and grow help, photo scanning, a private journal, and smarter selling for dispensaries."
+        keywords="what is Cuddles AI, AI plant assistant, AI cannabis budtender, plant care AI, strain recommendation app, cannabis AI assistant, smart budtender, strain scanner"
         url="/what-is-cuddles"
+
       />
 
       {/* Global abstract backdrop */}
@@ -194,7 +195,7 @@ const WhatIsCuddles = () => {
               What is <span className="gradient-text">Cuddles AI</span>?
             </h1>
             <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed mb-8">
-              Your personal AI-powered cannabis budtender — a smart companion that helps you discover strains, track experiences, and make informed decisions. Built for consumers. Powering dispensaries.
+              Your personal AI plant companion — a plant expert first and cannabis specialist second. Cuddles helps you care for anything you grow, discover the right strains, track experiences, and make informed decisions. Built for consumers. Powering dispensaries.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/education/chat-with-cuddles">
@@ -220,7 +221,8 @@ const WhatIsCuddles = () => {
           <GlassPlate className="px-6 md:px-12 py-12 text-center">
             <h2 className="font-display font-bold text-foreground mb-6 text-2xl md:text-3xl">Our Mission</h2>
             <p className="text-lg text-foreground/80 leading-relaxed">
-              Cannabis is personal. What works for one person may not work for another. Cuddles combines AI intelligence with real strain data and community wisdom to help every individual find their perfect match — no guesswork, no stigma.
+              Plants are personal. What thrives in one home — or works for one person — may not for another. Cuddles brings AI intelligence together with real botanical and strain data plus community wisdom, so whether it's a windowsill herb, a struggling houseplant or your next strain, you find the right match — no guesswork, no stigma.
+
             </p>
             <div className="mt-6 inline-flex items-center gap-2 text-sm text-foreground/70 bg-background/60 backdrop-blur-md border border-white/15 rounded-full px-4 py-2">
               <Shield className="w-4 h-4 text-primary" />
@@ -254,10 +256,11 @@ const WhatIsCuddles = () => {
           <div className="text-center mb-12">
             <p className="text-primary text-sm font-medium uppercase tracking-[0.2em] mb-3">For Consumers</p>
             <h2 className="font-display font-bold text-foreground mb-4 text-3xl md:text-5xl">
-              Your Personal <span className="gradient-text">Cannabis Companion</span>
+              Your Personal <span className="gradient-text">Plant Companion</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              A complete suite of free AI-powered tools designed to enhance your cannabis journey
+              A complete suite of free AI-powered tools for every plant you grow — with deep cannabis expertise built in
+
             </p>
           </div>
 

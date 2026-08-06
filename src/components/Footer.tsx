@@ -25,15 +25,16 @@ const Footer = () => {
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden ring-2 ring-primary/20">
-                <img src={cuddlesImage} alt="Cuddles AI cannabis companion brand mark" className="w-full h-full object-cover" />
+                <img src={cuddlesImage} alt="Cuddles AI plant and cannabis companion brand mark" className="w-full h-full object-cover" />
               </div>
               <div>
                 <div className="font-display font-semibold text-foreground">Cuddles</div>
-                <div className="text-xs text-muted-foreground">AI-Powered Budtender</div>
+                <div className="text-xs text-muted-foreground">AI Plant Expert & Budtender</div>
               </div>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs mb-2">
-              Your personal AI cannabis companion for strain recommendations, journaling, and more.
+              Your personal AI plant companion — plant care, grow help, strain recommendations, journaling and more.
+
             </p>
             <div className="mt-2 bg-card border border-border rounded-xl p-4 shadow-sm">
               <h5 className="font-semibold text-foreground mb-2 text-sm">Join our Newsletter</h5>
@@ -146,7 +147,7 @@ const Footer = () => {
         {/* SEO-rich text with internal links */}
         <div className="pt-6 border-t border-border">
           <p className="text-xs text-muted-foreground text-center max-w-2xl mx-auto mb-2">
-            Cuddles AI is the world's smartest <Link to="/ai-budtender" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> offering personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>, and a <Link to="/grow" className="underline hover:text-foreground">seedling monitor for growers</Link>. <Link to="/pos-integrations" className="underline hover:text-foreground">Integrates with Dutchie, Flowhub, Cova & Sweed</Link>. Powered by <Link to="/technology" className="underline hover:text-foreground">RAG technology</Link> for <Link to="/cannabis-retail-automation" className="underline hover:text-foreground">cannabis retail automation</Link>. Available worldwide for cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
+            Cuddles AI is a plant expert first and the world's smartest <Link to="/ai-budtender" className="underline hover:text-foreground">AI-powered cannabis budtender</Link> second — helping with houseplants, herbs, vegetables and indigenous species alongside personalized <Link to="/#demo" className="underline hover:text-foreground">strain recommendations</Link>, a <Link to="/journal" className="underline hover:text-foreground">strain journal</Link>, <Link to="/scanner" className="underline hover:text-foreground">strain scanner</Link>, a <Link to="/t-break" className="underline hover:text-foreground">tolerance break coach</Link>, and a <Link to="/grow" className="underline hover:text-foreground">seedling monitor for growers</Link>. <Link to="/pos-integrations" className="underline hover:text-foreground">Integrates with Dutchie, Flowhub, Cova & Sweed</Link>. Powered by <Link to="/technology" className="underline hover:text-foreground">RAG technology</Link> for <Link to="/cannabis-retail-automation" className="underline hover:text-foreground">cannabis retail automation</Link>. Available worldwide for plant lovers, cannabis enthusiasts and <Link to="/dispensary-onboarding" className="underline hover:text-foreground">dispensaries</Link>.
           </p>
           <p className="text-xs text-muted-foreground text-center max-w-2xl mx-auto mb-4">
             Learn about cannabis with our <Link to="/blog" className="underline hover:text-foreground">educational blog</Link> covering topics from <Link to="/blog/indica-vs-sativa-vs-hybrid" className="underline hover:text-foreground">indica vs sativa</Link> to <Link to="/blog/beginners-guide-to-terpenes" className="underline hover:text-foreground">terpenes</Link> and <Link to="/blog/responsible-consumption-tips" className="underline hover:text-foreground">responsible consumption</Link>.

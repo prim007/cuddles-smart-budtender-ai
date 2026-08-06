@@ -83,10 +83,11 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "How does the Cuddles AI budtender work?",
+      name: "How does the Cuddles AI plant expert and budtender work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Just chat with Cuddles. Tell it how you want to feel — relaxed, focused, pain-free, sleepy — and it recommends the right strain, vape or oil instantly. No signup required to start.",
+        text: "Just chat with Cuddles. Ask about any plant — a struggling houseplant, herbs, vegetables or a cannabis grow — or tell it how you want to feel and it recommends the right strain, vape or oil instantly. No signup required to start.",
+
       },
     },
     {
@@ -102,7 +103,7 @@ const faqSchema = {
       name: "Is Cuddles AI free to use?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes, the AI budtender is 100% free. Cuddles Premium (R99/month) unlocks advanced features like the strain journal, tolerance break coach, and seedling monitor.",
+        text: "Yes, the AI plant expert and budtender is 100% free. Cuddles Premium (R99/month) unlocks advanced features like the strain journal, tolerance break coach, and seedling monitor.",
       },
     },
     {
@@ -120,10 +121,11 @@ const Index = () => {
   return (
     <div className="min-h-screen md:pt-20">
       <SEO
-        title="Cuddles AI — Free AI Cannabis Budtender"
-        description="Free AI cannabis budtender. Personalized strain picks in seconds, scan strains with your camera, track your journal, read reviews. Used worldwide."
+        title="Cuddles AI — Free AI Plant Expert & Cannabis Budtender"
+        description="Free AI plant companion and cannabis budtender. Plant care and grow help, personalized strain picks in seconds, photo scanning, journal and reviews. Used worldwide."
         url="/"
-        keywords="AI budtender, cannabis AI, strain recommendations, weed strain finder, indica vs sativa, terpene guide, strain scanner, cannabis journal, strain reviews, smart budtender, Cuddles AI, dispensary AI, cannabis education, THC CBD guide"
+        keywords="AI plant expert, plant care AI, AI budtender, cannabis AI, strain recommendations, houseplant help, grow assistant, weed strain finder, indica vs sativa, terpene guide, strain scanner, cannabis journal, Cuddles AI, dispensary AI"
+
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(localBusinessSchema)}</script>

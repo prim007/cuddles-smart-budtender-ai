@@ -117,13 +117,14 @@ const Hero = () => {
               </span>
               <span className="mt-2 block text-3xl text-white/95 sm:text-4xl md:text-5xl lg:text-6xl">
                 the AI that gets your{" "}
-                <span className="gradient-text">cannabis</span> right.
+                <span className="gradient-text">plants</span> right.
               </span>
             </h1>
 
             <p className="mx-auto mt-5 max-w-lg text-base text-white/70 md:text-lg lg:mx-0">
-              Honest answers, science-backed strain matches and same-day delivery across South Africa — all in one chat.
+              A plant expert first, cannabis specialist second — honest answers on strains, herbs, houseplants and grows, plus same-day delivery across South Africa, all in one chat.
             </p>
+
 
             {/* Inline chat input */}
             <form onSubmit={handleSubmit} className="mx-auto mt-6 max-w-lg lg:mx-0">
