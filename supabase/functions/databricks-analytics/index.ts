@@ -108,11 +108,9 @@ serve(async (req) => {
     const authClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
       global: { headers: { Authorization: authHeader } },
     });
-    const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(
-      authHeader.replace("Bearer ", ""),
-    );
-    const userId = claimsData?.claims?.sub as string | undefined;
-    if (claimsError || !userId) return json({ error: "Unauthorized" }, 401);
+    const { data: userData, error: userError } = await authClient.auth.getUser();
+    const userId = userData?.user?.id as string | undefined;
+    if (userError || !userId) return json({ error: "Unauthorized" }, 401);
 
     const { data: isAdmin } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
     if (!isAdmin) return json({ error: "Forbidden" }, 403);
