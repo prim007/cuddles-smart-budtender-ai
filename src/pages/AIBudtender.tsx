@@ -5,6 +5,7 @@ import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
 import { ArrowRight, Bot, BarChart3, Clock, ShoppingCart, Users, Brain, Zap, CheckCircle2, MessageCircle, Download, Sparkles } from "lucide-react";
+import ComplianceSection from "@/components/ComplianceSection";
 
 const stats = [
   { value: "35%", label: "Higher Average Order Value", icon: ShoppingCart },
@@ -257,6 +258,7 @@ const AIBudtender = () => {
         </div>
       </section>
 
+      <ComplianceSection />
       <Footer />
     </div>
   );
