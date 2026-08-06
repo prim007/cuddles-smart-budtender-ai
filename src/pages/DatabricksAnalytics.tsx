@@ -32,9 +32,9 @@ const DatabricksAnalytics = () => {
   const [exportable, setExportable] = useState<string[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
   const [warehouseId, setWarehouseId] = useState("");
-  const [catalog, setCatalog] = useState("main");
+  const [catalog, setCatalog] = useState("workspace");
   const [schema, setSchema] = useState("cuddles");
-  const [statement, setStatement] = useState("SELECT * FROM main.cuddles.cuddles_chat_conversations LIMIT 20");
+  const [statement, setStatement] = useState("SELECT * FROM workspace.cuddles.cuddles_chat_conversations LIMIT 20");
   const [result, setResult] = useState<QueryResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
