@@ -591,7 +591,7 @@ const ToleranceBreak = () => {
             /* No Active Break */
             <Card className="text-center py-12">
               <Heart className="w-16 h-16 mx-auto mb-4 text-hippie-purple" />
-              <h3 className="text-xl font-display font-bold mb-2">Ready for a Reset?</h3>
+              <h2 className="text-xl font-display font-bold mb-2">Ready for a Reset?</h2>
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                 A tolerance break can help you enjoy cannabis more while saving money. Cuddles will be your personal coach through the journey!
               </p>
