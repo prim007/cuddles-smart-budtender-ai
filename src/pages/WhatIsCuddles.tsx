@@ -256,10 +256,11 @@ const WhatIsCuddles = () => {
           <div className="text-center mb-12">
             <p className="text-primary text-sm font-medium uppercase tracking-[0.2em] mb-3">For Consumers</p>
             <h2 className="font-display font-bold text-foreground mb-4 text-3xl md:text-5xl">
-              Your Personal <span className="gradient-text">Cannabis Companion</span>
+              Your Personal <span className="gradient-text">Plant Companion</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              A complete suite of free AI-powered tools designed to enhance your cannabis journey
+              A complete suite of free AI-powered tools for every plant you grow — with deep cannabis expertise built in
+
             </p>
           </div>
 
