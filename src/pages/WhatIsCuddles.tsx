@@ -221,7 +221,8 @@ const WhatIsCuddles = () => {
           <GlassPlate className="px-6 md:px-12 py-12 text-center">
             <h2 className="font-display font-bold text-foreground mb-6 text-2xl md:text-3xl">Our Mission</h2>
             <p className="text-lg text-foreground/80 leading-relaxed">
-              Cannabis is personal. What works for one person may not work for another. Cuddles combines AI intelligence with real strain data and community wisdom to help every individual find their perfect match — no guesswork, no stigma.
+              Plants are personal. What thrives in one home — or works for one person — may not for another. Cuddles brings AI intelligence together with real botanical and strain data plus community wisdom, so whether it's a windowsill herb, a struggling houseplant or your next strain, you find the right match — no guesswork, no stigma.
+
             </p>
             <div className="mt-6 inline-flex items-center gap-2 text-sm text-foreground/70 bg-background/60 backdrop-blur-md border border-white/15 rounded-full px-4 py-2">
               <Shield className="w-4 h-4 text-primary" />
