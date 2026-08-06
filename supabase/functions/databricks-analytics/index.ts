@@ -167,11 +167,11 @@ serve(async (req) => {
       const summary: { table: string; rows: number }[] = [];
 
       for (const table of tables) {
-        const columns = EXPORTABLE[table];
+        const { columns, sort } = EXPORTABLE[table];
         const { data, error } = await admin
           .from(table)
           .select(columns.join(", "))
-          .order("created_at", { ascending: false, nullsFirst: false })
+          .order(sort, { ascending: false, nullsFirst: false })
           .limit(MAX_ROWS);
 
         if (error) {
