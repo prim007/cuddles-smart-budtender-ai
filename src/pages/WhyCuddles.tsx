@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, BarChart3, Brain, TrendingUp, Users, ShoppingCart, Zap, CheckCircle2, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
+import ComplianceSection from "@/components/ComplianceSection";
 
 const benefits = [
   {
@@ -179,6 +180,7 @@ const WhyCuddles = () => {
           </Link>
         </div>
       </section>
+      <ComplianceSection />
     </div>
   );
 };
