@@ -115,7 +115,7 @@ const Install = () => {
         </div>
 
         <div className="pt-6 border-t space-y-2 text-sm text-muted-foreground">
-          <h3 className="font-semibold text-foreground">Benefits:</h3>
+          <h2 className="font-semibold text-foreground">Benefits:</h2>
           <ul className="space-y-1">
             <li>✓ Always gets the latest version</li>
             <li>✓ Faster loading</li>
