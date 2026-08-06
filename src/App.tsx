@@ -62,6 +62,7 @@ const ABDashboard = lazyWithReload(() => import("./pages/ABDashboard"));
 const DemoRequests = lazyWithReload(() => import("./pages/DemoRequests"));
 const ChatConversations = lazyWithReload(() => import("./pages/ChatConversations"));
 const AgentTraces = lazyWithReload(() => import("./pages/AgentTraces"));
+const PipelineHealth = lazyWithReload(() => import("./pages/PipelineHealth"));
 const InternationalMarket = lazyWithReload(() => import("./pages/InternationalMarket"));
 const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
 const Licensing = lazyWithReload(() => import("./pages/Licensing"));
@@ -188,6 +189,14 @@ const App = () => (
                   element={
                     <ProtectedRoute requireAdmin>
                       <Suspense fallback={<PageLoader />}><ABDashboard /></Suspense>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/pipeline-health"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <Suspense fallback={<PageLoader />}><PipelineHealth /></Suspense>
                     </ProtectedRoute>
                   }
                 />
