@@ -161,10 +161,11 @@ const WhatIsCuddles = () => {
   return (
     <div className="relative min-h-screen overflow-hidden pb-20">
       <SEO
-        title="What is Cuddles AI? — Your AI Cannabis Budtender"
-        description="Cuddles AI is a free AI-powered cannabis budtender that gives personalized strain recommendations, scans strains from photos, tracks your journal, and helps dispensaries sell smarter."
-        keywords="what is Cuddles AI, AI cannabis budtender, strain recommendation app, cannabis AI assistant, smart budtender, cannabis journal app, strain scanner"
+        title="What is Cuddles AI? — Your AI Plant & Cannabis Companion"
+        description="Cuddles AI is a free AI plant expert and cannabis specialist: personalised strain recommendations, plant care and grow help, photo scanning, a private journal, and smarter selling for dispensaries."
+        keywords="what is Cuddles AI, AI plant assistant, AI cannabis budtender, plant care AI, strain recommendation app, cannabis AI assistant, smart budtender, strain scanner"
         url="/what-is-cuddles"
+
       />
 
       {/* Global abstract backdrop */}
