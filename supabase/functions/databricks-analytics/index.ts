@@ -21,23 +21,30 @@ const INSERT_BATCH = 200;
 const MAX_ROWS = 5000;
 
 // Only these Cuddles tables may be exported, with the columns that are safe to ship.
-const EXPORTABLE: Record<string, string[]> = {
-  chat_conversations: ["id", "session_id", "user_message", "assistant_message", "created_at"],
-  tenant_strains: [
-    "id", "tenant_id", "strain_name", "strain_type", "category", "primary_effect",
-    "primary_terpene", "thc_min", "thc_max", "cbd_min", "cbd_max", "price", "in_stock", "created_at",
-  ],
-  tenants: ["id", "business_name", "plan", "status", "store_count", "pos_system", "created_at"],
-  delivery_orders: [
-    "id", "status", "subtotal", "delivery_fee", "total", "distance_km",
-    "estimated_delivery_minutes", "created_at",
-  ],
-  delivery_order_items: ["id", "order_id", "strain_id", "strain_name", "quantity", "unit_price", "total_price", "created_at"],
-  strain_reviews: ["id", "strain_name", "strain_type", "rating", "helpful_count", "created_at"],
-  strain_journal: ["id", "strain_name", "strain_type", "consumption_method", "rating", "mood_before", "mood_after", "session_date"],
-  email_leads: ["id", "source", "subscribed", "used", "created_at"],
-  ab_events: ["id", "experiment", "variant", "event_name", "path", "created_at"],
-  ui_feedback: ["id", "note", "path", "created_at"],
+// Tables also specify a sort column for deterministic batching.
+const EXPORTABLE: Record<string, { columns: string[]; sort: string }> = {
+  chat_conversations: { columns: ["id", "session_id", "user_message", "assistant_message", "created_at"], sort: "created_at" },
+  tenant_strains: {
+    columns: [
+      "id", "tenant_id", "strain_name", "strain_type", "category", "primary_effect",
+      "primary_terpene", "thc_min", "thc_max", "cbd_min", "cbd_max", "price", "in_stock", "created_at",
+    ],
+    sort: "created_at",
+  },
+  tenants: { columns: ["id", "business_name", "plan", "status", "store_count", "pos_system", "created_at"], sort: "created_at" },
+  delivery_orders: {
+    columns: [
+      "id", "status", "subtotal", "delivery_fee", "total", "distance_km",
+      "estimated_delivery_minutes", "created_at",
+    ],
+    sort: "created_at",
+  },
+  delivery_order_items: { columns: ["id", "order_id", "strain_id", "strain_name", "quantity", "unit_price", "total_price", "created_at"], sort: "created_at" },
+  strain_reviews: { columns: ["id", "strain_name", "strain_type", "rating", "helpful_count", "created_at"], sort: "created_at" },
+  strain_journal: { columns: ["id", "strain_name", "strain_type", "consumption_method", "rating", "mood_before", "mood_after", "session_date"], sort: "session_date" },
+  email_leads: { columns: ["id", "source", "subscribed", "used", "created_at"], sort: "created_at" },
+  ab_events: { columns: ["id", "experiment", "variant", "event_name", "path", "created_at"], sort: "created_at" },
+  ui_feedback: { columns: ["id", "note", "path", "created_at"], sort: "created_at" },
 };
 
 function json(body: unknown, status: number) {
