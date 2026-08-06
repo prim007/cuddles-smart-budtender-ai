@@ -25,15 +25,16 @@ const Footer = () => {
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden ring-2 ring-primary/20">
-                <img src={cuddlesImage} alt="Cuddles AI cannabis companion brand mark" className="w-full h-full object-cover" />
+                <img src={cuddlesImage} alt="Cuddles AI plant and cannabis companion brand mark" className="w-full h-full object-cover" />
               </div>
               <div>
                 <div className="font-display font-semibold text-foreground">Cuddles</div>
-                <div className="text-xs text-muted-foreground">AI-Powered Budtender</div>
+                <div className="text-xs text-muted-foreground">AI Plant Expert & Budtender</div>
               </div>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs mb-2">
-              Your personal AI cannabis companion for strain recommendations, journaling, and more.
+              Your personal AI plant companion — plant care, grow help, strain recommendations, journaling and more.
+
             </p>
             <div className="mt-2 bg-card border border-border rounded-xl p-4 shadow-sm">
               <h5 className="font-semibold text-foreground mb-2 text-sm">Join our Newsletter</h5>
