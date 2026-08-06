@@ -83,10 +83,11 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "How does the Cuddles AI budtender work?",
+      name: "How does the Cuddles AI plant expert and budtender work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Just chat with Cuddles. Tell it how you want to feel — relaxed, focused, pain-free, sleepy — and it recommends the right strain, vape or oil instantly. No signup required to start.",
+        text: "Just chat with Cuddles. Ask about any plant — a struggling houseplant, herbs, vegetables or a cannabis grow — or tell it how you want to feel and it recommends the right strain, vape or oil instantly. No signup required to start.",
+
       },
     },
     {
