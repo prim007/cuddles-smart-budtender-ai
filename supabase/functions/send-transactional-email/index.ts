@@ -110,8 +110,7 @@ Deno.serve(async (req) => {
   // callers may only trigger whitelisted templates.
   const authHeader = req.headers.get('Authorization') ?? ''
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
-  const claims = token ? parseJwtClaims(token) : null
-  const callerRole = claims?.role
+  const callerRole = await resolveCallerRole(token, supabaseUrl, supabaseServiceKey)
   if (callerRole !== 'service_role' && !ANON_ALLOWED_TEMPLATES.has(templateName)) {
     return new Response(
       JSON.stringify({ error: 'Forbidden: this template requires a server-side caller' }),
