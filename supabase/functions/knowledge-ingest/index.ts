@@ -5,6 +5,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 import { KNOWLEDGE_CORPUS, CORPUS_VERSION } from "../_shared/knowledge-corpus.ts";
+import { PLANT_CORPUS } from "../_shared/plant-corpus.ts";
+
+const FULL_CORPUS = [...KNOWLEDGE_CORPUS, ...PLANT_CORPUS];
 import { embedTexts, sha256Hex } from "../_shared/rag.ts";
 
 const corsHeaders = {
@@ -73,7 +76,7 @@ serve(async (req) => {
     const known = new Set((existing ?? []).map((r: { content_hash: string }) => r.content_hash));
 
     const prepared = await Promise.all(
-      KNOWLEDGE_CORPUS.map(async (doc) => ({
+      FULL_CORPUS.map(async (doc) => ({
         ...doc,
         content_hash: await sha256Hex(`${doc.title}::${doc.content}`),
       })),

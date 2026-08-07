@@ -179,4 +179,4 @@ export const KNOWLEDGE_CORPUS: KnowledgeDoc[] = [
   },
 ];
 
-export const CORPUS_VERSION = "2026-08-05";
+export const CORPUS_VERSION = "2026-08-06-plants";
