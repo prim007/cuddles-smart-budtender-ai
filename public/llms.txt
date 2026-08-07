@@ -10,6 +10,7 @@ Cuddles AI helps consumers care for any plant and find the right cannabis strain
 - [Shop](/shop): Cannabis product catalog (vapes, oils, flower) with same-day delivery.
 - [Catalog](/catalog): Browse the full Tripple444 product catalog.
 - [Strains directory](/strains): All cannabis strains with terpene, THC/CBD, and effect data.
+- [Plant care directory](/plants): Care guides for houseplants, herbs, vegetables, succulents and South African indigenous plants.
 - [Featured strains](/strains/featured): 10 weekly hand-picked strains.
 - [Strain reviews](/reviews): Community reviews and ratings.
 - [Strain journal](/journal): Track sessions, dosage, and effects.
