@@ -243,6 +243,10 @@ const App = () => (
                 <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
                 <Route path="/strains/featured" element={<Suspense fallback={<PageLoader />}><FeaturedStrains /></Suspense>} />
                 <Route path="/strains/:slug" element={<Suspense fallback={<PageLoader />}><StrainDetail /></Suspense>} />
+
+                {/* Plant Care Directory */}
+                <Route path="/plants" element={<Suspense fallback={<PageLoader />}><Plants /></Suspense>} />
+                <Route path="/plants/:slug" element={<Suspense fallback={<PageLoader />}><PlantDetail /></Suspense>} />
                 <Route path="/dispensary-near-me/:city" element={<Suspense fallback={<PageLoader />}><CityDispensaryPage /></Suspense>} />
                 <Route
                   path="/admin/widget-outreach"
