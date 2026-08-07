@@ -108,6 +108,8 @@ const PersonalizedRecommendationsGuide = lazyWithReload(() => import("./pages/Pe
 
 // SEO pages
 const Strains = lazyWithReload(() => import("./pages/Strains"));
+const Plants = lazyWithReload(() => import("./pages/Plants"));
+const PlantDetail = lazyWithReload(() => import("./pages/PlantDetail"));
 const StrainDetail = lazyWithReload(() => import("./pages/StrainDetail"));
 const FeaturedStrains = lazyWithReload(() => import("./pages/FeaturedStrains"));
 const CityDispensaryPage = lazyWithReload(() => import("./pages/CityDispensaryPage"));
