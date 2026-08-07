@@ -31,12 +31,21 @@ function generateToken(): string {
 // are safe for anonymous/authenticated user-initiated flows.
 const ANON_ALLOWED_TEMPLATES = new Set(['newsletter-confirmation'])
 
-function parseJwtClaims(token: string): Record<string, any> | null {
+// SECURITY: never trust an unverified JWT payload. The caller is only treated as
+// service_role when the bearer token is the actual service role key, or when the
+// token's signature is verified by the auth server and carries that role.
+async function resolveCallerRole(
+  token: string,
+  supabaseUrl: string,
+  serviceKey: string
+): Promise<string | null> {
+  if (!token) return null
+  if (token === serviceKey) return 'service_role'
   try {
-    const payload = token.split('.')[1]
-    if (!payload) return null
-    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
-    return JSON.parse(json)
+    const client = createClient(supabaseUrl, serviceKey)
+    const { data, error } = await client.auth.getClaims(token)
+    if (error || !data?.claims) return null
+    return (data.claims as Record<string, unknown>).role as string ?? null
   } catch {
     return null
   }
@@ -101,8 +110,7 @@ Deno.serve(async (req) => {
   // callers may only trigger whitelisted templates.
   const authHeader = req.headers.get('Authorization') ?? ''
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
-  const claims = token ? parseJwtClaims(token) : null
-  const callerRole = claims?.role
+  const callerRole = await resolveCallerRole(token, supabaseUrl, supabaseServiceKey)
   if (callerRole !== 'service_role' && !ANON_ALLOWED_TEMPLATES.has(templateName)) {
     return new Response(
       JSON.stringify({ error: 'Forbidden: this template requires a server-side caller' }),

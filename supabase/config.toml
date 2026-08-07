@@ -15,3 +15,6 @@ verify_jwt = false
 [functions.embed-strains]
 verify_jwt = false
 
+
+[functions.send-transactional-email]
+verify_jwt = true
