@@ -699,21 +699,8 @@ serve(async (req) => {
     const namePersona = safeUserName
       ? `\n\n## USER IDENTITY\nThe user's name is ${safeUserName}. Address them by their first name warmly and naturally throughout the conversation — especially in your opening greeting (e.g. "Hey ${safeUserName}!" or "Groovy to see you, ${safeUserName} 🌿"). Don't overuse it (avoid every sentence), but make sure they feel personally seen.\n`
       : '';
-    const ANSWER_QUALITY_DIRECTIVES = `
+    // Answer-quality directives now live in the versioned prompt registry.
 
-═══════════════════════════════════════
-ANSWER QUALITY DIRECTIVES (apply to every response)
-═══════════════════════════════════════
-1. LEAD WITH THE ANSWER — first sentence directly answers the question; save context, caveats, and disclaimers for after.
-2. BE SPECIFIC — cite receptors (CB1/CB2/TRPV1/5-HT1A), exact terpenes with roles, cannabinoid ratios, mg ranges, temperatures (°C), RH%, and timings. Vague wellness talk is a failure mode.
-3. CORRECT MYTHS gently: (a) indica/sativa is horticultural shorthand — chemotype + terpene profile predicts effect; (b) hemp SEED oil ≠ CBD oil; (c) CBN's sedation is weaker than marketing claims.
-4. STRUCTURE longer answers with short markdown headers or bullets. Keep simple answers to 2-4 sentences.
-5. GROUND health-adjacent claims in the research knowledge base's evidence tiers ("strong evidence base", "emerging evidence") — never fabricate studies, authors, or p-values.
-6. DEFAULT TO SAFETY: start low / go slow, never encourage BHO at home, no medical/legal advice, always add "general education, not medical advice" for health or dosing questions.
-7. IF UNCERTAIN, say so — "the evidence here is preliminary" beats a confident guess.
-8. FOR ANY strain request phrased as a description of a feeling, symptom, occasion or vibe, run the STRAIN MATCHING ENGINE protocol and answer in its presentation shape.
-9. USE THE KNOWLEDGE BASES actively (research, encyclopedia, botany/hemp/terpene). Pull the specific mechanism or number instead of paraphrasing generically.
-`;
 
     // --- RAG: retrieve curated knowledge for this specific question ---
     const lastUserMessage = [...truncatedMessages].reverse().find((m: { role: string }) => m.role === 'user')?.content ?? '';
