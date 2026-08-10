@@ -382,10 +382,22 @@
 
       if (!resp.ok) {
         var err = await resp.json().catch(function() { return {}; });
+        if (resp.status === 402) {
+          showUpgradeCta();
+        }
         addMessage('assistant', err.error || 'Sorry, something went wrong. Please try again.');
         isStreaming = false;
         return;
       }
+
+      // Read tier headers from the streaming response (premium tenants hide branding)
+      try {
+        widgetTier = (resp.headers.get('X-Cuddles-Widget-Tier') || 'free').toLowerCase();
+        widgetPlan = resp.headers.get('X-Cuddles-Widget-Plan') || widgetPlan;
+        var limitHeader = resp.headers.get('X-Cuddles-Widget-Limit');
+        if (limitHeader) freeMessageLimit = Math.max(parseInt(limitHeader, 10) || 15, 5);
+        updateFooter();
+      } catch(e) { /* ignore header parse errors */ }
 
       // Stream SSE response
       var reader = resp.body.getReader();
