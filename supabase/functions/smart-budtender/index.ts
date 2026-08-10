@@ -786,8 +786,14 @@ serve(async (req) => {
 
     // Stream the response back to the client
     return new Response(response.body, {
-      headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' },
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'text/event-stream',
+        ...promptTraceHeaders(usedModel, promptChars),
+        'Access-Control-Expose-Headers': 'X-Cuddles-Prompt-Version, X-Cuddles-Prompt-Chars, X-Cuddles-Model',
+      },
     });
+
   } catch (error) {
     console.error('Function error:', { error: error instanceof Error ? error.stack : error, timestamp: new Date().toISOString() });
     return new Response(JSON.stringify({ error: 'Unable to process your request. Please try again later.' }),
