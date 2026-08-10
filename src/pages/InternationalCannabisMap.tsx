@@ -587,15 +587,28 @@ const InternationalCannabisMap = () => {
                     Last reviewed by Cuddles: <strong>{active.updated}</strong>
                   </div>
 
-                  <div className="flex gap-2 pt-2">
-                    <Link to="/blog" className="flex-1">
-                      <Button variant="outline" className="w-full">Read blog</Button>
-                    </Link>
-                    <Link to="/chat" className="flex-1">
-                      <Button className="w-full bg-gradient-to-r from-hippie-coral to-hippie-amber text-white">
-                        Ask Cuddles
-                      </Button>
-                    </Link>
+                  <div className="flex flex-col gap-2 pt-2">
+                    {active && (() => {
+                      const slug = active.slug || countrySlug(active.name);
+                      const hasPage = slug === "ghana" || slug === "malawi" || slug === "zimbabwe";
+                      return hasPage ? (
+                        <Link to={`/country/${slug}`} className="flex-1">
+                          <Button className="w-full bg-gradient-to-r from-hippie-coral to-hippie-amber text-white">
+                            Read the full {active.name} guide
+                          </Button>
+                        </Link>
+                      ) : null;
+                    })()}
+                    <div className="flex gap-2">
+                      <Link to="/blog" className="flex-1">
+                        <Button variant="outline" className="w-full">Read blog</Button>
+                      </Link>
+                      <Link to="/education/chat-with-cuddles" className="flex-1">
+                        <Button className="w-full bg-gradient-to-r from-hippie-coral to-hippie-amber text-white">
+                          Ask Cuddles
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </>
