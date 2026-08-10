@@ -1,132 +1,87 @@
-# Dispensary Network Routing Layer — Technical Spec
+# Scale CuddlesAI to the Fullest
 
-Goal: turn the current per-tenant `tenant_strains` silo into a **network** where a single query ("nearest in-stock Blue Dream under R250") is fanned out across every eligible dispensary, ranked, and returned as a routed result the chat / widget can act on.
+## Goal
+Grow CuddlesAI into a multi-country, revenue-generating plant-care platform with a self-reinforcing B2B + B2C flywheel, while spending as little as possible because the team is solo and bootstrapped.
 
-## 1. What the routing layer does
+## Constraints
+- Solo founder, minimal budget.
+- React/Vite PWA + Supabase backend + Capacitor mobile app.
+- South Africa is the primary market; Ghana, Malawi, Zimbabwe are the first expansion targets.
+- Must stay within "general education only" and include medical/age disclaimers.
 
-Given a request `{ intent, strain?, category?, effect?, location, filters }`, it:
+## 0. Foundation (do this week)
+- Lock in the North Star metric: **weekly active chatters (WAC)** and **weekly B2B qualified leads (QPLs)**.
+- Wire up a simple dashboard that shows WAC and QPLs from `chat_conversations` and `demo_requests`/`tenants` tables.
+- Add a lightweight "Was this helpful?" prompt at the end of 20% of chat sessions; log answers to a new `chat_feedback` table.
+- Tag every chat with `intent` (education, product-finder, purchase-intent, B2B-question) so we know what is converting.
 
-1. Resolves candidate tenants (active, subscribed, geo-eligible).
-2. Queries `tenant_strains` across those tenants for matches.
-3. Scores each hit on: distance, price, stock, rating, tenant priority (paid tier), freshness of last inventory sync.
-4. Returns a ranked list of `{ tenant, strain, score, reasons[] }` plus a `routing_id` for analytics.
-5. Logs the routing decision so we can tune weights and prove ROI to dispensaries.
+## 1. Organic Growth Engine (SEO + Content)
+- Turn every strain and every plant guide into a standalone landing page that already exists; now aggressively interlink them and add FAQ schema.
+- Publish 2 short, high-intent articles per week aimed at South African and expansion-market queries:
+  - "Cannabis laws in Ghana 2026"
+  - "Where to buy CBD oil in Malawi"
+  - "How to grow basil in Durban"
+  - "Best indica strains for sleep South Africa"
+- Add a `/learn` hub that groups all content by intent (sleep, pain, energy, cultivation, law) to capture long-tail search.
+- Add programmatic city pages (`/dispensaries/cape-town`, `/dispensaries/joburg`, `/dispensaries/harare`) so local search traffic has a landing spot.
+- Build an embeddable "Cuddles strain widget" that bloggers and dispensaries can paste on their sites; every embed links back to cuddles-ai.com and counts as a free backlink.
 
-## 2. New database objects
+## 2. B2B / Widget-Led Growth
+- Turn the existing widget into a tiered product:
+  - **Free tier**: basic chat + limited menu items, branded "Powered by Cuddles".
+  - **Premium tier**: full menu, custom colors, no Cuddles branding (R999/mo or $55/mo in new markets).
+- Add a "Book a demo" CTA inside every free widget after 10 chats to convert dispensaries.
+- Create a one-page "Dispensary ROI calculator" landing page so owners can see saved staff hours and higher basket size.
+- Add a "Partner with Cuddles" affiliate program: dispensaries get 20% of referred premium subscriptions.
+- Add a simple CRM board in `/admin/crm` to track demo requests, follow-up dates, and conversion status.
 
-### `tenant_service_areas`
-Which geographic areas each tenant serves (delivery radius or pickup city).
-Fields: `tenant_id`, `center_lat`, `center_lng`, `radius_km`, `mode` (`pickup` | `delivery`), `active`.
+## 3. International Expansion
+- Add a lightweight country switcher that localizes content to **ZA, Ghana, Malawi, Zimbabwe** first.
+- For each country, create one landing page covering:
+  - Current legal status of cannabis and hemp.
+  - Common local strains / names.
+  - Price expectations in local currency.
+  - Link to the local dispensary map if available.
+- Add a `/country/ghana`, `/country/malawi`, `/country/zimbabwe` route and link them from the international map page.
+- Keep the main store in ZAR but display approximate conversions in GHS, MWK, ZWL for transparency.
 
-### `tenant_priority`
-Paid boost + fairness caps per tenant.
-Fields: `tenant_id`, `tier` (`standard` | `boosted` | `premium`), `boost_weight` (0–1), `daily_impression_cap`, `active`.
+## 4. Conversion & Revenue Optimization
+- Add a low-friction email capture before chat starts for anonymous users: "Get your personalized strain guide emailed to you."
+- Create a premium upsell in the chat when the user asks a high-intent question (e.g., "track my grow" or "I need a personalized plan"): "Upgrade to Premium for R99/mo to save unlimited plants and unlock the grow journal."
+- Add a 7-day email sequence for new signups: welcome → strain guide → grow tips → premium offer → T-break challenge → community WhatsApp group.
+- Add a "refer a friend" mechanic: give both users 15% off the Tripple Four Shop when a referred friend sends 3 chats.
+- A/B test the hero headline on the homepage every 2 weeks using the existing `abTest` helper.
 
-### `routing_decisions`
-Every routing call, for analytics + billing.
-Fields: `id`, `query` (jsonb — intent, filters, location), `candidate_count`, `winner_tenant_id`, `winner_strain_id`, `score`, `latency_ms`, `session_id`, `created_at`.
+## 5. Retention & Community Loops
+- Launch a simple "Cuddles Grow Club" WhatsApp community (wa.me link) promoted in chat and post-signup emails.
+- Add a weekly "Trending strain" push notification via the PWA (one per week, value-first, not spammy).
+- Add a "Streak" tracker to the seedling monitor so users return to log daily/weekly plant updates.
+- Publish a monthly "Cuddles Plant Report" (anonymized demand data) and email it to subscribers and B2B leads.
 
-### `routing_impressions`
-Which tenants were shown for a given decision (impression billing).
-Fields: `routing_decision_id`, `tenant_id`, `strain_id`, `rank`, `score`.
+## 6. Technical Quick Wins (cheap scale)
+- Enable Supabase connection pooling and review `db_health` before traffic spikes.
+- Cache the top 100 strain and plant pages as static prerendered routes.
+- Lazy-load the 3D iPhone animation and heavy chat components so first paint stays fast.
+- Add a simple waitlist/viral pre-launch page for each new country before localized dispensary data is live.
+- Add a lightweight `Referral` field at signup and store it in `profiles`.
 
-### Extensions to existing tables
-- `tenant_strains`: add `last_synced_at`, `stock_level` (int, nullable), `sync_source` (`manual` | `dutchie` | `flowhub` | ...). Enables freshness weighting.
-- `tenants`: add `default_lat`, `default_lng` (fallback when no service area rows).
+## 7. Measurement & Iteration
+- Track: WAC, QPL, signup rate, premium conversion rate, widget installs, referral rate, organic traffic per country, top 20 chat intents.
+- Review metrics every Monday and pick one experiment to run for the next 7 days.
+- Keep experiments small and cheap; kill anything that does not move WAC or QPL within 2 weeks.
 
-### RLS summary (plain English)
-- Service areas & priority: readable by anyone (needed for routing), writable only by the owning tenant or admin.
-- Routing decisions & impressions: insertable by the routing function (service role), readable by admin + the tenant whose rows they involve.
-- No anon writes anywhere.
+## 8. What to Avoid
+- Do not spend on paid ads until the organic funnel and conversion rate are proven.
+- Do not build native apps in new markets until the PWA is winning locally.
+- Do not add more AI features until the current ones are retained and monetized.
+- Do not expand beyond the 4-country shortlist until the first 3 are showing revenue.
 
-## 3. Edge function: `route-dispensary-query`
+## Suggested First Sprint
+1. Add `chat_feedback` table and intent tagging.
+2. Build the free/premium widget tier switcher.
+3. Create the Ghana country landing page.
+4. Add email capture to the chat.
+5. Publish the "Cuddles Plant Report" email to current leads.
 
-Path: `supabase/functions/route-dispensary-query/index.ts`
-Auth: accepts both `authenticated` and `anon` (rate-limited per IP; chat needs to work logged-out).
-
-### Request
-```json
-{
-  "intent": "find_strain" | "find_category" | "find_effect" | "find_nearest",
-  "strain_name": "Blue Dream",
-  "category": null,
-  "effect": null,
-  "location": { "lat": -26.20, "lng": 28.04 },
-  "max_distance_km": 25,
-  "max_price": 250,
-  "mode": "pickup" | "delivery" | "any",
-  "limit": 5,
-  "session_id": "uuid"
-}
-```
-
-### Response
-```json
-{
-  "routing_id": "uuid",
-  "results": [
-    {
-      "tenant": { "id", "name", "slug", "phone", "maps_url" },
-      "strain": { "id", "name", "price", "stock_level", "category" },
-      "distance_km": 3.2,
-      "score": 0.87,
-      "reasons": ["in stock", "1.8km closer", "R30 cheaper"]
-    }
-  ]
-}
-```
-
-### Scoring formula (v1)
-```text
-score = 0.35 * distance_norm      (closer = higher)
-      + 0.20 * price_norm         (cheaper within budget)
-      + 0.20 * stock_norm         (in-stock > low > unknown)
-      + 0.10 * freshness_norm     (synced <24h > <7d > older)
-      + 0.10 * rating_norm
-      + 0.05 * tenant.boost_weight
-```
-All `*_norm` values clamped to [0,1]. Boost is capped at 5% so paid priority never overrides a materially better match — this is the fairness guarantee we can quote to dispensaries.
-
-### Side effects
-- Insert one `routing_decisions` row.
-- Insert one `routing_impressions` row per returned result.
-- Respect `tenant_priority.daily_impression_cap` (skip capped tenants for the day).
-
-## 4. Chat / widget integration
-
-- `smart-budtender` and `public/widget.js` gain a client helper `routeDispensaryQuery(...)` called when the intent classifier detects "find / near me / cheapest / in stock".
-- Results render through the existing `ChatDispensaryCards` component with an added "Why this pick?" chip that expands the `reasons[]` array.
-- Menu-card intent (existing `matchMenuIntent`) stays first — a direct "show Dirty Vapes menu" keeps its deterministic path and never touches the router.
-
-## 5. Analytics surface
-
-New admin page `/network-analytics` (admin-gated) showing:
-- Routing volume by day
-- Win rate per tenant (impressions vs. winner)
-- Avg distance / price of winners
-- Cap utilization per tenant tier
-
-Feeds directly from `routing_decisions` + `routing_impressions`.
-
-## 6. Rollout order
-
-1. Migration: new tables, RLS, column additions, GRANTs.
-2. Backfill: default `tenant_service_areas` rows from existing tenant addresses; default `tenant_priority` = `standard` for all.
-3. Edge function `route-dispensary-query` + unit-style test via `curl_edge_functions`.
-4. Wire into `widget.js` behind a `network_routing_enabled` flag (per-tenant boolean on `tenants`) so we can pilot with Tripple444 first.
-5. Ship `/network-analytics`.
-6. Turn the flag on for Lëf Labs and Dirty Vapes once weights look sane.
-
-## 7. What this unlocks (business framing)
-
-- **For users**: one question → best match across every dispensary, not just the one they happened to land on.
-- **For dispensaries**: transparent, capped paid priority + real impression data = a defensible reason to pay for the Premium tier.
-- **For Cuddles**: every routed query becomes a training signal (which weights actually convert) and a billing event.
-
-## 8. Out of scope for v1
-
-- Real-time POS webhook ingestion (covered by the earlier POS adapter spec; router just reads whatever `tenant_strains` currently holds).
-- Cross-border routing / currency conversion.
-- Auction-style bidding for placement — starts as fixed tiers, revisited once we have volume.
-
-Reply **"build it"** to execute the migration + edge function, or name sections to change first.
+## Outcome
+A bootstrapped, compounding growth loop: free users bring SEO traffic, SEO traffic brings signups, signups feed the community and data moat, the data moat attracts dispensary partners, dispensary partners spread the widget, and the widget brings more free users and B2B revenue.
