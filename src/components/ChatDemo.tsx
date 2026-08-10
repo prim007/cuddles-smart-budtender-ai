@@ -55,7 +55,20 @@ const LOOSE_FIND_RE = /\b(where\s+(can|do)\s+i\s+(find|get)|i?\s*need\s+to\s+fin
 const COMMERCE_CONTEXT_RE = /\b(for\s+sale|buy|purchase|sells?|selling|stock(ists?|ed|ing)?|price|prices|cost|dispensar(y|ies)|shop|shops|store|stores|deliver(y|ed|ies)?|near\s*me|nearby|closest|nearest|in\s+stock|grams?|pre-?rolls?)\b/i;
 const hasBuyIntent = (content: string) =>
   BUY_INTENT_RE.test(content) || (LOOSE_FIND_RE.test(content) && COMMERCE_CONTEXT_RE.test(content));
-const LOCATION_TROUBLE_RE = /\b(location|gps|map|maps|near\s*me|closest)\b.{0,40}\b(not\s+working|isn'?t\s+working|doesn'?t\s+work|broken|failed|unavailable|can'?t|cannot)\b|\b(not\s+working|broken|failed|unavailable)\b.{0,40}\b(location|gps|map|maps|near\s*me|closest)\b/i;
+
+// --- Intent classification for analytics / funnel tagging ---
+export type ChatIntent = "advice" | "recommendation" | "dispensary" | "purchase" | "menu" | "general" | "ui" | "other";
+export function classifyIntent(content: string): ChatIntent {
+  const lower = content.toLowerCase();
+  if (isUiRoast(lower)) return "ui";
+  if (matchMenuIntent(content)) return "menu";
+  if (hasBuyIntent(content)) return "purchase";
+  if (DISPENSARY_INTENT_RE.test(lower) || NEAR_ME_RE.test(lower) || LOCATION_TROUBLE_RE.test(lower)) return "dispensary";
+  if (\b(recommend|suggest|strain|best for|top strain|indica|sativa|hybrid|help me|for sleep|for pain|for anxiety|creativity|energy|stress)\b.test(lower)) return "recommendation";
+  if (\b(dose|dosage|how much|safe|side effect|interaction|warning|health|medical)\b.test(lower)) return "advice";
+  if (lower.length < 10) return "general";
+  return "other";
+}
 const LOCATION_IN_MSG_RE = /\b(?:in|near|around|by|at)\s+([A-Z][A-Za-z\s,]{2,60}?)(?:[.?!]|$)/;
 
 // Pull the product/strain the user is hunting for, e.g. "find Durban Poison for sale"
