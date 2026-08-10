@@ -273,6 +273,25 @@
     return card;
   }
 
+  function updateFooter() {
+    var footer = chat.querySelector('.cuddles-powered');
+    if (footer) {
+      footer.className = 'cuddles-powered' + (widgetTier === 'premium' ? ' premium' : '');
+    }
+  }
+
+  function showUpgradeCta() {
+    if (upgradeCtaShown || widgetTier === 'premium') return;
+    upgradeCtaShown = true;
+    var cta = document.createElement('div');
+    cta.className = 'cuddles-upgrade';
+    cta.innerHTML = '<div class="cuddles-upgrade-title">Unlock the full Cuddles widget</div>' +
+      '<div class="cuddles-upgrade-text">You\'ve reached the free chat limit. Upgrade for unlimited chats, full menu access, and white-label branding.</div>' +
+      '<a href="https://cuddles-ai.com/dispensary-onboarding" target="_blank">Book a demo</a>';
+    messagesEl.appendChild(cta);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
   function downloadMenuPdf(menu) {
     var groups = groupMenuItems(menu);
     var lines = [menu.label, menu.contact || '', ''];
