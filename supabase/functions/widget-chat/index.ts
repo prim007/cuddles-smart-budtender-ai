@@ -235,7 +235,13 @@ serve(async (req) => {
     }
 
     return new Response(response.body, {
-      headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' },
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'text/event-stream',
+        'X-Cuddles-Widget-Tier': tier,
+        'X-Cuddles-Widget-Plan': plan,
+        'X-Cuddles-Widget-Limit': String(tier === 'free' ? MAX_FREE_SESSION_MESSAGES : 0),
+      },
     });
   } catch (error) {
     console.error('Widget chat error:', error);
