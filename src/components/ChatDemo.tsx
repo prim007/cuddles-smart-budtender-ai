@@ -599,6 +599,7 @@ const ChatDemo = () => {
           session_id: sessionId,
           user_message: userMessage.content,
           assistant_message: finalContent,
+          intent: classifyIntent(userMessage.content),
           redirect_url: orderPhone ? `tel:${orderPhone}` : null,
           user_metadata: {
             timestamp: new Date().toISOString(),
