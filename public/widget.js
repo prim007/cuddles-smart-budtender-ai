@@ -346,9 +346,15 @@
     var text = inputEl.value.trim();
     if (!text || isStreaming) return;
 
+    // Free tier soft limit: warn before server hard limit
+    if (widgetTier === 'free' && userMessageCount >= freeMessageLimit - 1 && !upgradeCtaShown) {
+      showUpgradeCta();
+    }
+
     inputEl.value = '';
     sendBtn.disabled = true;
     isStreaming = true;
+    userMessageCount++;
 
     addMessage('user', text);
 
