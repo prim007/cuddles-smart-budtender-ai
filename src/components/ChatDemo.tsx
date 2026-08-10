@@ -878,6 +878,42 @@ const ChatDemo = () => {
             {messages.filter(m => m.role === "assistant").length >= 4 && (
               <ChatSignupPrompt />
             )}
+            {/* Show satisfaction feedback prompt after several exchanges */}
+            {showFeedbackPrompt && (
+              <div className="mt-3 rounded-xl border border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10 p-3 animate-in fade-in">
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm font-semibold text-foreground">Is Cuddles helping you today?</p>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 text-xs"
+                      onClick={() => {
+                        trackEvent("chat_feedback", "engagement", "positive");
+                        setShowFeedbackPrompt(false);
+                      }}
+                    >
+                      👍 Yes, useful
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 text-xs"
+                      onClick={() => {
+                        trackEvent("chat_feedback", "engagement", "negative");
+                        setShowFeedbackPrompt(false);
+                        setMessages((prev) => [
+                          ...prev,
+                          { role: "assistant", content: "Got it — tell me what you're really looking for and I'll try a different angle. 🌿" },
+                        ]);
+                      }}
+                    >
+                      👎 Not really
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
