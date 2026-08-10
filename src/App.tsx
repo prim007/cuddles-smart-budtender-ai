@@ -222,6 +222,8 @@ const App = () => (
                 <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />
                 <Route path="/international-cannabis-map" element={<Suspense fallback={<PageLoader />}><InternationalCannabisMap /></Suspense>} />
                 <Route path="/africa-cannabis-map" element={<Navigate to="/international-cannabis-map?region=Africa" replace />} />
+                <Route path="/country/:country" element={<Suspense fallback={<PageLoader />}><CountryPage /></Suspense>} />
+                
                 
                 {/* Blog */}
                 <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />
