@@ -125,6 +125,7 @@ const ChatDemo = () => {
   const [sessionId, setSessionId] = useState<string>(generateSessionId());
   const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
+  const [showFeedbackPrompt, setShowFeedbackPrompt] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   // When set, the next user message is treated as a city/address for dispensary lookup
