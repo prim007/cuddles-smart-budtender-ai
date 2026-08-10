@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Expose-Headers': 'X-Cuddles-Widget-Tier, X-Cuddles-Widget-Plan, X-Cuddles-Widget-Limit',
 };
 
 // --- Input validation ---
@@ -86,13 +87,6 @@ serve(async (req) => {
       });
     }
 
-    // Rate limit by embed key
-    if (!checkRateLimit(embedKey)) {
-      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
-        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
     // Look up tenant
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -100,7 +94,7 @@ serve(async (req) => {
 
     const { data: tenant, error: tenantErr } = await supabase
       .from('tenants')
-      .select('id, business_name, phone, branding_color, status')
+      .select('id, business_name, phone, branding_color, status, plan')
       .eq('embed_key', embedKey)
       .single();
 
@@ -116,12 +110,35 @@ serve(async (req) => {
       });
     }
 
-    // Fetch tenant-specific strains
-    const { data: tenantStrains } = await supabase
+    // --- Tier mapping: free = standard/trial/basic, premium = everything else ---
+    const plan = (tenant.plan || '').toLowerCase();
+    const tier = ['standard', 'trial', 'basic', 'free'].includes(plan) ? 'free' : 'premium';
+    const MAX_FREE_MENU_ITEMS = 10;
+    const MAX_FREE_SESSION_MESSAGES = 15;
+
+    // Enforce free-tier session message ceiling on the server.
+    const userMessageCount = messages.filter((m: { role: string }) => m.role === 'user').length;
+    if (tier === 'free' && userMessageCount > MAX_FREE_SESSION_MESSAGES) {
+      return new Response(JSON.stringify({ error: 'Free tier message limit reached. Upgrade to Cuddles Premium for unlimited chats.' }), {
+        status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Rate limit by embed key
+    if (!checkRateLimit(embedKey)) {
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Fetch tenant-specific strains (limit menu surface for free tier)
+    let tenantStrainsQuery = supabase
       .from('tenant_strains')
       .select('category, strain_name, strain_type, primary_terpene, secondary_terpene, primary_effect, notes, thc_min, thc_max, price, in_stock')
       .eq('tenant_id', tenant.id)
       .eq('in_stock', true);
+    if (tier === 'free') tenantStrainsQuery = tenantStrainsQuery.limit(MAX_FREE_MENU_ITEMS);
+    const { data: tenantStrains } = await tenantStrainsQuery;
 
     // Sanitize tenant-supplied text to mitigate prompt injection.
     // Strips control chars, collapses whitespace, removes common injection
@@ -219,7 +236,13 @@ serve(async (req) => {
     }
 
     return new Response(response.body, {
-      headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' },
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'text/event-stream',
+        'X-Cuddles-Widget-Tier': tier,
+        'X-Cuddles-Widget-Plan': plan,
+        'X-Cuddles-Widget-Limit': String(tier === 'free' ? MAX_FREE_SESSION_MESSAGES : 0),
+      },
     });
   } catch (error) {
     console.error('Widget chat error:', error);

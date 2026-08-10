@@ -82,6 +82,7 @@ const ToleranceBreak = lazyWithReload(() => import("./pages/ToleranceBreak"));
 const TBreakChallenge = lazyWithReload(() => import("./pages/TBreakChallenge"));
 const SeedlingMonitor = lazyWithReload(() => import("./pages/SeedlingMonitor"));
 const InternationalCannabisMap = lazyWithReload(() => import("./pages/InternationalCannabisMap"));
+const CountryPage = lazyWithReload(() => import("./pages/CountryPage"));
 
 // B2B
 const DispensaryOnboarding = lazyWithReload(() => import("./pages/DispensaryOnboarding"));
@@ -221,6 +222,8 @@ const App = () => (
                 <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />
                 <Route path="/international-cannabis-map" element={<Suspense fallback={<PageLoader />}><InternationalCannabisMap /></Suspense>} />
                 <Route path="/africa-cannabis-map" element={<Navigate to="/international-cannabis-map?region=Africa" replace />} />
+                <Route path="/country/:country" element={<Suspense fallback={<PageLoader />}><CountryPage /></Suspense>} />
+                
                 
                 {/* Blog */}
                 <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />

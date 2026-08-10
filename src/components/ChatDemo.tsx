@@ -56,6 +56,20 @@ const COMMERCE_CONTEXT_RE = /\b(for\s+sale|buy|purchase|sells?|selling|stock(ist
 const hasBuyIntent = (content: string) =>
   BUY_INTENT_RE.test(content) || (LOOSE_FIND_RE.test(content) && COMMERCE_CONTEXT_RE.test(content));
 const LOCATION_TROUBLE_RE = /\b(location|gps|map|maps|near\s*me|closest)\b.{0,40}\b(not\s+working|isn'?t\s+working|doesn'?t\s+work|broken|failed|unavailable|can'?t|cannot)\b|\b(not\s+working|broken|failed|unavailable)\b.{0,40}\b(location|gps|map|maps|near\s*me|closest)\b/i;
+
+// --- Intent classification for analytics / funnel tagging ---
+export type ChatIntent = "advice" | "recommendation" | "dispensary" | "purchase" | "menu" | "general" | "ui" | "other";
+export function classifyIntent(content: string): ChatIntent {
+  const lower = content.toLowerCase();
+  if (isUiRoast(lower)) return "ui";
+  if (matchMenuIntent(content)) return "menu";
+  if (hasBuyIntent(content)) return "purchase";
+  if (DISPENSARY_INTENT_RE.test(lower) || NEAR_ME_RE.test(lower) || LOCATION_TROUBLE_RE.test(lower)) return "dispensary";
+  if (/\b(recommend|suggest|strain|best for|top strain|indica|sativa|hybrid|help me|for sleep|for pain|for anxiety|creativity|energy|stress)\b/.test(lower)) return "recommendation";
+  if (/\b(dose|dosage|how much|safe|side effect|interaction|warning|health|medical)\b/.test(lower)) return "advice";
+  if (lower.length < 10) return "general";
+  return "other";
+}
 const LOCATION_IN_MSG_RE = /\b(?:in|near|around|by|at)\s+([A-Z][A-Za-z\s,]{2,60}?)(?:[.?!]|$)/;
 
 // Pull the product/strain the user is hunting for, e.g. "find Durban Poison for sale"
@@ -111,6 +125,7 @@ const ChatDemo = () => {
   const [sessionId, setSessionId] = useState<string>(generateSessionId());
   const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
+  const [showFeedbackPrompt, setShowFeedbackPrompt] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   // When set, the next user message is treated as a city/address for dispensary lookup
@@ -584,6 +599,7 @@ const ChatDemo = () => {
           session_id: sessionId,
           user_message: userMessage.content,
           assistant_message: finalContent,
+          intent: classifyIntent(userMessage.content),
           redirect_url: orderPhone ? `tel:${orderPhone}` : null,
           user_metadata: {
             timestamp: new Date().toISOString(),
@@ -599,6 +615,12 @@ const ChatDemo = () => {
         });
       } catch (dbError) {
         console.error('Error saving conversation:', dbError);
+      }
+
+      // Show feedback prompt on every 5th assistant response, once per session
+      if (!showFeedbackPrompt && (messageCount + 1) >= 5 && Math.random() < 0.3) {
+        setShowFeedbackPrompt(true);
+        trackEvent("chat_feedback_prompt_shown", "engagement", "session");
       }
     } catch (error: any) {
       console.error("Error:", error);
@@ -855,6 +877,42 @@ const ChatDemo = () => {
             {/* Show signup prompt after 3 AI responses */}
             {messages.filter(m => m.role === "assistant").length >= 4 && (
               <ChatSignupPrompt />
+            )}
+            {/* Show satisfaction feedback prompt after several exchanges */}
+            {showFeedbackPrompt && (
+              <div className="mt-3 rounded-xl border border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10 p-3 animate-in fade-in">
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm font-semibold text-foreground">Is Cuddles helping you today?</p>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 text-xs"
+                      onClick={() => {
+                        trackEvent("chat_feedback", "engagement", "positive");
+                        setShowFeedbackPrompt(false);
+                      }}
+                    >
+                      👍 Yes, useful
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 text-xs"
+                      onClick={() => {
+                        trackEvent("chat_feedback", "engagement", "negative");
+                        setShowFeedbackPrompt(false);
+                        setMessages((prev) => [
+                          ...prev,
+                          { role: "assistant", content: "Got it — tell me what you're really looking for and I'll try a different angle. 🌿" },
+                        ]);
+                      }}
+                    >
+                      👎 Not really
+                    </Button>
+                  </div>
+                </div>
+              </div>
             )}
             <div ref={messagesEndRef} />
           </div>

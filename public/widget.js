@@ -158,6 +158,11 @@
     '@keyframes cuddlesBounce{to{transform:translateY(-4px);opacity:1}}',
     '.cuddles-powered{text-align:center;padding:6px;font-size:10px;color:rgba(255,255,255,.3)}',
     '.cuddles-powered a{color:rgba(255,255,255,.5);text-decoration:none}',
+    '.cuddles-powered.premium{display:none}',
+    '.cuddles-upgrade{max-width:92%;align-self:flex-start;background:#20203a;border:1px solid ' + BRAND_COLOR + '40;border-radius:16px;padding:12px 14px;font-size:12px;line-height:1.5;margin:0 16px 10px}',
+    '.cuddles-upgrade-title{font-weight:700;color:#fff;margin-bottom:4px}',
+    '.cuddles-upgrade-text{color:#e0e0e0;margin-bottom:8px}',
+    '.cuddles-upgrade a{display:inline-block;background:' + BRAND_COLOR + ';color:#fff;border-radius:999px;padding:7px 13px;text-decoration:none;font-weight:600;font-size:12px}',
   ].join('\n');
   document.head.appendChild(style);
 
@@ -193,6 +198,11 @@
 
   var messages = [];
   var isStreaming = false;
+  var widgetTier = 'free';          // 'free' or 'premium' — read from response headers
+  var widgetPlan = 'standard';      // raw tenant plan from response headers
+  var freeMessageLimit = 15;        // mirrored from edge function default
+  var userMessageCount = 0;         // number of user messages sent this session
+  var upgradeCtaShown = false;      // prevent showing the CTA more than once per session
 
   // Welcome message
   addMessage('assistant', "Hey there! 🌿 I'm Cuddles, your AI budtender. Whether you're looking for help with sleep, creativity, pain relief, or just vibing — I've got you. What can I help with today?");
@@ -263,6 +273,25 @@
     return card;
   }
 
+  function updateFooter() {
+    var footer = chat.querySelector('.cuddles-powered');
+    if (footer) {
+      footer.className = 'cuddles-powered' + (widgetTier === 'premium' ? ' premium' : '');
+    }
+  }
+
+  function showUpgradeCta() {
+    if (upgradeCtaShown || widgetTier === 'premium') return;
+    upgradeCtaShown = true;
+    var cta = document.createElement('div');
+    cta.className = 'cuddles-upgrade';
+    cta.innerHTML = '<div class="cuddles-upgrade-title">Unlock the full Cuddles widget</div>' +
+      '<div class="cuddles-upgrade-text">You\'ve reached the free chat limit. Upgrade for unlimited chats, full menu access, and white-label branding.</div>' +
+      '<a href="https://cuddles-ai.com/dispensary-onboarding" target="_blank">Book a demo</a>';
+    messagesEl.appendChild(cta);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
   function downloadMenuPdf(menu) {
     var groups = groupMenuItems(menu);
     var lines = [menu.label, menu.contact || '', ''];
@@ -317,9 +346,15 @@
     var text = inputEl.value.trim();
     if (!text || isStreaming) return;
 
+    // Free tier soft limit: warn before server hard limit
+    if (widgetTier === 'free' && userMessageCount >= freeMessageLimit - 1 && !upgradeCtaShown) {
+      showUpgradeCta();
+    }
+
     inputEl.value = '';
     sendBtn.disabled = true;
     isStreaming = true;
+    userMessageCount++;
 
     addMessage('user', text);
 
@@ -347,10 +382,22 @@
 
       if (!resp.ok) {
         var err = await resp.json().catch(function() { return {}; });
+        if (resp.status === 402) {
+          showUpgradeCta();
+        }
         addMessage('assistant', err.error || 'Sorry, something went wrong. Please try again.');
         isStreaming = false;
         return;
       }
+
+      // Read tier headers from the streaming response (premium tenants hide branding)
+      try {
+        widgetTier = (resp.headers.get('X-Cuddles-Widget-Tier') || 'free').toLowerCase();
+        widgetPlan = resp.headers.get('X-Cuddles-Widget-Plan') || widgetPlan;
+        var limitHeader = resp.headers.get('X-Cuddles-Widget-Limit');
+        if (limitHeader) freeMessageLimit = Math.max(parseInt(limitHeader, 10) || 15, 5);
+        updateFooter();
+      } catch(e) { /* ignore header parse errors */ }
 
       // Stream SSE response
       var reader = resp.body.getReader();
