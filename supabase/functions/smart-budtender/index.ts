@@ -7,6 +7,8 @@ import { WIKIPEDIA_KNOWLEDGE_BASE } from "./wikipedia-knowledge.ts";
 import { STRAIN_MATCHING_KNOWLEDGE } from "./strain-matching.ts";
 import { PLANT_KNOWLEDGE_BASE } from "./plant-knowledge.ts";
 import { retrieveKnowledge, buildRetrievalContext } from "../_shared/rag.ts";
+import { ANSWER_QUALITY_DIRECTIVES, composeSystemPrompt, promptTraceHeaders } from "../_shared/prompt-registry.ts";
+
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -699,21 +701,8 @@ serve(async (req) => {
     const namePersona = safeUserName
       ? `\n\n## USER IDENTITY\nThe user's name is ${safeUserName}. Address them by their first name warmly and naturally throughout the conversation — especially in your opening greeting (e.g. "Hey ${safeUserName}!" or "Groovy to see you, ${safeUserName} 🌿"). Don't overuse it (avoid every sentence), but make sure they feel personally seen.\n`
       : '';
-    const ANSWER_QUALITY_DIRECTIVES = `
+    // Answer-quality directives now live in the versioned prompt registry.
 
-═══════════════════════════════════════
-ANSWER QUALITY DIRECTIVES (apply to every response)
-═══════════════════════════════════════
-1. LEAD WITH THE ANSWER — first sentence directly answers the question; save context, caveats, and disclaimers for after.
-2. BE SPECIFIC — cite receptors (CB1/CB2/TRPV1/5-HT1A), exact terpenes with roles, cannabinoid ratios, mg ranges, temperatures (°C), RH%, and timings. Vague wellness talk is a failure mode.
-3. CORRECT MYTHS gently: (a) indica/sativa is horticultural shorthand — chemotype + terpene profile predicts effect; (b) hemp SEED oil ≠ CBD oil; (c) CBN's sedation is weaker than marketing claims.
-4. STRUCTURE longer answers with short markdown headers or bullets. Keep simple answers to 2-4 sentences.
-5. GROUND health-adjacent claims in the research knowledge base's evidence tiers ("strong evidence base", "emerging evidence") — never fabricate studies, authors, or p-values.
-6. DEFAULT TO SAFETY: start low / go slow, never encourage BHO at home, no medical/legal advice, always add "general education, not medical advice" for health or dosing questions.
-7. IF UNCERTAIN, say so — "the evidence here is preliminary" beats a confident guess.
-8. FOR ANY strain request phrased as a description of a feeling, symptom, occasion or vibe, run the STRAIN MATCHING ENGINE protocol and answer in its presentation shape.
-9. USE THE KNOWLEDGE BASES actively (research, encyclopedia, botany/hemp/terpene). Pull the specific mechanism or number instead of paraphrasing generically.
-`;
 
     // --- RAG: retrieve curated knowledge for this specific question ---
     const lastUserMessage = [...truncatedMessages].reverse().find((m: { role: string }) => m.role === 'user')?.content ?? '';
@@ -729,11 +718,29 @@ ANSWER QUALITY DIRECTIVES (apply to every response)
       console.error('RAG retrieval skipped:', err instanceof Error ? err.message : err);
     }
 
-    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + BOTANY_KNOWLEDGE_BASE + PLANT_KNOWLEDGE_BASE + WIKIPEDIA_KNOWLEDGE_BASE + STRAIN_MATCHING_KNOWLEDGE + ANSWER_QUALITY_DIRECTIVES + retrievalContext + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
-
-
     // Smart model routing
     const primaryModel = selectModel(messages, !!userHistory);
+
+    const { prompt: systemPrompt, chars: promptChars } = composeSystemPrompt(
+      [
+        { name: 'base', content: BASE_SYSTEM_PROMPT },
+        { name: 'research', content: RESEARCH_KNOWLEDGE_BASE },
+        { name: 'encyclopedia', content: ENCYCLOPEDIA_KNOWLEDGE_BASE },
+        { name: 'botany', content: BOTANY_KNOWLEDGE_BASE },
+        { name: 'plants', content: PLANT_KNOWLEDGE_BASE },
+        { name: 'wikipedia', content: WIKIPEDIA_KNOWLEDGE_BASE },
+        { name: 'strain_matching', content: STRAIN_MATCHING_KNOWLEDGE },
+        { name: 'answer_quality', content: ANSWER_QUALITY_DIRECTIVES },
+        { name: 'rag', content: retrievalContext },
+        { name: 'name_persona', content: namePersona },
+        { name: 'profile', content: profileContext },
+        { name: 'history', content: historyContext },
+        { name: 'inventory', content: inventoryContext },
+        { name: 'language', content: languageInstructions },
+      ],
+      { model: primaryModel },
+    );
+
 
     const callGateway = (model: string) => fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -752,13 +759,16 @@ ANSWER QUALITY DIRECTIVES (apply to every response)
     });
 
     let response = await callGateway(primaryModel);
+    let usedModel = primaryModel;
 
     // Fallback: if the chosen model is rate-limited or credits are tight,
     // retry once with the cheapest model so Cuddles keeps answering.
     if (!response.ok && (response.status === 429 || response.status === 402) && primaryModel !== 'google/gemini-2.5-flash-lite') {
       console.warn('Primary model failed, falling back to lite:', { primaryModel, status: response.status });
-      response = await callGateway('google/gemini-2.5-flash-lite');
+      usedModel = 'google/gemini-2.5-flash-lite';
+      response = await callGateway(usedModel);
     }
+
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -778,8 +788,14 @@ ANSWER QUALITY DIRECTIVES (apply to every response)
 
     // Stream the response back to the client
     return new Response(response.body, {
-      headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' },
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'text/event-stream',
+        ...promptTraceHeaders(usedModel, promptChars),
+        'Access-Control-Expose-Headers': 'X-Cuddles-Prompt-Version, X-Cuddles-Prompt-Chars, X-Cuddles-Model',
+      },
     });
+
   } catch (error) {
     console.error('Function error:', { error: error instanceof Error ? error.stack : error, timestamp: new Date().toISOString() });
     return new Response(JSON.stringify({ error: 'Unable to process your request. Please try again later.' }),
