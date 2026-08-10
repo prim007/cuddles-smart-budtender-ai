@@ -33,7 +33,10 @@ interface CountryNode {
   summary: string;
   details: string[];
   updated: string;
+  slug?: string;
 }
+
+const countrySlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 const STATUS_META: Record<
   LegalStatus,
