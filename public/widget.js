@@ -193,6 +193,11 @@
 
   var messages = [];
   var isStreaming = false;
+  var widgetTier = 'free';          // 'free' or 'premium' — read from response headers
+  var widgetPlan = 'standard';      // raw tenant plan from response headers
+  var freeMessageLimit = 15;        // mirrored from edge function default
+  var userMessageCount = 0;         // number of user messages sent this session
+  var upgradeCtaShown = false;      // prevent showing the CTA more than once per session
 
   // Welcome message
   addMessage('assistant', "Hey there! 🌿 I'm Cuddles, your AI budtender. Whether you're looking for help with sleep, creativity, pain relief, or just vibing — I've got you. What can I help with today?");
