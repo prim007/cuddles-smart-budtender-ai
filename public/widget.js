@@ -158,6 +158,11 @@
     '@keyframes cuddlesBounce{to{transform:translateY(-4px);opacity:1}}',
     '.cuddles-powered{text-align:center;padding:6px;font-size:10px;color:rgba(255,255,255,.3)}',
     '.cuddles-powered a{color:rgba(255,255,255,.5);text-decoration:none}',
+    '.cuddles-powered.premium{display:none}',
+    '.cuddles-upgrade{max-width:92%;align-self:flex-start;background:#20203a;border:1px solid ' + BRAND_COLOR + '40;border-radius:16px;padding:12px 14px;font-size:12px;line-height:1.5;margin:0 16px 10px}',
+    '.cuddles-upgrade-title{font-weight:700;color:#fff;margin-bottom:4px}',
+    '.cuddles-upgrade-text{color:#e0e0e0;margin-bottom:8px}',
+    '.cuddles-upgrade a{display:inline-block;background:' + BRAND_COLOR + ';color:#fff;border-radius:999px;padding:7px 13px;text-decoration:none;font-weight:600;font-size:12px}',
   ].join('\n');
   document.head.appendChild(style);
 
