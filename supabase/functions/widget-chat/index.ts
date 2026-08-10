@@ -100,7 +100,7 @@ serve(async (req) => {
 
     const { data: tenant, error: tenantErr } = await supabase
       .from('tenants')
-      .select('id, business_name, phone, branding_color, status')
+      .select('id, business_name, phone, branding_color, status, plan')
       .eq('embed_key', embedKey)
       .single();
 
@@ -116,12 +116,20 @@ serve(async (req) => {
       });
     }
 
-    // Fetch tenant-specific strains
-    const { data: tenantStrains } = await supabase
+    // --- Tier mapping: free = standard/trial/basic, premium = everything else ---
+    const plan = (tenant.plan || '').toLowerCase();
+    const tier = ['standard', 'trial', 'basic', 'free'].includes(plan) ? 'free' : 'premium';
+    const MAX_FREE_MENU_ITEMS = 10;
+    const MAX_FREE_SESSION_MESSAGES = 15;
+
+    // Fetch tenant-specific strains (limit menu surface for free tier)
+    let tenantStrainsQuery = supabase
       .from('tenant_strains')
       .select('category, strain_name, strain_type, primary_terpene, secondary_terpene, primary_effect, notes, thc_min, thc_max, price, in_stock')
       .eq('tenant_id', tenant.id)
       .eq('in_stock', true);
+    if (tier === 'free') tenantStrainsQuery = tenantStrainsQuery.limit(MAX_FREE_MENU_ITEMS);
+    const { data: tenantStrains } = await tenantStrainsQuery;
 
     // Sanitize tenant-supplied text to mitigate prompt injection.
     // Strips control chars, collapses whitespace, removes common injection
