@@ -244,6 +244,7 @@ export type Database = {
           assistant_message: string
           created_at: string
           id: string
+          intent: string | null
           redirect_url: string | null
           session_id: string
           user_message: string
@@ -253,6 +254,7 @@ export type Database = {
           assistant_message: string
           created_at?: string
           id?: string
+          intent?: string | null
           redirect_url?: string | null
           session_id: string
           user_message: string
@@ -262,10 +264,38 @@ export type Database = {
           assistant_message?: string
           created_at?: string
           id?: string
+          intent?: string | null
           redirect_url?: string | null
           session_id?: string
           user_message?: string
           user_metadata?: Json | null
+        }
+        Relationships: []
+      }
+      chat_feedback: {
+        Row: {
+          created_at: string
+          feedback_text: string | null
+          helpful: boolean | null
+          id: string
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          feedback_text?: string | null
+          helpful?: boolean | null
+          id?: string
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          feedback_text?: string | null
+          helpful?: boolean | null
+          id?: string
+          session_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
