@@ -7,6 +7,8 @@ import { WIKIPEDIA_KNOWLEDGE_BASE } from "./wikipedia-knowledge.ts";
 import { STRAIN_MATCHING_KNOWLEDGE } from "./strain-matching.ts";
 import { PLANT_KNOWLEDGE_BASE } from "./plant-knowledge.ts";
 import { retrieveKnowledge, buildRetrievalContext } from "../_shared/rag.ts";
+import { ANSWER_QUALITY_DIRECTIVES, composeSystemPrompt, promptTraceHeaders } from "../_shared/prompt-registry.ts";
+
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
