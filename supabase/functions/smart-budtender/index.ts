@@ -757,13 +757,16 @@ serve(async (req) => {
     });
 
     let response = await callGateway(primaryModel);
+    let usedModel = primaryModel;
 
     // Fallback: if the chosen model is rate-limited or credits are tight,
     // retry once with the cheapest model so Cuddles keeps answering.
     if (!response.ok && (response.status === 429 || response.status === 402) && primaryModel !== 'google/gemini-2.5-flash-lite') {
       console.warn('Primary model failed, falling back to lite:', { primaryModel, status: response.status });
-      response = await callGateway('google/gemini-2.5-flash-lite');
+      usedModel = 'google/gemini-2.5-flash-lite';
+      response = await callGateway(usedModel);
     }
+
 
     if (!response.ok) {
       const errorText = await response.text();
