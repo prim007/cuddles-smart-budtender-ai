@@ -616,6 +616,12 @@ const ChatDemo = () => {
       } catch (dbError) {
         console.error('Error saving conversation:', dbError);
       }
+
+      // Show feedback prompt on every 5th assistant response, once per session
+      if (!showFeedbackPrompt && (messageCount + 1) >= 5 && Math.random() < 0.3) {
+        setShowFeedbackPrompt(true);
+        trackEvent("chat_feedback_prompt_shown", "engagement", "session");
+      }
     } catch (error: any) {
       console.error("Error:", error);
       const errorMsg = error.message || "Failed to get response. Please try again.";
