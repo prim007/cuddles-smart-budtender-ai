@@ -87,21 +87,6 @@ serve(async (req) => {
       });
     }
 
-    // Enforce free-tier session message ceiling on the server.
-    const userMessageCount = messages.filter((m: { role: string }) => m.role === 'user').length;
-    if (tier === 'free' && userMessageCount > MAX_FREE_SESSION_MESSAGES) {
-      return new Response(JSON.stringify({ error: 'Free tier message limit reached. Upgrade to Cuddles Premium for unlimited chats.' }), {
-        status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Rate limit by embed key
-    if (!checkRateLimit(embedKey)) {
-      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
-        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
     // Look up tenant
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -130,6 +115,21 @@ serve(async (req) => {
     const tier = ['standard', 'trial', 'basic', 'free'].includes(plan) ? 'free' : 'premium';
     const MAX_FREE_MENU_ITEMS = 10;
     const MAX_FREE_SESSION_MESSAGES = 15;
+
+    // Enforce free-tier session message ceiling on the server.
+    const userMessageCount = messages.filter((m: { role: string }) => m.role === 'user').length;
+    if (tier === 'free' && userMessageCount > MAX_FREE_SESSION_MESSAGES) {
+      return new Response(JSON.stringify({ error: 'Free tier message limit reached. Upgrade to Cuddles Premium for unlimited chats.' }), {
+        status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Rate limit by embed key
+    if (!checkRateLimit(embedKey)) {
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     // Fetch tenant-specific strains (limit menu surface for free tier)
     let tenantStrainsQuery = supabase
