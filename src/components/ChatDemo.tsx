@@ -64,8 +64,8 @@ export function classifyIntent(content: string): ChatIntent {
   if (matchMenuIntent(content)) return "menu";
   if (hasBuyIntent(content)) return "purchase";
   if (DISPENSARY_INTENT_RE.test(lower) || NEAR_ME_RE.test(lower) || LOCATION_TROUBLE_RE.test(lower)) return "dispensary";
-  if (\b(recommend|suggest|strain|best for|top strain|indica|sativa|hybrid|help me|for sleep|for pain|for anxiety|creativity|energy|stress)\b.test(lower)) return "recommendation";
-  if (\b(dose|dosage|how much|safe|side effect|interaction|warning|health|medical)\b.test(lower)) return "advice";
+  if (/\b(recommend|suggest|strain|best for|top strain|indica|sativa|hybrid|help me|for sleep|for pain|for anxiety|creativity|energy|stress)\b/.test(lower)) return "recommendation";
+  if (/\b(dose|dosage|how much|safe|side effect|interaction|warning|health|medical)\b/.test(lower)) return "advice";
   if (lower.length < 10) return "general";
   return "other";
 }
