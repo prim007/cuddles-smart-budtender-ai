@@ -716,11 +716,29 @@ serve(async (req) => {
       console.error('RAG retrieval skipped:', err instanceof Error ? err.message : err);
     }
 
-    const systemPrompt = BASE_SYSTEM_PROMPT + RESEARCH_KNOWLEDGE_BASE + ENCYCLOPEDIA_KNOWLEDGE_BASE + BOTANY_KNOWLEDGE_BASE + PLANT_KNOWLEDGE_BASE + WIKIPEDIA_KNOWLEDGE_BASE + STRAIN_MATCHING_KNOWLEDGE + ANSWER_QUALITY_DIRECTIVES + retrievalContext + namePersona + profileContext + historyContext + inventoryContext + languageInstructions;
-
-
     // Smart model routing
     const primaryModel = selectModel(messages, !!userHistory);
+
+    const { prompt: systemPrompt, chars: promptChars } = composeSystemPrompt(
+      [
+        { name: 'base', content: BASE_SYSTEM_PROMPT },
+        { name: 'research', content: RESEARCH_KNOWLEDGE_BASE },
+        { name: 'encyclopedia', content: ENCYCLOPEDIA_KNOWLEDGE_BASE },
+        { name: 'botany', content: BOTANY_KNOWLEDGE_BASE },
+        { name: 'plants', content: PLANT_KNOWLEDGE_BASE },
+        { name: 'wikipedia', content: WIKIPEDIA_KNOWLEDGE_BASE },
+        { name: 'strain_matching', content: STRAIN_MATCHING_KNOWLEDGE },
+        { name: 'answer_quality', content: ANSWER_QUALITY_DIRECTIVES },
+        { name: 'rag', content: retrievalContext },
+        { name: 'name_persona', content: namePersona },
+        { name: 'profile', content: profileContext },
+        { name: 'history', content: historyContext },
+        { name: 'inventory', content: inventoryContext },
+        { name: 'language', content: languageInstructions },
+      ],
+      { model: primaryModel },
+    );
+
 
     const callGateway = (model: string) => fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
