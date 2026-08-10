@@ -94,6 +94,13 @@ serve(async (req) => {
       });
     }
 
+    // Rate limit by embed key
+    if (!checkRateLimit(embedKey)) {
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     // Look up tenant
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
