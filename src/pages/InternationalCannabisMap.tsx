@@ -500,11 +500,14 @@ const InternationalCannabisMap = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {visible.map((c) => {
               const meta = STATUS_META[c.status];
+              const slug = c.slug || countrySlug(c.name);
+              const hasPage = slug === "ghana" || slug === "malawi" || slug === "zimbabwe";
               return (
-                <button
+                <Link
                   key={c.name}
-                  onClick={() => setActive(c)}
-                  className="text-left p-4 rounded-2xl border border-border bg-card hover:border-hippie-coral/50 hover:shadow-elevated transition-all"
+                  to={hasPage ? `/country/${slug}` : `/international-cannabis-map?country=${slug}`}
+                  onClick={() => !hasPage && setActive(c)}
+                  className="text-left p-4 rounded-2xl border border-border bg-card hover:border-hippie-coral/50 hover:shadow-elevated transition-all block"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-2xl">{c.flag}</span>
@@ -517,7 +520,7 @@ const InternationalCannabisMap = () => {
                   <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
                     {c.summary}
                   </div>
-                </button>
+                </Link>
               );
             })}
           </div>
