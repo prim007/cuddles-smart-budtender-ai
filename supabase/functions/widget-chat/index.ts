@@ -110,9 +110,11 @@ serve(async (req) => {
       });
     }
 
-    // --- Tier mapping: free = standard/trial/basic, premium = everything else ---
+    // --- Tier mapping ---
+    // 'standard' is the PAID B2B plan (and the forced default for self-signup tenants),
+    // so only explicitly free/lite plans are throttled. Trials get full features too.
     const plan = (tenant.plan || '').toLowerCase();
-    const tier = ['standard', 'trial', 'basic', 'free'].includes(plan) ? 'free' : 'premium';
+    const tier = ['free', 'lite', 'starter'].includes(plan) ? 'free' : 'premium';
     const MAX_FREE_MENU_ITEMS = 10;
     const MAX_FREE_SESSION_MESSAGES = 15;
 
