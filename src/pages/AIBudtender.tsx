@@ -71,8 +71,8 @@ const AIBudtender = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="AI Budtender for Dispensaries | Free to Try & Download"
-        description="Cuddles AI is the smart budtender that lifts dispensary sales and halves wait times with RAG strain recommendations and POS integration. Free to try."
+        title="AI Budtender Software for Dispensaries | Cuddles AI"
+        description="AI budtender software with RAG-grounded strain recommendations, POS and menu sync, and 24/7 chat. Lifts basket size, cuts wait times. Free to try."
         url="/ai-budtender"
         keywords="AI budtender for dispensaries, automated cannabis product recommendations, cannabis retail automation, smart budtender, dispensary AI chatbot, reduce dispensary wait times with AI, cannabis recommendation engine"
         structuredData={structuredData}
@@ -211,6 +211,52 @@ const AIBudtender = () => {
           </div>
         </div>
       </section>
+
+      {/* How the AI budtender works (technical) */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="font-display text-3xl font-bold text-foreground text-center mb-4">
+            How the AI Budtender Works
+          </h2>
+          <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+            Cuddles is a retrieval-grounded recommendation engine, not a generic chatbot bolted onto a menu.
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="p-6">
+              <h3 className="font-display text-xl font-semibold text-foreground mb-2">RAG-grounded answers</h3>
+              <p className="text-muted-foreground">
+                Every reply is built from a curated knowledge base of strain, terpene, dosing and safety
+                passages retrieved by vector search, so recommendations cite your catalogue instead of
+                relying on a model's memory.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-display text-xl font-semibold text-foreground mb-2">Live menu &amp; POS sync</h3>
+              <p className="text-muted-foreground">
+                Your product list syncs into a per-tenant catalogue that is automatically re-embedded when
+                items change, so the budtender only recommends stock you actually have on the shelf.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-display text-xl font-semibold text-foreground mb-2">Effect-based matching</h3>
+              <p className="text-muted-foreground">
+                Customer intent (sleep, focus, pain, anxiety, social) is classified and matched against
+                cannabinoid ratios, terpene profiles and tolerance signals — the same reasoning a strong
+                budtender uses on the floor.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-display text-xl font-semibold text-foreground mb-2">Embed in one line</h3>
+              <p className="text-muted-foreground">
+                A single script tag with your tenant embed key drops the widget onto any website, including
+                WordPress and Shopify. Conversations, intents and demand signals flow into your insights
+                dashboard.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
 
       {/* CTA */}
       <section className="py-16 px-4">
