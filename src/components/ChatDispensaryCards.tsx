@@ -117,8 +117,10 @@ const ChatDispensaryCards = ({ dispensaries }: Props) => {
         </div>
       ))}
       <p className="px-1 text-[10px] text-muted-foreground">
-        🪪 Most dispensaries require 18+ with valid ID. Menus vary — check before visiting. Not medical advice.
+        🪪 Most dispensaries require 18+ with valid ID. Menus vary — check before visiting. Not medical advice. Listings partly via{" "}
+        <a href="https://daggaspot.co.za" target="_blank" rel="noopener noreferrer" className="underline">DaggaSpot</a>.
       </p>
+
     </div>
   );
 };
