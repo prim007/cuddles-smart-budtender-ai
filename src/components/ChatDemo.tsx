@@ -204,8 +204,31 @@ const ChatDemo = () => {
     );
     const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${searchLabel} near ${locationLabel}`)}`;
     try {
+      let dispensaries: Dispensary[] = [];
+
+      // 1) DaggaSpot directory — free, works for signed-out visitors too
+      try {
+        const { data: dagga } = await supabase.functions.invoke("daggaspot-dispensaries", {
+          body: { ...searchArgs, limit: 5 },
+        });
+        if (Array.isArray(dagga?.dispensaries)) dispensaries = dagga.dispensaries;
+      } catch (e) {
+        console.error("daggaspot lookup failed", e);
+      }
+
       const { data: sessionData } = await supabase.auth.getSession();
-      if (!sessionData.session) {
+
+      // 2) Fall back to Google Places for signed-in users when the directory is empty
+      if (dispensaries.length === 0 && sessionData.session) {
+        const { data, error } = await supabase.functions.invoke("find-dispensaries", {
+          body: { ...searchArgs, query: searchLabel },
+        });
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+        dispensaries = data?.dispensaries || [];
+      }
+
+      if (dispensaries.length === 0 && !sessionData.session) {
         setMessages((prev) => [
           ...prev,
           {
@@ -217,12 +240,6 @@ const ChatDemo = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("find-dispensaries", {
-        body: { ...searchArgs, query: searchLabel },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      const dispensaries: Dispensary[] = data?.dispensaries || [];
       trackEvent("dispensary_search", "engagement", args.address ? "address" : "gps");
 
       if (dispensaries.length === 0) {
