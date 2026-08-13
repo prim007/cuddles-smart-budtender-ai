@@ -18,3 +18,6 @@ verify_jwt = false
 
 [functions.send-transactional-email]
 verify_jwt = true
+
+[functions.daggaspot-dispensaries]
+verify_jwt = false
