@@ -1,6 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendLovableEmail } from "npm:@lovable.dev/email-js";
 import { rateLimitResponse } from "../_shared/rate-limit.ts";
+
+const SITE_NAME = "cuddles-ai";
+const FROM_DOMAIN = "cuddles-ai.com";
+const SENDER_DOMAIN = "notify.cuddles-ai.com";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
