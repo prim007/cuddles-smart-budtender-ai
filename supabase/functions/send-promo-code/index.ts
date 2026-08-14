@@ -222,15 +222,22 @@ serve(async (req) => {
   </table>
 </body>
 </html>
-        `,
-      }),
-    });
+        `;
 
-    const emailResult = await emailResponse.json();
-    if (!emailResponse.ok) {
-      console.error("Resend API error:", emailResult);
-      throw new Error(`Resend API failed [${emailResponse.status}]: ${JSON.stringify(emailResult)}`);
-    }
+    await sendLovableEmail(
+      {
+        to: normalizedEmail,
+        from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+        sender_domain: SENDER_DOMAIN,
+        subject: "Your 15% Discount Code from Cuddles! ✌️",
+        html: emailHtml,
+        purpose: "transactional",
+        label: "promo-code",
+        idempotency_key: `promo-${normalizedEmail}-${promoCode}`,
+      },
+      { apiKey: LOVABLE_API_KEY, sendUrl: Deno.env.get("LOVABLE_SEND_URL") },
+    );
+
 
     return new Response(
       JSON.stringify({ success: true }),
