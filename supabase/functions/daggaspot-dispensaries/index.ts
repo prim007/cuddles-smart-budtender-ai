@@ -121,6 +121,9 @@ serve(async (req) => {
 
     let results;
     if (isValidCoordinate(lat, lng)) {
+      // Only surface spots that are genuinely nearby — otherwise callers can
+      // fall back to a wider search instead of showing another city as "closest".
+      const maxKm = Math.min(Math.max(Number(body.max_km) || 60, 1), 500);
       const origin = { lat: lat as number, lng: lng as number };
       results = pool
         .filter((s) => isValidCoordinate(s.latitude, s.longitude))
@@ -128,9 +131,11 @@ serve(async (req) => {
           s,
           d: haversineKm(origin, { lat: s.latitude!, lng: s.longitude! }),
         }))
+        .filter(({ d }) => d <= maxKm)
         .sort((a, b) => a.d - b.d)
         .slice(0, limit)
         .map(({ s, d }) => shape(s, d));
+
     } else if (place) {
       const tokens = place.split(/[\s,]+/).filter((t) => t.length > 2);
       const scored = pool
