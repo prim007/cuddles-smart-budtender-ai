@@ -254,17 +254,26 @@ const ChatDemo = () => {
         return;
       }
 
+      const nearestKm = dispensaries
+        .map((d) => (typeof d.distance_km === "number" ? d.distance_km : null))
+        .filter((d): d is number => d != null)
+        .sort((a, b) => a - b)[0];
+      const farAway = nearestKm != null && nearestKm > 25;
+
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
           content: product
             ? `Here are the ${dispensaries.length} closest spots to ask for **${product}** 🌿 — stock changes daily, so call ahead to confirm they have it. You can also order delivery from Tripple Four below. Not medical advice.`
-            : `Here are the top ${dispensaries.length} dispensaries closest to you 🌿`,
+            : farAway
+              ? `I couldn't find anything right on your doorstep — the nearest listings are about ${Math.round(nearestKm!)} km away 🌿 Call ahead before travelling.`
+              : `Here are the top ${dispensaries.length} dispensaries closest to you 🌿`,
           dispensaries,
           ...(product ? { orderPhone: "0645436734" } : {}),
         },
       ]);
+
     } catch (err: unknown) {
       console.error("dispensary search failed", err);
       setMessages((prev) => [

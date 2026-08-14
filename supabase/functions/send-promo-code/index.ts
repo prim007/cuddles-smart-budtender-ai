@@ -1,6 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendLovableEmail } from "npm:@lovable.dev/email-js";
 import { rateLimitResponse } from "../_shared/rate-limit.ts";
+
+const SITE_NAME = "cuddles-ai";
+const FROM_DOMAIN = "cuddles-ai.com";
+const SENDER_DOMAIN = "notify.cuddles-ai.com";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -38,10 +44,11 @@ serve(async (req) => {
   if (rl) return rl;
 
   try {
-    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-    if (!RESEND_API_KEY) {
-      throw new Error("RESEND_API_KEY is not configured");
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+      throw new Error("LOVABLE_API_KEY is not configured");
     }
+
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -104,18 +111,9 @@ serve(async (req) => {
       }
     }
 
-    // Send email via Resend
-    const emailResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "Cuddles AI <admin@cuddles-ai.com>",
-        to: [email.trim().toLowerCase()],
-        subject: "Your 15% Discount Code from Cuddles! ✌️",
-        html: `
+    // Send email via the Lovable email service (verified sender domain)
+    const emailHtml = `
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -231,15 +229,22 @@ serve(async (req) => {
   </table>
 </body>
 </html>
-        `,
-      }),
-    });
+        `;
 
-    const emailResult = await emailResponse.json();
-    if (!emailResponse.ok) {
-      console.error("Resend API error:", emailResult);
-      throw new Error(`Resend API failed [${emailResponse.status}]: ${JSON.stringify(emailResult)}`);
-    }
+    await sendLovableEmail(
+      {
+        to: normalizedEmail,
+        from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+        sender_domain: SENDER_DOMAIN,
+        subject: "Your 15% Discount Code from Cuddles! ✌️",
+        html: emailHtml,
+        purpose: "transactional",
+        label: "promo-code",
+        idempotency_key: `promo-${normalizedEmail}-${promoCode}`,
+      },
+      { apiKey: LOVABLE_API_KEY, sendUrl: Deno.env.get("LOVABLE_SEND_URL") },
+    );
+
 
     return new Response(
       JSON.stringify({ success: true }),
