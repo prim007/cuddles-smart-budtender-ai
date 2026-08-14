@@ -104,18 +104,9 @@ serve(async (req) => {
       }
     }
 
-    // Send email via Resend
-    const emailResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "Cuddles AI <admin@cuddles-ai.com>",
-        to: [email.trim().toLowerCase()],
-        subject: "Your 15% Discount Code from Cuddles! ✌️",
-        html: `
+    // Send email via the Lovable email service (verified sender domain)
+    const emailHtml = `
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
