@@ -650,16 +650,18 @@ const ChatDemo = () => {
       }
     } catch (error: any) {
       console.error("Error:", error);
-      const errorMsg = error.message || "Failed to get response. Please try again.";
-      
-      // Surface rate limit / payment errors clearly
+      const errorMsg = error?.message || "";
+
+      // Never surface raw/technical errors to visitors — show a branded maintenance notice
       if (errorMsg.includes("429") || errorMsg.includes("rate limit") || errorMsg.includes("Too many")) {
-        toast({ title: "Slow down", description: "Too many requests. Please wait a moment and try again.", variant: "destructive" });
-      } else if (errorMsg.includes("402") || errorMsg.includes("Payment")) {
-        toast({ title: "Service unavailable", description: "AI service temporarily unavailable. Please try again later.", variant: "destructive" });
+        toast({ title: "Slow down", description: "Too many requests. Please wait a moment and try again." });
       } else {
-        toast({ title: t.error, description: errorMsg, variant: "destructive" });
+        toast({
+          title: "Cuddles is under re-engineering 🛠️",
+          description: "We're upgrading Cuddles right now — she'll be back soon. Please try again in a little while.",
+        });
       }
+
     } finally {
       setIsLoading(false);
     }
