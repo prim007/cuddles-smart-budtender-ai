@@ -118,6 +118,7 @@ const WidgetOutreach = lazyWithReload(() => import("./pages/WidgetOutreach"));
 const EmailQueueStatus = lazyWithReload(() => import("./pages/EmailQueueStatus"));
 const BrevoSync = lazyWithReload(() => import("./pages/BrevoSync"));
 const DatabricksAnalytics = lazyWithReload(() => import("./pages/DatabricksAnalytics"));
+const SnowflakeAnalytics = lazyWithReload(() => import("./pages/SnowflakeAnalytics"));
 const Claim = lazyWithReload(() => import("./pages/Claim"));
 const MenuPage = lazyWithReload(() => import("./pages/MenuPage"));
 
@@ -283,6 +284,16 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/admin/snowflake"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <Suspense fallback={<PageLoader />}><SnowflakeAnalytics /></Suspense>
+                    </ProtectedRoute>
+                  }
+                />
+
+
 
                 {/* B2B SEO Pages */}
                 <Route path="/ai-budtender" element={<Suspense fallback={<PageLoader />}><AIBudtender /></Suspense>} />
