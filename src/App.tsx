@@ -118,6 +118,7 @@ const WidgetOutreach = lazyWithReload(() => import("./pages/WidgetOutreach"));
 const EmailQueueStatus = lazyWithReload(() => import("./pages/EmailQueueStatus"));
 const BrevoSync = lazyWithReload(() => import("./pages/BrevoSync"));
 const DatabricksAnalytics = lazyWithReload(() => import("./pages/DatabricksAnalytics"));
+const SnowflakeAnalytics = lazyWithReload(() => import("./pages/SnowflakeAnalytics"));
 const Claim = lazyWithReload(() => import("./pages/Claim"));
 const MenuPage = lazyWithReload(() => import("./pages/MenuPage"));
 
