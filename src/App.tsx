@@ -284,6 +284,16 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/admin/snowflake"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <Suspense fallback={<PageLoader />}><SnowflakeAnalytics /></Suspense>
+                    </ProtectedRoute>
+                  }
+                />
+
+
 
                 {/* B2B SEO Pages */}
                 <Route path="/ai-budtender" element={<Suspense fallback={<PageLoader />}><AIBudtender /></Suspense>} />
