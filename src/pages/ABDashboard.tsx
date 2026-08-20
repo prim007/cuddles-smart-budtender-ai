@@ -93,7 +93,7 @@ const ABDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background py-12 px-4">
-      <SEO title="A/B Test Dashboard — Cuddles" description="Internal A/B testing dashboard" noindex />
+      <SEO title="A/B Test Dashboard — Cuddles" description="Internal A/B testing dashboard" url="/ab-dashboard" noindex />
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>

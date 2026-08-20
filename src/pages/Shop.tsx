@@ -57,6 +57,7 @@ const Shop = () => {
       <SEO
         title="Order Cannabis Delivery | Cuddles AI"
         description="Order cannabis for delivery. Browse strains, add to cart, and get it delivered to your door."
+        url="/shop"
       />
       <div className="min-h-screen bg-background pt-20">
         {/* Urgency banner */}
