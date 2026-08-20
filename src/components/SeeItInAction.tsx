@@ -34,21 +34,23 @@ const menuRows: [string, string][] = [
 
 const matchChips = ["Deep sleep", "No anxiety", "Body-heavy", "Myrcene forward"];
 
-const SeeItInAction = () => {
+const SeeItInAction = ({ hideHeading = false }: { hideHeading?: boolean }) => {
   const [active, setActive] = useState<DemoId>("ocr");
 
   return (
-    <section id="see-it-in-action" className="py-24 bg-muted/30 overflow-hidden">
+    <section id="see-it-in-action" className={`${hideHeading ? "pt-6 pb-24" : "py-24 bg-muted/30"} overflow-hidden`}>
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center mb-12">
-          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">Live demos</p>
-          <h2 className="font-display font-bold text-foreground mb-6 text-balance">
-            See it <span className="gradient-text">in action</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-            Three things Cuddles does that no other budtender in South Africa does — shown, not told.
-          </p>
-        </div>
+        {!hideHeading && (
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">Live demos</p>
+            <h2 className="font-display font-bold text-foreground mb-6 text-balance">
+              See it <span className="gradient-text">in action</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+              Three things Cuddles does that no other budtender in South Africa does — shown, not told.
+            </p>
+          </div>
+        )}
 
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           {tabs.map((tab) => {

@@ -87,6 +87,9 @@ const Footer = () => {
               <Link to="/why-cuddles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Why Cuddles AI
               </Link>
+              <Link to="/see-it-in-action" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                See It In Action
+              </Link>
               <Link to="/dispensary-onboarding" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Get Started Free
               </Link>

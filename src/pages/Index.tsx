@@ -18,7 +18,6 @@ import Testimonials from "@/components/Testimonials";
 import YouTubeSection from "@/components/YouTubeSection";
 import PhoneShowcase from "@/components/PhoneShowcase";
 import PawDownloadCTA from "@/components/PawDownloadCTA";
-import SeeItInAction from "@/components/SeeItInAction";
 import ComplianceSection from "@/components/ComplianceSection";
 
 const localBusinessSchema = {
@@ -140,7 +139,7 @@ const Index = () => {
           <ChatDemo />
         </div>
         <PhoneShowcase />
-        <SeeItInAction />
+
 
 
         <TrendingStrainsTicker />
