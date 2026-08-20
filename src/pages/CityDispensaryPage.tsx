@@ -126,7 +126,7 @@ const CityDispensaryPage = () => {
             <Button onClick={scrollToChat} className="gap-2">
               <MessageCircle className="h-4 w-4" /> Chat with Cuddles
             </Button>
-            <a href="tel:+27000000000" className="inline-flex">
+            <a href="tel:+27645436734" className="inline-flex">
               <Button variant="outline" className="gap-2"><Phone className="h-4 w-4" /> Prefer to call?</Button>
             </a>
           </div>

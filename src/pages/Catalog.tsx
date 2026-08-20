@@ -13,6 +13,7 @@ const Catalog = () => {
       <SEO
         title="Browse Our Catalog | Cuddles AI"
         description="Browse our full product catalog on WhatsApp Business. Order directly through WhatsApp for fast delivery."
+        url="/catalog"
       />
       <div className="min-h-screen bg-background">
         {/* Header */}
