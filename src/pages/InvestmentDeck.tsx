@@ -174,25 +174,57 @@ const InvestmentDeck = () => {
               <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Business Model</h2>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-purple/10 to-hippie-pink/10">
-                <h3 className="text-xl font-bubble font-bold text-hippie-purple mb-3">SaaS Subscription</h3>
-                <p className="text-foreground/80 mb-2">Monthly recurring revenue per dispensary location</p>
-                <div className="text-2xl font-bold text-foreground">R5,300-R17,800/mo</div>
-              </div>
-              
-              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-orange/10 to-hippie-yellow/10">
-                <h3 className="text-xl font-bubble font-bold text-hippie-orange mb-3">Transaction Fee</h3>
-                <p className="text-foreground/80 mb-2">Small percentage on purchases influenced by Cuddles</p>
-                <div className="text-2xl font-bold text-foreground">1-2%</div>
-              </div>
-              
+            <p className="text-foreground/80 mb-6">
+              Dispensaries rent Cuddles as a monthly, cancel-anytime licence. Pricing is priced to sit under one
+              part-time budtender salary in South Africa (R6,000–R9,000/month) while scaling with locations and volume.
+              All prices exclude VAT and include a 14-day free trial.
+            </p>
+
+            <div className="grid md:grid-cols-4 gap-6">
               <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-green/10 to-hippie-blue/10">
-                <h3 className="text-xl font-bubble font-bold text-hippie-green mb-3">Enterprise</h3>
-                <p className="text-foreground/80 mb-2">Custom solutions for multi-location chains</p>
+                <h3 className="text-xl font-bubble font-bold text-hippie-green mb-3">Starter</h3>
+                <p className="text-foreground/80 mb-2">1 location, embeddable widget, 1,000 chats/mo</p>
+                <div className="text-2xl font-bold text-foreground">R1,899/mo</div>
+                <div className="text-sm text-foreground/60">≈ $100 USD</div>
+              </div>
+
+              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-purple/10 to-hippie-pink/10">
+                <h3 className="text-xl font-bubble font-bold text-hippie-purple mb-3">Growth</h3>
+                <p className="text-foreground/80 mb-2">Up to 3 locations, POS sync, 5,000 chats/mo</p>
+                <div className="text-2xl font-bold text-foreground">R5,300/mo</div>
+                <div className="text-sm text-foreground/60">≈ $285 USD</div>
+              </div>
+
+              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-orange/10 to-hippie-yellow/10">
+                <h3 className="text-xl font-bubble font-bold text-hippie-orange mb-3">Pro</h3>
+                <p className="text-foreground/80 mb-2">Unlimited locations, white-label, analytics &amp; API</p>
+                <div className="text-2xl font-bold text-foreground">R27,750/mo</div>
+                <div className="text-sm text-foreground/60">≈ $1,500 USD</div>
+              </div>
+
+              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-pink/10 to-hippie-purple/10">
+                <h3 className="text-xl font-bubble font-bold text-hippie-pink mb-3">Enterprise</h3>
+                <p className="text-foreground/80 mb-2">Chains, reseller &amp; white-label deals, custom SLAs</p>
                 <div className="text-2xl font-bold text-foreground">Custom</div>
+                <div className="text-sm text-foreground/60">Annual contract</div>
               </div>
             </div>
+
+            <div className="mt-8 grid md:grid-cols-3 gap-6">
+              <div className="p-5 rounded-lg bg-muted/40">
+                <div className="text-sm text-foreground/70 mb-1">Consumer Premium</div>
+                <div className="text-xl font-bold text-foreground">R99/mo</div>
+              </div>
+              <div className="p-5 rounded-lg bg-muted/40">
+                <div className="text-sm text-foreground/70 mb-1">Blended target ARPA (B2B)</div>
+                <div className="text-xl font-bold text-foreground">≈ R4,800/mo</div>
+              </div>
+              <div className="p-5 rounded-lg bg-muted/40">
+                <div className="text-sm text-foreground/70 mb-1">Gross margin (AI + infra costs)</div>
+                <div className="text-xl font-bold text-foreground">≈ 82%</div>
+              </div>
+            </div>
+
           </Card>
         </div>
       </section>
