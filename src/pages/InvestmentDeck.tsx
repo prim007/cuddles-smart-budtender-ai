@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, TrendingUp, Users, Target, Zap, DollarSign, Award, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
+import { generateInvestorPdf } from "@/lib/generateInvestorPdf";
+
 
 const InvestmentDeck = () => {
   const structuredData = {
