@@ -151,7 +151,7 @@ const InvestmentDeck = () => {
                 </li>
                 <li className="flex gap-3">
                   <span className="text-hippie-green mt-1">✓</span>
-                  <span>Instant responses with 95%+ accuracy</span>
+                  <span>Sub-2 second responses grounded in a curated knowledge base (RAG)</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-hippie-green mt-1">✓</span>
