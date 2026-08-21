@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, TrendingUp, Users, Target, Zap, DollarSign, Award, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
+import { generateInvestorPdf } from "@/lib/generateInvestorPdf";
+
 
 const InvestmentDeck = () => {
   const structuredData = {
@@ -51,12 +53,18 @@ const InvestmentDeck = () => {
           <p className="text-xl md:text-2xl text-center text-foreground/90 mb-8">
             Revolutionizing Cannabis Retail with AI-Powered Recommendations
           </p>
-          <div className="flex justify-center gap-4">
-            <Button className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white">
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button onClick={generateInvestorPdf} className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white">
               <Mail className="w-4 h-4 mr-2" />
-              Contact Us
+              Download Investor Summary
             </Button>
+            <a href="mailto:admin@cuddles-ai.com">
+              <Button variant="outline" className="border-2 border-hippie-yellow text-foreground">
+                Contact Us
+              </Button>
+            </a>
           </div>
+
         </div>
       </section>
 
@@ -151,7 +159,7 @@ const InvestmentDeck = () => {
                 </li>
                 <li className="flex gap-3">
                   <span className="text-hippie-green mt-1">✓</span>
-                  <span>Instant responses with 95%+ accuracy</span>
+                  <span>Sub-2 second responses grounded in a curated knowledge base (RAG)</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-hippie-green mt-1">✓</span>
@@ -174,25 +182,57 @@ const InvestmentDeck = () => {
               <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Business Model</h2>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-purple/10 to-hippie-pink/10">
-                <h3 className="text-xl font-bubble font-bold text-hippie-purple mb-3">SaaS Subscription</h3>
-                <p className="text-foreground/80 mb-2">Monthly recurring revenue per dispensary location</p>
-                <div className="text-2xl font-bold text-foreground">R5,300-R17,800/mo</div>
-              </div>
-              
-              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-orange/10 to-hippie-yellow/10">
-                <h3 className="text-xl font-bubble font-bold text-hippie-orange mb-3">Transaction Fee</h3>
-                <p className="text-foreground/80 mb-2">Small percentage on purchases influenced by Cuddles</p>
-                <div className="text-2xl font-bold text-foreground">1-2%</div>
-              </div>
-              
+            <p className="text-foreground/80 mb-6">
+              Dispensaries rent Cuddles as a monthly, cancel-anytime licence. Pricing is priced to sit under one
+              part-time budtender salary in South Africa (R6,000–R9,000/month) while scaling with locations and volume.
+              All prices exclude VAT and include a 14-day free trial.
+            </p>
+
+            <div className="grid md:grid-cols-4 gap-6">
               <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-green/10 to-hippie-blue/10">
-                <h3 className="text-xl font-bubble font-bold text-hippie-green mb-3">Enterprise</h3>
-                <p className="text-foreground/80 mb-2">Custom solutions for multi-location chains</p>
+                <h3 className="text-xl font-bubble font-bold text-hippie-green mb-3">Starter</h3>
+                <p className="text-foreground/80 mb-2">1 location, embeddable widget, 1,000 chats/mo</p>
+                <div className="text-2xl font-bold text-foreground">R1,899/mo</div>
+                <div className="text-sm text-foreground/60">≈ $100 USD</div>
+              </div>
+
+              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-purple/10 to-hippie-pink/10">
+                <h3 className="text-xl font-bubble font-bold text-hippie-purple mb-3">Growth</h3>
+                <p className="text-foreground/80 mb-2">Up to 3 locations, POS sync, 5,000 chats/mo</p>
+                <div className="text-2xl font-bold text-foreground">R5,300/mo</div>
+                <div className="text-sm text-foreground/60">≈ $285 USD</div>
+              </div>
+
+              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-orange/10 to-hippie-yellow/10">
+                <h3 className="text-xl font-bubble font-bold text-hippie-orange mb-3">Pro</h3>
+                <p className="text-foreground/80 mb-2">Unlimited locations, white-label, analytics &amp; API</p>
+                <div className="text-2xl font-bold text-foreground">R27,750/mo</div>
+                <div className="text-sm text-foreground/60">≈ $1,500 USD</div>
+              </div>
+
+              <div className="p-6 rounded-lg bg-gradient-to-br from-hippie-pink/10 to-hippie-purple/10">
+                <h3 className="text-xl font-bubble font-bold text-hippie-pink mb-3">Enterprise</h3>
+                <p className="text-foreground/80 mb-2">Chains, reseller &amp; white-label deals, custom SLAs</p>
                 <div className="text-2xl font-bold text-foreground">Custom</div>
+                <div className="text-sm text-foreground/60">Annual contract</div>
               </div>
             </div>
+
+            <div className="mt-8 grid md:grid-cols-3 gap-6">
+              <div className="p-5 rounded-lg bg-muted/40">
+                <div className="text-sm text-foreground/70 mb-1">Consumer Premium</div>
+                <div className="text-xl font-bold text-foreground">R99/mo</div>
+              </div>
+              <div className="p-5 rounded-lg bg-muted/40">
+                <div className="text-sm text-foreground/70 mb-1">Blended target ARPA (B2B)</div>
+                <div className="text-xl font-bold text-foreground">≈ R4,800/mo</div>
+              </div>
+              <div className="p-5 rounded-lg bg-muted/40">
+                <div className="text-sm text-foreground/70 mb-1">Gross margin (AI + infra costs)</div>
+                <div className="text-xl font-bold text-foreground">≈ 82%</div>
+              </div>
+            </div>
+
           </Card>
         </div>
       </section>
@@ -205,54 +245,60 @@ const InvestmentDeck = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-yellow to-hippie-orange flex items-center justify-center">
                 <Award className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Traction & Metrics</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Product Status &amp; Targets</h2>
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div>
-                <h3 className="text-xl font-bubble font-bold text-foreground mb-4">Key Achievements</h3>
+                <h3 className="text-xl font-bubble font-bold text-foreground mb-4">Shipped today</h3>
                 <ul className="space-y-3 text-foreground/80">
                   <li className="flex gap-3">
                     <span className="text-hippie-yellow mt-1">★</span>
-                    <span>95% recommendation accuracy rate</span>
+                    <span>Live consumer app: AI plant &amp; cannabis expert, strain scanner (OCR), journal, reviews</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-yellow mt-1">★</span>
-                    <span>Sub-2 second average response time</span>
+                    <span>Embeddable dispensary widget with tenant-scoped catalogs and 14-day free trial</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-yellow mt-1">★</span>
-                    <span>4.9/5 customer satisfaction rating</span>
+                    <span>RAG knowledge base over curated strain, dosing and safety documents</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-yellow mt-1">★</span>
-                    <span>Integration with major POS systems</span>
+                    <span>POS connector framework (Dutchie, Flowhub, Cova, Sweed) and ~2,800 mapped dispensary listings</span>
                   </li>
                 </ul>
               </div>
-              
+
               <div>
-                <h3 className="text-xl font-bubble font-bold text-foreground mb-4">Customer Impact</h3>
+                <h3 className="text-xl font-bubble font-bold text-foreground mb-4">12-month targets</h3>
                 <ul className="space-y-3 text-foreground/80">
                   <li className="flex gap-3">
                     <span className="text-hippie-green mt-1">↑</span>
-                    <span>35% increase in average order value</span>
+                    <span>50 paying dispensary tenants (≈ R2.9m ARR at blended ARPA)</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-green mt-1">↑</span>
-                    <span>50% reduction in customer service time</span>
+                    <span>Median chat response under 2 seconds at 10x current volume</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-green mt-1">↑</span>
-                    <span>40% improvement in customer retention</span>
+                    <span>+15% basket size uplift measured against tenant POS baselines</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-green mt-1">↑</span>
-                    <span>60% decrease in product returns</span>
+                    <span>Expansion pilots in Ghana, Malawi and Zimbabwe</span>
                   </li>
                 </ul>
               </div>
             </div>
+
+            <p className="text-sm text-foreground/60">
+              Figures marked as targets are forward-looking objectives, not audited results. Cuddles is pre-revenue at
+              scale; uplift benchmarks will be reported per tenant once POS baselines are measured.
+            </p>
+
           </Card>
         </div>
       </section>
@@ -265,14 +311,19 @@ const InvestmentDeck = () => {
               Ready to Join Us?
             </h2>
             <p className="text-xl text-center text-foreground/80 mb-8">
-              We're raising our Series A to scale operations, expand our AI capabilities, and capture market share across South Africa and beyond.
+              We're raising a R3m seed round to scale dispensary onboarding, deepen the AI stack, and expand across
+              South Africa, Ghana, Malawi and Zimbabwe.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white text-lg px-8 py-6 h-auto">
+              <Button
+                onClick={generateInvestorPdf}
+                className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white text-lg px-8 py-6 h-auto"
+              >
               <Mail className="w-5 h-5 mr-2" />
-              Request Full Deck
+              Download Investor Summary
             </Button>
+
             <Link to="/schedule-demo">
               <Button variant="outline" className="bg-white/10 backdrop-blur-sm text-foreground border-2 border-hippie-yellow hover:bg-hippie-yellow/20 text-lg px-8 py-6 h-auto w-full">
                 Schedule Demo

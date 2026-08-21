@@ -93,11 +93,25 @@ const Licensing = () => {
               <section className="mb-8">
                 <h2 className="text-2xl font-bubble font-bold text-foreground mb-4">4. Dispensary &amp; B2B Licence (Embeddable Widget &amp; API)</h2>
                 <p className="text-foreground/80 leading-relaxed mb-4">
-                  Licensed dispensaries and brands receive a non-exclusive, non-transferable, tenant-scoped licence to embed the Cuddles widget (widget.js), use issued tenant embed keys, and access related APIs for the purpose of serving their own customers. The licence is tied to the active B2B subscription and may not be sublicensed, resold, or used to build a competing budtender product.
+                  Licensed dispensaries and brands rent Cuddles on a monthly, cancel-anytime licence. They receive a non-exclusive, non-transferable, tenant-scoped right to embed the Cuddles widget (widget.js), use issued tenant embed keys, and access related APIs for the purpose of serving their own customers. The licence is tied to the active B2B subscription and may not be sublicensed, resold, or used to build a competing budtender product.
+                </p>
+                <p className="text-foreground/80 leading-relaxed mb-2">
+                  <strong>Rental pricing</strong> (excluding VAT, 14-day free trial on every tier — same rates shown on our{" "}
+                  <a href="/investment-deck" className="text-primary hover:underline">investment deck</a>):
+                </p>
+                <ul className="list-disc pl-6 text-foreground/80 leading-relaxed mb-4 space-y-1">
+                  <li><strong>Starter — R1,899/month (~$100 USD):</strong> 1 location, embeddable widget, 1,000 AI chats per month</li>
+                  <li><strong>Growth — R5,300/month (~$285 USD):</strong> up to 3 locations, POS sync, 5,000 AI chats per month</li>
+                  <li><strong>Pro — R27,750/month (~$1,500 USD):</strong> unlimited locations, white-label, advanced analytics and API access</li>
+                  <li><strong>Enterprise — custom:</strong> chains, resellers and white-label partners on annual contracts</li>
+                </ul>
+                <p className="text-foreground/80 leading-relaxed mb-4">
+                  Tiers are benchmarked below the cost of one part-time budtender in South Africa (R6,000–R9,000/month). Overage on included chat volume is billed at R0.85 per additional chat, or the tenant may upgrade tiers at any time. Prices may be reviewed annually with 30 days' written notice; existing tenants keep their rate for the remainder of the paid period.
                 </p>
                 <p className="text-foreground/80 leading-relaxed mb-4">
                   Embed keys are confidential. Tenants are responsible for their own catalog data, compliance with local cannabis laws, and any claims made to their customers.
                 </p>
+
               </section>
 
               <section className="mb-8">
