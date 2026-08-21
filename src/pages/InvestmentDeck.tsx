@@ -303,14 +303,19 @@ const InvestmentDeck = () => {
               Ready to Join Us?
             </h2>
             <p className="text-xl text-center text-foreground/80 mb-8">
-              We're raising our Series A to scale operations, expand our AI capabilities, and capture market share across South Africa and beyond.
+              We're raising a R3m seed round to scale dispensary onboarding, deepen the AI stack, and expand across
+              South Africa, Ghana, Malawi and Zimbabwe.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white text-lg px-8 py-6 h-auto">
+              <Button
+                onClick={generateInvestorPdf}
+                className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white text-lg px-8 py-6 h-auto"
+              >
               <Mail className="w-5 h-5 mr-2" />
-              Request Full Deck
+              Download Investor Summary
             </Button>
+
             <Link to="/schedule-demo">
               <Button variant="outline" className="bg-white/10 backdrop-blur-sm text-foreground border-2 border-hippie-yellow hover:bg-hippie-yellow/20 text-lg px-8 py-6 h-auto w-full">
                 Schedule Demo
