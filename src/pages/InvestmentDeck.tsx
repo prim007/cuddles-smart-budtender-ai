@@ -237,54 +237,60 @@ const InvestmentDeck = () => {
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-hippie-yellow to-hippie-orange flex items-center justify-center">
                 <Award className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Traction & Metrics</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">Product Status &amp; Targets</h2>
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div>
-                <h3 className="text-xl font-bubble font-bold text-foreground mb-4">Key Achievements</h3>
+                <h3 className="text-xl font-bubble font-bold text-foreground mb-4">Shipped today</h3>
                 <ul className="space-y-3 text-foreground/80">
                   <li className="flex gap-3">
                     <span className="text-hippie-yellow mt-1">★</span>
-                    <span>95% recommendation accuracy rate</span>
+                    <span>Live consumer app: AI plant &amp; cannabis expert, strain scanner (OCR), journal, reviews</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-yellow mt-1">★</span>
-                    <span>Sub-2 second average response time</span>
+                    <span>Embeddable dispensary widget with tenant-scoped catalogs and 14-day free trial</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-yellow mt-1">★</span>
-                    <span>4.9/5 customer satisfaction rating</span>
+                    <span>RAG knowledge base over curated strain, dosing and safety documents</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-yellow mt-1">★</span>
-                    <span>Integration with major POS systems</span>
+                    <span>POS connector framework (Dutchie, Flowhub, Cova, Sweed) and ~2,800 mapped dispensary listings</span>
                   </li>
                 </ul>
               </div>
-              
+
               <div>
-                <h3 className="text-xl font-bubble font-bold text-foreground mb-4">Customer Impact</h3>
+                <h3 className="text-xl font-bubble font-bold text-foreground mb-4">12-month targets</h3>
                 <ul className="space-y-3 text-foreground/80">
                   <li className="flex gap-3">
                     <span className="text-hippie-green mt-1">↑</span>
-                    <span>35% increase in average order value</span>
+                    <span>50 paying dispensary tenants (≈ R2.9m ARR at blended ARPA)</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-green mt-1">↑</span>
-                    <span>50% reduction in customer service time</span>
+                    <span>Median chat response under 2 seconds at 10x current volume</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-green mt-1">↑</span>
-                    <span>40% improvement in customer retention</span>
+                    <span>+15% basket size uplift measured against tenant POS baselines</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-hippie-green mt-1">↑</span>
-                    <span>60% decrease in product returns</span>
+                    <span>Expansion pilots in Ghana, Malawi and Zimbabwe</span>
                   </li>
                 </ul>
               </div>
             </div>
+
+            <p className="text-sm text-foreground/60">
+              Figures marked as targets are forward-looking objectives, not audited results. Cuddles is pre-revenue at
+              scale; uplift benchmarks will be reported per tenant once POS baselines are measured.
+            </p>
+
           </Card>
         </div>
       </section>
