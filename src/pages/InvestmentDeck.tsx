@@ -53,12 +53,18 @@ const InvestmentDeck = () => {
           <p className="text-xl md:text-2xl text-center text-foreground/90 mb-8">
             Revolutionizing Cannabis Retail with AI-Powered Recommendations
           </p>
-          <div className="flex justify-center gap-4">
-            <Button className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white">
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button onClick={generateInvestorPdf} className="bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange text-white">
               <Mail className="w-4 h-4 mr-2" />
-              Contact Us
+              Download Investor Summary
             </Button>
+            <a href="mailto:admin@cuddles-ai.com">
+              <Button variant="outline" className="border-2 border-hippie-yellow text-foreground">
+                Contact Us
+              </Button>
+            </a>
           </div>
+
         </div>
       </section>
 
