@@ -55,7 +55,7 @@ const structuredData = {
   offers: {
     "@type": "Offer",
     price: "0",
-    priceCurrency: "USD",
+    priceCurrency: "ZAR",
     description: "Free to try and download — no credit card required",
   },
   featureList: [
@@ -72,7 +72,7 @@ const AIBudtender = () => {
     <div className="min-h-screen bg-background">
       <SEO
         title="AI Budtender Software for Dispensaries | Cuddles AI"
-        description="AI budtender software with RAG-grounded strain recommendations, POS and menu sync, and 24/7 chat. Lifts basket size, cuts wait times. Free to try."
+        description="AI budtender software for dispensaries: RAG-grounded strain answers from your own menu, POS sync, 24/7 chat. Free to try, rentals from R1,899/mo."
         url="/ai-budtender"
         keywords="AI budtender for dispensaries, automated cannabis product recommendations, cannabis retail automation, smart budtender, dispensary AI chatbot, reduce dispensary wait times with AI, cannabis recommendation engine"
         structuredData={structuredData}
