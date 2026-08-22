@@ -44,7 +44,7 @@ const SEO = ({
     "offers": {
       "@type": "Offer",
       "price": "0",
-      "priceCurrency": "USD",
+      "priceCurrency": "ZAR",
       "description": "Free to use with premium features available"
     },
     "aggregateRating": {
