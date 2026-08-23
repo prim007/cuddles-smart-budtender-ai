@@ -257,6 +257,86 @@ const AIBudtender = () => {
         </div>
       </section>
 
+      {/* B2B proof points & rental pricing */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="font-display text-3xl font-bold text-foreground text-center mb-4">
+            What Dispensaries Get When They Rent Cuddles
+          </h2>
+          <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+            No per-seat licences and no build cost — you rent a working AI budtender monthly and can
+            cancel at any time.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border border-border rounded-xl overflow-hidden">
+              <thead className="bg-muted/50 text-left">
+                <tr>
+                  <th className="px-4 py-3 font-semibold text-foreground">Plan</th>
+                  <th className="px-4 py-3 font-semibold text-foreground">Monthly</th>
+                  <th className="px-4 py-3 font-semibold text-foreground">Included</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted-foreground">
+                <tr className="border-t border-border">
+                  <td className="px-4 py-3 font-medium text-foreground">Starter</td>
+                  <td className="px-4 py-3">R1,899 (~$100)</td>
+                  <td className="px-4 py-3">1 location, 1,000 chats, embeddable widget</td>
+                </tr>
+                <tr className="border-t border-border">
+                  <td className="px-4 py-3 font-medium text-foreground">Growth</td>
+                  <td className="px-4 py-3">R5,300 (~$285)</td>
+                  <td className="px-4 py-3">3 locations, POS/menu sync, 5,000 chats, demand insights</td>
+                </tr>
+                <tr className="border-t border-border">
+                  <td className="px-4 py-3 font-medium text-foreground">Pro</td>
+                  <td className="px-4 py-3">R27,750 (~$1,500)</td>
+                  <td className="px-4 py-3">Unlimited locations, white-label, API access</td>
+                </tr>
+                <tr className="border-t border-border">
+                  <td className="px-4 py-3 font-medium text-foreground">Enterprise</td>
+                  <td className="px-4 py-3">Custom</td>
+                  <td className="px-4 py-3">Annual contract, dedicated support, custom integrations</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mt-10">
+            <Card className="p-6">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-2">Answers from your menu</h3>
+              <p className="text-muted-foreground text-sm">
+                Retrieval runs against your own tenant catalogue, so out-of-stock and off-menu products
+                are never recommended.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-2">Live in a day</h3>
+              <p className="text-muted-foreground text-sm">
+                Upload or sync your menu, paste one script tag, and the budtender is answering customers —
+                no developer, no POS migration.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-2">Demand data back to you</h3>
+              <p className="text-muted-foreground text-sm">
+                Every conversation is turned into intent and demand signals you can use for buying
+                decisions in your insights dashboard.
+              </p>
+            </Card>
+          </div>
+          <p className="text-xs text-muted-foreground text-center mt-6">
+            Response-time and conversion figures are internal targets, not audited results. Cuddles is an
+            education and recommendation tool, not medical advice.
+          </p>
+          <div className="text-center mt-8">
+            <Link to="/licensing">
+              <Button size="lg" variant="outline" className="font-display font-medium rounded-xl">
+                See full rental terms
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
 
       {/* CTA */}
       <section className="py-16 px-4">
