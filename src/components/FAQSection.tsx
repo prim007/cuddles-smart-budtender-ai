@@ -3,11 +3,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 const faqs = [
   {
     question: "What is Cuddles AI?",
-    answer: "Cuddles AI is the world's smartest AI-powered cannabis budtender. It uses advanced machine learning to recommend personalized cannabis strains based on your desired effects, experience level, and preferences."
+    answer: "Cuddles AI is a plant expert first and a cannabis specialist second. It helps with any plant — houseplants, herbs, vegetables, succulents and South African indigenous species — diagnosing problems from a photo and guiding watering, light, soil and feeding. For cannabis, it doubles as an AI budtender that recommends strains based on your desired effects, experience level and preferences. Educational only, not medical advice."
   },
   {
-    question: "How does the AI strain recommendation work?",
-    answer: "Cuddles analyzes your preferences including desired effects (relaxation, energy, creativity), experience level, and flavor preferences to suggest the best cannabis strains for you. It learns from community reviews and scientific data."
+    question: "How does the AI plant and strain recommendation work?",
+    answer: "Tell Cuddles what you're growing or how you want to feel. For plants it reads symptoms, species and your environment to give care and grow steps; for cannabis it weighs desired effects (relaxation, energy, creativity), experience level and flavour to suggest suitable strains — drawing on horticultural knowledge, community reviews and scientific data."
+
   },
   {
     question: "Is Cuddles AI free to use?",
