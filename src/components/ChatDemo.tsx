@@ -652,9 +652,14 @@ const ChatDemo = () => {
       console.error("Error:", error);
       const errorMsg = error?.message || "";
 
-      // Never surface raw/technical errors to visitors — show a branded maintenance notice
+      // Never surface raw/technical errors to visitors — show a branded, actionable notice
       if (errorMsg.includes("429") || errorMsg.includes("rate limit") || errorMsg.includes("Too many")) {
         toast({ title: "Slow down", description: "Too many requests. Please wait a moment and try again." });
+      } else if (errorMsg.includes("402") || errorMsg.toLowerCase().includes("credits") || errorMsg.toLowerCase().includes("top up")) {
+        toast({
+          title: "Cuddles' AI credits are low 🤖💳",
+          description: "The workspace owner needs to top up Lovable AI credits to keep the chat going. Please try again once credits are restored.",
+        });
       } else {
         toast({
           title: "Cuddles is under re-engineering 🛠️",
