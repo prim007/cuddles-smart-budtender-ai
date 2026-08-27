@@ -5,9 +5,16 @@ import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.5
 export interface ToolContext {
   admin: SupabaseClient;
   userId: string | null;
+  sessionId?: string | null;
+  agentRole?: string;
 }
 
+/** Tools that mutate data or spend money — never executed directly, always
+ *  returned to the user as a pending approval they must confirm in chat. */
+export const APPROVAL_REQUIRED = new Set(["start_checkout"]);
+
 export const AGENT_TOOLS = [
+
   {
     type: "function",
     function: {
