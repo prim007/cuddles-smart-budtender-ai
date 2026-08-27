@@ -41,8 +41,9 @@ const BrevoSync = () => {
   const [lists, setLists] = useState<BrevoList[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState<number | null>(null);
-  const [newListName, setNewListName] = useState("Cuddles Referral Campaign");
+  const [newListName, setNewListName] = useState("Cuddles Newsletter Invite");
   const [creating, setCreating] = useState(false);
+  const [sources, setSources] = useState<string[]>(SOURCES.map((s) => s.id));
 
   const loadLists = async () => {
     setLoading(true);
