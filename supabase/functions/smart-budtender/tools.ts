@@ -87,8 +87,24 @@ async function searchStrains(ctx: ToolContext, args: Record<string, unknown>) {
 
   const { data, error } = await q;
   if (error) return { error: "Strain lookup unavailable right now." };
-  if (!data?.length) return { results: [], note: "No in-stock match found. Suggest alternatives from general knowledge." };
-  return { results: data };
+  if (data?.length) return { source: "live_inventory", results: data };
+
+  // No partner stock — fall back to the curated strain catalogue (no prices).
+  let cat = ctx.admin
+    .from("strain_profiles")
+    .select("strain_name, strain_type, thc_range, cbd_range, effects, terpenes, short_description, strain_slug")
+    .limit(limit);
+  if (query) cat = cat.ilike("strain_name", `%${query}%`);
+  const { data: profiles } = await cat;
+  if (profiles?.length) {
+    return {
+      source: "strain_catalogue",
+      note: "These are catalogue entries, not live stock — do not quote prices for them.",
+      results: profiles,
+    };
+  }
+  return { results: [], note: "No match found. Answer from general knowledge and say stock isn't listed." };
+
 }
 
 async function findDispensaries(args: Record<string, unknown>) {
