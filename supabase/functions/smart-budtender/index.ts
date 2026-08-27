@@ -747,6 +747,51 @@ serve(async (req) => {
     );
 
 
+    // ═══════════════════════════════════════
+    // AGENT TOOL LOOP
+    // The model decides which tools it needs (live stock, dispensaries, memory),
+    // we execute them, then it answers with the results in context.
+    // ═══════════════════════════════════════
+    const conversation: Record<string, unknown>[] = [...truncatedMessages];
+    const isSimpleTurn = lastUserMessage.length < 40 && SIMPLE_PATTERNS.some(p => p.test(lastUserMessage.trim()));
+    const toolsUsed: string[] = [];
+
+    if (!isSimpleTurn) {
+      const toolCtx = { admin: createToolClient(), userId };
+      for (let step = 0; step < 3; step++) {
+        const planRes = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: primaryModel,
+            messages: [{ role: 'system', content: systemPrompt }, ...conversation],
+            tools: AGENT_TOOLS,
+            tool_choice: 'auto',
+          }),
+        });
+        if (!planRes.ok) {
+          console.warn('Tool planning step failed:', planRes.status);
+          break;
+        }
+        const planJson = await planRes.json();
+        const msg = planJson?.choices?.[0]?.message;
+        const calls = msg?.tool_calls;
+        if (!Array.isArray(calls) || calls.length === 0) break;
+
+        conversation.push({ role: 'assistant', content: msg.content ?? '', tool_calls: calls });
+        for (const call of calls.slice(0, 4)) {
+          const name = call?.function?.name ?? '';
+          toolsUsed.push(name);
+          const result = await runTool(name, call?.function?.arguments ?? '{}', toolCtx);
+          conversation.push({
+            role: 'tool',
+            tool_call_id: call.id,
+            content: JSON.stringify(result).slice(0, 6000),
+          });
+        }
+      }
+    }
+
     const callGateway = (model: string) => fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -757,11 +802,12 @@ serve(async (req) => {
         model,
         messages: [
           { role: 'system', content: systemPrompt },
-          ...truncatedMessages,
+          ...conversation,
         ],
         stream: true,
       }),
     });
+
 
     let response = await callGateway(primaryModel);
     let usedModel = primaryModel;
