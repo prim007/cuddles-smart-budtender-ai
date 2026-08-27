@@ -257,6 +257,102 @@ const AIBudtender = () => {
         </div>
       </section>
 
+      {/* POS integrations */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="font-display text-3xl font-bold text-foreground text-center mb-4">
+            POS Integrations: Dutchie, Cova, Flowhub &amp; More
+          </h2>
+          <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+            The AI budtender is only as good as the menu behind it. Cuddles pulls your live product
+            list so every recommendation reflects what is actually in stock right now.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <caption className="sr-only">Supported point-of-sale and e-commerce integrations</caption>
+              <thead>
+                <tr className="border-b border-border">
+                  <th scope="col" className="py-3 pr-4 font-semibold text-foreground">Platform</th>
+                  <th scope="col" className="py-3 pr-4 font-semibold text-foreground">How it connects</th>
+                  <th scope="col" className="py-3 font-semibold text-foreground">Menu refresh</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted-foreground">
+                <tr className="border-b border-border/60">
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Dutchie</th>
+                  <td className="py-3 pr-4">Menu feed mapped into your tenant catalogue, including THC/CBD and category fields.</td>
+                  <td className="py-3">Scheduled sync</td>
+                </tr>
+                <tr className="border-b border-border/60">
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Cova</th>
+                  <td className="py-3 pr-4">Product and inventory export mapped to strain profiles with per-store availability.</td>
+                  <td className="py-3">Scheduled sync</td>
+                </tr>
+                <tr className="border-b border-border/60">
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Flowhub</th>
+                  <td className="py-3 pr-4">Inventory feed keyed on SKU so out-of-stock items drop out of recommendations.</td>
+                  <td className="py-3">Scheduled sync</td>
+                </tr>
+                <tr className="border-b border-border/60">
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Shopify &amp; WooCommerce</th>
+                  <td className="py-3 pr-4">Storefront catalogue import plus the embeddable widget on your product pages.</td>
+                  <td className="py-3">Near real-time</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Spreadsheet or PDF menu</th>
+                  <td className="py-3 pr-4">Upload a CSV or menu PDF — Cuddles extracts products, prices and potency automatically.</td>
+                  <td className="py-3">On upload</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-sm text-muted-foreground mt-6 text-center">
+            Running something else? See the{" "}
+            <Link to="/pos-integrations" className="text-primary hover:underline">full POS integration guide</Link>{" "}
+            — any menu that can be exported can be connected.
+          </p>
+        </div>
+      </section>
+
+      {/* RAG pipeline detail */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="font-display text-3xl font-bold text-foreground text-center mb-4">
+            Inside the RAG Pipeline
+          </h2>
+          <p className="text-muted-foreground text-center mb-10">
+            Retrieval-augmented generation is why Cuddles answers about your shelf instead of
+            inventing products. Here is what happens on every message.
+          </p>
+          <ol className="space-y-5">
+            <li className="p-5 rounded-xl border border-border bg-card">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-1">1. Intent classification</h3>
+              <p className="text-muted-foreground">The customer's message is classified into an intent — effect-seeking, product lookup, dosing question, safety question or purchase intent — which decides what gets retrieved.</p>
+            </li>
+            <li className="p-5 rounded-xl border border-border bg-card">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-1">2. Vector retrieval</h3>
+              <p className="text-muted-foreground">The query is embedded and matched against two stores: your tenant menu embeddings and a curated knowledge base of strain, terpene, dosing and safety passages.</p>
+            </li>
+            <li className="p-5 rounded-xl border border-border bg-card">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-1">3. Grounded generation</h3>
+              <p className="text-muted-foreground">Only the retrieved passages and in-stock products are passed to the language model, with instructions to refuse rather than guess when the catalogue has no match.</p>
+            </li>
+            <li className="p-5 rounded-xl border border-border bg-card">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-1">4. Tool calls for live data</h3>
+              <p className="text-muted-foreground">When a customer asks where to buy or what is in stock, the agent calls live tools — menu search and dispensary lookup — instead of answering from memory.</p>
+            </li>
+            <li className="p-5 rounded-xl border border-border bg-card">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-1">5. Demand signals back to you</h3>
+              <p className="text-muted-foreground">Every intent and unmatched request is logged to your insights dashboard, so you can see the effects and products customers ask for but you do not stock.</p>
+            </li>
+          </ol>
+          <p className="text-sm text-muted-foreground mt-8 text-center">
+            Deeper technical detail is in the{" "}
+            <Link to="/technology" className="text-primary hover:underline">RAG architecture whitepaper</Link>.
+          </p>
+        </div>
+      </section>
+
       {/* B2B proof points & rental pricing */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">

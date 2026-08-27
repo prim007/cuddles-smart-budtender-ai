@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import SEO from "@/components/SEO";
 
 export default function ConfirmNewsletter() {
   const [searchParams] = useSearchParams();
@@ -46,6 +47,12 @@ export default function ConfirmNewsletter() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <SEO
+        title="Confirm Your Newsletter Subscription | Cuddles AI"
+        description="Confirm your email to start receiving Cuddles AI cannabis and plant-care insights."
+        url="/newsletter/confirm"
+        noindex
+      />
       <Card className="max-w-md w-full border-primary/20 shadow-lg">
         <CardHeader className="text-center">
           <div className="mx-auto w-12 h-12 rounded-full flex items-center justify-center mb-4 bg-primary/10 text-primary">

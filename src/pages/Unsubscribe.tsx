@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, MailX, AlertCircle, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import SEO from "@/components/SEO";
 
 export default function Unsubscribe() {
   const [searchParams] = useSearchParams();
@@ -85,6 +86,12 @@ export default function Unsubscribe() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <SEO
+        title="Unsubscribe from Cuddles AI Emails"
+        description="Manage your Cuddles AI email preferences or unsubscribe from our newsletter in one click."
+        url="/unsubscribe"
+        noindex
+      />
       <Card className="max-w-md w-full border-primary/20 shadow-lg">
         <CardHeader className="text-center">
           <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">

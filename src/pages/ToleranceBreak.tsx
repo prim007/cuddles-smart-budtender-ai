@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { differenceInDays, format, addDays } from "date-fns";
+import SEO from "@/components/SEO";
 
 interface DailyLog {
   day: number;
@@ -298,6 +299,11 @@ const ToleranceBreak = () => {
 
   return (
     <div className="min-h-screen pb-20">
+      <SEO
+        title="Tolerance Break Coach — AI-Guided T-Break Tracker"
+        description="Reset your THC tolerance with Cuddles AI's tolerance break coach: daily mood and sleep logging, progress tracking, and personalized motivation."
+        url="/t-break"
+      />
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-hippie-pink/20">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/">

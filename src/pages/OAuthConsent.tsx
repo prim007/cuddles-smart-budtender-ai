@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import SEO from "@/components/SEO";
 
 // Local typed wrapper for the beta supabase.auth.oauth namespace.
 type OAuthResult = { data?: any; error?: { message: string } | null };
@@ -94,6 +95,12 @@ export default function OAuthConsent() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
+      <SEO
+        title="Authorize Application | Cuddles AI"
+        description="Review and approve access requested by an application connecting to your Cuddles AI account."
+        url="/.lovable/oauth/consent"
+        noindex
+      />
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Connect {clientName} to Cuddles AI</CardTitle>

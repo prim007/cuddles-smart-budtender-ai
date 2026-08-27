@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { RefreshCw, Upload, Plus, Copy, Users } from "lucide-react";
 import { REFERRAL_CAMPAIGN_HTML, REFERRAL_CAMPAIGN_SUBJECT } from "@/lib/campaigns/referralCampaign";
+import SEO from "@/components/SEO";
 
 interface BrevoList {
   id: number;
@@ -85,6 +86,12 @@ const BrevoSync = () => {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-10 space-y-6">
+      <SEO
+        title="Brevo Bulk Email Admin | Cuddles AI"
+        description="Internal Cuddles AI admin tool for syncing subscribers and sending bulk Brevo email campaigns."
+        url="/admin/brevo"
+        noindex
+      />
       <header className="space-y-2">
         <h1 className="text-3xl font-bold">Brevo bulk email</h1>
         <p className="text-muted-foreground">
