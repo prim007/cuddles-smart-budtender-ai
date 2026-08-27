@@ -157,6 +157,16 @@ const BrevoSync = () => {
             </div>
           ))}
 
+          <div className="rounded-lg border p-3 space-y-2">
+            <p className="text-sm font-medium">Contact sources to sync</p>
+            {SOURCES.map((s) => (
+              <label key={s.id} className="flex items-center gap-2 text-sm">
+                <Checkbox checked={sources.includes(s.id)} onCheckedChange={() => toggleSource(s.id)} />
+                {s.label}
+              </label>
+            ))}
+          </div>
+
           <div className="flex gap-2 pt-2">
             <Input
               value={newListName}
@@ -174,25 +184,82 @@ const BrevoSync = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Referral campaign template</CardTitle>
-          <CardDescription>
-            Subject: <span className="font-medium">{REFERRAL_CAMPAIGN_SUBJECT}</span>
-          </CardDescription>
+          <CardTitle>Campaign templates</CardTitle>
+          <CardDescription>Preview, then copy the HTML into Brevo's code editor</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div
-            className="rounded-lg border bg-muted/30 p-4 max-h-80 overflow-auto"
-            // Static, first-party template preview.
-            dangerouslySetInnerHTML={{ __html: REFERRAL_CAMPAIGN_HTML }}
-          />
-          <Button onClick={() => void copyCampaign()}>
-            <Copy className="h-4 w-4 mr-2" />
-            Copy campaign HTML
-          </Button>
-          <ol className="text-sm text-muted-foreground list-decimal pl-5 space-y-1">
-            <li>Sync contacts into a list above.</li>
-            <li>In Brevo: Campaigns → Create → Email → paste this HTML in the code editor.</li>
-            <li>Pick the synced list as the recipients and send or schedule.</li>
+        <CardContent>
+          <Tabs defaultValue="newsletter">
+            <TabsList>
+              {CAMPAIGNS.map((c) => (
+                <TabsTrigger key={c.id} value={c.id}>{c.label}</TabsTrigger>
+              ))}
+            </TabsList>
+            {CAMPAIGNS.map((c) => (
+              <TabsContent key={c.id} value={c.id} className="space-y-4 pt-4">
+                <div className="rounded-lg border bg-muted/30 p-3 text-sm">
+                  <span className="text-muted-foreground">Subject: </span>
+                  <span className="font-medium">{c.subject}</span>
+                </div>
+                <div
+                  className="rounded-lg border bg-muted/30 p-4 max-h-96 overflow-auto"
+                  // Static, first-party template preview.
+                  dangerouslySetInnerHTML={{ __html: c.html }}
+                />
+                <div className="flex gap-2">
+                  <Button onClick={() => void copyText(c.html, "Campaign HTML")}>
+                    <Copy className="h-4 w-4 mr-2" />
+                    Copy HTML
+                  </Button>
+                  <Button variant="outline" onClick={() => void copyText(c.subject, "Subject line")}>
+                    <Copy className="h-4 w-4 mr-2" />
+                    Copy subject
+                  </Button>
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>How to send the bulk email</CardTitle>
+          <CardDescription>Takes about 5 minutes end to end</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ol className="text-sm list-decimal pl-5 space-y-2">
+            <li>
+              <strong>Create the list:</strong> type a name above (e.g. "Cuddles Newsletter Invite") and
+              click <em>Create list</em>.
+            </li>
+            <li>
+              <strong>Pick your sources:</strong> tick "Signed-up app users" to reach everyone with an
+              account, plus leads/subscribers if you want a wider blast.
+            </li>
+            <li>
+              <strong>Sync:</strong> click <em>Sync contacts</em> on that list. Unsubscribed, bounced and
+              complained addresses are removed automatically.
+            </li>
+            <li>
+              <strong>Copy the template:</strong> open the <em>Newsletter invite</em> tab above and copy
+              both the subject line and the HTML.
+            </li>
+            <li>
+              <strong>In Brevo:</strong> Campaigns → Create a campaign → Email → give it a name → paste
+              the subject → choose <em>Design with: Paste your code</em> and paste the HTML.
+            </li>
+            <li>
+              <strong>Recipients:</strong> select the synced list. Sender must be an address on your
+              verified domain (notify.cuddles-ai.com).
+            </li>
+            <li>
+              <strong>Test first:</strong> use "Send a test" to your own inbox, check it on mobile, then
+              hit <em>Send now</em> or schedule it.
+            </li>
+            <li>
+              <strong>Check results:</strong> Brevo → Statistics shows opens, clicks and unsubscribes per
+              campaign.
+            </li>
           </ol>
         </CardContent>
       </Card>
