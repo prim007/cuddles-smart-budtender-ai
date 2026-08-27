@@ -5,9 +5,16 @@ import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.5
 export interface ToolContext {
   admin: SupabaseClient;
   userId: string | null;
+  sessionId?: string | null;
+  agentRole?: string;
 }
 
+/** Tools that mutate data or spend money — never executed directly, always
+ *  returned to the user as a pending approval they must confirm in chat. */
+export const APPROVAL_REQUIRED = new Set(["start_checkout"]);
+
 export const AGENT_TOOLS = [
+
   {
     type: "function",
     function: {
@@ -70,7 +77,53 @@ export const AGENT_TOOLS = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "update_user_memory",
+      description:
+        "Persist structured long-term memory for this signed-in user: preferences learned this turn, a short rolling summary, and the strains you just recommended. Call at most once per turn, only when you genuinely learned something durable.",
+      parameters: {
+        type: "object",
+        properties: {
+          preferences: {
+            type: "object",
+            description: "Durable preference facts, e.g. { liked: ['Blue Dream'], disliked: ['Durban Poison'], tolerance: 'low', goals: ['sleep'] }.",
+            additionalProperties: true,
+          },
+          summary: { type: "string", description: "Two or three sentences describing this user, third person." },
+          last_recommendations: { type: "array", items: { type: "string" }, description: "Strain names recommended this turn." },
+        },
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "start_checkout",
+      description:
+        "Propose a purchase for the user to confirm. This NEVER charges anyone — it returns a confirmation card the user must approve in the chat. Call only when the user has clearly chosen a product and wants to buy it.",
+      parameters: {
+        type: "object",
+        properties: {
+          strain_name: { type: "string", description: "Exact product name from search_strains." },
+          quantity: { type: "number", description: "Units, default 1." },
+          note: { type: "string", description: "Optional one-line note about the order." },
+        },
+        required: ["strain_name"],
+        additionalProperties: false,
+      },
+    },
+  },
 ] as const;
+
+/** Filter the catalogue down to a specialist's allowed tools. */
+export function toolsFor(names: string[]) {
+  if (!names.length) return [];
+  return AGENT_TOOLS.filter((t) => names.includes(t.function.name));
+}
+
 
 async function searchStrains(ctx: ToolContext, args: Record<string, unknown>) {
   const limit = Math.min(Number(args.limit) || 8, 12);
@@ -172,6 +225,77 @@ async function saveUserPreference(ctx: ToolContext, args: Record<string, unknown
   return { saved: true };
 }
 
+async function updateUserMemory(ctx: ToolContext, args: Record<string, unknown>) {
+  if (!ctx.userId) return { saved: false, note: "Not signed in — cannot store memory." };
+
+  const { data: existing } = await ctx.admin
+    .from("user_memory")
+    .select("summary, preferences, last_recommendations")
+    .eq("user_id", ctx.userId)
+    .maybeSingle();
+
+  const incoming = (args.preferences && typeof args.preferences === "object")
+    ? args.preferences as Record<string, unknown>
+    : {};
+  const merged = { ...(existing?.preferences as Record<string, unknown> ?? {}), ...incoming };
+
+  const recs = Array.isArray(args.last_recommendations)
+    ? (args.last_recommendations as unknown[]).filter((r) => typeof r === "string").slice(0, 10)
+    : (existing?.last_recommendations ?? []);
+
+  const summary = typeof args.summary === "string" && args.summary.trim()
+    ? args.summary.replace(/[\u0000-\u001F]/g, "").trim().slice(0, 600)
+    : existing?.summary ?? null;
+
+  const { error } = await ctx.admin.from("user_memory").upsert(
+    {
+      user_id: ctx.userId,
+      preferences: merged,
+      last_recommendations: recs,
+      summary,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "user_id" },
+  );
+  if (error) {
+    console.error("update_user_memory failed:", error.message);
+    return { saved: false };
+  }
+  return { saved: true };
+}
+
+/** Never charges. Returns an approval card the client renders for confirmation. */
+async function startCheckout(ctx: ToolContext, args: Record<string, unknown>) {
+  const strainName = typeof args.strain_name === "string" ? args.strain_name.trim().slice(0, 80) : "";
+  if (!strainName) return { requires_approval: false, error: "No product specified." };
+  const quantity = Math.min(Math.max(Number(args.quantity) || 1, 1), 20);
+
+  const { data: match } = await ctx.admin
+    .from("tenant_strains")
+    .select("id, strain_name, price, in_stock")
+    .ilike("strain_name", `%${strainName}%`)
+    .eq("in_stock", true)
+    .limit(1)
+    .maybeSingle();
+
+  if (!match) {
+    return { requires_approval: false, note: `${strainName} isn't in live stock, so no order can be started.` };
+  }
+
+  return {
+    requires_approval: true,
+    action: "checkout",
+    strain_id: match.id,
+    strain_name: match.strain_name,
+    unit_price: match.price,
+    quantity,
+    estimated_total: Number(match.price ?? 0) * quantity,
+    note: typeof args.note === "string" ? args.note.slice(0, 160) : undefined,
+    instruction:
+      "Nothing has been ordered. Tell the user exactly what you are proposing (product, quantity, total) and ask them to confirm before anything happens.",
+  };
+}
+
 export async function runTool(name: string, rawArgs: string, ctx: ToolContext): Promise<unknown> {
   let args: Record<string, unknown> = {};
   try {
@@ -179,19 +303,52 @@ export async function runTool(name: string, rawArgs: string, ctx: ToolContext): 
   } catch {
     return { error: "Invalid tool arguments." };
   }
-  switch (name) {
-    case "search_strains":
-      return await searchStrains(ctx, args);
-    case "find_dispensaries":
-      return await findDispensaries(args);
-    case "get_user_memory":
-      return await getUserMemory(ctx);
-    case "save_user_preference":
-      return await saveUserPreference(ctx, args);
-    default:
-      return { error: `Unknown tool ${name}` };
+
+  const startedAt = Date.now();
+  let result: unknown;
+  let errorMsg: string | null = null;
+  try {
+    switch (name) {
+      case "search_strains":
+        result = await searchStrains(ctx, args); break;
+      case "find_dispensaries":
+        result = await findDispensaries(args); break;
+      case "get_user_memory":
+        result = await getUserMemory(ctx); break;
+      case "save_user_preference":
+        result = await saveUserPreference(ctx, args); break;
+      case "update_user_memory":
+        result = await updateUserMemory(ctx, args); break;
+      case "start_checkout":
+        result = await startCheckout(ctx, args); break;
+      default:
+        result = { error: `Unknown tool ${name}` };
+    }
+  } catch (e) {
+    errorMsg = e instanceof Error ? e.message : String(e);
+    result = { error: "Tool failed." };
   }
+
+  // Trace every step so /agent-traces can grade the agent.
+  try {
+    await ctx.admin.from("agent_traces").insert({
+      session_id: ctx.sessionId ?? null,
+      user_id: ctx.userId ?? null,
+      agent_role: ctx.agentRole ?? "budtender",
+      step_index: 0,
+      tool_called: name,
+      payload: args as Record<string, unknown>,
+      result: JSON.parse(JSON.stringify(result ?? null)),
+      latency_ms: Date.now() - startedAt,
+      error: errorMsg,
+    });
+  } catch (e) {
+    console.error("agent trace insert failed:", e instanceof Error ? e.message : e);
+  }
+
+  return result;
 }
+
 
 export function createToolClient(): SupabaseClient {
   return createClient(

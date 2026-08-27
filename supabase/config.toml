@@ -21,3 +21,6 @@ verify_jwt = true
 
 [functions.daggaspot-dispensaries]
 verify_jwt = false
+
+[functions.nightly-agent-jobs]
+verify_jwt = false
