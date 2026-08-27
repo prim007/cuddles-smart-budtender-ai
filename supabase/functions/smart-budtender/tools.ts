@@ -77,7 +77,53 @@ export const AGENT_TOOLS = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "update_user_memory",
+      description:
+        "Persist structured long-term memory for this signed-in user: preferences learned this turn, a short rolling summary, and the strains you just recommended. Call at most once per turn, only when you genuinely learned something durable.",
+      parameters: {
+        type: "object",
+        properties: {
+          preferences: {
+            type: "object",
+            description: "Durable preference facts, e.g. { liked: ['Blue Dream'], disliked: ['Durban Poison'], tolerance: 'low', goals: ['sleep'] }.",
+            additionalProperties: true,
+          },
+          summary: { type: "string", description: "Two or three sentences describing this user, third person." },
+          last_recommendations: { type: "array", items: { type: "string" }, description: "Strain names recommended this turn." },
+        },
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "start_checkout",
+      description:
+        "Propose a purchase for the user to confirm. This NEVER charges anyone — it returns a confirmation card the user must approve in the chat. Call only when the user has clearly chosen a product and wants to buy it.",
+      parameters: {
+        type: "object",
+        properties: {
+          strain_name: { type: "string", description: "Exact product name from search_strains." },
+          quantity: { type: "number", description: "Units, default 1." },
+          note: { type: "string", description: "Optional one-line note about the order." },
+        },
+        required: ["strain_name"],
+        additionalProperties: false,
+      },
+    },
+  },
 ] as const;
+
+/** Filter the catalogue down to a specialist's allowed tools. */
+export function toolsFor(names: string[]) {
+  if (!names.length) return [];
+  return AGENT_TOOLS.filter((t) => names.includes(t.function.name));
+}
+
 
 async function searchStrains(ctx: ToolContext, args: Record<string, unknown>) {
   const limit = Math.min(Number(args.limit) || 8, 12);
