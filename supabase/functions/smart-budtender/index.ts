@@ -728,27 +728,43 @@ serve(async (req) => {
     // Smart model routing
     const primaryModel = selectModel(messages, !!userHistory);
 
-    const { prompt: systemPrompt, chars: promptChars } = composeSystemPrompt(
-      [
-        { name: 'base', content: BASE_SYSTEM_PROMPT },
-        { name: 'research', content: RESEARCH_KNOWLEDGE_BASE },
-        { name: 'encyclopedia', content: ENCYCLOPEDIA_KNOWLEDGE_BASE },
-        { name: 'botany', content: BOTANY_KNOWLEDGE_BASE },
-        { name: 'plants', content: PLANT_KNOWLEDGE_BASE },
-        { name: 'wikipedia', content: WIKIPEDIA_KNOWLEDGE_BASE },
-        { name: 'strain_matching', content: STRAIN_MATCHING_KNOWLEDGE },
-        { name: 'answer_quality', content: ANSWER_QUALITY_DIRECTIVES },
-        { name: 'tools', content: `
+    // --- Triage router: pick a specialist so we don't fire the mega-prompt every turn ---
+    const { specialist, via: routedVia } = await routeTurn(lastUserMessage, LOVABLE_API_KEY);
+    const keepSection = (name: string) => specialist.sections.includes(name);
+
+    const knowledgeSections = [
+      { name: 'research', content: RESEARCH_KNOWLEDGE_BASE },
+      { name: 'encyclopedia', content: ENCYCLOPEDIA_KNOWLEDGE_BASE },
+      { name: 'botany', content: BOTANY_KNOWLEDGE_BASE },
+      { name: 'plants', content: PLANT_KNOWLEDGE_BASE },
+      { name: 'wikipedia', content: WIKIPEDIA_KNOWLEDGE_BASE },
+      { name: 'strain_matching', content: STRAIN_MATCHING_KNOWLEDGE },
+    ].filter((s) => keepSection(s.name));
+
+    const specialistTools = toolsFor([...specialist.tools]);
+    const toolDirective = specialistTools.length
+      ? `
 
 ═══════════════════════════════════════
 YOUR TOOLS (use them instead of guessing)
 ═══════════════════════════════════════
-You can call tools before answering. Rules:
-- search_strains — call this whenever the user asks what's available, prices, or wants a product recommendation. Quote real names and prices from the result; never invent stock.
-- find_dispensaries — call this when they ask where to buy or for a shop near a place. If you have no location, ask for their city first.
-- get_user_memory — call this before a personalised recommendation for a signed-in user.
-- save_user_preference — call this when they reveal a lasting preference (loved/hated a strain, tolerance, a goal). Never for small talk.
-Never mention tools, functions or lookups to the user — just answer naturally with what you found. If a tool returns nothing, say so honestly and fall back to general knowledge.` },
+You can call tools before answering. Available to you now: ${specialist.tools.join(', ')}.
+- search_strains — call whenever the user asks what's available, prices, or wants a product recommendation. Quote real names and prices from the result; never invent stock.
+- find_dispensaries — call when they ask where to buy or for a shop near a place. If you have no location, ask for their city first.
+- get_user_memory — call before a personalised recommendation for a signed-in user.
+- save_user_preference — call when they reveal a lasting preference (loved/hated a strain, tolerance, a goal). Never for small talk.
+- update_user_memory — call at most once per turn to persist structured preferences, a short summary, and the strains you just recommended.
+- start_checkout — only when the user has clearly chosen a product and wants to buy. It charges nothing; it proposes an order the user must confirm in chat. Always restate product, quantity and total, then ask for confirmation.
+Never mention tools, functions or lookups to the user — just answer naturally with what you found. If a tool returns nothing, say so honestly and fall back to general knowledge.`
+      : '';
+
+    const { prompt: systemPrompt, chars: promptChars } = composeSystemPrompt(
+      [
+        { name: 'base', content: BASE_SYSTEM_PROMPT },
+        { name: 'specialist', content: `\n\n## ACTIVE ROLE\n${specialist.directive}\n` },
+        ...knowledgeSections,
+        { name: 'answer_quality', content: ANSWER_QUALITY_DIRECTIVES },
+        { name: 'tools', content: toolDirective },
 
         { name: 'rag', content: retrievalContext },
         { name: 'name_persona', content: namePersona },
@@ -765,21 +781,28 @@ Never mention tools, functions or lookups to the user — just answer naturally 
     // AGENT TOOL LOOP
     // The model decides which tools it needs (live stock, dispensaries, memory),
     // we execute them, then it answers with the results in context.
+    // Every tool call is written to agent_traces.
     // ═══════════════════════════════════════
     const conversation: Record<string, unknown>[] = [...truncatedMessages];
     const isSimpleTurn = lastUserMessage.length < 40 && SIMPLE_PATTERNS.some(p => p.test(lastUserMessage.trim()));
     const toolsUsed: string[] = [];
+    let pendingApproval: Record<string, unknown> | null = null;
 
-    if (!isSimpleTurn) {
-      const toolCtx = { admin: createToolClient(), userId };
-      for (let step = 0; step < 3; step++) {
+    if (!isSimpleTurn && specialistTools.length && specialist.maxSteps > 0) {
+      const toolCtx = {
+        admin: createToolClient(),
+        userId,
+        sessionId: typeof sessionId === 'string' ? sessionId : null,
+        agentRole: specialist.role,
+      };
+      for (let step = 0; step < specialist.maxSteps; step++) {
         const planRes = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             model: primaryModel,
             messages: [{ role: 'system', content: systemPrompt }, ...conversation],
-            tools: AGENT_TOOLS,
+            tools: specialistTools,
             tool_choice: 'auto',
           }),
         });
@@ -797,6 +820,9 @@ Never mention tools, functions or lookups to the user — just answer naturally 
           const name = call?.function?.name ?? '';
           toolsUsed.push(name);
           const result = await runTool(name, call?.function?.arguments ?? '{}', toolCtx);
+          if (APPROVAL_REQUIRED.has(name) && (result as { requires_approval?: boolean })?.requires_approval) {
+            pendingApproval = result as Record<string, unknown>;
+          }
           conversation.push({
             role: 'tool',
             tool_call_id: call.id,
@@ -805,6 +831,7 @@ Never mention tools, functions or lookups to the user — just answer naturally 
         }
       }
     }
+
 
     const callGateway = (model: string) => fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
