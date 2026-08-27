@@ -101,9 +101,30 @@ serve(async (req) => {
 
       const sources: string[] = Array.isArray(body?.sources) && body.sources.length
         ? body.sources.map(String)
-        : ["newsletter_subscribers", "email_leads"];
+        : ["newsletter_subscribers", "email_leads", "app_users"];
 
       const contacts = new Map<string, Record<string, unknown>>();
+
+      if (sources.includes("app_users")) {
+        // Signed-up app users (auth). Paginated, capped at 5k.
+        for (let page = 1; page <= 50; page++) {
+          const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 100 });
+          if (error) {
+            console.error("brevo-sync: listUsers failed", error);
+            break;
+          }
+          const users = data?.users ?? [];
+          for (const u of users) {
+            const email = String(u.email ?? "").trim().toLowerCase();
+            if (!EMAIL_RE.test(email)) continue;
+            contacts.set(email, {
+              FIRSTNAME: (u.user_metadata?.full_name ?? u.user_metadata?.name ?? "") as string,
+              SOURCE: "app_signup",
+            });
+          }
+          if (users.length < 100) break;
+        }
+      }
 
       if (sources.includes("newsletter_subscribers")) {
         const { data, error } = await admin
