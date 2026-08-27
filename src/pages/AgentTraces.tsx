@@ -53,11 +53,26 @@ const percentile = (arr: number[], p: number) => {
   return sorted[idx];
 };
 
+const RANGES: { label: string; value: string; hours: number | null }[] = [
+  { label: "Last hour", value: "1h", hours: 1 },
+  { label: "Last 24 hours", value: "24h", hours: 24 },
+  { label: "Last 7 days", value: "7d", hours: 24 * 7 },
+  { label: "Last 30 days", value: "30d", hours: 24 * 30 },
+  { label: "All time", value: "all", hours: null },
+];
+
 const AgentTraces = () => {
   const [traces, setTraces] = useState<Trace[]>([]);
   const [feedback, setFeedback] = useState<Record<string, Feedback>>({});
   const [reviewerId, setReviewerId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Filters
+  const [userFilter, setUserFilter] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [toolFilter, setToolFilter] = useState("all");
+  const [rangeFilter, setRangeFilter] = useState("all");
+  const [errorsOnly, setErrorsOnly] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -82,14 +97,49 @@ const AgentTraces = () => {
     load();
   }, []);
 
+  const roleOptions = useMemo(
+    () => Array.from(new Set(traces.map((t) => t.agent_role).filter(Boolean))).sort(),
+    [traces],
+  );
+  const toolOptions = useMemo(
+    () => Array.from(new Set(traces.map((t) => t.tool_called).filter(Boolean) as string[])).sort(),
+    [traces],
+  );
+
+  const filtered = useMemo(() => {
+    const hours = RANGES.find((r) => r.value === rangeFilter)?.hours ?? null;
+    const cutoff = hours ? Date.now() - hours * 3600_000 : null;
+    const q = userFilter.trim().toLowerCase();
+    return traces.filter((t) => {
+      if (cutoff && new Date(t.created_at).getTime() < cutoff) return false;
+      if (roleFilter !== "all" && t.agent_role !== roleFilter) return false;
+      if (toolFilter !== "all" && t.tool_called !== toolFilter) return false;
+      if (errorsOnly && !t.error) return false;
+      if (q) {
+        const hay = `${t.user_id ?? ""} ${t.session_id ?? ""}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [traces, userFilter, roleFilter, toolFilter, rangeFilter, errorsOnly]);
+
+  const resetFilters = () => {
+    setUserFilter("");
+    setRoleFilter("all");
+    setToolFilter("all");
+    setRangeFilter("all");
+    setErrorsOnly(false);
+  };
+
   // Group traces by session
   const sessions = useMemo(() => {
-    return traces.reduce<Record<string, Trace[]>>((acc, t) => {
+    return filtered.reduce<Record<string, Trace[]>>((acc, t) => {
       const key = t.session_id ?? "no-session";
       (acc[key] ||= []).push(t);
       return acc;
     }, {});
-  }, [traces]);
+  }, [filtered]);
+
 
   // Aggregate metrics
   const metrics = useMemo(() => {
