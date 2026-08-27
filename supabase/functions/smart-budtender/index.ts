@@ -738,6 +738,18 @@ serve(async (req) => {
         { name: 'wikipedia', content: WIKIPEDIA_KNOWLEDGE_BASE },
         { name: 'strain_matching', content: STRAIN_MATCHING_KNOWLEDGE },
         { name: 'answer_quality', content: ANSWER_QUALITY_DIRECTIVES },
+        { name: 'tools', content: `
+
+═══════════════════════════════════════
+YOUR TOOLS (use them instead of guessing)
+═══════════════════════════════════════
+You can call tools before answering. Rules:
+- search_strains — call this whenever the user asks what's available, prices, or wants a product recommendation. Quote real names and prices from the result; never invent stock.
+- find_dispensaries — call this when they ask where to buy or for a shop near a place. If you have no location, ask for their city first.
+- get_user_memory — call this before a personalised recommendation for a signed-in user.
+- save_user_preference — call this when they reveal a lasting preference (loved/hated a strain, tolerance, a goal). Never for small talk.
+Never mention tools, functions or lookups to the user — just answer naturally with what you found. If a tool returns nothing, say so honestly and fall back to general knowledge.` },
+
         { name: 'rag', content: retrievalContext },
         { name: 'name_persona', content: namePersona },
         { name: 'profile', content: profileContext },
