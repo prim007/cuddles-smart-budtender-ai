@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RefreshCw, Mail, AlertCircle, Clock, CheckCircle2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import SEO from "@/components/SEO";
 
 interface QueueMetric {
   queue_name: string;
@@ -108,6 +109,12 @@ const EmailQueueStatus = () => {
 
   return (
     <div className="min-h-screen bg-background pt-24 pb-16">
+      <SEO
+        title="Email Queue Status Admin | Cuddles AI"
+        description="Internal Cuddles AI admin view of queued, sent, and failed transactional emails."
+        url="/admin/email-queue"
+        noindex
+      />
       <div className="container mx-auto px-4 max-w-6xl space-y-8">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>

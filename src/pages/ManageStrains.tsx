@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Plus, Trash2, Leaf, ArrowLeft, Package, Edit2, Save, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import SEO from "@/components/SEO";
 
 const CATEGORIES = [
   "Help me sleep", "Boost creativity", "Pain relief",
@@ -164,6 +165,12 @@ const ManageStrains = () => {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
+      <SEO
+        title="Manage Your Dispensary Strains | Cuddles AI"
+        description="Add, edit, and sync the strains in your dispensary menu so Cuddles AI recommends what you actually stock."
+        url="/manage-strains"
+        noindex
+      />
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">

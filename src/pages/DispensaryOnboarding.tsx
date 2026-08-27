@@ -27,6 +27,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import cuddlesImage from "@/assets/cuddles.png";
+import SEO from "@/components/SEO";
 
 const POS_OPTIONS = [
   "Dutchie",
@@ -217,6 +218,11 @@ const DispensaryOnboarding = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
+      <SEO
+        title="Dispensary Onboarding — Add Cuddles AI to Your Store"
+        description="Onboard your dispensary onto Cuddles AI: connect your menu, get an embeddable AI budtender widget, and start a 14-day free trial."
+        url="/dispensary-onboarding"
+      />
       <Card className="w-full max-w-2xl border-border/50 shadow-elevated bg-card/95 backdrop-blur-sm">
         <CardContent className="p-8">
           <ProgressDots />

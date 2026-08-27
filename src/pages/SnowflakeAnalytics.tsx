@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { RefreshCw, Play, Upload, Snowflake as SnowflakeIcon } from "lucide-react";
+import SEO from "@/components/SEO";
 
 interface Warehouse {
   name: string;
@@ -95,6 +96,12 @@ const SnowflakeAnalytics = () => {
 
   return (
     <main className="container mx-auto max-w-5xl px-4 py-10 space-y-6">
+      <SEO
+        title="Snowflake Analytics Admin | Cuddles AI"
+        description="Internal Cuddles AI admin console for Snowflake data exports and warehouse queries."
+        url="/admin/snowflake"
+        noindex
+      />
       <header className="space-y-2">
         <h1 className="font-heading text-3xl font-bold">Snowflake Analytics</h1>
         <p className="text-muted-foreground">

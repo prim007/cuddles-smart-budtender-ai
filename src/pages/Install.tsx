@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Download, Smartphone, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { trackInstallFunnel, detectInstallPlatform } from "@/components/GoogleAnalytics";
+import SEO from "@/components/SEO";
 
 const Install = () => {
   const navigate = useNavigate();
@@ -54,6 +55,11 @@ const Install = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/20 to-background p-4 flex items-center justify-center">
+      <SEO
+        title="Install the Cuddles AI App — Android & iOS"
+        description="Install Cuddles AI on your phone in seconds. Get the AI budtender and plant-care assistant as a fast, offline-ready app on Android and iOS."
+        url="/install"
+      />
       <Card className="max-w-md w-full p-8 space-y-6">
         <div className="text-center space-y-4">
           <div className="w-20 h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
