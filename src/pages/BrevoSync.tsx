@@ -7,7 +7,21 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { RefreshCw, Upload, Plus, Copy, Users } from "lucide-react";
 import { REFERRAL_CAMPAIGN_HTML, REFERRAL_CAMPAIGN_SUBJECT } from "@/lib/campaigns/referralCampaign";
+import { NEWSLETTER_CAMPAIGN_HTML, NEWSLETTER_CAMPAIGN_SUBJECT } from "@/lib/campaigns/newsletterCampaign";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import SEO from "@/components/SEO";
+
+const SOURCES = [
+  { id: "app_users", label: "Signed-up app users" },
+  { id: "newsletter_subscribers", label: "Newsletter subscribers" },
+  { id: "email_leads", label: "Email leads" },
+] as const;
+
+const CAMPAIGNS = [
+  { id: "newsletter", label: "Newsletter invite", subject: NEWSLETTER_CAMPAIGN_SUBJECT, html: NEWSLETTER_CAMPAIGN_HTML },
+  { id: "referral", label: "Referral", subject: REFERRAL_CAMPAIGN_SUBJECT, html: REFERRAL_CAMPAIGN_HTML },
+];
 
 interface BrevoList {
   id: number;
