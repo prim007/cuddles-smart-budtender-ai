@@ -708,12 +708,17 @@ serve(async (req) => {
     const lastUserMessage = [...truncatedMessages].reverse().find((m: { role: string }) => m.role === 'user')?.content ?? '';
     let retrievalContext = '';
     try {
-      const ragClient = createClient(
-        Deno.env.get("SUPABASE_URL") ?? "",
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-      );
-      const docs = await retrieveKnowledge(ragClient, LOVABLE_API_KEY, lastUserMessage, 6);
-      retrievalContext = buildRetrievalContext(docs);
+      // Skip embeddings for simple greetings/acks — they don't need curated knowledge
+      // and this saves credits when the wallet is tight.
+      const isSimpleGreeting = lastUserMessage.length < 40 && SIMPLE_PATTERNS.some(p => p.test(lastUserMessage.trim()));
+      if (!isSimpleGreeting) {
+        const ragClient = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+        );
+        const docs = await retrieveKnowledge(ragClient, LOVABLE_API_KEY, lastUserMessage, 6);
+        retrievalContext = buildRetrievalContext(docs);
+      }
     } catch (err) {
       console.error('RAG retrieval skipped:', err instanceof Error ? err.message : err);
     }
