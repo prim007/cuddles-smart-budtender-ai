@@ -242,6 +242,78 @@ const AgentTraces = () => {
           </p>
         </div>
 
+        {/* Filters */}
+        <Card className="p-4 mb-6">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground mb-3">
+            <Filter className="w-4 h-4" /> Filters
+          </div>
+          <div className="grid gap-3 md:grid-cols-4">
+            <Input
+              placeholder="User or session ID…"
+              value={userFilter}
+              onChange={(e) => setUserFilter(e.target.value)}
+              aria-label="Filter by user or session ID"
+            />
+            <Select value={roleFilter} onValueChange={setRoleFilter}>
+              <SelectTrigger aria-label="Filter by specialist">
+                <SelectValue placeholder="Specialist" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All specialists</SelectItem>
+                {roleOptions.map((r) => (
+                  <SelectItem key={r} value={r}>
+                    {r}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={toolFilter} onValueChange={setToolFilter}>
+              <SelectTrigger aria-label="Filter by tool">
+                <SelectValue placeholder="Tool" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All tools</SelectItem>
+                {toolOptions.map((t) => (
+                  <SelectItem key={t} value={t}>
+                    {t}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={rangeFilter} onValueChange={setRangeFilter}>
+              <SelectTrigger aria-label="Filter by time range">
+                <SelectValue placeholder="Time range" />
+              </SelectTrigger>
+              <SelectContent>
+                {RANGES.map((r) => (
+                  <SelectItem key={r.value} value={r.value}>
+                    {r.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-3 mt-3 flex-wrap">
+            <Button
+              size="sm"
+              variant={errorsOnly ? "destructive" : "outline"}
+              onClick={() => setErrorsOnly((v) => !v)}
+            >
+              <AlertCircle className="w-3.5 h-3.5 mr-1.5" />
+              Errors only
+            </Button>
+            <Button size="sm" variant="ghost" onClick={resetFilters}>
+              <X className="w-3.5 h-3.5 mr-1.5" />
+              Reset
+            </Button>
+            <span className="text-xs text-muted-foreground">
+              {filtered.length} of {traces.length} trace events ·{" "}
+              {Object.keys(sessions).length} sessions
+            </span>
+          </div>
+        </Card>
+
+
         {/* Metrics dashboard */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="p-4">
