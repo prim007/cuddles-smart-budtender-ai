@@ -8,6 +8,8 @@ import { STRAIN_MATCHING_KNOWLEDGE } from "./strain-matching.ts";
 import { PLANT_KNOWLEDGE_BASE } from "./plant-knowledge.ts";
 import { retrieveKnowledge, buildRetrievalContext } from "../_shared/rag.ts";
 import { ANSWER_QUALITY_DIRECTIVES, composeSystemPrompt, promptTraceHeaders } from "../_shared/prompt-registry.ts";
+import { AGENT_TOOLS, runTool, createToolClient } from "./tools.ts";
+
 
 
 const corsHeaders = {
@@ -736,6 +738,18 @@ serve(async (req) => {
         { name: 'wikipedia', content: WIKIPEDIA_KNOWLEDGE_BASE },
         { name: 'strain_matching', content: STRAIN_MATCHING_KNOWLEDGE },
         { name: 'answer_quality', content: ANSWER_QUALITY_DIRECTIVES },
+        { name: 'tools', content: `
+
+═══════════════════════════════════════
+YOUR TOOLS (use them instead of guessing)
+═══════════════════════════════════════
+You can call tools before answering. Rules:
+- search_strains — call this whenever the user asks what's available, prices, or wants a product recommendation. Quote real names and prices from the result; never invent stock.
+- find_dispensaries — call this when they ask where to buy or for a shop near a place. If you have no location, ask for their city first.
+- get_user_memory — call this before a personalised recommendation for a signed-in user.
+- save_user_preference — call this when they reveal a lasting preference (loved/hated a strain, tolerance, a goal). Never for small talk.
+Never mention tools, functions or lookups to the user — just answer naturally with what you found. If a tool returns nothing, say so honestly and fall back to general knowledge.` },
+
         { name: 'rag', content: retrievalContext },
         { name: 'name_persona', content: namePersona },
         { name: 'profile', content: profileContext },
@@ -747,6 +761,51 @@ serve(async (req) => {
     );
 
 
+    // ═══════════════════════════════════════
+    // AGENT TOOL LOOP
+    // The model decides which tools it needs (live stock, dispensaries, memory),
+    // we execute them, then it answers with the results in context.
+    // ═══════════════════════════════════════
+    const conversation: Record<string, unknown>[] = [...truncatedMessages];
+    const isSimpleTurn = lastUserMessage.length < 40 && SIMPLE_PATTERNS.some(p => p.test(lastUserMessage.trim()));
+    const toolsUsed: string[] = [];
+
+    if (!isSimpleTurn) {
+      const toolCtx = { admin: createToolClient(), userId };
+      for (let step = 0; step < 3; step++) {
+        const planRes = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: primaryModel,
+            messages: [{ role: 'system', content: systemPrompt }, ...conversation],
+            tools: AGENT_TOOLS,
+            tool_choice: 'auto',
+          }),
+        });
+        if (!planRes.ok) {
+          console.warn('Tool planning step failed:', planRes.status);
+          break;
+        }
+        const planJson = await planRes.json();
+        const msg = planJson?.choices?.[0]?.message;
+        const calls = msg?.tool_calls;
+        if (!Array.isArray(calls) || calls.length === 0) break;
+
+        conversation.push({ role: 'assistant', content: msg.content ?? '', tool_calls: calls });
+        for (const call of calls.slice(0, 4)) {
+          const name = call?.function?.name ?? '';
+          toolsUsed.push(name);
+          const result = await runTool(name, call?.function?.arguments ?? '{}', toolCtx);
+          conversation.push({
+            role: 'tool',
+            tool_call_id: call.id,
+            content: JSON.stringify(result).slice(0, 6000),
+          });
+        }
+      }
+    }
+
     const callGateway = (model: string) => fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -757,11 +816,12 @@ serve(async (req) => {
         model,
         messages: [
           { role: 'system', content: systemPrompt },
-          ...truncatedMessages,
+          ...conversation,
         ],
         stream: true,
       }),
     });
+
 
     let response = await callGateway(primaryModel);
     let usedModel = primaryModel;
@@ -797,9 +857,11 @@ serve(async (req) => {
         ...corsHeaders,
         'Content-Type': 'text/event-stream',
         ...promptTraceHeaders(usedModel, promptChars),
-        'Access-Control-Expose-Headers': 'X-Cuddles-Prompt-Version, X-Cuddles-Prompt-Chars, X-Cuddles-Model',
+        'X-Cuddles-Tools': toolsUsed.join(',') || 'none',
+        'Access-Control-Expose-Headers': 'X-Cuddles-Prompt-Version, X-Cuddles-Prompt-Chars, X-Cuddles-Model, X-Cuddles-Tools',
       },
     });
+
 
   } catch (error) {
     console.error('Function error:', { error: error instanceof Error ? error.stack : error, timestamp: new Date().toISOString() });
