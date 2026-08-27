@@ -385,10 +385,13 @@ const AgentTraces = () => {
 
         {loading && <p className="text-muted-foreground">Loading traces…</p>}
 
-        {!loading && traces.length === 0 && (
+        {!loading && filtered.length === 0 && (
           <Card className="p-8 text-center text-muted-foreground">
-            No agent traces yet. Send a chat message to generate one.
+            {traces.length === 0
+              ? "No agent traces yet. Send a chat message to generate one."
+              : "No traces match these filters."}
           </Card>
+
         )}
 
         <div className="space-y-6">
