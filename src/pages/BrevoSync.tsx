@@ -80,9 +80,13 @@ const BrevoSync = () => {
   };
 
   const handleSync = async (listId: number) => {
+    if (sources.length === 0) {
+      toast.error("Pick at least one contact source");
+      return;
+    }
     setSyncing(listId);
     try {
-      const data = await call({ action: "sync", listId });
+      const data = await call({ action: "sync", listId, sources });
       toast.success(`Synced ${data.synced} contacts to Brevo`);
       await loadLists();
     } catch (err) {
