@@ -3,6 +3,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Activity,
   Clock,
@@ -13,9 +21,12 @@ import {
   ThumbsDown,
   CheckCircle2,
   TrendingUp,
+  Filter,
+  X,
 } from "lucide-react";
 import SEO from "@/components/SEO";
 import { toast } from "sonner";
+
 
 interface Trace {
   id: string;
