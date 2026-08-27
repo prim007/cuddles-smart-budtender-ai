@@ -98,10 +98,13 @@ const BrevoSync = () => {
     }
   };
 
-  const copyCampaign = async () => {
-    await navigator.clipboard.writeText(REFERRAL_CAMPAIGN_HTML);
-    toast.success("Campaign HTML copied — paste it into Brevo's code editor");
+  const copyText = async (text: string, label: string) => {
+    await navigator.clipboard.writeText(text);
+    toast.success(`${label} copied`);
   };
+
+  const toggleSource = (id: string) =>
+    setSources((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-10 space-y-6">
