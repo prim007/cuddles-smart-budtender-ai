@@ -887,7 +887,10 @@ Never mention tools, functions or lookups to the user — just answer naturally 
         'Content-Type': 'text/event-stream',
         ...promptTraceHeaders(usedModel, promptChars),
         'X-Cuddles-Tools': toolsUsed.join(',') || 'none',
-        'Access-Control-Expose-Headers': 'X-Cuddles-Prompt-Version, X-Cuddles-Prompt-Chars, X-Cuddles-Model, X-Cuddles-Tools',
+        'X-Cuddles-Agent': `${specialist.role}:${routedVia}`,
+        'X-Cuddles-Approval': pendingApproval ? encodeURIComponent(JSON.stringify(pendingApproval)) : '',
+        'Access-Control-Expose-Headers': 'X-Cuddles-Prompt-Version, X-Cuddles-Prompt-Chars, X-Cuddles-Model, X-Cuddles-Tools, X-Cuddles-Agent, X-Cuddles-Approval',
+
       },
     });
 
