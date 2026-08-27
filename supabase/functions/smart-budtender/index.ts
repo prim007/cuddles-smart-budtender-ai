@@ -845,9 +845,11 @@ serve(async (req) => {
         ...corsHeaders,
         'Content-Type': 'text/event-stream',
         ...promptTraceHeaders(usedModel, promptChars),
-        'Access-Control-Expose-Headers': 'X-Cuddles-Prompt-Version, X-Cuddles-Prompt-Chars, X-Cuddles-Model',
+        'X-Cuddles-Tools': toolsUsed.join(',') || 'none',
+        'Access-Control-Expose-Headers': 'X-Cuddles-Prompt-Version, X-Cuddles-Prompt-Chars, X-Cuddles-Model, X-Cuddles-Tools',
       },
     });
+
 
   } catch (error) {
     console.error('Function error:', { error: error instanceof Error ? error.stack : error, timestamp: new Date().toISOString() });
