@@ -3,6 +3,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Activity,
   Clock,
@@ -13,9 +21,12 @@ import {
   ThumbsDown,
   CheckCircle2,
   TrendingUp,
+  Filter,
+  X,
 } from "lucide-react";
 import SEO from "@/components/SEO";
 import { toast } from "sonner";
+
 
 interface Trace {
   id: string;
@@ -53,11 +64,26 @@ const percentile = (arr: number[], p: number) => {
   return sorted[idx];
 };
 
+const RANGES: { label: string; value: string; hours: number | null }[] = [
+  { label: "Last hour", value: "1h", hours: 1 },
+  { label: "Last 24 hours", value: "24h", hours: 24 },
+  { label: "Last 7 days", value: "7d", hours: 24 * 7 },
+  { label: "Last 30 days", value: "30d", hours: 24 * 30 },
+  { label: "All time", value: "all", hours: null },
+];
+
 const AgentTraces = () => {
   const [traces, setTraces] = useState<Trace[]>([]);
   const [feedback, setFeedback] = useState<Record<string, Feedback>>({});
   const [reviewerId, setReviewerId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Filters
+  const [userFilter, setUserFilter] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [toolFilter, setToolFilter] = useState("all");
+  const [rangeFilter, setRangeFilter] = useState("all");
+  const [errorsOnly, setErrorsOnly] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -82,14 +108,49 @@ const AgentTraces = () => {
     load();
   }, []);
 
+  const roleOptions = useMemo(
+    () => Array.from(new Set(traces.map((t) => t.agent_role).filter(Boolean))).sort(),
+    [traces],
+  );
+  const toolOptions = useMemo(
+    () => Array.from(new Set(traces.map((t) => t.tool_called).filter(Boolean) as string[])).sort(),
+    [traces],
+  );
+
+  const filtered = useMemo(() => {
+    const hours = RANGES.find((r) => r.value === rangeFilter)?.hours ?? null;
+    const cutoff = hours ? Date.now() - hours * 3600_000 : null;
+    const q = userFilter.trim().toLowerCase();
+    return traces.filter((t) => {
+      if (cutoff && new Date(t.created_at).getTime() < cutoff) return false;
+      if (roleFilter !== "all" && t.agent_role !== roleFilter) return false;
+      if (toolFilter !== "all" && t.tool_called !== toolFilter) return false;
+      if (errorsOnly && !t.error) return false;
+      if (q) {
+        const hay = `${t.user_id ?? ""} ${t.session_id ?? ""}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [traces, userFilter, roleFilter, toolFilter, rangeFilter, errorsOnly]);
+
+  const resetFilters = () => {
+    setUserFilter("");
+    setRoleFilter("all");
+    setToolFilter("all");
+    setRangeFilter("all");
+    setErrorsOnly(false);
+  };
+
   // Group traces by session
   const sessions = useMemo(() => {
-    return traces.reduce<Record<string, Trace[]>>((acc, t) => {
+    return filtered.reduce<Record<string, Trace[]>>((acc, t) => {
       const key = t.session_id ?? "no-session";
       (acc[key] ||= []).push(t);
       return acc;
     }, {});
-  }, [traces]);
+  }, [filtered]);
+
 
   // Aggregate metrics
   const metrics = useMemo(() => {
@@ -181,6 +242,78 @@ const AgentTraces = () => {
           </p>
         </div>
 
+        {/* Filters */}
+        <Card className="p-4 mb-6">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground mb-3">
+            <Filter className="w-4 h-4" /> Filters
+          </div>
+          <div className="grid gap-3 md:grid-cols-4">
+            <Input
+              placeholder="User or session ID…"
+              value={userFilter}
+              onChange={(e) => setUserFilter(e.target.value)}
+              aria-label="Filter by user or session ID"
+            />
+            <Select value={roleFilter} onValueChange={setRoleFilter}>
+              <SelectTrigger aria-label="Filter by specialist">
+                <SelectValue placeholder="Specialist" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All specialists</SelectItem>
+                {roleOptions.map((r) => (
+                  <SelectItem key={r} value={r}>
+                    {r}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={toolFilter} onValueChange={setToolFilter}>
+              <SelectTrigger aria-label="Filter by tool">
+                <SelectValue placeholder="Tool" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All tools</SelectItem>
+                {toolOptions.map((t) => (
+                  <SelectItem key={t} value={t}>
+                    {t}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={rangeFilter} onValueChange={setRangeFilter}>
+              <SelectTrigger aria-label="Filter by time range">
+                <SelectValue placeholder="Time range" />
+              </SelectTrigger>
+              <SelectContent>
+                {RANGES.map((r) => (
+                  <SelectItem key={r.value} value={r.value}>
+                    {r.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-3 mt-3 flex-wrap">
+            <Button
+              size="sm"
+              variant={errorsOnly ? "destructive" : "outline"}
+              onClick={() => setErrorsOnly((v) => !v)}
+            >
+              <AlertCircle className="w-3.5 h-3.5 mr-1.5" />
+              Errors only
+            </Button>
+            <Button size="sm" variant="ghost" onClick={resetFilters}>
+              <X className="w-3.5 h-3.5 mr-1.5" />
+              Reset
+            </Button>
+            <span className="text-xs text-muted-foreground">
+              {filtered.length} of {traces.length} trace events ·{" "}
+              {Object.keys(sessions).length} sessions
+            </span>
+          </div>
+        </Card>
+
+
         {/* Metrics dashboard */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="p-4">
@@ -252,10 +385,13 @@ const AgentTraces = () => {
 
         {loading && <p className="text-muted-foreground">Loading traces…</p>}
 
-        {!loading && traces.length === 0 && (
+        {!loading && filtered.length === 0 && (
           <Card className="p-8 text-center text-muted-foreground">
-            No agent traces yet. Send a chat message to generate one.
+            {traces.length === 0
+              ? "No agent traces yet. Send a chat message to generate one."
+              : "No traces match these filters."}
           </Card>
+
         )}
 
         <div className="space-y-6">
