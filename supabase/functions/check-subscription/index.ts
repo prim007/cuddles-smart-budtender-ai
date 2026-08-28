@@ -28,14 +28,25 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
 
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) throw new Error("No authorization header");
+    const unauthorized = () =>
+      new Response(JSON.stringify({ subscribed: false, error: "Unauthorized" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401,
+      });
 
-    const token = authHeader.replace("Bearer ", "");
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) return unauthorized();
+
+    const token = authHeader.replace("Bearer ", "").trim();
+    if (!token) return unauthorized();
+
     const { data: userData, error: userError } = await supabase.auth.getUser(token);
-    if (userError) throw new Error(`Auth error: ${userError.message}`);
+    if (userError) {
+      console.warn("[CHECK-SUB] Unauthorized:", userError.message);
+      return unauthorized();
+    }
     const user = userData.user;
-    if (!user?.email) throw new Error("User not authenticated");
+    if (!user?.email) return unauthorized();
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });

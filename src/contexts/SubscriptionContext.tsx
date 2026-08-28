@@ -22,7 +22,7 @@ interface SubscriptionContextType {
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [isPremium, setIsPremium] = useState(false);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,17 +36,26 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
+    // Always use a fresh, valid access token — never let the anon key be forwarded.
+    const { data: sessionData } = await supabase.auth.getSession();
+    const accessToken = sessionData.session?.access_token;
+    if (!accessToken) {
+      // No valid session yet; keep current state instead of downgrading the user.
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.functions.invoke("check-subscription");
+      const { data, error } = await supabase.functions.invoke("check-subscription", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       if (error) throw error;
       setIsPremium(data?.subscribed ?? false);
       setPlan((data?.plan as Plan) ?? null);
       setSubscriptionEnd(data?.subscription_end ?? null);
     } catch (err) {
+      // Transient failures should not silently downgrade a paying member.
       console.error("Error checking subscription:", err);
-      setIsPremium(false);
-      setPlan(null);
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +63,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     checkSubscription();
-  }, [checkSubscription]);
+  }, [checkSubscription, session?.access_token]);
 
   useEffect(() => {
     if (!user) return;
