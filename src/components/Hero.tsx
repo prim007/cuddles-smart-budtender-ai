@@ -196,6 +196,16 @@ const Hero = () => {
                 Start Chatting Now
               </Button>
 
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleDownload}
+                className="h-auto w-full gap-2 rounded-2xl border-white/30 bg-white/5 px-8 py-5 font-display text-lg font-semibold text-white backdrop-blur-md hover:bg-white/15 sm:w-auto"
+              >
+                <Download className="h-5 w-5" />
+                Download App
+              </Button>
+
               <a
                 href="https://tripplefourshophub.online/partners/lef-labs"
                 target="_blank"
