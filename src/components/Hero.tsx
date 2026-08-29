@@ -222,14 +222,10 @@ const Hero = () => {
               💬 24/7 budtender
             </div>
 
-            <div className="relative">
-              <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[3rem] bg-gradient-to-tr from-hippie-coral/20 via-transparent to-hippie-sage/15 blur-3xl" />
-              <div className="transform transition-transform duration-1000 ease-out lg:-rotate-[4deg] lg:hover:rotate-0 drop-shadow-[0_50px_60px_rgba(0,0,0,0.55)]">
-                <PhoneFrame>
-                  <PhoneChatPreview bubbles={HERO_BUBBLES} />
-                </PhoneFrame>
-              </div>
+            <div className="relative w-full max-w-[560px]">
+              <Cuddles3D />
             </div>
+
           </div>
         </div>
       </div>
