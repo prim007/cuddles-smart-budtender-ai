@@ -71,8 +71,8 @@ const AIBudtender = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="AI Budtender Software for Dispensaries | Cuddles AI"
-        description="AI budtender software for dispensaries: RAG-grounded strain answers from your own menu, POS sync, 24/7 chat. Free to try, rentals from R1,899/mo."
+        title="AI Budtender: 24/7 Strain Recommendations | Cuddles AI"
+        description="Try a free AI budtender that recommends strains by effect, answers THC, CBD and dosing questions instantly, and sells from your live dispensary menu. Free to use, rentals from R1,899/mo."
         url="/ai-budtender"
         keywords="AI budtender for dispensaries, automated cannabis product recommendations, cannabis retail automation, smart budtender, dispensary AI chatbot, reduce dispensary wait times with AI, cannabis recommendation engine"
         structuredData={structuredData}
