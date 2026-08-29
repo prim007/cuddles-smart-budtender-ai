@@ -163,7 +163,7 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
   });
 
   return (
-    <group ref={root} scale={1.05}>
+    <group ref={root} scale={0.78} position={[0, 0.2, 0]}>
       <group ref={head}>
         {/* central blade / face */}
         <Blade length={3.2} width={1.9} rotation={[0, 0, 0]} position={[0, 0.35, 0]} material={body} />
@@ -211,7 +211,7 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
       </group>
 
       {/* arms */}
-      <group ref={leftArm} position={[-1.75, -0.7, 0.2]}>
+      <group ref={leftArm} position={[-1.55, -0.55, 0.25]}>
         <mesh position={[-0.35, 0.1, 0]} rotation={[0, 0, Math.PI / 2.2]} castShadow>
           <capsuleGeometry args={[0.13, 0.55, 6, 14]} />
           <meshStandardMaterial color="#6fbc52" roughness={0.45} />
@@ -221,7 +221,7 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
           <meshStandardMaterial color="#6fbc52" roughness={0.45} />
         </mesh>
       </group>
-      <group ref={rightArm} position={[1.75, -0.7, 0.2]}>
+      <group ref={rightArm} position={[1.55, -0.55, 0.25]}>
         <mesh position={[0.35, 0.1, 0]} rotation={[0, 0, -Math.PI / 2.2]} castShadow>
           <capsuleGeometry args={[0.13, 0.55, 6, 14]} />
           <meshStandardMaterial color="#6fbc52" roughness={0.45} />
@@ -271,7 +271,7 @@ const Cuddles3D = () => {
         shadows
         dpr={[1, 1.8]}
         frameloop={reduced ? "demand" : "always"}
-        camera={{ position: [0, 0.2, 9], fov: 42 }}
+        camera={{ position: [0, 0.1, 10.5], fov: 42 }}
         gl={{ antialias: true, alpha: true }}
       >
         <ambientLight intensity={0.55} />
@@ -291,7 +291,7 @@ const Cuddles3D = () => {
           </Environment>
           <PointerTracker pointer={pointer} />
           <Character pointer={pointer} />
-          <ContactShadows position={[0, -3.15, 0]} opacity={0.45} scale={12} blur={2.6} far={5} color="#1a0f1f" />
+          <ContactShadows position={[0, -2.5, 0]} opacity={0.45} scale={12} blur={2.6} far={5} color="#1a0f1f" />
         </Suspense>
       </Canvas>
     </div>
