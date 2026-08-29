@@ -47,12 +47,6 @@ const SEO = ({
       "priceCurrency": "ZAR",
       "description": "Free to use with premium features available"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "150",
-      "bestRating": "5"
-    },
     "featureList": [
       "AI-Powered Strain Recommendations",
       "Cannabis Strain Journal",
