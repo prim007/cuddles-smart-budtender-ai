@@ -4,21 +4,14 @@ import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { useEffect, useState, useRef } from "react";
-import PhoneFrame from "@/components/PhoneFrame";
-import PhoneChatPreview from "@/components/PhoneChatPreview";
+import Cuddles3D from "@/components/Cuddles3D";
+
 
 const HERO_PROMPTS = [
   "Best strain for sleep?",
   "Something for anxiety relief",
   "A creative sativa for daytime",
   "Help with chronic pain",
-];
-
-const HERO_BUBBLES = [
-  { from: "user" as const, text: "Best strain for sleep? 😴" },
-  { from: "cuddles" as const, text: "Try Granddaddy Purple — heavy indica, ~20% THC, myrcene-rich. Great for insomnia." },
-  { from: "user" as const, text: "How much should I take?" },
-  { from: "cuddles" as const, text: "Start low: 2.5–5mg edible or 1–2 small puffs 30 min before bed. Wait, then reassess." },
 ];
 
 const Hero = () => {
@@ -222,14 +215,10 @@ const Hero = () => {
               💬 24/7 budtender
             </div>
 
-            <div className="relative">
-              <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[3rem] bg-gradient-to-tr from-hippie-coral/20 via-transparent to-hippie-sage/15 blur-3xl" />
-              <div className="transform transition-transform duration-1000 ease-out lg:-rotate-[4deg] lg:hover:rotate-0 drop-shadow-[0_50px_60px_rgba(0,0,0,0.55)]">
-                <PhoneFrame>
-                  <PhoneChatPreview bubbles={HERO_BUBBLES} />
-                </PhoneFrame>
-              </div>
+            <div className="relative w-full max-w-[560px]">
+              <Cuddles3D />
             </div>
+
           </div>
         </div>
       </div>
