@@ -235,11 +235,11 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
       {/* legs */}
       {[-0.45, 0.45].map((x) => (
         <group key={x}>
-          <mesh position={[x, -2.35, 0]} castShadow>
+          <mesh position={[x, -1.85, 0]} castShadow>
             <capsuleGeometry args={[0.14, 0.5, 6, 14]} />
             <meshStandardMaterial color="#6fbc52" roughness={0.45} />
           </mesh>
-          <mesh position={[x, -2.75, 0.14]} scale={[1, 0.7, 1.35]} castShadow>
+          <mesh position={[x, -2.25, 0.14]} scale={[1, 0.7, 1.35]} castShadow>
             <sphereGeometry args={[0.24, 20, 20]} />
             <meshStandardMaterial color="#4e9b3b" roughness={0.5} />
           </mesh>
@@ -291,7 +291,7 @@ const Cuddles3D = () => {
           </Environment>
           <PointerTracker pointer={pointer} />
           <Character pointer={pointer} />
-          <ContactShadows position={[0, -2.5, 0]} opacity={0.45} scale={12} blur={2.6} far={5} color="#1a0f1f" />
+          <ContactShadows position={[0, -2.1, 0]} opacity={0.45} scale={12} blur={2.6} far={5} color="#1a0f1f" />
         </Suspense>
       </Canvas>
     </div>
