@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Lightformer, ContactShadows } from "@react-three/drei";
+import { Environment, Lightformer, ContactShadows, Sparkles, Float } from "@react-three/drei";
 import { Suspense, useMemo, useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 
@@ -115,10 +115,14 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
 
   const body = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
+      new THREE.MeshPhysicalMaterial({
         color: "#65b34a",
-        roughness: 0.45,
+        roughness: 0.35,
         metalness: 0.05,
+        clearcoat: 0.6,
+        clearcoatRoughness: 0.5,
+        sheen: 0.4,
+        sheenColor: new THREE.Color("#c8f0a0"),
       }),
     []
   );
@@ -163,10 +167,15 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
   });
 
   return (
-    <group ref={root} scale={0.95} position={[0, 0.15, 0]}>
+    <group ref={root} scale={1.18} position={[0, 0.1, 0]}>
       <group ref={head}>
         {/* central blade / face */}
         <Blade length={3.2} width={1.9} rotation={[0, 0, 0]} position={[0, 0.35, 0]} material={body} />
+        {/* leaf vein highlight on central blade */}
+        <mesh position={[0, 0.35, 0.12]}>
+          <capsuleGeometry args={[0.03, 2.4, 4, 8]} />
+          <meshStandardMaterial color="#8fd06a" roughness={0.4} emissive="#4c8f36" emissiveIntensity={0.35} />
+        </mesh>
         {/* side blades */}
         <Blade length={2.5} width={1.5} rotation={[0, 0, 0.72]} position={[-1.15, -0.15, -0.08]} material={body} />
         <Blade length={2.5} width={1.5} rotation={[0, 0, -0.72]} position={[1.15, -0.15, -0.08]} material={body} />
@@ -265,13 +274,13 @@ const Cuddles3D = () => {
   );
 
   return (
-    <div className="relative h-[420px] w-full sm:h-[500px] lg:h-[600px]" aria-hidden="true">
+    <div className="relative h-[460px] w-full sm:h-[540px] lg:h-[640px]" aria-hidden="true">
       <div className="pointer-events-none absolute inset-6 -z-10 rounded-[3rem] bg-gradient-to-tr from-hippie-coral/20 via-transparent to-hippie-sage/20 blur-3xl" />
       <Canvas
         shadows
         dpr={[1, 1.8]}
         frameloop={reduced ? "demand" : "always"}
-        camera={{ position: [0, 0.1, 10.5], fov: 42 }}
+        camera={{ position: [0, 0.1, 11.5], fov: 42 }}
         gl={{ antialias: true, alpha: true }}
       >
         <ambientLight intensity={0.55} />
@@ -283,6 +292,8 @@ const Cuddles3D = () => {
           shadow-mapSize-height={1024}
         />
         <directionalLight position={[-5, 2, -3]} intensity={0.7} color="#ffb98a" />
+        {/* warm rim light from behind for silhouette pop */}
+        <spotLight position={[0, 4, -6]} intensity={1.4} color="#ffb27a" angle={0.7} penumbra={1} />
         <Suspense fallback={null}>
           <Environment resolution={128}>
             <Lightformer intensity={2} position={[0, 5, 2]} scale={[10, 10, 1]} />
@@ -290,8 +301,16 @@ const Cuddles3D = () => {
             <Lightformer intensity={1} color="#8fd3a5" position={[5, 1, -1]} rotation-y={-Math.PI / 2} scale={[16, 2, 1]} />
           </Environment>
           <PointerTracker pointer={pointer} />
-          <Character pointer={pointer} />
-          <ContactShadows position={[0, -2.1, 0]} opacity={0.45} scale={12} blur={2.6} far={5} color="#1a0f1f" />
+          <Float speed={1.2} rotationIntensity={0.08} floatIntensity={0.15}>
+            <Character pointer={pointer} />
+          </Float>
+          {/* glowing halo ring behind the character */}
+          <mesh position={[0, 0.1, -1.6]}>
+            <torusGeometry args={[3.1, 0.05, 16, 100]} />
+            <meshStandardMaterial color="#ffb98a" emissive="#ff8f5e" emissiveIntensity={2.2} toneMapped={false} />
+          </mesh>
+          <Sparkles count={45} scale={[8, 7, 4]} position={[0, 0.5, 0]} size={3.2} speed={0.35} color="#ffd9a8" opacity={0.6} />
+          <ContactShadows position={[0, -2.75, 0]} opacity={0.5} scale={13} blur={2.8} far={5.5} color="#1a0f1f" />
         </Suspense>
       </Canvas>
     </div>

@@ -1,10 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Store, UserPlus, Send, MessageCircle } from "lucide-react";
+import { ExternalLink, Store, UserPlus, Send, MessageCircle, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { useEffect, useState, useRef } from "react";
+import { toast } from "sonner";
 import Cuddles3D from "@/components/Cuddles3D";
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
 
 
 const HERO_PROMPTS = [
@@ -18,7 +24,30 @@ const Hero = () => {
   const [liveCount, setLiveCount] = useState(12);
   const [heroInput, setHeroInput] = useState("");
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleDownload = async () => {
+    trackEvent('cta_click', 'install', 'hero_download_app');
+    if (installPrompt) {
+      await installPrompt.prompt();
+      const { outcome } = await installPrompt.userChoice;
+      if (outcome === "accepted") setInstallPrompt(null);
+    } else {
+      toast.info("Install Cuddles", {
+        description: "Tap your browser's menu and choose 'Add to Home Screen' to install the Cuddles app.",
+      });
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -165,6 +194,16 @@ const Hero = () => {
               >
                 <MessageCircle className="h-5 w-5" />
                 Start Chatting Now
+              </Button>
+
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleDownload}
+                className="h-auto w-full gap-2 rounded-2xl border-white/30 bg-white/5 px-8 py-5 font-display text-lg font-semibold text-white backdrop-blur-md hover:bg-white/15 sm:w-auto"
+              >
+                <Download className="h-5 w-5" />
+                Download App
               </Button>
 
               <a
