@@ -14,13 +14,6 @@ const HERO_PROMPTS = [
   "Help with chronic pain",
 ];
 
-const HERO_BUBBLES = [
-  { from: "user" as const, text: "Best strain for sleep? 😴" },
-  { from: "cuddles" as const, text: "Try Granddaddy Purple — heavy indica, ~20% THC, myrcene-rich. Great for insomnia." },
-  { from: "user" as const, text: "How much should I take?" },
-  { from: "cuddles" as const, text: "Start low: 2.5–5mg edible or 1–2 small puffs 30 min before bed. Wait, then reassess." },
-];
-
 const Hero = () => {
   const [liveCount, setLiveCount] = useState(12);
   const [heroInput, setHeroInput] = useState("");
