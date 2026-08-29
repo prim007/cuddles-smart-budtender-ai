@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Lightformer, ContactShadows } from "@react-three/drei";
+import { Environment, Lightformer, ContactShadows, Sparkles, Float } from "@react-three/drei";
 import { Suspense, useMemo, useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 
@@ -115,10 +115,14 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
 
   const body = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
+      new THREE.MeshPhysicalMaterial({
         color: "#65b34a",
-        roughness: 0.45,
+        roughness: 0.35,
         metalness: 0.05,
+        clearcoat: 0.6,
+        clearcoatRoughness: 0.5,
+        sheen: 0.4,
+        sheenColor: new THREE.Color("#c8f0a0"),
       }),
     []
   );
