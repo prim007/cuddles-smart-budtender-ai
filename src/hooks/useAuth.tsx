@@ -108,11 +108,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signIn = async (email: string, password: string) => {
+    const lock = getLockoutState(email);
+    if (lock.locked) {
+      return {
+        error: new Error(
+          `Too many failed sign-in attempts. Please try again in ${lock.minutesRemaining} minute${lock.minutesRemaining === 1 ? "" : "s"}, or reset your password.`,
+        ),
+        user: null,
+      };
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    return { error, user: data?.user ?? null };
+
+    if (error) {
+      const next = recordFailedAttempt(email);
+      if (next.locked) {
+        return {
+          error: new Error(
+            `Too many failed sign-in attempts. This account is locked for ${next.minutesRemaining} minutes.`,
+          ),
+          user: null,
+        };
+      }
+      if (next.attemptsRemaining <= 2) {
+        return {
+          error: new Error(
+            `${error.message} (${next.attemptsRemaining} attempt${next.attemptsRemaining === 1 ? "" : "s"} left before a temporary lock)`,
+          ),
+          user: null,
+        };
+      }
+      return { error, user: null };
+    }
+
+    clearFailedAttempts(email);
+    return { error: null, user: data?.user ?? null };
   };
 
   const signUp = async (email: string, password: string, name?: string, redirectPath?: string) => {
