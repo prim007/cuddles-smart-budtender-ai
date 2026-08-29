@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { useEffect, useState, useRef } from "react";
-import PhoneFrame from "@/components/PhoneFrame";
-import PhoneChatPreview from "@/components/PhoneChatPreview";
+import Cuddles3D from "@/components/Cuddles3D";
+
 
 const HERO_PROMPTS = [
   "Best strain for sleep?",
