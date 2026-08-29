@@ -163,7 +163,7 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
   });
 
   return (
-    <group ref={root} scale={0.78} position={[0, 0.2, 0]}>
+    <group ref={root} scale={0.95} position={[0, 0.15, 0]}>
       <group ref={head}>
         {/* central blade / face */}
         <Blade length={3.2} width={1.9} rotation={[0, 0, 0]} position={[0, 0.35, 0]} material={body} />
