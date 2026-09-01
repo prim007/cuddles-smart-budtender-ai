@@ -10,6 +10,7 @@ import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { getStaticBlogPost, mergeStaticBlogPosts } from "@/data/staticBlogPosts";
@@ -259,7 +260,8 @@ const BlogPost = () => {
       <section className="pb-20">
         <div className="container mx-auto px-4">
           <article className="max-w-3xl mx-auto prose prose-lg dark:prose-invert prose-headings:font-display prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl">
-            <ReactMarkdown
+<ReactMarkdown
+              remarkPlugins={[remarkGfm]}
               disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
               unwrapDisallowed
             >{displayPost.content}</ReactMarkdown>
