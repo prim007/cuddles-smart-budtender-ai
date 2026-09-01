@@ -10,6 +10,7 @@ import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { getStaticBlogPost, mergeStaticBlogPosts } from "@/data/staticBlogPosts";
