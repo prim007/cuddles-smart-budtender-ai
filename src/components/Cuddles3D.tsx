@@ -64,14 +64,32 @@ function Daisy({ position }: { position: [number, number, number] }) {
   );
 }
 
-function Eye({ x, blink, look }: { x: number; blink: number; look: THREE.Vector2 }) {
+type FaceState = { blinkL: number; blinkR: number; look: THREE.Vector2 };
+
+function Eye({ x, side, face }: { x: number; side: "L" | "R"; face: React.MutableRefObject<FaceState> }) {
+  const pupil = useRef<THREE.Group>(null);
+  const lid = useRef<THREE.Mesh>(null);
+
+  useFrame(() => {
+    const f = face.current;
+    if (pupil.current) {
+      pupil.current.position.x = f.look.x * 0.09;
+      pupil.current.position.y = f.look.y * 0.07;
+    }
+    if (lid.current) {
+      const b = side === "L" ? f.blinkL : f.blinkR;
+      lid.current.position.y = 0.28 - b * 0.28;
+      lid.current.scale.y = Math.max(b, 0.001);
+    }
+  });
+
   return (
     <group position={[x, 0.55, 0.62]}>
       <mesh>
         <sphereGeometry args={[0.28, 32, 32]} />
         <meshStandardMaterial color="#ffffff" roughness={0.25} />
       </mesh>
-      <group position={[look.x * 0.09, look.y * 0.07, 0.19]}>
+      <group ref={pupil} position={[0, 0, 0.19]}>
         <mesh>
           <sphereGeometry args={[0.14, 24, 24]} />
           <meshStandardMaterial color="#3b2416" roughness={0.2} />
@@ -82,13 +100,14 @@ function Eye({ x, blink, look }: { x: number; blink: number; look: THREE.Vector2
         </mesh>
       </group>
       {/* eyelid for blinking */}
-      <mesh position={[0, 0.28 - blink * 0.28, 0.06]} scale={[1, Math.max(blink, 0.001), 1]}>
+      <mesh ref={lid} position={[0, 0.28, 0.06]} scale={[1, 0.001, 1]}>
         <sphereGeometry args={[0.295, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
         <meshStandardMaterial color="#5aa845" roughness={0.6} />
       </mesh>
     </group>
   );
 }
+
 
 type Expression = "happy" | "wink" | "surprised" | "chill";
 
@@ -98,17 +117,19 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
   const leftArm = useRef<THREE.Group>(null);
   const rightArm = useRef<THREE.Group>(null);
   const mouth = useRef<THREE.Mesh>(null);
-  const [blinkL, setBlinkL] = useState(0);
-  const [blinkR, setBlinkR] = useState(0);
-  const [expr, setExpr] = useState<Expression>("happy");
-  const look = useRef(new THREE.Vector2());
+  const browL = useRef<THREE.Mesh>(null);
+  const browR = useRef<THREE.Mesh>(null);
+  const exprRef = useRef<Expression>("happy");
+  // smoothed drivers so expression changes ease in instead of popping
+  const drive = useRef({ surprise: 0, chill: 0, wink: 0 });
+  const face = useRef<FaceState>({ blinkL: 0, blinkR: 0, look: new THREE.Vector2() });
 
   useEffect(() => {
     const order: Expression[] = ["happy", "wink", "chill", "surprised"];
     let i = 0;
     const id = setInterval(() => {
       i = (i + 1) % order.length;
-      setExpr(order[i]);
+      exprRef.current = order[i];
     }, 4200);
     return () => clearInterval(id);
   }, []);
@@ -130,16 +151,25 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
     const dt = Math.min(delta, 0.05);
+    const ease = (current: number, target: number, speed: number) =>
+      current + (target - current) * (1 - Math.exp(-speed * dt));
+
+    const expr = exprRef.current;
+    const d = drive.current;
+    d.surprise = ease(d.surprise, expr === "surprised" ? 1 : 0, 5);
+    d.chill = ease(d.chill, expr === "chill" ? 1 : 0, 5);
+    d.wink = ease(d.wink, expr === "wink" ? 1 : 0, 9);
 
     // smooth look target from pointer
-    look.current.lerp(pointer.current, 1 - Math.exp(-6 * dt));
+    face.current.look.lerp(pointer.current, 1 - Math.exp(-6 * dt));
+    const look = face.current.look;
 
     if (root.current) {
       // idle bob + gentle bend/sway of the whole plant
       root.current.position.y = Math.sin(t * 1.4) * 0.12 - 0.1;
       root.current.rotation.z = Math.sin(t * 0.8) * 0.05;
-      root.current.rotation.y = look.current.x * 0.45 + Math.sin(t * 0.5) * 0.08;
-      root.current.rotation.x = -look.current.y * 0.18;
+      root.current.rotation.y = look.x * 0.45 + Math.sin(t * 0.5) * 0.08;
+      root.current.rotation.x = -look.y * 0.18;
     }
     if (head.current) {
       // counter-bend so the top leans like a stem in a breeze
@@ -147,24 +177,30 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
       head.current.rotation.x = Math.sin(t * 1.1) * 0.04;
     }
     if (rightArm.current) {
-      const wave = expr === "surprised" ? 1.5 : 1;
+      const wave = 1 + d.surprise * 0.5;
       rightArm.current.rotation.z = -0.9 - Math.sin(t * 4) * 0.55 * wave;
     }
     if (leftArm.current) {
       leftArm.current.rotation.z = 0.7 + Math.sin(t * 1.6) * 0.16;
     }
     if (mouth.current) {
-      const open = expr === "surprised" ? 1.5 : expr === "chill" ? 0.5 : 1;
+      const open = 1 + d.surprise * 0.5 - d.chill * 0.5;
       const s = open * (1 + Math.sin(t * 3) * 0.08);
       mouth.current.scale.set(1, s, 1);
     }
+    if (browL.current) browL.current.rotation.z = 0.12 + d.surprise * 0.13;
+    if (browR.current) browR.current.rotation.z = -0.12 - d.surprise * 0.13;
 
-    // blinking
-    const blinkPhase = (t % 4.5) / 4.5;
-    const b = blinkPhase > 0.96 ? 1 : 0;
-    setBlinkL(expr === "chill" ? 0.75 : b);
-    setBlinkR(expr === "wink" ? 1 : expr === "chill" ? 0.75 : b);
+    // blinking — smooth triangular envelope instead of a hard on/off flip
+    const cycle = 4.5;
+    const phase = t % cycle;
+    const blinkDur = 0.18;
+    const raw = phase > cycle - blinkDur ? 1 - Math.abs(((phase - (cycle - blinkDur)) / blinkDur) * 2 - 1) : 0;
+    const soft = raw * raw * (3 - 2 * raw);
+    face.current.blinkL = Math.max(soft, d.chill * 0.75);
+    face.current.blinkR = Math.max(soft, d.chill * 0.75, d.wink);
   });
+
 
   return (
     <group ref={root} scale={1.18} position={[0, 0.1, 0]}>
@@ -185,18 +221,19 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
         <Daisy position={[0, 1.95, 0.15]} />
 
         {/* face */}
-        <Eye x={-0.42} blink={blinkL} look={look.current} />
-        <Eye x={0.42} blink={blinkR} look={look.current} />
+        <Eye x={-0.42} side="L" face={face} />
+        <Eye x={0.42} side="R" face={face} />
 
         {/* brows */}
-        <mesh position={[-0.44, 0.95, 0.62]} rotation={[0, 0, expr === "surprised" ? 0.25 : 0.12]}>
+        <mesh ref={browL} position={[-0.44, 0.95, 0.62]} rotation={[0, 0, 0.12]}>
           <boxGeometry args={[0.34, 0.07, 0.07]} />
           <meshStandardMaterial color="#3a3a34" roughness={0.6} />
         </mesh>
-        <mesh position={[0.44, 0.95, 0.62]} rotation={[0, 0, expr === "surprised" ? -0.25 : -0.12]}>
+        <mesh ref={browR} position={[0.44, 0.95, 0.62]} rotation={[0, 0, -0.12]}>
           <boxGeometry args={[0.34, 0.07, 0.07]} />
           <meshStandardMaterial color="#3a3a34" roughness={0.6} />
         </mesh>
+
 
         {/* mouth */}
         <mesh ref={mouth} position={[0, 0.02, 0.6]} scale={[1, 1, 1]}>
