@@ -9,7 +9,6 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Preview,
   Text,
 } from 'npm:@react-email/components@0.0.22'
@@ -24,22 +23,22 @@ export const MagicLinkEmail = ({
   confirmationUrl,
 }: MagicLinkEmailProps) => (
   <Html lang="en" dir="ltr">
-    <Head />
-    <Preview>Your Cuddles login link ✨</Preview>
+    <Head>
+      <style>{darkModeCss}</style>
+    </Head>
+    <Preview>Your login link for {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style={logo} />
-        <Text style={brand}>Cuddles</Text>
         <Heading style={h1}>Your login link</Heading>
         <Text style={text}>
-          Tap the button below to sign in to Cuddles. This link expires shortly,
-          so don't wait too long!
+          Click the button below to log in to {siteName}. This link will expire
+          shortly.
         </Text>
-        <Button style={button} href={confirmationUrl}>
-          Sign In
+        <Button className="dm-btn" style={button} href={confirmationUrl}>
+          Log In
         </Button>
         <Text style={footer}>
-          Didn't request this? No worries — just ignore this email.
+          If you didn't request this link, you can safely ignore this email.
         </Text>
       </Container>
     </Body>
@@ -48,36 +47,35 @@ export const MagicLinkEmail = ({
 
 export default MagicLinkEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Outfit, Arial, sans-serif' }
-const logo = { margin: '0 0 8px', borderRadius: '12px' }
-const container = { padding: '32px 28px' }
-const brand = {
-  fontSize: '18px',
-  fontWeight: 'bold' as const,
-  color: 'hsl(350, 65%, 55%)',
-  margin: '0 0 24px',
-  fontFamily: 'Space Grotesk, Arial, sans-serif',
-}
+const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
+const container = { padding: '20px 25px' }
 const h1 = {
-  fontSize: '24px',
+  fontSize: '22px',
   fontWeight: 'bold' as const,
-  color: 'hsl(270, 30%, 15%)',
+  color: '#000000',
   margin: '0 0 20px',
-  fontFamily: 'Space Grotesk, Arial, sans-serif',
 }
 const text = {
-  fontSize: '15px',
-  color: 'hsl(270, 15%, 45%)',
-  lineHeight: '1.6',
-  margin: '0 0 24px',
+  fontSize: '14px',
+  color: '#55575d',
+  lineHeight: '1.5',
+  margin: '0 0 25px',
 }
 const button = {
-  backgroundColor: 'hsl(350, 65%, 55%)',
-  color: 'hsl(30, 50%, 98%)',
-  fontSize: '15px',
-  fontWeight: 'bold' as const,
-  borderRadius: '12px',
-  padding: '14px 24px',
+  backgroundColor: '#000000',
+  color: '#ffffff',
+  fontSize: '14px',
+  border: '1px solid #000000',
+  borderRadius: '8px',
+  padding: '12px 20px',
   textDecoration: 'none',
 }
-const footer = { fontSize: '12px', color: '#999999', margin: '32px 0 0' }
+const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+// Rendered as a text child, which React may HTML-escape: keep this CSS free of >, &, and quotes.
+const darkModeCss = `
+  @media (prefers-color-scheme: dark) {
+    .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  }
+  [data-ogsc] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  [data-ogsb] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+`
