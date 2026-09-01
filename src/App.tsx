@@ -67,7 +67,6 @@ const InternationalMarket = lazyWithReload(() => import("./pages/InternationalMa
 const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
 const Licensing = lazyWithReload(() => import("./pages/Licensing"));
 const Install = lazyWithReload(() => import("./pages/Install"));
-const Unsubscribe = lazyWithReload(() => import("./pages/Unsubscribe"));
 const ConfirmNewsletter = lazyWithReload(() => import("./pages/ConfirmNewsletter"));
 const Trust = lazyWithReload(() => import("./pages/Trust"));
 const DPA = lazyWithReload(() => import("./pages/DPA"));
@@ -212,7 +211,6 @@ const App = () => (
                 <Route path="/privacy-policy" element={<Suspense fallback={<PageLoader />}><PrivacyPolicy /></Suspense>} />
                 <Route path="/licensing" element={<Suspense fallback={<PageLoader />}><Licensing /></Suspense>} />
                 <Route path="/install" element={<Suspense fallback={<PageLoader />}><Install /></Suspense>} />
-                <Route path="/unsubscribe" element={<Suspense fallback={<PageLoader />}><Unsubscribe /></Suspense>} />
                 <Route path="/newsletter/confirm" element={<Suspense fallback={<PageLoader />}><ConfirmNewsletter /></Suspense>} />
                 <Route path="/trust" element={<Suspense fallback={<PageLoader />}><Trust /></Suspense>} />
                 <Route path="/legal/dpa" element={<Suspense fallback={<PageLoader />}><DPA /></Suspense>} />

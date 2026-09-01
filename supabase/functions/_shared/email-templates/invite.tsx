@@ -9,7 +9,6 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Link,
   Preview,
   Text,
@@ -27,26 +26,27 @@ export const InviteEmail = ({
   confirmationUrl,
 }: InviteEmailProps) => (
   <Html lang="en" dir="ltr">
-    <Head />
-    <Preview>You've been invited to Cuddles 🌿</Preview>
+    <Head>
+      <style>{darkModeCss}</style>
+    </Head>
+    <Preview>You've been invited to join {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Img src="https://rcigcarkcpinnniddxcm.supabase.co/storage/v1/object/public/email-assets/cuddles-logo.png" alt="Cuddles" width="48" height="48" style={logo} />
-        <Text style={brand}>Cuddles</Text>
-        <Heading style={h1}>You've been invited!</Heading>
+        <Heading style={h1}>You've been invited</Heading>
         <Text style={text}>
-          Someone invited you to join{' '}
+          You've been invited to join{' '}
           <Link href={siteUrl} style={link}>
-            <strong>Cuddles</strong>
+            <strong>{siteName}</strong>
           </Link>
-          — the world's smartest AI budtender. Click below to accept and create
-          your account.
+          . Click the button below to accept the invitation and create your
+          account.
         </Text>
-        <Button style={button} href={confirmationUrl}>
+        <Button className="dm-btn" style={button} href={confirmationUrl}>
           Accept Invitation
         </Button>
         <Text style={footer}>
-          Wasn't expecting this? No worries — just ignore this email.
+          If you weren't expecting this invitation, you can safely ignore this
+          email.
         </Text>
       </Container>
     </Body>
@@ -55,37 +55,36 @@ export const InviteEmail = ({
 
 export default InviteEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Outfit, Arial, sans-serif' }
-const logo = { margin: '0 0 8px', borderRadius: '12px' }
-const container = { padding: '32px 28px' }
-const brand = {
-  fontSize: '18px',
-  fontWeight: 'bold' as const,
-  color: 'hsl(350, 65%, 55%)',
-  margin: '0 0 24px',
-  fontFamily: 'Space Grotesk, Arial, sans-serif',
-}
+const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
+const container = { padding: '20px 25px' }
 const h1 = {
-  fontSize: '24px',
+  fontSize: '22px',
   fontWeight: 'bold' as const,
-  color: 'hsl(270, 30%, 15%)',
+  color: '#000000',
   margin: '0 0 20px',
-  fontFamily: 'Space Grotesk, Arial, sans-serif',
 }
 const text = {
-  fontSize: '15px',
-  color: 'hsl(270, 15%, 45%)',
-  lineHeight: '1.6',
-  margin: '0 0 24px',
+  fontSize: '14px',
+  color: '#55575d',
+  lineHeight: '1.5',
+  margin: '0 0 25px',
 }
-const link = { color: 'hsl(350, 65%, 55%)', textDecoration: 'underline' }
+const link = { color: 'inherit', textDecoration: 'underline' }
 const button = {
-  backgroundColor: 'hsl(350, 65%, 55%)',
-  color: 'hsl(30, 50%, 98%)',
-  fontSize: '15px',
-  fontWeight: 'bold' as const,
-  borderRadius: '12px',
-  padding: '14px 24px',
+  backgroundColor: '#000000',
+  color: '#ffffff',
+  fontSize: '14px',
+  border: '1px solid #000000',
+  borderRadius: '8px',
+  padding: '12px 20px',
   textDecoration: 'none',
 }
-const footer = { fontSize: '12px', color: '#999999', margin: '32px 0 0' }
+const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+// Rendered as a text child, which React may HTML-escape: keep this CSS free of >, &, and quotes.
+const darkModeCss = `
+  @media (prefers-color-scheme: dark) {
+    .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  }
+  [data-ogsc] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  [data-ogsb] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+`

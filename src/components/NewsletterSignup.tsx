@@ -48,20 +48,9 @@ export function NewsletterSignup({ className = "" }: NewsletterSignupProps) {
         throw insertError;
       }
 
-      // 2. Trigger the transactional email with the confirmation link
-      const origin = window.location.origin;
-      const confirmationUrl = `${origin}/newsletter/confirm?token=${id}`;
-
-      const { error: emailError } = await supabase.functions.invoke('send-transactional-email', {
-        body: {
-          templateName: 'newsletter-confirmation',
-          recipientEmail: email,
-          idempotencyKey: `newsletter-confirm-${id}`,
-          templateData: { 
-            name: name || 'Friend',
-            confirmationUrl 
-          },
-        },
+      // 2. Trigger the confirmation email (server-side; recipient verified there)
+      const { error: emailError } = await supabase.functions.invoke('send-newsletter-confirmation', {
+        body: { email: email.toLowerCase() },
       });
 
       if (emailError) throw emailError;

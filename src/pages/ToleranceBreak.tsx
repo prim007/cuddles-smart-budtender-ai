@@ -133,19 +133,11 @@ const ToleranceBreak = () => {
     if (notes.includes(key)) return;
 
     try {
-      await supabase.functions.invoke("send-transactional-email", {
+      await supabase.functions.invoke("send-tbreak-milestone", {
         body: {
-          templateName: "t-break-milestone",
-          recipientEmail: user.email,
-          idempotencyKey: `tbreak-${brk.id}-${key}`,
-          templateData: {
-            milestone: completed ? "the finish line" : `day ${dayNumber}`,
-            dayNumber,
-            targetDays: brk.target_days,
-            completed,
-            ...(completed ? { rewardCode: REWARD_CODE } : {}),
-            appUrl: `${window.location.origin}/t-break`,
-          },
+          breakId: brk.id,
+          dayNumber,
+          completed,
         },
       });
 
