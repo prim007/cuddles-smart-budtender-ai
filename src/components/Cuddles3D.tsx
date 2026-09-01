@@ -64,14 +64,32 @@ function Daisy({ position }: { position: [number, number, number] }) {
   );
 }
 
-function Eye({ x, blink, look }: { x: number; blink: number; look: THREE.Vector2 }) {
+type FaceState = { blinkL: number; blinkR: number; look: THREE.Vector2 };
+
+function Eye({ x, side, face }: { x: number; side: "L" | "R"; face: React.MutableRefObject<FaceState> }) {
+  const pupil = useRef<THREE.Group>(null);
+  const lid = useRef<THREE.Mesh>(null);
+
+  useFrame(() => {
+    const f = face.current;
+    if (pupil.current) {
+      pupil.current.position.x = f.look.x * 0.09;
+      pupil.current.position.y = f.look.y * 0.07;
+    }
+    if (lid.current) {
+      const b = side === "L" ? f.blinkL : f.blinkR;
+      lid.current.position.y = 0.28 - b * 0.28;
+      lid.current.scale.y = Math.max(b, 0.001);
+    }
+  });
+
   return (
     <group position={[x, 0.55, 0.62]}>
       <mesh>
         <sphereGeometry args={[0.28, 32, 32]} />
         <meshStandardMaterial color="#ffffff" roughness={0.25} />
       </mesh>
-      <group position={[look.x * 0.09, look.y * 0.07, 0.19]}>
+      <group ref={pupil} position={[0, 0, 0.19]}>
         <mesh>
           <sphereGeometry args={[0.14, 24, 24]} />
           <meshStandardMaterial color="#3b2416" roughness={0.2} />
@@ -82,13 +100,14 @@ function Eye({ x, blink, look }: { x: number; blink: number; look: THREE.Vector2
         </mesh>
       </group>
       {/* eyelid for blinking */}
-      <mesh position={[0, 0.28 - blink * 0.28, 0.06]} scale={[1, Math.max(blink, 0.001), 1]}>
+      <mesh ref={lid} position={[0, 0.28, 0.06]} scale={[1, 0.001, 1]}>
         <sphereGeometry args={[0.295, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
         <meshStandardMaterial color="#5aa845" roughness={0.6} />
       </mesh>
     </group>
   );
 }
+
 
 type Expression = "happy" | "wink" | "surprised" | "chill";
 
