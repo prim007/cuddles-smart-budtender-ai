@@ -221,18 +221,19 @@ function Character({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2>
         <Daisy position={[0, 1.95, 0.15]} />
 
         {/* face */}
-        <Eye x={-0.42} blink={blinkL} look={look.current} />
-        <Eye x={0.42} blink={blinkR} look={look.current} />
+        <Eye x={-0.42} side="L" face={face} />
+        <Eye x={0.42} side="R" face={face} />
 
         {/* brows */}
-        <mesh position={[-0.44, 0.95, 0.62]} rotation={[0, 0, expr === "surprised" ? 0.25 : 0.12]}>
+        <mesh ref={browL} position={[-0.44, 0.95, 0.62]} rotation={[0, 0, 0.12]}>
           <boxGeometry args={[0.34, 0.07, 0.07]} />
           <meshStandardMaterial color="#3a3a34" roughness={0.6} />
         </mesh>
-        <mesh position={[0.44, 0.95, 0.62]} rotation={[0, 0, expr === "surprised" ? -0.25 : -0.12]}>
+        <mesh ref={browR} position={[0.44, 0.95, 0.62]} rotation={[0, 0, -0.12]}>
           <boxGeometry args={[0.34, 0.07, 0.07]} />
           <meshStandardMaterial color="#3a3a34" roughness={0.6} />
         </mesh>
+
 
         {/* mouth */}
         <mesh ref={mouth} position={[0, 0.02, 0.6]} scale={[1, 1, 1]}>
