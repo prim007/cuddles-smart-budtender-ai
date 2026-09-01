@@ -126,8 +126,25 @@ body {
     @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20;
   }
 
-  .focus-ring {
+.focus-ring {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Blog article tables: clean borders, spacing, and header tint */
+  .prose table {
+    @apply w-full text-sm border-collapse;
+  }
+
+  .prose table th {
+    @apply border border-border bg-muted px-3 py-2 text-left font-semibold text-foreground;
+  }
+
+  .prose table td {
+    @apply border border-border px-3 py-2 align-top text-muted-foreground;
+  }
+
+  .prose table tr:nth-child(even) td {
+    @apply bg-muted/40;
   }
 }
 
