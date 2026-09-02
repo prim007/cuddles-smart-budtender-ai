@@ -92,26 +92,37 @@ const StrainDetail = () => {
     tenantStrain?.primary_effect && { icon: Zap, label: "Effect", value: tenantStrain.primary_effect },
   ].filter(Boolean) as { icon: any; label: string; value: string }[];
 
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: displayName,
-    description,
-    category: `${displayType} Cannabis Strain`,
-    brand: { "@type": "Brand", name: "Cuddles AI" },
-    url: `https://cuddles-ai.com/strains/${slug}`,
-    ...(tenantStrain?.price != null && {
-      offers: {
-        "@type": "Offer",
-        price: tenantStrain.price,
-        priceCurrency: "ZAR",
-        availability: tenantStrain.in_stock
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
+  // Google requires Product markup to carry offers, review, or aggregateRating.
+  // Without real merchant data we describe the page as a WebPage instead of
+  // shipping an incomplete Product.
+  const hasOffer = tenantStrain?.price != null;
+  const productSchema = hasOffer
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: displayName,
+        description,
+        category: `${displayType} Cannabis Strain`,
+        brand: { "@type": "Brand", name: "Cuddles AI" },
         url: `https://cuddles-ai.com/strains/${slug}`,
-      },
-    }),
-  };
+        offers: {
+          "@type": "Offer",
+          price: tenantStrain!.price,
+          priceCurrency: "ZAR",
+          availability: tenantStrain!.in_stock
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+          url: `https://cuddles-ai.com/strains/${slug}`,
+        },
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: displayName,
+        description,
+        about: { "@type": "Thing", name: `${displayName} (${displayType} cannabis strain)` },
+        url: `https://cuddles-ai.com/strains/${slug}`,
+      };
 
   const faqs = buildStrainFaqs({
     name: displayName,
