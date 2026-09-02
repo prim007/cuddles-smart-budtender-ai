@@ -383,6 +383,12 @@ const AgentTraces = () => {
           </div>
         </Card>
 
+        {!loading && filtered.length > 0 && (
+          <div className="mb-8">
+            <AgentFlameGraph traces={filtered} />
+          </div>
+        )}
+
         {loading && <p className="text-muted-foreground">Loading traces…</p>}
 
         {!loading && filtered.length === 0 && (
