@@ -13,6 +13,8 @@ project_id = "vfcoctqnohlljuxualwl"
     verify_jwt = false
   [functions.send-tbreak-milestone]
     verify_jwt = true
+  [functions.handle-email-unsubscribe]
+    verify_jwt = false
   [functions.handle-email-events]
     verify_jwt = false
   [functions.preview-transactional-email]
