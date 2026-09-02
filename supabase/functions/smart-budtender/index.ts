@@ -877,7 +877,7 @@ Never mention tools, functions or lookups to the user — just answer naturally 
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/event-stream',
-        ...promptTraceHeaders(usedModel, promptChars),
+        ...promptTraceHeaders(primaryModel, promptChars),
         'X-Cuddles-Tools': toolsUsed.join(',') || 'none',
         'X-Cuddles-Agent': `${specialist.role}:${routedVia}`,
         'X-Cuddles-Approval': pendingApproval ? encodeURIComponent(JSON.stringify(pendingApproval)) : '',

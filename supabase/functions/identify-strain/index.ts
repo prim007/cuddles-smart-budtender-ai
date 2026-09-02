@@ -276,33 +276,24 @@ RULES: Never fabricate high confidence from a bad photo. Educational only — la
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "";
     
-    // Extract JSON from the response
+    // Only return structured identification data. A malformed model response is
+    // an unavailable result, not an "Unknown" identification to present as fact.
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return new Response(
+        JSON.stringify({ error: "The strain identification service returned an unverifiable result. Please try again with a clearer image." }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     let strainData;
     try {
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        strainData = JSON.parse(jsonMatch[0]);
-      } else {
-        strainData = {
-          strain_name: "Unknown",
-          confidence: 0,
-          strain_type: "unknown",
-          characteristics: [],
-          description: sanitizeString(content),
-          effects: [],
-          similar_strains: []
-        };
-      }
+      strainData = JSON.parse(jsonMatch[0]);
     } catch {
-      strainData = {
-        strain_name: "Unknown",
-        confidence: 0,
-        strain_type: "unknown",
-        description: sanitizeString(content),
-        characteristics: [],
-        effects: [],
-        similar_strains: []
-      };
+      return new Response(
+        JSON.stringify({ error: "The strain identification service returned an unverifiable result. Please try again with a clearer image." }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const ocr = await ocrPromise;
