@@ -64,38 +64,57 @@ const Checkout = () => {
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
   const [distanceKm, setDistanceKm] = useState<number | null>(null);
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [deliveryError, setDeliveryError] = useState<string | null>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+
+  const resetDelivery = () => {
+    setDeliveryFee(null);
+    setDistanceKm(null);
+    setEstimatedTime(null);
+    setCoords(null);
+  };
 
   const calculateDelivery = () => {
     if (!address.trim()) {
       toast({ title: "Enter address", description: "Please enter a delivery address.", variant: "destructive" });
       return;
     }
-    // Simple geocoding simulation — in production use a real geocoding API
-    // For now, estimate based on a random distance within Cape Town area
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const km = calculateDistance(pos.coords.latitude, pos.coords.longitude);
-          setDistanceKm(Math.round(km * 10) / 10);
-          setDeliveryFee(getDeliveryFee(km));
-          setEstimatedTime(getEstimatedTime(km));
-        },
-        () => {
-          // Fallback: assume 10km
-          setDistanceKm(10);
-          setDeliveryFee(50);
-          setEstimatedTime(35);
-          toast({ title: "Location unavailable", description: "Using estimated delivery fee. Enable location for accurate pricing." });
-        }
+    resetDelivery();
+    setDeliveryError(null);
+
+    // Delivery pricing is distance-based, so it requires a real device location.
+    // If we can't get one we say so — we never guess a fee, distance or ETA.
+    if (!("geolocation" in navigator)) {
+      setDeliveryError(
+        "Your browser can't share a location, so we can't work out your delivery distance or fee. Please contact us to arrange delivery manually."
       );
-    } else {
-      setDistanceKm(10);
-      setDeliveryFee(50);
-      setEstimatedTime(35);
+      return;
     }
+
+    setIsCalculating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const km = calculateDistance(pos.coords.latitude, pos.coords.longitude);
+        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setDistanceKm(Math.round(km * 10) / 10);
+        setDeliveryFee(getDeliveryFee(km));
+        setEstimatedTime(getEstimatedTime(km));
+        setIsCalculating(false);
+      },
+      (err) => {
+        setIsCalculating(false);
+        setDeliveryError(
+          err.code === err.PERMISSION_DENIED
+            ? "Location access is blocked, so we can't calculate your delivery fee. Enable location for this site and try again."
+            : "We couldn't confirm your location, so we can't calculate a delivery fee right now. Please try again in a moment."
+        );
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
   };
 
-  const total = subtotal + (deliveryFee || 0);
+  const total = deliveryFee == null ? null : subtotal + deliveryFee;
 
   const handlePlaceOrder = async () => {
     if (!user) {
@@ -111,6 +130,10 @@ const Checkout = () => {
       toast({ title: "Empty cart", description: "Add items to your cart first.", variant: "destructive" });
       return;
     }
+    if (deliveryFee == null || distanceKm == null || estimatedTime == null || coords == null || total == null) {
+      toast({ title: "Delivery fee required", description: "Confirm your location before placing the order.", variant: "destructive" });
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -119,9 +142,9 @@ const Checkout = () => {
         .insert({
           user_id: user.id,
           delivery_address: address,
-          delivery_lat: distanceKm ? -33.9 : null,
-          delivery_lng: distanceKm ? 18.4 : null,
-          delivery_fee: deliveryFee || 0,
+          delivery_lat: coords.lat,
+          delivery_lng: coords.lng,
+          delivery_fee: deliveryFee,
           subtotal,
           total,
           distance_km: distanceKm,
@@ -271,7 +294,8 @@ const Checkout = () => {
                   value={address}
                   onChange={(e) => {
                     setAddress(e.target.value);
-                    setDeliveryFee(null);
+                    resetDelivery();
+                    setDeliveryError(null);
                   }}
                   className="rounded-xl"
                 />
@@ -279,10 +303,16 @@ const Checkout = () => {
                   variant="outline"
                   className="rounded-xl"
                   onClick={calculateDelivery}
+                  disabled={isCalculating}
                 >
                   <Truck className="w-4 h-4 mr-2" />
-                  Calculate Delivery Fee
+                  {isCalculating ? "Confirming location..." : "Calculate Delivery Fee"}
                 </Button>
+                {deliveryError && (
+                  <p role="alert" className="text-sm text-destructive">
+                    {deliveryError}
+                  </p>
+                )}
                 <Textarea
                   placeholder="Driver notes (optional — gate code, landmarks, etc.)"
                   value={notes}
@@ -317,13 +347,15 @@ const Checkout = () => {
                   )}
                   <div className="border-t border-border pt-2 flex justify-between text-base">
                     <span className="font-semibold text-foreground">Total</span>
-                    <span className="font-bold text-primary text-xl">R{total.toFixed(2)}</span>
+                    <span className="font-bold text-primary text-xl">
+                      {total != null ? `R${total.toFixed(2)}` : "—"}
+                    </span>
                   </div>
                 </div>
 
                 <Button
                   className="w-full rounded-xl py-6 text-lg bg-gradient-to-r from-primary to-accent text-primary-foreground font-display font-semibold"
-                  disabled={isSubmitting || deliveryFee == null}
+                  disabled={isSubmitting || deliveryFee == null || total == null}
                   onClick={handlePlaceOrder}
                 >
                   {isSubmitting ? (
@@ -331,13 +363,13 @@ const Checkout = () => {
                   ) : (
                     <>
                       <CreditCard className="w-5 h-5 mr-2" />
-                      Place Order · R{total.toFixed(2)}
+                      {total != null ? `Place Order · R${total.toFixed(2)}` : "Place Order"}
                     </>
                   )}
                 </Button>
                 {deliveryFee == null && (
                   <p className="text-xs text-muted-foreground text-center">
-                    Calculate delivery fee to continue
+                    Confirm your location to see the delivery fee and total
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground text-center">

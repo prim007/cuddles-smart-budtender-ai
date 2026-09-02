@@ -244,75 +244,56 @@ RULES: Never fabricate high confidence from a bad photo. Educational only — la
       return null;
     });
 
-    const MODEL_FALLBACKS = ["google/gemini-2.5-pro", "google/gemini-2.5-flash", "google/gemini-2.5-flash-lite"];
+    const model = "google/gemini-2.5-pro";
+    console.log("Calling strain identification model:", model);
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Lovable-API-Key": LOVABLE_API_KEY,
+        "X-Lovable-AIG-SDK": "supabase-edge-function",
+        "Content-Type": "application/json",
+      },
+      body: buildBody(model),
+    });
 
-    let response: Response | null = null;
-    let lastErrorText = "";
-    for (const model of MODEL_FALLBACKS) {
-      console.log("Trying model:", model);
-      response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Lovable-API-Key": LOVABLE_API_KEY,
-          "X-Lovable-AIG-SDK": "supabase-edge-function",
-          "Content-Type": "application/json",
-        },
-        body: buildBody(model),
-      });
-      if (response.ok) break;
-      lastErrorText = await response.text();
-      console.error(`Model ${model} failed:`, response.status, lastErrorText.slice(0, 200));
-      // Don't fall back on auth/payment/rate errors
-      if (response.status === 429 || response.status === 402 || response.status === 401) break;
-    }
-
-    if (!response || !response.ok) {
-      const status = response?.status ?? 500;
-      if (status === 429) {
-        return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+    if (!response.ok) {
+      const errorText = await response.text();
+      let gatewayMessage = '';
+      try {
+        const parsed = JSON.parse(errorText);
+        gatewayMessage = parsed.message || parsed.error || '';
+      } catch {
+        gatewayMessage = errorText;
       }
-      if (status === 402) {
-        return new Response(
-          JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      throw new Error(`AI gateway returned ${status}: ${lastErrorText.slice(0, 200)}`);
+      const message = gatewayMessage || "The strain identification service could not complete this request. Please try again later.";
+      console.error("AI gateway error:", response.status, errorText.slice(0, 200));
+      return new Response(
+        JSON.stringify({ error: message }),
+        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "";
     
-    // Extract JSON from the response
+    // Only return structured identification data. A malformed model response is
+    // an unavailable result, not an "Unknown" identification to present as fact.
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return new Response(
+        JSON.stringify({ error: "The strain identification service returned an unverifiable result. Please try again with a clearer image." }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     let strainData;
     try {
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        strainData = JSON.parse(jsonMatch[0]);
-      } else {
-        strainData = {
-          strain_name: "Unknown",
-          confidence: 0,
-          strain_type: "unknown",
-          characteristics: [],
-          description: sanitizeString(content),
-          effects: [],
-          similar_strains: []
-        };
-      }
+      strainData = JSON.parse(jsonMatch[0]);
     } catch {
-      strainData = {
-        strain_name: "Unknown",
-        confidence: 0,
-        strain_type: "unknown",
-        description: sanitizeString(content),
-        characteristics: [],
-        effects: [],
-        similar_strains: []
-      };
+      return new Response(
+        JSON.stringify({ error: "The strain identification service returned an unverifiable result. Please try again with a clearer image." }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const ocr = await ocrPromise;
