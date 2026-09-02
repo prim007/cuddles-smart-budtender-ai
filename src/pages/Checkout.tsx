@@ -64,35 +64,55 @@ const Checkout = () => {
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
   const [distanceKm, setDistanceKm] = useState<number | null>(null);
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [deliveryError, setDeliveryError] = useState<string | null>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+
+  const resetDelivery = () => {
+    setDeliveryFee(null);
+    setDistanceKm(null);
+    setEstimatedTime(null);
+    setCoords(null);
+  };
 
   const calculateDelivery = () => {
     if (!address.trim()) {
       toast({ title: "Enter address", description: "Please enter a delivery address.", variant: "destructive" });
       return;
     }
-    // Simple geocoding simulation — in production use a real geocoding API
-    // For now, estimate based on a random distance within Cape Town area
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const km = calculateDistance(pos.coords.latitude, pos.coords.longitude);
-          setDistanceKm(Math.round(km * 10) / 10);
-          setDeliveryFee(getDeliveryFee(km));
-          setEstimatedTime(getEstimatedTime(km));
-        },
-        () => {
-          // Fallback: assume 10km
-          setDistanceKm(10);
-          setDeliveryFee(50);
-          setEstimatedTime(35);
-          toast({ title: "Location unavailable", description: "Using estimated delivery fee. Enable location for accurate pricing." });
-        }
+    setDeliveryError(null);
+
+    // Delivery pricing is distance-based, so it requires a real device location.
+    // If we can't get one we say so — we never guess a fee, distance or ETA.
+    if (!("geolocation" in navigator)) {
+      resetDelivery();
+      setDeliveryError(
+        "Your browser can't share a location, so we can't work out your delivery distance or fee. Please contact us to arrange delivery manually."
       );
-    } else {
-      setDistanceKm(10);
-      setDeliveryFee(50);
-      setEstimatedTime(35);
+      return;
     }
+
+    setIsCalculating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const km = calculateDistance(pos.coords.latitude, pos.coords.longitude);
+        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setDistanceKm(Math.round(km * 10) / 10);
+        setDeliveryFee(getDeliveryFee(km));
+        setEstimatedTime(getEstimatedTime(km));
+        setIsCalculating(false);
+      },
+      (err) => {
+        resetDelivery();
+        setIsCalculating(false);
+        setDeliveryError(
+          err.code === err.PERMISSION_DENIED
+            ? "Location access is blocked, so we can't calculate your delivery fee. Enable location for this site and try again."
+            : "We couldn't confirm your location, so we can't calculate a delivery fee right now. Please try again in a moment."
+        );
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
   };
 
   const total = subtotal + (deliveryFee || 0);
