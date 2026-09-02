@@ -857,18 +857,19 @@ Never mention tools, functions or lookups to the user — just answer naturally 
 
     if (!response.ok) {
       const errorText = await response.text();
+      let gatewayMessage = '';
+      try {
+        const parsed = JSON.parse(errorText);
+        gatewayMessage = parsed.message || parsed.error || '';
+      } catch {
+        gatewayMessage = errorText;
+      }
+      const message = gatewayMessage || 'The AI service could not complete this request. Please try again later.';
       console.error('AI gateway error:', { status: response.status, error: errorText, timestamp: new Date().toISOString() });
 
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Cuddles is getting a lot of love right now 🌿 — give it a moment and try again." }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Cuddles' AI credits are running low — the workspace owner needs to top up Lovable AI credits to keep the chat going." }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      }
-      return new Response(JSON.stringify({ error: 'Cuddles hit a snag. Please try again in a moment.' }),
-        { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      // Preserve the gateway status and message so unavailable AI is never presented as a successful answer.
+      return new Response(JSON.stringify({ error: message }),
+        { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     // Stream the response back to the client
