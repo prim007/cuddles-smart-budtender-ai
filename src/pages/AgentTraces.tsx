@@ -25,6 +25,7 @@ import {
   X,
 } from "lucide-react";
 import SEO from "@/components/SEO";
+import AgentFlameGraph from "@/components/AgentFlameGraph";
 import { toast } from "sonner";
 
 
