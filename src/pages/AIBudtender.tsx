@@ -71,8 +71,8 @@ const AIBudtender = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="AI Budtender: 24/7 Strain Recommendations | Cuddles AI"
-        description="Try a free AI budtender that recommends strains by effect, answers THC, CBD and dosing questions instantly, and sells from your live dispensary menu. Free to use, rentals from R1,899/mo."
+        title="AI Budtender for Dispensaries: 24/7 Smart Recommendations"
+        description="An AI budtender that covers peak-hour queues and staff turnover for your dispensary. Free to try, no credit card, and it plugs into your live menu in minutes."
         url="/ai-budtender"
         keywords="AI budtender for dispensaries, automated cannabis product recommendations, cannabis retail automation, smart budtender, dispensary AI chatbot, reduce dispensary wait times with AI, cannabis recommendation engine"
         structuredData={structuredData}
@@ -93,7 +93,7 @@ const AIBudtender = () => {
             The AI Budtender That <span className="text-primary">Sells For You</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8">
-            Stop losing sales to long wait times and undertrained staff. Cuddles AI gives every customer a personalized, knowledgeable budtender experience — instantly.
+            Peak-hour queues and constant staff turnover cost dispensaries sales every week. Cuddles answers product questions instantly, so every customer gets a knowledgeable budtender experience — even when your floor is short-staffed.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/education/chat-with-cuddles">

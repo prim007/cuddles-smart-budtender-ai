@@ -14,6 +14,13 @@ const SLUG_TO_ID: Record<string, string> = {
   "leaf-labs": "leaf-labs",
 };
 
+// Aliased URLs must point at a single canonical slug so duplicate menus
+// don't compete with each other in search or in link previews.
+const CANONICAL_SLUG: Record<string, string> = {
+  "tripple444": "tripple-four",
+  "lef-labs": "leaf-labs",
+};
+
 interface Props {
   slug?: string;
 }
