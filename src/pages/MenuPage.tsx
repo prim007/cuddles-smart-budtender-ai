@@ -33,17 +33,20 @@ const MenuPage = ({ slug: propSlug }: Props) => {
 
   if (!menu) return <Navigate to="/" replace />;
 
-  const title = `${menu.label} · Cuddles`;
-  const description = `${menu.label} — live menu and pricing. ${menu.disclaimer ?? ""}`.trim();
+  const canonicalSlug = CANONICAL_SLUG[slug] ?? slug;
+  const canonicalUrl = `https://cuddles-ai.com/${canonicalSlug}`;
+  const title = `${menu.label} Menu · Cuddles AI`;
+  const description = `${menu.label} — live cannabis menu and pricing, with Cuddles AI on hand to answer product questions. ${menu.disclaimer ?? ""}`.trim();
 
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description.slice(0, 160)} />
-        <link rel="canonical" href={`https://cuddles-ai.com/${slug}`} />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description.slice(0, 160)} />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
       </Helmet>
