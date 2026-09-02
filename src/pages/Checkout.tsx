@@ -131,6 +131,10 @@ const Checkout = () => {
       toast({ title: "Empty cart", description: "Add items to your cart first.", variant: "destructive" });
       return;
     }
+    if (deliveryFee == null || distanceKm == null || estimatedTime == null || coords == null) {
+      toast({ title: "Delivery fee required", description: "Confirm your location before placing the order.", variant: "destructive" });
+      return;
+    }
 
     setIsSubmitting(true);
     try {
