@@ -25,6 +25,7 @@ import {
   X,
 } from "lucide-react";
 import SEO from "@/components/SEO";
+import AgentFlameGraph from "@/components/AgentFlameGraph";
 import { toast } from "sonner";
 
 
@@ -382,6 +383,12 @@ const AgentTraces = () => {
             </div>
           </div>
         </Card>
+
+        {!loading && filtered.length > 0 && (
+          <div className="mb-8">
+            <AgentFlameGraph traces={filtered} />
+          </div>
+        )}
 
         {loading && <p className="text-muted-foreground">Loading traces…</p>}
 

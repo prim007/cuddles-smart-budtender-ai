@@ -18,6 +18,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import SEO from "@/components/SEO";
+import AgentFlameGraph from "@/components/AgentFlameGraph";
 
 type TraceRow = {
   created_at: string;
@@ -27,6 +28,8 @@ type TraceRow = {
   tokens_in: number | null;
   tokens_out: number | null;
   error: string | null;
+  session_id?: string | null;
+  step_index?: number | null;
 };
 
 type EmailRow = { created_at: string; status: string; template_name: string };
@@ -61,7 +64,7 @@ const PipelineHealth = () => {
       const [t, c, e] = await Promise.all([
         supabase
           .from("agent_traces")
-          .select("created_at, agent_role, tool_called, latency_ms, tokens_in, tokens_out, error")
+          .select("created_at, agent_role, tool_called, latency_ms, tokens_in, tokens_out, error, session_id, step_index")
           .gte("created_at", since)
           .order("created_at", { ascending: false })
           .limit(5000),
@@ -327,6 +330,8 @@ const PipelineHealth = () => {
             </CardContent>
           </Card>
         </div>
+
+        <AgentFlameGraph traces={traces} />
 
         <Card>
           <CardHeader>
