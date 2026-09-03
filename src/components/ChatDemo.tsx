@@ -1014,8 +1014,17 @@ const ChatDemo = () => {
           </div>
 
 
-          {/* Post-chat catalog nudge */}
-          {messages.filter(m => m.role === "user").length >= 2 && !(!user && messageCount >= 3) && (
+           {canUndo && (
+             <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2" role="status">
+               <span className="text-sm text-foreground">Last message sent</span>
+               <Button variant="outline" size="sm" className="min-h-11 gap-2" onClick={handleUndo}>
+                 <Undo2 className="h-4 w-4" /> Undo
+               </Button>
+             </div>
+           )}
+
+           {/* Post-chat catalog nudge */}
+           {messages.filter(m => m.role === "user").length >= 2 && !(!user && messageCount >= 3) && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 mb-4">
               <span className="text-2xl">🚀</span>
               <div className="flex-1">
