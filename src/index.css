@@ -186,6 +186,18 @@ html[data-hand="left"] .a11y-panel {
   right: auto;
 }
 
+html[data-hand="left"] .a11y-theme-toggle {
+  left: 4rem;
+  right: auto;
+}
+
+@media (min-width: 768px) {
+  html[data-hand="left"] .a11y-theme-toggle {
+    left: 5rem;
+    right: auto;
+  }
+}
+
 html[data-hand="right"] .a11y-panel {
   right: 1rem;
   left: auto;
