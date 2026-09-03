@@ -130,7 +130,11 @@ const ChatDemo = () => {
   const [showFeedbackPrompt, setShowFeedbackPrompt] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const lastSentRef = useRef<{ messages: Message[]; sessionId: string } | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
+  const { guard, cue } = useAccessibility();
+  const { announce, alert, streamChunk, endStream } = useAnnouncer();
   // When set, the next user message is treated as a city/address for dispensary lookup
   const awaitingDispensaryLocation = useRef(false);
   // Strain/product the user is hunting for, carried across the location follow-up
