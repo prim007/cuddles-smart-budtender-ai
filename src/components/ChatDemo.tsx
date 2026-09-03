@@ -383,7 +383,7 @@ const ChatDemo = () => {
     const wasVoiceInput = fromVoice;
     const previousMessages = messages;
     const previousMessageCount = messageCount;
-    lastSentRef.current = { messages: previousMessages, sessionId };
+    lastSentRef.current = { messages: previousMessages, sessionId, messageCount: previousMessageCount };
     cue("send");
     announce("Message sent");
 
@@ -725,6 +725,32 @@ const ChatDemo = () => {
     window.addEventListener('cuddles-quick-prompt', handler);
     return () => window.removeEventListener('cuddles-quick-prompt', handler);
   }, []);
+
+  const handleSendWithProtection = guard((messageContent?: string, fromVoice = false) => {
+    void handleSend(messageContent, fromVoice);
+  }, "chat-send");
+
+  const handleUndo = useCallback(() => {
+    const previous = lastSentRef.current;
+    if (!previous) return;
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    endStream();
+    setMessages(previous.messages);
+    setSessionId(previous.sessionId);
+    setMessageCount(previous.messageCount);
+    setInput("");
+    lastSentRef.current = null;
+    setIsLoading(false);
+    cue("undo");
+    announce("Last message undone");
+  }, [announce, cue, endStream]);
+
+  useEffect(() => {
+    const handler = () => handleUndo();
+    window.addEventListener("cuddles-undo-last", handler);
+    return () => window.removeEventListener("cuddles-undo-last", handler);
+  }, [handleUndo]);
 
   // Auto-send a welcome prompt after 3s if user hasn't interacted yet
   const autoPromptSent = useRef(false);
