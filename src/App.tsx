@@ -1,6 +1,5 @@
 import { Suspense, lazy, type ComponentType } from "react";
 import { Toaster } from "@/components/ui/toaster";
-import CuddlesWalker from "@/components/CuddlesWalker";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -15,11 +14,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import FeatureNav from "@/components/FeatureNav";
-import ExitIntentCartReminder from "@/components/ExitIntentCartReminder";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
-import UserNamePrompt from "@/components/UserNamePrompt";
-import NdebeleBackground from "@/components/NdebeleBackground";
-import StickyMobileSignupBar from "@/components/StickyMobileSignupBar";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -144,13 +139,10 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <NdebeleBackground />
-              <CuddlesWalker />
               <GoogleAnalytics />
               <MicrosoftClarity />
               <InstallFunnelTracker />
               <FeatureNav />
-              <ExitIntentCartReminder />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
@@ -321,8 +313,6 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <CookieConsentBanner />
-              <UserNamePrompt />
-              <StickyMobileSignupBar />
             </BrowserRouter>
           </TooltipProvider>
           </SubscriptionProvider>
