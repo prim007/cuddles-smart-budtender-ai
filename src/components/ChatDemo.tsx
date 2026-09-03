@@ -802,9 +802,9 @@ const ChatDemo = () => {
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto glass-card rounded-2xl md:rounded-3xl p-3 sm:p-6 md:p-8 animate-fade-in shadow-elevated">
+        <div className="a11y-chat max-w-4xl mx-auto glass-card rounded-2xl md:rounded-3xl p-3 sm:p-6 md:p-8 animate-fade-in shadow-elevated">
           {/* Header with controls */}
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div className="a11y-chat-toolbar flex flex-wrap items-center justify-between gap-2 mb-4">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <ConversationHistory 
                 onLoadSession={handleLoadSession}
@@ -1075,7 +1075,7 @@ const ChatDemo = () => {
           ) : (
             <>
               {/* Input */}
-              <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+              <div className="a11y-chat-input flex flex-wrap gap-2 pt-4 border-t border-border">
                 <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} className="h-10 w-10 min-w-[2.5rem]" />
                 <Input
                   value={input}
