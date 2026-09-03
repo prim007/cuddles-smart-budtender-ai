@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+
 import { Link } from "react-router-dom";
 import ChatSignupPrompt from "./ChatSignupPrompt";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,6 +28,7 @@ import { useUserProfile } from "@/contexts/UserProfileContext";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } from "@/components/GoogleAnalytics";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import ChatStrainCard from "./ChatStrainCard";
 import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
 import ChatMenuCard from "./ChatMenuCard";
@@ -891,8 +893,9 @@ const ChatDemo = () => {
                       }`}
                     >
                       {message.content && (
-                        <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <div className="chat-markdown prose prose-sm dark:prose-invert max-w-none">
                           <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
                             disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
                             unwrapDisallowed
                           >{message.content}</ReactMarkdown>

@@ -132,6 +132,36 @@ export const KNOWLEDGE_CORPUS: KnowledgeDoc[] = [
       "Every health, dosing, or symptom-related answer must end with a clear line that this is general education and not medical advice, and that users should consult a qualified healthcare professional for their situation. Cuddles never diagnoses, never prescribes, never advises on stopping medication, and never gives legal advice on obtaining cannabis where it is illegal.",
   },
 
+  // ── Decision quality & practical diagnosis ─────────────────────────────────
+  {
+    category: "safety",
+    title: "Evidence ladder for plant and cannabis questions",
+    tags: ["evidence", "research", "uncertainty", "safety", "claims"],
+    content:
+      "Separate four kinds of information before answering: established findings supported by repeated human research; emerging findings from smaller or early studies; common user reports that are not proof; and unknowns that cannot be inferred from a product name, photo, or symptom alone. Never turn an association into a promise. Say what is known, what is plausible, and what information is missing. If the answer could change a health decision, recommend a qualified clinician rather than filling the gap with confidence.",
+  },
+  {
+    category: "cultivation",
+    title: "Plant problem diagnosis without guessing",
+    tags: ["plants", "diagnosis", "troubleshooting", "watering", "light", "pests"],
+    content:
+      "Use a repeatable order: describe the pattern and where it appears; check recent changes; inspect the roots and drainage; measure light, temperature, humidity and medium pH when relevant; then consider pests or disease. Lower leaves versus new growth, dry versus soft tissue, and gradual versus sudden change narrow the possibilities. Ask for plant type, age, medium, pot drainage, light hours, watering rhythm and a clear photo before naming a deficiency. Change one variable at a time and observe for several days; do not stack fertiliser, pH adjusters and pesticides when the cause is uncertain.",
+  },
+  {
+    category: "safety",
+    title: "How to read a cannabis product label",
+    tags: ["label", "coa", "testing", "thc", "cbd", "products"],
+    content:
+      "Treat the label as a starting point, not a guarantee of effects. Check whether THC and CBD are listed as percentages or milligrams, whether the amount is per serving or for the whole package, the batch number and expiry, the intended route, and whether an independent Certificate of Analysis is available. Product names, indica/sativa labels and terpene marketing do not prove a specific experience. If potency, ingredients, contaminants or serving size are unclear, say the product is unverifiable and recommend choosing a clearly labelled, legally compliant product instead.",
+  },
+  {
+    category: "dosing",
+    title: "A safer way to explain dose and timing",
+    tags: ["dosing", "onset", "titration", "beginner", "harm reduction"],
+    content:
+      "Explain dose as a range plus a waiting rule, never as a promised result. Ask about route, previous tolerance, other substances and whether the user needs to remain alert. Inhaled effects arrive quickly but can build for several minutes; oral products take much longer and last longer, so redosing early is the main avoidable error. Use the smallest practical starting point, wait for the full expected onset, avoid alcohol and driving, and stop escalating if unwanted effects appear. Health, pregnancy, medication and severe-symptom questions need a clinician or pharmacist.",
+  },
+
   // ── Cultivation ────────────────────────────────────────────────────────────
   {
     category: "cultivation",
@@ -179,4 +209,4 @@ export const KNOWLEDGE_CORPUS: KnowledgeDoc[] = [
   },
 ];
 
-export const CORPUS_VERSION = "2026-08-06-plants";
+export const CORPUS_VERSION = "2026-09-03-knowledge-refresh";
