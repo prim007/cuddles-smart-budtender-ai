@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Lightformer, ContactShadows, Sparkles, Float } from "@react-three/drei";
+import { Environment, Lightformer, ContactShadows } from "@react-three/drei";
 import { Suspense, useMemo, useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 
@@ -312,7 +312,6 @@ const Cuddles3D = () => {
 
   return (
     <div className="relative h-[460px] w-full sm:h-[540px] lg:h-[640px]" aria-hidden="true">
-      <div className="pointer-events-none absolute inset-6 -z-10 rounded-[3rem] bg-gradient-to-tr from-hippie-coral/20 via-transparent to-hippie-sage/20 blur-3xl" />
       <Canvas
         shadows
         dpr={[1, 1.8]}
@@ -329,7 +328,6 @@ const Cuddles3D = () => {
           shadow-mapSize-height={1024}
         />
         <directionalLight position={[-5, 2, -3]} intensity={0.7} color="#ffb98a" />
-        {/* warm rim light from behind for silhouette pop */}
         <spotLight position={[0, 4, -6]} intensity={1.4} color="#ffb27a" angle={0.7} penumbra={1} />
         <Suspense fallback={null}>
           <Environment resolution={128}>
@@ -338,15 +336,7 @@ const Cuddles3D = () => {
             <Lightformer intensity={1} color="#8fd3a5" position={[5, 1, -1]} rotation-y={-Math.PI / 2} scale={[16, 2, 1]} />
           </Environment>
           <PointerTracker pointer={pointer} />
-          <Float speed={1.2} rotationIntensity={0.08} floatIntensity={0.15}>
-            <Character pointer={pointer} />
-          </Float>
-          {/* glowing halo ring behind the character */}
-          <mesh position={[0, 0.1, -1.6]}>
-            <torusGeometry args={[3.1, 0.05, 16, 100]} />
-            <meshStandardMaterial color="#ffb98a" emissive="#ff8f5e" emissiveIntensity={2.2} toneMapped={false} />
-          </mesh>
-          <Sparkles count={45} scale={[8, 7, 4]} position={[0, 0.5, 0]} size={3.2} speed={0.35} color="#ffd9a8" opacity={0.6} />
+          <Character pointer={pointer} />
           <ContactShadows position={[0, -2.75, 0]} opacity={0.5} scale={13} blur={2.8} far={5.5} color="#1a0f1f" />
         </Suspense>
       </Canvas>
