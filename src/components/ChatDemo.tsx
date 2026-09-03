@@ -130,7 +130,7 @@ const ChatDemo = () => {
   const [showFeedbackPrompt, setShowFeedbackPrompt] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const lastSentRef = useRef<{ messages: Message[]; sessionId: string } | null>(null);
+  const lastSentRef = useRef<{ messages: Message[]; sessionId: string; messageCount: number } | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
   const { guard, cue } = useAccessibility();
