@@ -522,12 +522,13 @@ const ChatDemo = () => {
           const jsonStr = line.slice(6).trim();
           if (jsonStr === "[DONE]") { streamDone = true; break; }
 
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const tokenContent = parsed.choices?.[0]?.delta?.content as string | undefined;
-            if (tokenContent) {
-              assistantSoFar += tokenContent;
-              const currentContent = assistantSoFar;
+            try {
+             const parsed = JSON.parse(jsonStr);
+             const tokenContent = parsed.choices?.[0]?.delta?.content as string | undefined;
+             if (tokenContent) {
+               assistantSoFar += tokenContent;
+               streamChunk(assistantSoFar);
+               const currentContent = assistantSoFar;
               setMessages((prev) => {
                 const last = prev[prev.length - 1];
                 if (last?.role === "assistant" && !last.orderPhone) {
