@@ -1,10 +1,8 @@
 import { Helmet } from "react-helmet-async";
 import Hero from "@/components/Hero";
-import Features from "@/components/Features";
 import CuddlesFeatures from "@/components/CuddlesFeatures";
 import HowItWorks from "@/components/HowItWorks";
 import ChatDemo from "@/components/ChatDemo";
-import InvestorCTA from "@/components/InvestorCTA";
 import FAQSection from "@/components/FAQSection";
 import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
@@ -12,12 +10,6 @@ import ThemeToggle from "@/components/ThemeToggle";
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import SignupCTA from "@/components/SignupCTA";
 
-import TrendingStrainsTicker from "@/components/TrendingStrainsTicker";
-import StrainQuiz from "@/components/StrainQuiz";
-import Testimonials from "@/components/Testimonials";
-import YouTubeSection from "@/components/YouTubeSection";
-import PhoneShowcase from "@/components/PhoneShowcase";
-import PawDownloadCTA from "@/components/PawDownloadCTA";
 import ComplianceSection from "@/components/ComplianceSection";
 
 const localBusinessSchema = {
@@ -138,22 +130,11 @@ const Index = () => {
         <div id="chat-demo">
           <ChatDemo />
         </div>
-        <PhoneShowcase />
-
-
-
-        <TrendingStrainsTicker />
-        <Testimonials />
-        <StrainQuiz />
-        <YouTubeSection />
-        <PawDownloadCTA />
+        <HowItWorks />
         <CuddlesFeatures />
         <FeaturedBlogPosts />
-        <Features />
-        <HowItWorks />
         <FAQSection />
         <ComplianceSection />
-        <InvestorCTA />
         <SignupCTA />
       </main>
       <Footer />
