@@ -311,7 +311,7 @@ const Cuddles3D = () => {
   );
 
   return (
-    <div className="relative h-[460px] w-full sm:h-[540px] lg:h-[640px]" aria-hidden="true">
+    <div className="relative h-[320px] w-full sm:h-[540px] lg:h-[640px]" aria-hidden="true">
       <Canvas
         shadows
         dpr={[1, 1.8]}

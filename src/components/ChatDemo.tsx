@@ -723,26 +723,26 @@ const ChatDemo = () => {
   }, [messageCount]);
 
   return (
-    <section id="demo" className="py-24 bg-muted/30 relative overflow-hidden">
+    <section id="demo" className="py-12 md:py-24 bg-muted/30 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-hippie-coral/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-hippie-lavender/5 rounded-full blur-3xl" />
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-12">
+        <div className="max-w-3xl mx-auto text-center mb-8 md:mb-12">
           <div className="pill mb-4 animate-fade-in">💬 Live Demo</div>
           <h2 className="font-display font-bold text-foreground mb-6">
             {t.chatTitle}
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-base md:text-lg text-muted-foreground">
             Experience the power of AI-driven recommendations in real-time
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto glass-card rounded-3xl p-6 md:p-8 animate-fade-in shadow-elevated">
+        <div className="max-w-4xl mx-auto glass-card rounded-2xl md:rounded-3xl p-3 sm:p-6 md:p-8 animate-fade-in shadow-elevated">
           {/* Header with controls */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <ConversationHistory 
                 onLoadSession={handleLoadSession}
                 currentSessionId={sessionId}
@@ -757,7 +757,7 @@ const ChatDemo = () => {
                 <Plus className="h-5 w-5" />
               </Button>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               {ttsSupported && (
                 <Button
                   variant="outline"
@@ -789,7 +789,7 @@ const ChatDemo = () => {
           <QuickPrompts onSelect={handleSend} disabled={isLoading} />
 
           {/* Messages */}
-          <div className="h-[400px] overflow-y-auto mb-4 space-y-4 pr-4">
+          <div className="h-[60vh] max-h-[400px] md:h-[400px] md:max-h-none overflow-y-auto mb-4 space-y-4 pr-1 md:pr-4">
             {(() => {
               const RECO_RE = /\b(recommend|try|suggest|strain|indica|sativa|hybrid|terpene|dose|dosage)\b/i;
               const firstRecoIdx = !user
