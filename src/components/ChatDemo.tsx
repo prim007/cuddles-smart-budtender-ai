@@ -914,7 +914,7 @@ const ChatDemo = () => {
                       {message.uiFeedback && <ChatUIFeedbackPrompt />}
                       {message.orderPhone && (
                         <Button
-                          className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
+                          className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-primary-foreground font-display font-medium rounded-xl"
                           onClick={() => window.open('https://tripplefourshophub.online', '_blank')}
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
@@ -1092,7 +1092,7 @@ const ChatDemo = () => {
                 <Button
                   onClick={() => handleSendWithProtection()}
                   disabled={isLoading || !input.trim()}
-                  className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white"
+                  className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-primary-foreground"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
