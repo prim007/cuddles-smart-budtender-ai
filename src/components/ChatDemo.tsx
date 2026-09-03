@@ -381,6 +381,8 @@ const ChatDemo = () => {
     const content = messageContent || input;
     if (!content.trim() || isLoading) return;
     const wasVoiceInput = fromVoice;
+    cue("send");
+    announce("Message sent");
 
     const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
