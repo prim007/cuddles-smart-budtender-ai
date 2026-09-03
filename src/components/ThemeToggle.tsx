@@ -10,7 +10,7 @@ const ThemeToggle = () => {
       variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="fixed top-4 right-4 z-50 bg-card/80 backdrop-blur-sm border-border hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+      className="a11y-theme-toggle fixed top-4 right-16 z-50 md:top-5 md:right-20 bg-card/80 backdrop-blur-sm border-border hover:bg-accent hover:text-accent-foreground transition-all duration-300"
       aria-label="Toggle theme"
     >
       {theme === "dark" ? (
