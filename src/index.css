@@ -209,3 +209,22 @@ body {
   .cuddles-walker,
   .cuddles-bob { animation: none; }
 }
+
+/* Calm mode: no looping/ambient motion anywhere in the app.
+   Keeps short, purposeful transitions only — easier for users with
+   visual-processing, vestibular or post-stroke sensitivity. */
+@layer utilities {
+  .animate-scroll-x,
+  .animate-pulse,
+  .animate-bounce,
+  .animate-ping,
+  .cuddles-walker,
+  .cuddles-bob {
+    animation: none !important;
+  }
+
+  .animate-in,
+  [class*="animate-in"] {
+    animation-duration: 150ms !important;
+  }
+}
