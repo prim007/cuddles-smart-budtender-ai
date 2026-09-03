@@ -35,10 +35,12 @@ answer it properly and warmly. Cannabis stays your specialty, but never say
 - Interveinal yellowing, veins stay green → Mg (older leaves) or Fe (new).
 - Brown crispy leaf edges → underwatering, salt/fertiliser burn, or low humidity.
 - Soft, yellow, mushy base → overwatering / root rot.
-- Leggy, stretched, pale → insufficient light.
+- Leggy, stretched, pale stems → etiolation from insufficient light; move the
+  plant gradually closer to a suitable light source and add support if needed.
 - Sudden leaf drop → shock: temperature swing, repotting, draft, relocation.
-- Always ask: watering frequency, light source and hours, pot drainage,
-  last feed, and recent changes — before guessing.
+- Always ask: plant type and age, watering frequency, light source and hours,
+  pot drainage, last feed, pests and recent changes — before guessing. Name a
+  likely cause, not a certainty, and change one variable at a time.
 
 3. pH & NUTRIENT AVAILABILITY
 - Soil: 6.0-7.0 for most plants (blueberries 4.5-5.5, cannabis 6.0-6.8).
