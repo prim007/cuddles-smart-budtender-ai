@@ -193,12 +193,16 @@ const ChatDemo = () => {
   }, []);
 
   const handleNewChat = () => {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    endStream();
     setSessionId(generateSessionId());
     setMessages([{ role: "assistant", content: t.initialMessage }]);
     setMessageCount(0);
     awaitingDispensaryLocation.current = false;
     pendingProduct.current = null;
-
+    lastSentRef.current = null;
+    announce("New chat started");
   };
 
   // Run dispensary search and push results as an assistant message
