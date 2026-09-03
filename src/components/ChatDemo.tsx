@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+
 import { Link } from "react-router-dom";
 import ChatSignupPrompt from "./ChatSignupPrompt";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,6 +28,7 @@ import { useUserProfile } from "@/contexts/UserProfileContext";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { trackChatInitiated, trackRecommendationGiven, trackOrderLinkClicked } from "@/components/GoogleAnalytics";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import ChatStrainCard from "./ChatStrainCard";
 import ChatDispensaryCards, { type Dispensary } from "./ChatDispensaryCards";
 import ChatMenuCard from "./ChatMenuCard";
@@ -874,7 +876,7 @@ const ChatDemo = () => {
                       }`}
                     >
                       {message.role === "user" ? (
-                        <User className="w-5 h-5 text-white" />
+                        <User className="w-5 h-5 text-primary-foreground" />
                       ) : (
                         <img
                           src={processedImage}
@@ -884,15 +886,16 @@ const ChatDemo = () => {
                       )}
                     </div>
                     <div
-                      className={`px-4 py-3 rounded-2xl max-w-[80%] ${
+                      className={`px-4 py-3 rounded-2xl max-w-[92%] sm:max-w-[85%] leading-7 ${
                         message.role === "user"
-                          ? "bg-gradient-to-br from-hippie-coral to-hippie-peach text-white"
+                          ? "bg-gradient-to-br from-hippie-coral to-hippie-peach text-primary-foreground"
                           : "bg-card border border-border text-foreground shadow-soft"
                       }`}
                     >
                       {message.content && (
-                        <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <div className="chat-markdown prose prose-base dark:prose-invert max-w-none">
                           <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
                             disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}
                             unwrapDisallowed
                           >{message.content}</ReactMarkdown>
@@ -911,7 +914,7 @@ const ChatDemo = () => {
                       {message.uiFeedback && <ChatUIFeedbackPrompt />}
                       {message.orderPhone && (
                         <Button
-                          className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white font-display font-medium rounded-xl"
+                          className="mt-3 w-full bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-primary-foreground font-display font-medium rounded-xl"
                           onClick={() => window.open('https://tripplefourshophub.online', '_blank')}
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
@@ -1089,7 +1092,7 @@ const ChatDemo = () => {
                 <Button
                   onClick={() => handleSendWithProtection()}
                   disabled={isLoading || !input.trim()}
-                  className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white"
+                  className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-primary-foreground"
                 >
                   <Send className="w-4 h-4" />
                 </Button>

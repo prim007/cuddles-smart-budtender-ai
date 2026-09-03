@@ -148,6 +148,71 @@ body {
   }
 }
 
+/* Calm, layered markdown for Cuddles' answers. The hierarchy keeps long
+   explanations readable without making short replies feel over-designed. */
+@layer components {
+  .chat-markdown {
+    @apply leading-6 text-[0.9375rem];
+  }
+
+  .chat-markdown > :first-child {
+    @apply mt-0;
+  }
+
+  .chat-markdown > :last-child {
+    @apply mb-0;
+  }
+
+  .chat-markdown :is(h2, h3, h4) {
+    @apply mt-5 mb-2 font-display font-semibold text-foreground;
+  }
+
+  .chat-markdown h2 {
+    @apply border-b border-border/60 pb-1 text-base;
+  }
+
+  .chat-markdown h3 {
+    @apply text-[0.9375rem];
+  }
+
+  .chat-markdown p {
+    @apply my-2;
+  }
+
+  .chat-markdown :is(ul, ol) {
+    @apply my-2 pl-5;
+  }
+
+  .chat-markdown li {
+    @apply my-1 pl-1;
+  }
+
+  .chat-markdown li::marker {
+    color: hsl(var(--primary));
+  }
+
+  .chat-markdown strong {
+    @apply font-semibold text-foreground;
+  }
+
+  .chat-markdown blockquote {
+    @apply my-3 border-l-2 border-primary/60 bg-primary/5 px-3 py-2 text-muted-foreground;
+  }
+
+  .chat-markdown code {
+    @apply rounded bg-muted px-1 py-0.5 text-[0.85em] text-foreground;
+  }
+
+  .chat-markdown table {
+    @apply my-3 block max-w-full overflow-x-auto text-xs;
+  }
+}
+
+/* Keep streamed answers readable at larger accessibility text sizes. */
+.chat-markdown :is(p, li, blockquote) {
+  overflow-wrap: anywhere;
+}
+
 /* Accessibility modes */
 .a11y-contrast {
   --background: 0 0% 0%;
