@@ -321,6 +321,8 @@ const App = () => (
               <CookieConsentBanner />
             </BrowserRouter>
           </TooltipProvider>
+          </AnnouncerProvider>
+          </AccessibilityProvider>
           </SubscriptionProvider>
         </AuthProvider>
         </CartProvider>
