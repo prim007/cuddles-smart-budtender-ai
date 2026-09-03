@@ -149,13 +149,13 @@ const FeatureNav = () => {
   return (
     <>
       {/* Mobile floating action button */}
-      <div className="fixed bottom-6 left-6 z-[9998] md:hidden">
+      <div className="fixed z-[55] bottom-6 left-6 right-6 flex justify-between pointer-events-none md:hidden a11y-hand-left">
         <Button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
           className={cn(
-            "w-14 h-14 rounded-full shadow-elevated transition-all duration-300",
+            "pointer-events-auto min-h-11 min-w-11 w-14 h-14 rounded-full shadow-elevated transition-all duration-300",
             isOpen 
               ? "bg-muted text-foreground" 
               : "bg-gradient-to-br from-hippie-purple to-hippie-pink text-white"
