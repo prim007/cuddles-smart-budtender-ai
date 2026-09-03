@@ -231,6 +231,23 @@ serve(async (req) => {
 </html>
         `;
 
+    const emailText = [
+      "Your 15% discount code from Cuddles",
+      "",
+      `Discount code: ${promoCode}`,
+      "",
+      "Use it at checkout on the Tripple Four Shop: https://tripplefourshophub.online",
+      "",
+      `Claim your free Cuddles account: https://cuddles-ai.com/claim?email=${encodeURIComponent(normalizedEmail)}&code=${encodeURIComponent(promoCode)}`,
+      "",
+      "This code is unique to you and can be used once. No expiry.",
+      "",
+      "Stay lifted,",
+      "Primrose Maseko - Founder, Cuddles AI & Tripple444",
+      "",
+      "You're receiving this because you signed up at https://cuddles-ai.com.",
+    ].join("\n");
+
     await sendLovableEmail(
       {
         to: normalizedEmail,
@@ -238,7 +255,9 @@ serve(async (req) => {
         sender_domain: SENDER_DOMAIN,
         subject: "Your 15% Discount Code from Cuddles! ✌️",
         html: emailHtml,
+        text: emailText,
         purpose: "transactional",
+
         label: "promo-code",
         idempotency_key: `promo-${normalizedEmail}-${promoCode}`,
       },
