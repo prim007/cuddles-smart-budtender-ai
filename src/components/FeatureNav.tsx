@@ -149,13 +149,13 @@ const FeatureNav = () => {
   return (
     <>
       {/* Mobile floating action button */}
-      <div className="fixed bottom-6 left-6 z-[9998] md:hidden">
+      <div className="a11y-mobile-menu fixed z-[55] bottom-6 left-6 right-6 flex pointer-events-none md:hidden">
         <Button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
           className={cn(
-            "w-14 h-14 rounded-full shadow-elevated transition-all duration-300",
+            "pointer-events-auto min-h-11 min-w-11 w-14 h-14 rounded-full shadow-elevated transition-all duration-300",
             isOpen 
               ? "bg-muted text-foreground" 
               : "bg-gradient-to-br from-hippie-purple to-hippie-pink text-white"
@@ -175,7 +175,7 @@ const FeatureNav = () => {
 
       {/* Mobile menu */}
       <div className={cn(
-        "fixed bottom-24 left-6 z-[9998] md:hidden transition-all duration-300 origin-bottom-left",
+        "a11y-mobile-panel fixed bottom-24 left-6 z-[9998] md:hidden transition-all duration-300 origin-bottom-left",
         isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
       )}>
         <div className="bg-card border border-border rounded-2xl p-4 shadow-elevated space-y-2">

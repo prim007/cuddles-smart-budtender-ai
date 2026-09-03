@@ -12,8 +12,11 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { UserProfileProvider } from "@/contexts/UserProfileContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
+import { AnnouncerProvider } from "@/contexts/AnnouncerContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import FeatureNav from "@/components/FeatureNav";
+import AccessibilityPanel from "@/components/AccessibilityPanel";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -135,6 +138,8 @@ const App = () => (
         <CartProvider>
         <AuthProvider>
           <SubscriptionProvider>
+          <AccessibilityProvider>
+          <AnnouncerProvider>
           <TooltipProvider>
             <Toaster />
             <Sonner />
@@ -143,6 +148,7 @@ const App = () => (
               <MicrosoftClarity />
               <InstallFunnelTracker />
               <FeatureNav />
+              <AccessibilityPanel />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
@@ -315,6 +321,8 @@ const App = () => (
               <CookieConsentBanner />
             </BrowserRouter>
           </TooltipProvider>
+          </AnnouncerProvider>
+          </AccessibilityProvider>
           </SubscriptionProvider>
         </AuthProvider>
         </CartProvider>

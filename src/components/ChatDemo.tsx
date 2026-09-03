@@ -5,9 +5,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, ExternalLink, Plus, Volume2, VolumeX, UserPlus } from "lucide-react";
+import { Send, User, ExternalLink, Plus, Volume2, VolumeX, UserPlus, Undo2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAccessibility } from "@/contexts/AccessibilityContext";
+import { useAnnouncer } from "@/contexts/AnnouncerContext";
 import cuddlesImage from "@/assets/cuddles.png";
 
 
@@ -128,7 +130,12 @@ const ChatDemo = () => {
   const [showFeedbackPrompt, setShowFeedbackPrompt] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const lastSentRef = useRef<{ messages: Message[]; sessionId: string; messageCount: number } | null>(null);
+  const [canUndo, setCanUndo] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
+  const { guard, cue } = useAccessibility();
+  const { announce, alert, streamChunk, endStream } = useAnnouncer();
   // When set, the next user message is treated as a city/address for dispensary lookup
   const awaitingDispensaryLocation = useRef(false);
   // Strain/product the user is hunting for, carried across the location follow-up
@@ -187,12 +194,17 @@ const ChatDemo = () => {
   }, []);
 
   const handleNewChat = () => {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    endStream();
     setSessionId(generateSessionId());
     setMessages([{ role: "assistant", content: t.initialMessage }]);
     setMessageCount(0);
     awaitingDispensaryLocation.current = false;
     pendingProduct.current = null;
-
+    lastSentRef.current = null;
+    setCanUndo(false);
+    announce("New chat started");
   };
 
   // Run dispensary search and push results as an assistant message
@@ -371,6 +383,12 @@ const ChatDemo = () => {
     const content = messageContent || input;
     if (!content.trim() || isLoading) return;
     const wasVoiceInput = fromVoice;
+    const previousMessages = messages;
+    const previousMessageCount = messageCount;
+    lastSentRef.current = { messages: previousMessages, sessionId, messageCount: previousMessageCount };
+    setCanUndo(true);
+    cue("send");
+    announce("Message sent");
 
     const userMessage: Message = { role: "user", content };
     setMessages((prev) => [...prev, userMessage]);
@@ -449,6 +467,9 @@ const ChatDemo = () => {
 
     try {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-budtender`;
+      abortControllerRef.current?.abort();
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
       
       // Use user's session token if logged in (enables Level 3/4 personalization)
       const { data: { session: currentSession } } = await supabase.auth.getSession();
@@ -473,6 +494,7 @@ const ChatDemo = () => {
           language,
           userName: displayName ?? undefined,
         }),
+        signal: abortController.signal,
       });
 
       if (!resp.ok) {
@@ -506,12 +528,13 @@ const ChatDemo = () => {
           const jsonStr = line.slice(6).trim();
           if (jsonStr === "[DONE]") { streamDone = true; break; }
 
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const tokenContent = parsed.choices?.[0]?.delta?.content as string | undefined;
-            if (tokenContent) {
-              assistantSoFar += tokenContent;
-              const currentContent = assistantSoFar;
+            try {
+             const parsed = JSON.parse(jsonStr);
+             const tokenContent = parsed.choices?.[0]?.delta?.content as string | undefined;
+             if (tokenContent) {
+               assistantSoFar += tokenContent;
+               streamChunk(assistantSoFar);
+               const currentContent = assistantSoFar;
               setMessages((prev) => {
                 const last = prev[prev.length - 1];
                 if (last?.role === "assistant" && !last.orderPhone) {
@@ -593,6 +616,10 @@ const ChatDemo = () => {
         return [...prev, { role: "assistant", content: finalContent, orderPhone }];
       });
 
+      endStream(finalContent);
+      cue("reply");
+      announce("Cuddles replied");
+
       // Speak the response if voice is enabled and it's a greeting
       if (voiceEnabled && ttsSupported && finalContent) {
         const didGreet = speakIfGreeting(content, finalContent);
@@ -653,6 +680,7 @@ const ChatDemo = () => {
         trackEvent("chat_feedback_prompt_shown", "engagement", "session");
       }
     } catch (error: any) {
+      if (error?.name === "AbortError") return;
       console.error("Error:", error);
       const errorMsg = error?.message || "";
 
@@ -670,8 +698,12 @@ const ChatDemo = () => {
           description: "We're upgrading Cuddles right now — she'll be back soon. Please try again in a little while.",
         });
       }
+      cue("error");
+      alert("Cuddles could not complete that request. Please try again.");
 
     } finally {
+      abortControllerRef.current = null;
+      endStream();
       setIsLoading(false);
     }
   };
@@ -679,7 +711,7 @@ const ChatDemo = () => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSend();
+      handleSendWithProtection();
     }
   };
 
@@ -689,12 +721,16 @@ const ChatDemo = () => {
   };
 
   const handleVoiceTranscript = (transcript: string) => {
-    handleSend(transcript, true);
+    handleSendWithProtection(transcript, true);
   };
 
+  const handleSendWithProtection = guard<[string?, boolean?]>((messageContent?: string, fromVoice = false) => {
+    void handleSend(messageContent, fromVoice);
+  }, "chat-send");
+
   // Keep a stable ref to handleSend so the event listener never goes stale
-  const handleSendRef = useRef(handleSend);
-  useEffect(() => { handleSendRef.current = handleSend; });
+  const handleSendRef = useRef(handleSendWithProtection);
+  useEffect(() => { handleSendRef.current = handleSendWithProtection; });
 
   // Listen for hero quick-prompt events
   useEffect(() => {
@@ -705,6 +741,29 @@ const ChatDemo = () => {
     window.addEventListener('cuddles-quick-prompt', handler);
     return () => window.removeEventListener('cuddles-quick-prompt', handler);
   }, []);
+
+  const handleUndo = useCallback(() => {
+    const previous = lastSentRef.current;
+    if (!previous) return;
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    endStream();
+    setMessages(previous.messages);
+    setSessionId(previous.sessionId);
+    setMessageCount(previous.messageCount);
+    setInput("");
+    lastSentRef.current = null;
+    setIsLoading(false);
+    setCanUndo(false);
+    cue("undo");
+    announce("Last message undone");
+  }, [announce, cue, endStream]);
+
+  useEffect(() => {
+    const handler = () => handleUndo();
+    window.addEventListener("cuddles-undo-last", handler);
+    return () => window.removeEventListener("cuddles-undo-last", handler);
+  }, [handleUndo]);
 
   // Auto-send a welcome prompt after 3s if user hasn't interacted yet
   const autoPromptSent = useRef(false);
@@ -743,9 +802,9 @@ const ChatDemo = () => {
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto glass-card rounded-2xl md:rounded-3xl p-3 sm:p-6 md:p-8 animate-fade-in shadow-elevated">
+        <div className="a11y-chat max-w-4xl mx-auto glass-card rounded-2xl md:rounded-3xl p-3 sm:p-6 md:p-8 animate-fade-in shadow-elevated">
           {/* Header with controls */}
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div className="a11y-chat-toolbar flex flex-wrap items-center justify-between gap-2 mb-4">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <ConversationHistory 
                 onLoadSession={handleLoadSession}
@@ -772,13 +831,14 @@ const ChatDemo = () => {
                     setVoiceEnabled(next);
                     if (next) prime(); // unlock TTS inside gesture
                   }}
-                  className={`bg-card/80 backdrop-blur-sm border-border hover:bg-accent ${voiceEnabled ? 'text-primary' : 'text-muted-foreground'}`}
-                  title={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
+                   className={`bg-card/80 backdrop-blur-sm border-border hover:bg-accent ${voiceEnabled ? 'text-primary' : 'text-muted-foreground'}`}
+                   title={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
+                   aria-label={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
                 >
                   {voiceEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
                 </Button>
               )}
-              <ImageUploadButton onImageAnalysis={handleSend} disabled={isLoading} />
+              <ImageUploadButton onImageAnalysis={handleSendWithProtection} disabled={isLoading} />
               <DispensaryFinder />
               <DosageCalculator />
               <UserProfilePanel />
@@ -790,7 +850,7 @@ const ChatDemo = () => {
           </div>
 
           {/* Quick prompts */}
-          <QuickPrompts onSelect={handleSend} disabled={isLoading} />
+          <QuickPrompts onSelect={handleSendWithProtection} disabled={isLoading} />
 
           {/* Messages */}
           <div ref={messagesContainerRef} className="h-[60vh] max-h-[400px] md:h-[400px] md:max-h-none overflow-y-auto mb-4 space-y-4 pr-1 md:pr-4">
@@ -955,8 +1015,17 @@ const ChatDemo = () => {
           </div>
 
 
-          {/* Post-chat catalog nudge */}
-          {messages.filter(m => m.role === "user").length >= 2 && !(!user && messageCount >= 3) && (
+           {canUndo && (
+             <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2" role="status">
+               <span className="text-sm text-foreground">Last message sent</span>
+               <Button variant="outline" size="sm" className="min-h-11 gap-2" onClick={handleUndo}>
+                 <Undo2 className="h-4 w-4" /> Undo
+               </Button>
+             </div>
+           )}
+
+           {/* Post-chat catalog nudge */}
+           {messages.filter(m => m.role === "user").length >= 2 && !(!user && messageCount >= 3) && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20 mb-4">
               <span className="text-2xl">🚀</span>
               <div className="flex-1">
@@ -1007,7 +1076,7 @@ const ChatDemo = () => {
           ) : (
             <>
               {/* Input */}
-              <div className="flex gap-2 pt-4 border-t border-border">
+              <div className="a11y-chat-input flex flex-wrap gap-2 pt-4 border-t border-border">
                 <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} className="h-10 w-10 min-w-[2.5rem]" />
                 <Input
                   value={input}
@@ -1018,7 +1087,7 @@ const ChatDemo = () => {
                   className="flex-1 rounded-xl border-border bg-background/50 focus-ring"
                 />
                 <Button
-                  onClick={() => handleSend()}
+                  onClick={() => handleSendWithProtection()}
                   disabled={isLoading || !input.trim()}
                   className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white"
                 >

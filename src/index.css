@@ -148,6 +148,80 @@ body {
   }
 }
 
+/* Accessibility modes */
+.a11y-contrast {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 7%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 0 0% 100%;
+  --muted: 0 0% 16%;
+  --muted-foreground: 0 0% 92%;
+  --border: 0 0% 55%;
+  --input: 0 0% 55%;
+  --primary: 45 100% 55%;
+  --primary-foreground: 0 0% 0%;
+  --accent: 180 100% 60%;
+  --accent-foreground: 0 0% 0%;
+  --ring: 45 100% 70%;
+}
+
+.a11y-contrast body,
+.a11y-contrast .glass-card {
+  background-image: none;
+}
+
+.a11y-contrast :is(a, button, input, textarea, select, [role="button"]):focus-visible {
+  outline: 3px solid hsl(var(--ring));
+  outline-offset: 3px;
+}
+
+.a11y-contrast .text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+
+html[data-hand="left"] .a11y-panel {
+  left: 1rem;
+  right: auto;
+}
+
+html[data-hand="right"] .a11y-panel {
+  right: 1rem;
+  left: auto;
+}
+
+html[data-hand="right"] .a11y-panel [data-radix-popper-content-wrapper] {
+  --radix-popover-content-transform-origin: top right;
+}
+
+html[data-hand="left"] .a11y-mobile-panel {
+  left: 1.5rem;
+  right: auto;
+  transform-origin: bottom left;
+}
+
+html[data-hand="right"] .a11y-mobile-menu {
+  left: auto;
+  right: 1.5rem;
+}
+
+html[data-hand="right"] .a11y-mobile-panel {
+  left: auto;
+  right: 1.5rem;
+  transform-origin: bottom right;
+}
+
+@media (min-width: 768px) {
+  html[data-hand="left"] .a11y-panel {
+    left: 1.5rem;
+  }
+
+  html[data-hand="right"] .a11y-panel {
+    right: 1.5rem;
+  }
+}
+
 @layer utilities {
   .scroll-smooth {
     scroll-behavior: smooth;
