@@ -381,6 +381,9 @@ const ChatDemo = () => {
     const content = messageContent || input;
     if (!content.trim() || isLoading) return;
     const wasVoiceInput = fromVoice;
+    const previousMessages = messages;
+    const previousMessageCount = messageCount;
+    lastSentRef.current = { messages: previousMessages, sessionId };
     cue("send");
     announce("Message sent");
 
