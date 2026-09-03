@@ -40,9 +40,12 @@ const DEFAULTS: AccessibilitySettings = {
 
 const STORAGE_KEY = "cuddles:a11y";
 
+type Cue = "send" | "reply" | "error" | "undo";
+
 interface AccessibilityContextValue extends AccessibilitySettings {
   set: <K extends keyof AccessibilitySettings>(key: K, value: AccessibilitySettings[K]) => void;
   reset: () => void;
+  cue: (kind: Cue) => void;
   /** Wrap a handler so repeat fires inside the debounce window are ignored. */
   guard: <A extends unknown[]>(fn: (...args: A) => void, key?: string) => (...args: A) => void;
 }
