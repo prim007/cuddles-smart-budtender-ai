@@ -21,7 +21,7 @@ interface AnnouncerContextValue {
    */
   streamChunk: (fullTextSoFar: string) => void;
   /** Flush whatever is left of a stream and reset the buffer. */
-  endStream: () => void;
+  endStream: (finalText?: string) => void;
 }
 
 const AnnouncerContext = createContext<AnnouncerContextValue | null>(null);
