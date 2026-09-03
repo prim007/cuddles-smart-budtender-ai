@@ -461,6 +461,9 @@ const ChatDemo = () => {
 
     try {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-budtender`;
+      abortControllerRef.current?.abort();
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
       
       // Use user's session token if logged in (enables Level 3/4 personalization)
       const { data: { session: currentSession } } = await supabase.auth.getSession();
