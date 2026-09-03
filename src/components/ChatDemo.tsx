@@ -754,6 +754,7 @@ const ChatDemo = () => {
     setInput("");
     lastSentRef.current = null;
     setIsLoading(false);
+    setCanUndo(false);
     cue("undo");
     announce("Last message undone");
   }, [announce, cue, endStream]);
