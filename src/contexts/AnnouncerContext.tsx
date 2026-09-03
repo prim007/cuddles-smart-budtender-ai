@@ -79,15 +79,19 @@ export const AnnouncerProvider = ({ children }: { children: ReactNode }) => {
     [chunkedAnnouncements, schedule]
   );
 
-  const endStream = useCallback(() => {
+  const endStream = useCallback((finalText?: string) => {
     if (timer.current) {
       clearTimeout(timer.current);
       timer.current = null;
     }
+    if (finalText && chunkedAnnouncements) {
+      const remaining = finalText.slice(consumed.current).replace(/\s+/g, " ").trim();
+      if (remaining) pending.current.push(remaining);
+    }
     flush();
     consumed.current = 0;
     pending.current = [];
-  }, [flush]);
+  }, [chunkedAnnouncements, flush]);
 
   useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current);
