@@ -190,7 +190,7 @@ const Hero = () => {
                   chatSection?.scrollIntoView({ behavior: 'smooth' });
                   setTimeout(() => inputRef.current?.focus(), 700);
                 }}
-                className="h-auto w-full gap-2 rounded-2xl bg-gradient-to-r from-hippie-coral to-hippie-peach px-8 py-5 font-display text-lg font-semibold text-white shadow-[0_20px_40px_-10px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.02] hover:opacity-95 transition-transform sm:w-auto"
+                className="h-auto w-full gap-2 rounded-2xl bg-gradient-to-r from-hippie-coral to-hippie-peach px-6 py-4 font-display text-base md:px-8 md:py-5 md:text-lg font-semibold text-white shadow-[0_20px_40px_-10px_hsl(var(--hippie-coral)/0.5)] hover:scale-[1.02] hover:opacity-95 transition-transform sm:w-auto"
               >
                 <MessageCircle className="h-5 w-5" />
                 Start Chatting Now
@@ -200,7 +200,7 @@ const Hero = () => {
                 size="lg"
                 variant="outline"
                 onClick={handleDownload}
-                className="h-auto w-full gap-2 rounded-2xl border-white/30 bg-white/5 px-8 py-5 font-display text-lg font-semibold text-white backdrop-blur-md hover:bg-white/15 sm:w-auto"
+                className="h-auto w-full gap-2 rounded-2xl border-white/30 bg-white/5 px-6 py-4 font-display text-base md:px-8 md:py-5 md:text-lg font-semibold text-white backdrop-blur-md hover:bg-white/15 sm:w-auto"
               >
                 <Download className="h-5 w-5" />
                 Download App
@@ -216,7 +216,7 @@ const Hero = () => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="h-auto w-full gap-2 rounded-2xl border-white/30 bg-white/5 px-8 py-5 font-display text-lg font-semibold text-white backdrop-blur-md hover:bg-white/15 sm:w-auto"
+                  className="h-auto w-full gap-2 rounded-2xl border-white/30 bg-white/5 px-6 py-4 font-display text-base md:px-8 md:py-5 md:text-lg font-semibold text-white backdrop-blur-md hover:bg-white/15 sm:w-auto"
                 >
                   <Store className="h-5 w-5" />
                   View Tripple Four Store

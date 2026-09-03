@@ -53,10 +53,10 @@ export default function CookieConsentBanner() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[100] animate-in slide-in-from-bottom-4 duration-500">
-      <div className="mx-4 mb-4 rounded-2xl border border-border bg-card/95 backdrop-blur-md shadow-2xl p-5 sm:p-6 max-w-5xl sm:mx-auto">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-3 mb-3 rounded-2xl border border-border bg-card/95 backdrop-blur-md shadow-2xl p-4 sm:p-6 sm:mb-4 max-w-5xl sm:mx-auto">
+        <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex-1 space-y-1">
-            <p className="text-sm sm:text-base text-card-foreground leading-relaxed">
+            <p className="text-xs sm:text-base text-card-foreground leading-relaxed">
               We use cookies to enhance your experience, serve personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.{" "}
               <Link
                 to="/privacy-policy"
@@ -67,7 +67,7 @@ export default function CookieConsentBanner() {
               </Link>
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 shrink-0">
+          <div className="flex flex-row gap-2 sm:gap-3 shrink-0">
             <Button
               variant="outline"
               size="sm"
