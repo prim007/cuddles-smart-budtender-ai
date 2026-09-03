@@ -164,9 +164,12 @@ const ChatDemo = () => {
   }, [messageCount, showEmailCapture, user]);
 
   const scrollToBottom = (smooth = true) => {
-    // Use requestAnimationFrame to batch with next paint cycle and avoid forced reflow
+    // Scroll only the message list — never the page (which yanked mobile users
+    // away from the hero on load).
     requestAnimationFrame(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "end" });
+      const el = messagesContainerRef.current;
+      if (!el) return;
+      el.scrollTo({ top: el.scrollHeight, behavior: smooth ? "smooth" : "auto" });
     });
   };
 
