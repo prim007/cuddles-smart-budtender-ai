@@ -53,7 +53,7 @@ export default function CookieConsentBanner() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[100] animate-in slide-in-from-bottom-4 duration-500">
-      <div className="mx-3 mb-3 rounded-2xl border border-border bg-card/95 backdrop-blur-md shadow-2xl p-4 sm:p-6 sm:mb-4 max-w-5xl sm:mx-auto">
+      <div className="mx-3 mb-24 rounded-2xl border border-border bg-card/95 backdrop-blur-md shadow-2xl p-4 sm:p-6 sm:mb-4 max-w-5xl sm:mx-auto">
         <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex-1 space-y-1">
             <p className="text-xs sm:text-base text-card-foreground leading-relaxed">
