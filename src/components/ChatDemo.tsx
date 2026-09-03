@@ -721,7 +721,7 @@ const ChatDemo = () => {
   };
 
   const handleVoiceTranscript = (transcript: string) => {
-    handleSend(transcript, true);
+    handleSendWithProtection(transcript, true);
   };
 
   // Keep a stable ref to handleSend so the event listener never goes stale
@@ -837,7 +837,7 @@ const ChatDemo = () => {
                   {voiceEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
                 </Button>
               )}
-              <ImageUploadButton onImageAnalysis={handleSend} disabled={isLoading} />
+              <ImageUploadButton onImageAnalysis={handleSendWithProtection} disabled={isLoading} />
               <DispensaryFinder />
               <DosageCalculator />
               <UserProfilePanel />
@@ -849,7 +849,7 @@ const ChatDemo = () => {
           </div>
 
           {/* Quick prompts */}
-          <QuickPrompts onSelect={handleSend} disabled={isLoading} />
+          <QuickPrompts onSelect={handleSendWithProtection} disabled={isLoading} />
 
           {/* Messages */}
           <div ref={messagesContainerRef} className="h-[60vh] max-h-[400px] md:h-[400px] md:max-h-none overflow-y-auto mb-4 space-y-4 pr-1 md:pr-4">
@@ -1066,7 +1066,7 @@ const ChatDemo = () => {
           ) : (
             <>
               {/* Input */}
-              <div className="flex gap-2 pt-4 border-t border-border">
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
                 <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} className="h-10 w-10 min-w-[2.5rem]" />
                 <Input
                   value={input}
@@ -1077,7 +1077,7 @@ const ChatDemo = () => {
                   className="flex-1 rounded-xl border-border bg-background/50 focus-ring"
                 />
                 <Button
-                  onClick={() => handleSend()}
+                  onClick={() => handleSendWithProtection()}
                   disabled={isLoading || !input.trim()}
                   className="px-6 rounded-xl bg-gradient-to-r from-hippie-coral to-hippie-amber hover:shadow-glow text-white"
                 >
