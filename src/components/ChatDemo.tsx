@@ -5,9 +5,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, ExternalLink, Plus, Volume2, VolumeX, UserPlus } from "lucide-react";
+import { Send, User, ExternalLink, Plus, Volume2, VolumeX, UserPlus, Undo2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAccessibility } from "@/contexts/AccessibilityContext";
+import { useAnnouncer } from "@/contexts/AnnouncerContext";
 import cuddlesImage from "@/assets/cuddles.png";
 
 
