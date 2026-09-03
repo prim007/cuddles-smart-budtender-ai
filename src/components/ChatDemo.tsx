@@ -613,6 +613,10 @@ const ChatDemo = () => {
         return [...prev, { role: "assistant", content: finalContent, orderPhone }];
       });
 
+      endStream(finalContent);
+      cue("reply");
+      announce("Cuddles replied");
+
       // Speak the response if voice is enabled and it's a greeting
       if (voiceEnabled && ttsSupported && finalContent) {
         const didGreet = speakIfGreeting(content, finalContent);
@@ -673,6 +677,7 @@ const ChatDemo = () => {
         trackEvent("chat_feedback_prompt_shown", "engagement", "session");
       }
     } catch (error: any) {
+      if (error?.name === "AbortError") return;
       console.error("Error:", error);
       const errorMsg = error?.message || "";
 
@@ -690,8 +695,12 @@ const ChatDemo = () => {
           description: "We're upgrading Cuddles right now — she'll be back soon. Please try again in a little while.",
         });
       }
+      cue("error");
+      alert("Cuddles could not complete that request. Please try again.");
 
     } finally {
+      abortControllerRef.current = null;
+      endStream();
       setIsLoading(false);
     }
   };
@@ -726,7 +735,7 @@ const ChatDemo = () => {
     return () => window.removeEventListener('cuddles-quick-prompt', handler);
   }, []);
 
-  const handleSendWithProtection = guard((messageContent?: string, fromVoice = false) => {
+  const handleSendWithProtection = guard((messageContent: string | undefined, fromVoice: boolean = false) => {
     void handleSend(messageContent, fromVoice);
   }, "chat-send");
 
