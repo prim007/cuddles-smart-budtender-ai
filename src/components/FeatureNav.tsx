@@ -236,8 +236,8 @@ const FeatureNav = () => {
       {/* Desktop top navigation bar — compact pill nav */}
       <nav className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-50 px-3 py-2 rounded-3xl border border-white/10 bg-card/60 backdrop-blur-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] items-center gap-1">
         {(() => {
-          const primary = features.filter(f => ["Home", "Chat", "Shopify Integration", "What is Cuddles", "Shop"].includes(f.title));
-          const overflow = features.filter(f => !["Home", "Chat", "Shopify Integration", "What is Cuddles", "Shop"].includes(f.title));
+          const primary = features.filter(f => ["Home", "Chat", "Shop"].includes(f.title));
+          const overflow = features.filter(f => !["Home", "Chat", "Shop"].includes(f.title));
           return (
             <>
               {primary.map((feature) => {
@@ -268,8 +268,8 @@ const FeatureNav = () => {
               <div className="h-5 w-px bg-white/10 mx-1" />
 
               <DropdownMenu>
-                <DropdownMenuTrigger aria-label="More features menu" className="px-3 py-2 rounded-2xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all flex items-center gap-1.5 focus:outline-none">
-                  More Features
+                <DropdownMenuTrigger aria-label="Open learning menu" className="px-3 py-2 rounded-2xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all flex items-center gap-1.5 focus:outline-none">
+                  Learn
                   <ChevronDown className="w-4 h-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-2xl border-white/10 bg-card/95 backdrop-blur-xl">

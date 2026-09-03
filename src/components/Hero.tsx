@@ -1,10 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { ExternalLink, Store, UserPlus, Send, MessageCircle, Download } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Send } from "lucide-react";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
-import { useEffect, useState, useRef } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
 import Cuddles3D from "@/components/Cuddles3D";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -13,55 +10,9 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 
-const HERO_PROMPTS = [
-  "Best strain for sleep?",
-  "Something for anxiety relief",
-  "A creative sativa for daytime",
-  "Help with chronic pain",
-];
-
 const Hero = () => {
-  const [liveCount, setLiveCount] = useState(12);
   const [heroInput, setHeroInput] = useState("");
-  const [placeholderIdx, setPlaceholderIdx] = useState(0);
-  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setInstallPrompt(e as BeforeInstallPromptEvent);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
-
-  const handleDownload = async () => {
-    trackEvent('cta_click', 'install', 'hero_download_app');
-    if (installPrompt) {
-      await installPrompt.prompt();
-      const { outcome } = await installPrompt.userChoice;
-      if (outcome === "accepted") setInstallPrompt(null);
-    } else {
-      toast.info("Install Cuddles", {
-        description: "Tap your browser's menu and choose 'Add to Home Screen' to install the Cuddles app.",
-      });
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveCount((prev) => Math.max(5, prev + Math.floor(Math.random() * 5) - 2));
-    }, 8000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPlaceholderIdx((i) => (i + 1) % HERO_PROMPTS.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
 
   const sendToChat = (text: string) => {
     trackEvent('hero_chat_submit', 'conversion', text);
@@ -82,43 +33,14 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#1a0f1f] py-10 md:py-16">
-      {/* Sculptural sunset glows */}
-      <div className="pointer-events-none absolute -top-24 -left-24 h-[500px] w-[500px] rounded-full bg-hippie-coral/10 blur-[120px]" />
-      <div className="pointer-events-none absolute top-1/2 -right-48 h-[600px] w-[600px] rounded-full bg-hippie-sage/10 blur-[160px]" />
-      {/* Abstract tilted glass shards */}
-      <div className="pointer-events-none absolute top-20 right-[12%] hidden h-96 w-64 rotate-[15deg] rounded-3xl border border-white/10 bg-white/[0.04] shadow-2xl backdrop-blur-3xl md:block" />
-      <div className="pointer-events-none absolute -bottom-10 left-[8%] hidden h-40 w-80 -rotate-[5deg] rounded-3xl border border-white/10 bg-white/[0.04] shadow-2xl backdrop-blur-2xl lg:block" />
-      <div className="pointer-events-none absolute top-1/3 left-1/2 hidden h-48 w-48 -translate-x-1/2 rotate-[28deg] rounded-2xl border border-white/5 bg-gradient-to-br from-hippie-peach/10 to-transparent backdrop-blur-xl lg:block" />
-      {/* Subtle grain to prevent banding */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")" } } />
-
-
-
+    <section className="relative overflow-hidden bg-foreground py-10 text-background md:py-16">
       <div className="container relative z-10 mx-auto px-4">
-        {/* Navigation */}
-        <nav className="mb-10 flex items-center justify-between md:mb-16">
-          <div className="flex items-center gap-2">
-            <div className="h-9 w-9 overflow-hidden rounded-xl ring-2 ring-white/20">
-              <img src={cuddlesImage} alt="Cuddles AI budtender brand mark" className="h-full w-full object-cover" width="36" height="36" fetchPriority="high" />
-            </div>
-            <span className="font-display text-lg font-semibold text-white">Cuddles</span>
+        <div className="mb-10 flex items-center gap-2 md:mb-16">
+          <div className="h-9 w-9 overflow-hidden rounded-xl ring-2 ring-background/20">
+            <img src={cuddlesImage} alt="Cuddles AI brand mark" className="h-full w-full object-cover" width="36" height="36" fetchPriority="high" />
           </div>
-          <div className="flex items-center gap-2">
-            <a href="https://tripplefourmarketplace.lovable.app" target="_blank" rel="noopener noreferrer" aria-label="Open the Tripple Four Marketplace in a new tab">
-              <Button variant="ghost" size="sm" className="gap-2 font-medium text-white/80 hover:bg-white/10 hover:text-white">
-                <ExternalLink className="h-4 w-4" />
-                <span className="hidden sm:inline">Marketplace</span>
-              </Button>
-            </a>
-            <Link to="/auth">
-              <Button size="sm" className="gap-1 border border-white/20 bg-white/15 font-medium text-white hover:bg-white/25">
-                <UserPlus className="h-3.5 w-3.5" />
-                Sign Up
-              </Button>
-            </Link>
-          </div>
-        </nav>
+          <span className="font-display text-lg font-semibold">Cuddles</span>
+        </div>
 
         <div className="grid items-center gap-10 md:gap-12 lg:grid-cols-2">
           {/* Left: bold copy */}

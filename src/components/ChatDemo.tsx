@@ -1,25 +1,17 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import ChatSignupPrompt from "./ChatSignupPrompt";
 import { useAuth } from "@/hooks/useAuth";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, ExternalLink, Plus, Volume2, VolumeX, UserPlus } from "lucide-react";
+import { Send, User, ExternalLink, Plus, Volume2, VolumeX } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import cuddlesImage from "@/assets/cuddles.png";
 
-
-import QuickPrompts from "./QuickPrompts";
 import ConversationHistory, { saveSession } from "./ConversationHistory";
-import EmailCapture from "./EmailCapture";
 import VoiceInputButton from "./VoiceInputButton";
 import LanguageSelector from "./LanguageSelector";
-import UserProfilePanel from "./UserProfilePanel";
-import DosageCalculator from "./DosageCalculator";
-import ImageUploadButton from "./ImageUploadButton";
-import DispensaryFinder from "./DispensaryFinder";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProfile } from "@/contexts/UserProfileContext";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
