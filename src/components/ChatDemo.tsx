@@ -724,9 +724,13 @@ const ChatDemo = () => {
     handleSendWithProtection(transcript, true);
   };
 
+  const handleSendWithProtection = guard<[string?, boolean?]>((messageContent?: string, fromVoice = false) => {
+    void handleSend(messageContent, fromVoice);
+  }, "chat-send");
+
   // Keep a stable ref to handleSend so the event listener never goes stale
-  const handleSendRef = useRef(handleSend);
-  useEffect(() => { handleSendRef.current = handleSend; });
+  const handleSendRef = useRef(handleSendWithProtection);
+  useEffect(() => { handleSendRef.current = handleSendWithProtection; });
 
   // Listen for hero quick-prompt events
   useEffect(() => {
@@ -737,10 +741,6 @@ const ChatDemo = () => {
     window.addEventListener('cuddles-quick-prompt', handler);
     return () => window.removeEventListener('cuddles-quick-prompt', handler);
   }, []);
-
-  const handleSendWithProtection = guard<[string?, boolean?]>((messageContent?: string, fromVoice = false) => {
-    void handleSend(messageContent, fromVoice);
-  }, "chat-send");
 
   const handleUndo = useCallback(() => {
     const previous = lastSentRef.current;
