@@ -793,7 +793,7 @@ const ChatDemo = () => {
           <QuickPrompts onSelect={handleSend} disabled={isLoading} />
 
           {/* Messages */}
-          <div className="h-[60vh] max-h-[400px] md:h-[400px] md:max-h-none overflow-y-auto mb-4 space-y-4 pr-1 md:pr-4">
+          <div ref={messagesContainerRef} className="h-[60vh] max-h-[400px] md:h-[400px] md:max-h-none overflow-y-auto mb-4 space-y-4 pr-1 md:pr-4">
             {(() => {
               const RECO_RE = /\b(recommend|try|suggest|strain|indica|sativa|hybrid|terpene|dose|dosage)\b/i;
               const firstRecoIdx = !user
