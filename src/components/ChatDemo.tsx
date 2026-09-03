@@ -831,8 +831,9 @@ const ChatDemo = () => {
                     setVoiceEnabled(next);
                     if (next) prime(); // unlock TTS inside gesture
                   }}
-                  className={`bg-card/80 backdrop-blur-sm border-border hover:bg-accent ${voiceEnabled ? 'text-primary' : 'text-muted-foreground'}`}
-                  title={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
+                   className={`bg-card/80 backdrop-blur-sm border-border hover:bg-accent ${voiceEnabled ? 'text-primary' : 'text-muted-foreground'}`}
+                   title={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
+                   aria-label={voiceEnabled ? "Mute Cuddles" : "Unmute Cuddles"}
                 >
                   {voiceEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
                 </Button>

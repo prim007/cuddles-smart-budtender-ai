@@ -195,9 +195,21 @@ html[data-hand="right"] .a11y-panel [data-radix-popper-content-wrapper] {
   --radix-popover-content-transform-origin: top right;
 }
 
-html[data-hand="right"] .md\\:hidden.fixed.bottom-6 {
+html[data-hand="left"] .a11y-mobile-panel {
+  left: 1.5rem;
+  right: auto;
+  transform-origin: bottom left;
+}
+
+html[data-hand="right"] .a11y-mobile-menu {
   left: auto;
   right: 1.5rem;
+}
+
+html[data-hand="right"] .a11y-mobile-panel {
+  left: auto;
+  right: 1.5rem;
+  transform-origin: bottom right;
 }
 
 @media (min-width: 768px) {
