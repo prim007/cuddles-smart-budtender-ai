@@ -63,7 +63,7 @@ const AccessibilityPanel = () => {
     const path = voicePath(command);
     if (path) {
       navigate(path);
-      announce(`Opening ${path === "/" ? "home" : path.slice(1).replaceAll("-", " ")}`);
+      announce(`Opening ${path === "/" ? "home" : path.slice(1).replace(/-/g, " ")}`);
       return;
     }
     announce("I did not recognise that command");
