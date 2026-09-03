@@ -131,6 +131,7 @@ const ChatDemo = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const lastSentRef = useRef<{ messages: Message[]; sessionId: string; messageCount: number } | null>(null);
+  const [canUndo, setCanUndo] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
   const { guard, cue } = useAccessibility();
@@ -202,6 +203,7 @@ const ChatDemo = () => {
     awaitingDispensaryLocation.current = false;
     pendingProduct.current = null;
     lastSentRef.current = null;
+    setCanUndo(false);
     announce("New chat started");
   };
 
@@ -384,6 +386,7 @@ const ChatDemo = () => {
     const previousMessages = messages;
     const previousMessageCount = messageCount;
     lastSentRef.current = { messages: previousMessages, sessionId, messageCount: previousMessageCount };
+    setCanUndo(true);
     cue("send");
     announce("Message sent");
 
@@ -735,7 +738,7 @@ const ChatDemo = () => {
     return () => window.removeEventListener('cuddles-quick-prompt', handler);
   }, []);
 
-  const handleSendWithProtection = guard((messageContent: string | undefined, fromVoice: boolean = false) => {
+  const handleSendWithProtection = guard<[string?, boolean?]>((messageContent?: string, fromVoice = false) => {
     void handleSend(messageContent, fromVoice);
   }, "chat-send");
 
