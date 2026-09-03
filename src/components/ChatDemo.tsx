@@ -876,7 +876,7 @@ const ChatDemo = () => {
                       }`}
                     >
                       {message.role === "user" ? (
-                        <User className="w-5 h-5 text-white" />
+                        <User className="w-5 h-5 text-primary-foreground" />
                       ) : (
                         <img
                           src={processedImage}
@@ -886,14 +886,14 @@ const ChatDemo = () => {
                       )}
                     </div>
                     <div
-                      className={`px-4 py-3 rounded-2xl max-w-[80%] ${
+                      className={`px-4 py-3 rounded-2xl max-w-[92%] sm:max-w-[85%] leading-7 ${
                         message.role === "user"
-                          ? "bg-gradient-to-br from-hippie-coral to-hippie-peach text-white"
+                          ? "bg-gradient-to-br from-hippie-coral to-hippie-peach text-primary-foreground"
                           : "bg-card border border-border text-foreground shadow-soft"
                       }`}
                     >
                       {message.content && (
-                        <div className="chat-markdown prose prose-sm dark:prose-invert max-w-none">
+                        <div className="chat-markdown prose prose-base dark:prose-invert max-w-none">
                           <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
                             disallowedElements={['script', 'iframe', 'object', 'embed', 'link', 'style']}

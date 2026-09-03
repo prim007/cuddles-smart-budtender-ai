@@ -78,8 +78,8 @@ const RULES: Array<{ role: SpecialistRole; re: RegExp }> = [
   { role: "smalltalk", re: /^(hi|hey|hello|yo|sup|howzit|thanks|thank you|ok|okay|cool|great|bye|good (morning|afternoon|evening))\b[\s!.?]*$/i },
   { role: "inventory", re: /\b(price|prices|cost|how much|in stock|stock|menu|buy|purchase|order|checkout|deliver|delivery|dispensar(y|ies)|shop|store|near me|nearby|for sale)\b/i },
   { role: "grow_coach", re: /\b(grow|growing|germinat|seedling|clone|soil|nutrient|npk|repot|water(ing)?|light schedule|veg stage|flower(ing)? stage|harvest|cure|drying|pest|spider mite|root rot|houseplant|monstera|succulent|herb garden|fertilis|fertiliz)\b/i },
-  { role: "educator", re: /\b(what is|why does|how does|explain|science|research|study|studies|legal|law|history|endocannabinoid|terpene|cannabinoid|cbd|cbn|cbg|metaboli|drug test|interaction|side effect)\b/i },
-  { role: "budtender", re: /\b(recommend|suggest|best for|which strain|strain for|help me (sleep|relax|focus)|for (sleep|anxiety|pain|focus|energy|creativity|stress)|indica|sativa|hybrid|dose|dosage|tolerance)\b/i },
+  { role: "educator", re: /\b(what is|why does|how does|explain|science|research|study|studies|legal|law|history|endocannabinoid|terpene|cannabinoid|cbd|cbn|cbg|metaboli|drug test|interaction|side effect|evidence|label|coa|certificate of analysis)\b/i },
+  { role: "budtender", re: /\b(recommend|suggest|best for|which strain|strain for|help me (sleep|relax|focus)|for (sleep|anxiety|pain|focus|energy|creativity|stress)|indica|sativa|hybrid|dose|dosage|tolerance|dagga|zol|skyf)\b/i },
 ];
 
 export function ruleRoute(message: string): SpecialistRole | null {

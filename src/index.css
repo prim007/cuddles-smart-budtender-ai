@@ -208,6 +208,11 @@ body {
   }
 }
 
+/* Keep streamed answers readable at larger accessibility text sizes. */
+.chat-markdown :is(p, li, blockquote) {
+  overflow-wrap: anywhere;
+}
+
 /* Accessibility modes */
 .a11y-contrast {
   --background: 0 0% 0%;
