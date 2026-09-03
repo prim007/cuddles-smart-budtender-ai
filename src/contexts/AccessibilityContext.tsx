@@ -73,6 +73,25 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
 
   const reset = useCallback(() => setSettings(DEFAULTS), []);
 
+  const cue = useCallback<AccessibilityContextValue["cue"]>((kind) => {
+    if (!settings.audioCues || typeof window === "undefined") return;
+    const AudioContextClass = window.AudioContext ?? (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const context = new AudioContextClass();
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    const frequencies: Record<Cue, number> = { send: 520, reply: 660, error: 180, undo: 400 };
+    oscillator.frequency.value = frequencies[kind];
+    oscillator.type = "sine";
+    gain.gain.setValueAtTime(0.0001, context.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.04, context.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.12);
+    oscillator.connect(gain).connect(context.destination);
+    oscillator.start();
+    oscillator.stop(context.currentTime + 0.13);
+    oscillator.addEventListener("ended", () => void context.close(), { once: true });
+  }, [settings.audioCues]);
+
   useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
@@ -101,7 +120,7 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     [settings.debounceMs]
   );
 
-  const value = useMemo(() => ({ ...settings, set, reset, guard }), [settings, set, reset, guard]);
+  const value = useMemo(() => ({ ...settings, set, reset, cue, guard }), [settings, set, reset, cue, guard]);
 
   return <AccessibilityContext.Provider value={value}>{children}</AccessibilityContext.Provider>;
 };
