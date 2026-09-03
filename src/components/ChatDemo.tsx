@@ -488,6 +488,7 @@ const ChatDemo = () => {
           language,
           userName: displayName ?? undefined,
         }),
+        signal: abortController.signal,
       });
 
       if (!resp.ok) {
