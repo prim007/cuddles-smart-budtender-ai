@@ -138,6 +138,8 @@ const App = () => (
         <CartProvider>
         <AuthProvider>
           <SubscriptionProvider>
+          <AccessibilityProvider>
+          <AnnouncerProvider>
           <TooltipProvider>
             <Toaster />
             <Sonner />
@@ -146,6 +148,7 @@ const App = () => (
               <MicrosoftClarity />
               <InstallFunnelTracker />
               <FeatureNav />
+              <AccessibilityPanel />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
