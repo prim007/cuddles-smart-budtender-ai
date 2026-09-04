@@ -66,6 +66,12 @@ const features: Feature[] = [
     gradient: "from-hippie-coral to-hippie-pink",
   },
   {
+    icon: Leaf,
+    title: "Budtender",
+    href: "/budtender",
+    gradient: "from-hippie-green to-hippie-teal",
+  },
+  {
     icon: BookOpen,
     title: "Journal",
     href: "/journal",
