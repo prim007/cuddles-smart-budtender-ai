@@ -136,12 +136,10 @@ export const useVoiceInput = ({
         setIsListening(true);
       } catch (error) {
         console.error("Failed to start speech recognition:", error);
-        if (onError) {
-          handleError("Failed to start voice input. Please try again.");
-        }
+        onErrorRef.current?.("Failed to start voice input. Please try again.");
       }
     }
-  }, [isListening, onError]);
+  }, [isListening]);
 
   const stopListening = useCallback(() => {
     if (recognitionRef.current && isListening) {
