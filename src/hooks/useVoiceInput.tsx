@@ -37,6 +37,12 @@ export const useVoiceInput = ({
   const [transcript, setTranscript] = useState("");
   const [isSupported, setIsSupported] = useState(false);
   const recognitionRef = useRef<any>(null);
+  // Keep callbacks in refs so a new inline function identity on every render
+  // never tears down and recreates the SpeechRecognition instance.
+  const onResultRef = useRef(onResult);
+  const onErrorRef = useRef(onError);
+  onResultRef.current = onResult;
+  onErrorRef.current = onError;
 
   useEffect(() => {
     // Check for browser support
@@ -65,8 +71,8 @@ export const useVoiceInput = ({
         const currentTranscript = finalTranscript || interimTranscript;
         setTranscript(currentTranscript);
 
-        if (finalTranscript && onResult) {
-          onResult(finalTranscript.trim());
+        if (finalTranscript && onResultRef.current) {
+          onResultRef.current(finalTranscript.trim());
         }
       };
 
@@ -74,28 +80,29 @@ export const useVoiceInput = ({
         console.error("Speech recognition error:", event.error);
         setIsListening(false);
         
-        if (onError) {
+        const handleError = onErrorRef.current;
+        if (handleError) {
           switch (event.error) {
             case "not-allowed":
-              onError("Microphone access denied. Please enable microphone permissions.");
+              handleError("Microphone access denied. Please enable microphone permissions.");
               break;
             case "no-speech":
-              onError("No speech detected. Please try again.");
+              handleError("No speech detected. Please try again.");
               break;
             case "audio-capture":
-              onError("No microphone found. Please check your device.");
+              handleError("No microphone found. Please check your device.");
               break;
             case "network":
-              onError("Network error. Please check your connection.");
+              handleError("Network error. Please check your connection.");
               break;
             case "service-not-allowed":
-              onError("Voice input is not available in this browser. Please try Chrome or Safari.");
+              handleError("Voice input is not available in this browser. Please try Chrome or Safari.");
               break;
             case "aborted":
               // Intentional stop — don't show error
               break;
             default:
-              onError(`Speech recognition error: ${event.error}`);
+              handleError(`Speech recognition error: ${event.error}`);
           }
         }
       };
@@ -112,7 +119,7 @@ export const useVoiceInput = ({
         recognitionRef.current.abort();
       }
     };
-  }, [continuous, language, onResult, onError]);
+  }, [continuous, language]);
 
   // Update language when it changes
   useEffect(() => {
@@ -130,7 +137,7 @@ export const useVoiceInput = ({
       } catch (error) {
         console.error("Failed to start speech recognition:", error);
         if (onError) {
-          onError("Failed to start voice input. Please try again.");
+          handleError("Failed to start voice input. Please try again.");
         }
       }
     }
