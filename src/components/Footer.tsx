@@ -52,14 +52,6 @@ const Footer = () => {
               <h5 className="font-semibold text-foreground mb-2 text-sm">Join our Newsletter</h5>
               <NewsletterSignup />
             </div>
-            <div className="mt-4 flex justify-center rounded-xl border border-border bg-card p-3">
-              {/* @ts-expect-error custom element provided by the DaggaSpot widget */}
-              <cannamap-badge
-                data-org-id="507bec94-ff41-4f59-aaf5-c0d429249a38"
-                data-size="medium"
-                data-theme="light"
-              />
-            </div>
           </div>
           
           {/* Features */}
@@ -178,6 +170,14 @@ const Footer = () => {
           <p className="text-xs text-muted-foreground text-center max-w-2xl mx-auto mb-4">
             Learn about cannabis with our <Link to="/blog" className="underline hover:text-foreground">educational blog</Link> covering topics from <Link to="/blog/indica-vs-sativa-vs-hybrid" className="underline hover:text-foreground">indica vs sativa</Link> to <Link to="/blog/beginners-guide-to-terpenes" className="underline hover:text-foreground">terpenes</Link> and <Link to="/blog/responsible-consumption-tips" className="underline hover:text-foreground">responsible consumption</Link>.
           </p>
+<div className="flex justify-center py-3">
+            {/* @ts-expect-error custom element provided by the DaggaSpot widget */}
+            <cannamap-badge
+              data-org-id="507bec94-ff41-4f59-aaf5-c0d429249a38"
+              data-size="medium"
+              data-theme="light"
+            />
+          </div>
           <div className="text-center text-sm text-muted-foreground">
             © 2025 Cuddles AI. All rights reserved.
           </div>
