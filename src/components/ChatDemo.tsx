@@ -408,6 +408,8 @@ const ChatDemo = () => {
         },
       ]);
       trackEvent("ui_feedback_prompt_shown", "engagement", "chat");
+      lastSentRef.current = null;
+      setCanUndo(false);
       return;
     }
 
@@ -426,6 +428,8 @@ const ChatDemo = () => {
         },
       ]);
       trackEvent("menu_shown", "engagement", menu.id);
+      lastSentRef.current = null;
+      setCanUndo(false);
       return;
     }
 
@@ -433,6 +437,8 @@ const ChatDemo = () => {
     const handled = await tryHandleDispensaryIntent(content);
     if (handled) {
       setMessageCount((prev) => prev + 1);
+      lastSentRef.current = null;
+      setCanUndo(false);
       return;
     }
 
