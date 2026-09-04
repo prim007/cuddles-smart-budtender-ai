@@ -64,6 +64,7 @@ const PipelineHealth = lazyWithReload(() => import("./pages/PipelineHealth"));
 const InternationalMarket = lazyWithReload(() => import("./pages/InternationalMarket"));
 const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
 const Licensing = lazyWithReload(() => import("./pages/Licensing"));
+const Partners = lazyWithReload(() => import("./pages/Partners"));
 const Install = lazyWithReload(() => import("./pages/Install"));
 const ConfirmNewsletter = lazyWithReload(() => import("./pages/ConfirmNewsletter"));
 const Unsubscribe = lazyWithReload(() => import("./pages/Unsubscribe"));
