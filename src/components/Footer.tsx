@@ -1,8 +1,11 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { BookOpen, Camera, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download, MapPin } from "lucide-react";
 import { NewsletterSignup } from "./NewsletterSignup";
 import { ZA_CITIES } from "@/data/zaCities";
+
+const WIDGET_SRC = "https://daggaspot.co.za/assets/widget/widget.js";
 
 const features = [
   { icon: Home, title: "Home", href: "/" },
@@ -17,6 +20,15 @@ const features = [
 ];
 
 const Footer = () => {
+  useEffect(() => {
+    if (document.querySelector(`script[src="${WIDGET_SRC}"]`)) return;
+    const script = document.createElement("script");
+    script.src = WIDGET_SRC;
+    script.async = true;
+    script.setAttribute("data-api", "https://api.daggaspot.co.za");
+    document.body.appendChild(script);
+  }, []);
+
   return (
     <footer className="bg-card border-t border-border py-12 pb-32 md:pb-28">
       <div className="container mx-auto px-4">
@@ -36,9 +48,17 @@ const Footer = () => {
               Your personal AI plant companion — plant care, grow help, strain recommendations, journaling and more.
 
             </p>
-            <div className="mt-2 bg-card border border-border rounded-xl p-4 shadow-sm">
+<div className="mt-2 bg-card border border-border rounded-xl p-4 shadow-sm">
               <h5 className="font-semibold text-foreground mb-2 text-sm">Join our Newsletter</h5>
               <NewsletterSignup />
+            </div>
+            <div className="mt-4 flex justify-center rounded-xl border border-border bg-card p-3">
+              {/* @ts-expect-error custom element provided by the DaggaSpot widget */}
+              <cannamap-badge
+                data-org-id="507bec94-ff41-4f59-aaf5-c0d429249a38"
+                data-size="medium"
+                data-theme="light"
+              />
             </div>
           </div>
           
