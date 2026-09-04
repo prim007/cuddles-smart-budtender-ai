@@ -64,6 +64,7 @@ const PipelineHealth = lazyWithReload(() => import("./pages/PipelineHealth"));
 const InternationalMarket = lazyWithReload(() => import("./pages/InternationalMarket"));
 const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
 const Licensing = lazyWithReload(() => import("./pages/Licensing"));
+const Partners = lazyWithReload(() => import("./pages/Partners"));
 const Install = lazyWithReload(() => import("./pages/Install"));
 const ConfirmNewsletter = lazyWithReload(() => import("./pages/ConfirmNewsletter"));
 const Unsubscribe = lazyWithReload(() => import("./pages/Unsubscribe"));
@@ -209,6 +210,7 @@ const App = () => (
                 <Route path="/international-market" element={<Suspense fallback={<PageLoader />}><InternationalMarket /></Suspense>} />
                 <Route path="/privacy-policy" element={<Suspense fallback={<PageLoader />}><PrivacyPolicy /></Suspense>} />
                 <Route path="/licensing" element={<Suspense fallback={<PageLoader />}><Licensing /></Suspense>} />
+                <Route path="/partners" element={<Suspense fallback={<PageLoader />}><Partners /></Suspense>} />
                 <Route path="/install" element={<Suspense fallback={<PageLoader />}><Install /></Suspense>} />
                 <Route path="/newsletter/confirm" element={<Suspense fallback={<PageLoader />}><ConfirmNewsletter /></Suspense>} />
                 <Route path="/unsubscribe" element={<Suspense fallback={<PageLoader />}><Unsubscribe /></Suspense>} />
