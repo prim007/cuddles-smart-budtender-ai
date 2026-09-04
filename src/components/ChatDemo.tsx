@@ -707,6 +707,10 @@ const ChatDemo = () => {
       abortControllerRef.current = null;
       endStream();
       setIsLoading(false);
+      // Undo only applies while the message is in flight — once Cuddles has
+      // answered, keep the reply and hide the bar.
+      lastSentRef.current = null;
+      setCanUndo(false);
     }
   };
 
