@@ -25,6 +25,7 @@ import {
   Crown,
   Sparkles,
   Globe2,
+  Leaf,
   ChevronDown,
   HelpCircle,
   Code
@@ -64,6 +65,12 @@ const features: Feature[] = [
     title: "Chat",
     href: "/ai-budtender",
     gradient: "from-hippie-coral to-hippie-pink",
+  },
+  {
+    icon: Leaf,
+    title: "Budtender",
+    href: "/budtender",
+    gradient: "from-hippie-green to-hippie-teal",
   },
   {
     icon: BookOpen,

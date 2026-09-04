@@ -21,17 +21,17 @@ import { useUserProfile } from "@/contexts/UserProfileContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-type ConsumptionMethod = "smoke" | "vape" | "edible" | "tincture";
-type ExperienceLevel = "beginner" | "intermediate" | "experienced";
+export type ConsumptionMethod = "smoke" | "vape" | "edible" | "tincture";
+export type ExperienceLevel = "beginner" | "intermediate" | "experienced";
 
-interface DosageRecommendation {
+export interface DosageRecommendation {
   thcRange: string;
   amount: string;
   timing: string;
   notes: string;
 }
 
-const dosageMatrix: Record<ConsumptionMethod, Record<ExperienceLevel, DosageRecommendation>> = {
+export const dosageMatrix: Record<ConsumptionMethod, Record<ExperienceLevel, DosageRecommendation>> = {
   smoke: {
     beginner: {
       thcRange: "10-15% THC",

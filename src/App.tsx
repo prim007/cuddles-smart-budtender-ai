@@ -110,6 +110,7 @@ const PersonalizedRecommendationsGuide = lazyWithReload(() => import("./pages/Pe
 
 // SEO pages
 const Strains = lazyWithReload(() => import("./pages/Strains"));
+const Budtender = lazyWithReload(() => import("./pages/Budtender"));
 const Plants = lazyWithReload(() => import("./pages/Plants"));
 const PlantDetail = lazyWithReload(() => import("./pages/PlantDetail"));
 const StrainDetail = lazyWithReload(() => import("./pages/StrainDetail"));
@@ -248,6 +249,7 @@ const App = () => (
                 <Route path="/premium" element={<Suspense fallback={<PageLoader />}><Premium /></Suspense>} />
 
                 {/* Strain SEO Pages */}
+                <Route path="/budtender" element={<Suspense fallback={<PageLoader />}><Budtender /></Suspense>} />
                 <Route path="/strains" element={<Suspense fallback={<PageLoader />}><Strains /></Suspense>} />
                 <Route path="/strains/featured" element={<Suspense fallback={<PageLoader />}><FeaturedStrains /></Suspense>} />
                 <Route path="/strains/:slug" element={<Suspense fallback={<PageLoader />}><StrainDetail /></Suspense>} />
