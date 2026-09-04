@@ -228,8 +228,9 @@ const ProductSearch = () => {
                         addItem({
                           strainId: r.shopId as string,
                           strainName: r.name,
+                          strainType: r.type,
                           price: r.price as number,
-                        } as never)
+                        })
                       }
                     >
                       {inCart(r.shopId) ? (
