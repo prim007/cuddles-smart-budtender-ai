@@ -25,6 +25,7 @@ import {
   Crown,
   Sparkles,
   Globe2,
+  Leaf,
   ChevronDown,
   HelpCircle,
   Code
