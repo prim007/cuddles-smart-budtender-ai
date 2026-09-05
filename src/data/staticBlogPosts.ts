@@ -12,6 +12,86 @@ export interface StaticBlogPost {
 
 export const staticBlogPosts: StaticBlogPost[] = [
   {
+    id: "static-thc-vapes-explained",
+    title: "THC Vapes, Explained: What's Actually Inside the Pen — and How to Buy One You Can Trust",
+    slug: "thc-vapes-explained",
+    excerpt:
+      "Guest post by Budbase. No grinder, no ash, no smell in the car — but 'convenient' and 'good' aren't the same thing. What's actually inside a THC vape: distillate vs live resin vs live rosin, the hardware, and how to spot a serious product from a filler-heavy one.",
+    content: `### THC Vapes, Explained: What's Actually Inside the Pen — and How to Buy One You Can Trust
+
+*Guest post by **Budbase**, published with permission. Educational only — this is not medical advice. For adults only, in places where cannabis use is legal. In South Africa, private adult use is decriminalised — stay within the law and buy from sources you trust.*
+
+Vape pens have quietly become the default format for a huge share of cannabis consumers. No grinder, no ash, no lingering smell in the car upholstery. Just a small device, a battery, and a couple of seconds.
+
+But "convenient" and "good" aren't the same thing. The vape category is also where the widest quality gap in cannabis lives — the difference between a well-made live resin cart and a cheap unregulated one isn't subtle, and it's not something you can see through the glass.
+
+Here's what's actually going on inside a THC vape, why so many people prefer the format, and how to tell a serious product from a filler-heavy one.
+
+---
+
+### What a THC vape actually is
+
+A vape has two halves: **the oil** and **the hardware**. Both matter, and most buyers only think about the first one.
+
+---
+
+### The oil
+
+Almost every THC vape on the market falls into one of these buckets:
+
+**Distillate** — Cannabis extract stripped down to nearly pure THC, then usually re-flavoured with terpenes. Potent, clean-tasting, cheap to produce, and mostly flavourless on its own. Terpenes get added back in — either cannabis-derived or botanical — which is why two distillate carts can taste completely different. Nothing wrong with a good distillate cart; it's simply the entry-level, least characterful option.
+
+**Live resin** — Extracted from flower that was flash-frozen at harvest rather than dried and cured. Freezing preserves the volatile terpenes that normally evaporate during curing, so the oil keeps the strain's actual aromatic profile. Fuller flavour, more nuanced effect, higher price.
+
+**Live rosin** — Solventless. Made with ice water, heat, and pressure instead of hydrocarbons. The purist's option, and the most expensive, because the yields are low and the input flower has to be excellent.
+
+**Blends with minor cannabinoids** — Some formulations layer in CBG, CBN, or CBD alongside THC. Different balances produce noticeably different experiences — a little CBN in an evening cart, or CBD to soften the edge of a strong one.
+
+---
+
+### The hardware
+
+Cheap hardware ruins good oil.
+
+The cartridge is a heating coil, a wick or ceramic core, and a tank. Three things go wrong at the budget end:
+
+- **Burnt taste and harsh hits** — poor coils run too hot and scorch the oil, destroying the terpenes you paid for.
+- **Leaks and clogs** — badly fitted tanks leak into the battery connection, and thin oil with cutting agents clogs the airway.
+- **Heavy metals** — the serious one. Low-grade metal components can leach into the oil over time. Reputable manufacturers test for this; mystery-brand carts don't.
+
+A decent 510-thread battery with variable voltage helps too: run live resin and rosin **low** (around 2.2–2.8V) to protect the flavour, and only step up if the oil is thick.
+
+---
+
+### How to tell a serious product from a filler-heavy one
+
+1. **Read the ingredients.** The list should be short: cannabis extract and terpenes. Be suspicious of anything listing "cutting agents", vitamin E acetate, MCT oil, or unnamed "flavouring". Vitamin E acetate was the additive behind the 2019 vaping lung-injury outbreak (EVALI) — it has no place in a cartridge.
+2. **Ask for the COA.** A Certificate of Analysis from a third-party lab shows cannabinoid content and screening for pesticides, solvents, and heavy metals. A seller who can't or won't show one is telling you something.
+3. **Judge the oil, not the packaging.** Good oil is honey-gold to light amber and moves slowly when you tilt the cart. Watery, dark, or separated oil is a red flag — as is counterfeit packaging copied from big US brands.
+4. **Price is a signal.** Live rosin is expensive to make. A "live rosin" cart at a distillate price is not live rosin.
+5. **Start low, especially if you're new.** Vape oil is concentrated — often 70–90% THC versus 15–25% in flower. One short puff, wait ten minutes, then decide. There's no prize for finishing the hit.
+
+---
+
+### Why people love the format anyway
+
+Done properly, vapes earn their popularity: discreet, consistent dosing, no smoke, and the flavour of a well-made live resin is the closest you can get to the living plant. The point isn't to avoid the category — it's to buy it with your eyes open.
+
+---
+
+### Where Budbase fits in
+
+*Budbase built their shop around exactly this problem — vetted carts, clear oil types, and straight answers about what's inside each one. If you're comparing options, they're a good place to start the conversation.*
+
+---
+
+*Educational only — this is not medical advice. Cannabis affects everyone differently. If you have a health condition or take medication, speak to a qualified healthcare professional first. Keep all cannabis products away from children and pets.*`,
+    author: "Budbase",
+    tags: ["Vapes", "Guest Post", "Education", "Product Safety", "South Africa"],
+    published_at: "2026-09-05T08:00:00Z",
+    featured_image: "/blog/thc-vapes-explained.jpg",
+  },
+  {
     id: "static-best-strains-for-anxiety",
     title: "Best Cannabis Strains for Anxiety: A Terpene-First Guide",
     slug: "best-strains-for-anxiety",
