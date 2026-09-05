@@ -112,10 +112,29 @@ const ChatMenuCard = ({ menu }: Props) => {
 
       {menu.pdfUrl && showPdf && (
         <div className="border-b border-border bg-muted/30">
+          {/* Phones and tablets rarely render inline PDFs — show the cover instead. */}
+          {menu.coverUrl && (
+            <a
+              href={menu.pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block sm:hidden p-3"
+            >
+              <img
+                src={menu.coverUrl}
+                alt={`${menu.label} front page`}
+                loading="lazy"
+                className="w-full rounded-lg border border-border"
+              />
+              <span className="mt-2 block text-center text-xs text-primary underline">
+                Open the full catalogue
+              </span>
+            </a>
+          )}
           <object
             data={menu.pdfUrl}
             type="application/pdf"
-            className="w-full h-[380px] sm:h-[460px]"
+            className="hidden sm:block w-full h-[460px]"
             aria-label={`${menu.label} catalogue`}
           >
             <div className="p-4 text-sm text-muted-foreground">
@@ -128,6 +147,7 @@ const ChatMenuCard = ({ menu }: Props) => {
           </object>
         </div>
       )}
+
 
       {menu.orderPhone && (
         <div className="px-3 py-2.5 border-b border-border bg-background/60">
