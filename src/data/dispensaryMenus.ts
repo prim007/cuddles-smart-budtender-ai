@@ -69,6 +69,8 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
     contact: "LëF Labs (Pty) Ltd · B2B wholesale · 071 806 5754",
     orderPhone: "0718065754",
     pdfUrl: "/menus/leflabs-september-2026-catalogue.pdf",
+    coverUrl: "/menus/leflabs-cover.jpg",
+
     hidePrices: true,
     priceNote: "On request",
     disclaimer:
