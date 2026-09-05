@@ -23,6 +23,9 @@ export interface DispensaryMenu {
   orderPhone?: string;
   /** Embedded catalogue PDF shown inline in chat. */
   pdfUrl?: string;
+  /** Cover image of the catalogue (first page), shown on small screens. */
+  coverUrl?: string;
+
   /** Hide numeric prices (e.g. confidential wholesale pricing). */
   hidePrices?: boolean;
   /** Shown in place of prices when hidePrices is on. */
