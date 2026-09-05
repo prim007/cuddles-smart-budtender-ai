@@ -9,7 +9,6 @@ import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
 
 // src/data/dispensaryMenus.ts
-import leflabsCatalogue from "npm:@/assets/leflabs-catalogue.pdf.asset.json";
 var DISPENSARY_MENUS = [
   {
     id: "tripple444",
@@ -51,7 +50,7 @@ var DISPENSARY_MENUS = [
     ],
     contact: "L\xEBF Labs (Pty) Ltd \xB7 B2B wholesale \xB7 071 806 5754",
     orderPhone: "0718065754",
-    pdfUrl: leflabsCatalogue.url,
+    pdfUrl: "/menus/leflabs-september-2026-catalogue.pdf",
     hidePrices: true,
     priceNote: "On request",
     disclaimer: "L\xEBF Labs September 2026 wholesale catalogue. B2B only \u2014 pricing, COAs and volume breaks on request by phone. Order minimums apply (100g on 4A Indoor & Indoor, 250g on the rest). 18+. Not medical advice.",

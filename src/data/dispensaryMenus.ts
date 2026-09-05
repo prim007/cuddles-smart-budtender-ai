@@ -1,7 +1,6 @@
 // Dispensary menus shown inline in the chat.
 // Add a new partner by pushing to DISPENSARY_MENUS.
 // Prices are in ZAR unless the entry says otherwise.
-import leflabsCatalogue from "@/assets/leflabs-catalogue.pdf.asset.json";
 
 
 
@@ -66,7 +65,7 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
     ],
     contact: "LëF Labs (Pty) Ltd · B2B wholesale · 071 806 5754",
     orderPhone: "0718065754",
-    pdfUrl: leflabsCatalogue.url,
+    pdfUrl: "/menus/leflabs-september-2026-catalogue.pdf",
     hidePrices: true,
     priceNote: "On request",
     disclaimer:
