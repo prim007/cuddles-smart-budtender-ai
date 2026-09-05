@@ -9,6 +9,7 @@ import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
 
 // src/data/dispensaryMenus.ts
+import leflabsCatalogue from "npm:@/assets/leflabs-catalogue.pdf.asset.json";
 var DISPENSARY_MENUS = [
   {
     id: "tripple444",

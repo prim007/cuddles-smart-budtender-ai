@@ -1,6 +1,9 @@
 // Dispensary menus shown inline in the chat.
 // Add a new partner by pushing to DISPENSARY_MENUS.
 // Prices are in ZAR unless the entry says otherwise.
+import leflabsCatalogue from "@/assets/leflabs-catalogue.pdf.asset.json";
+
+
 
 export interface MenuItem {
   name: string;
