@@ -224,22 +224,38 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
 
 
 
+// Any "what specials / deals / promos are around?" question surfaces the
+// current partner catalogue (LëF Labs September 2026).
+const SPECIALS_RE =
+  /\b(specials?|deals?|promos?|promotions?|discounts?|offers?|catalogue|catalog|price\s*list|wholesale|bulk|what'?s\s+(on|new|hot)\s+(special|this month)?)\b/;
+
+export const SPECIALS_MENU_ID = "leaf-labs";
+
 /** Returns the matching menu if the user's message mentions a known dispensary/brand. */
 export function matchMenuIntent(text: string): DispensaryMenu | null {
   // Normalize: lowercase + strip diacritics (so "Lëf" matches "lef")
   const normalize = (s: string) =>
     s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const lower = normalize(text);
+
+  // Brand mentioned by name always wins.
+  for (const m of DISPENSARY_MENUS) {
+    if (m.aliases.some((a) => lower.includes(normalize(a)))) return m;
+  }
+
+  // "Any specials around?" → current partner catalogue.
+  if (SPECIALS_RE.test(lower)) {
+    return DISPENSARY_MENUS.find((m) => m.id === SPECIALS_MENU_ID) ?? null;
+  }
+
   // If the user is asking for a location/hours ("where is …", "near me",
   // "open", "hours", "address", etc.) let the dispensary handler answer
   // instead of hijacking the reply with a price menu.
   const LOCATION_INTENT_RE =
     /\b(where|near\s*me|nearby|closest|nearest|location|address|directions?|open(ing)?|hours?|store|shop\s*(near|around|close)|find)\b/;
   if (LOCATION_INTENT_RE.test(lower)) return null;
-  // Otherwise, if a known dispensary/brand alias is mentioned, show its menu.
-  for (const m of DISPENSARY_MENUS) {
-    if (m.aliases.some((a) => lower.includes(normalize(a)))) return m;
-  }
+
   return null;
 }
+
 
