@@ -28,12 +28,13 @@ const ALL_KNOWLEDGE = [
   "plants",
   "wikipedia",
   "strain_matching",
+  "partner_catalogue",
 ];
 
 export const SPECIALISTS: Record<SpecialistRole, Specialist> = {
   budtender: {
     role: "budtender",
-    sections: ["strain_matching", "encyclopedia", "research"],
+    sections: ["strain_matching", "encyclopedia", "research", "partner_catalogue"],
     tools: ["search_strains", "get_user_memory", "save_user_preference", "update_user_memory"],
     directive:
       "You are operating as the BUDTENDER specialist: match the person to a strain or product using effects, terpenes, tolerance and their remembered preferences. Recommend 1-3 options, explain why, and keep the education-only framing.",
@@ -41,12 +42,13 @@ export const SPECIALISTS: Record<SpecialistRole, Specialist> = {
   },
   inventory: {
     role: "inventory",
-    sections: ["strain_matching"],
+    sections: ["strain_matching", "partner_catalogue"],
     tools: ["search_strains", "find_dispensaries", "start_checkout", "get_user_memory"],
     directive:
-      "You are operating as the INVENTORY specialist: answer about real stock, prices, menus and where to buy. Always ground answers in tool results — never invent stock or prices. If nothing is in stock, say so plainly.",
+      "You are operating as the INVENTORY specialist: answer about real stock, menus, specials and where to buy. Always ground answers in tool results or the partner catalogue — never invent stock. If someone asks about specials, deals or this month's catalogue, point them to the LëF Labs September 2026 catalogue shown in the chat and its Order now button (071 806 5754), without quoting confidential wholesale prices.",
     maxSteps: 3,
   },
+
   educator: {
     role: "educator",
     sections: ALL_KNOWLEDGE,
