@@ -19,3 +19,5 @@ project_id = "vfcoctqnohlljuxualwl"
     verify_jwt = false
   [functions.preview-transactional-email]
     verify_jwt = false
+  [functions.notify-article-decision]
+    verify_jwt = false
