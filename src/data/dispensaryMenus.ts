@@ -238,11 +238,6 @@ export function matchMenuIntent(text: string): DispensaryMenu | null {
     s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const lower = normalize(text);
 
-  // Brand mentioned by name always wins.
-  for (const m of DISPENSARY_MENUS) {
-    if (m.aliases.some((a) => lower.includes(normalize(a)))) return m;
-  }
-
   // "Any specials around?" → current partner catalogue.
   if (SPECIALS_RE.test(lower)) {
     return DISPENSARY_MENUS.find((m) => m.id === SPECIALS_MENU_ID) ?? null;
@@ -255,7 +250,13 @@ export function matchMenuIntent(text: string): DispensaryMenu | null {
     /\b(where|near\s*me|nearby|closest|nearest|location|address|directions?|open(ing)?|hours?|store|shop\s*(near|around|close)|find)\b/;
   if (LOCATION_INTENT_RE.test(lower)) return null;
 
+  // Otherwise, if a known dispensary/brand alias is mentioned, show its menu.
+  for (const m of DISPENSARY_MENUS) {
+    if (m.aliases.some((a) => lower.includes(normalize(a)))) return m;
+  }
+
   return null;
+
 }
 
 
