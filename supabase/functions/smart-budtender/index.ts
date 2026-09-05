@@ -5,6 +5,7 @@ import { ENCYCLOPEDIA_KNOWLEDGE_BASE } from "./encyclopedia-knowledge.ts";
 import { BOTANY_KNOWLEDGE_BASE } from "./botany-knowledge.ts";
 import { WIKIPEDIA_KNOWLEDGE_BASE } from "./wikipedia-knowledge.ts";
 import { STRAIN_MATCHING_KNOWLEDGE } from "./strain-matching.ts";
+import { PARTNER_CATALOGUE_KNOWLEDGE } from "./partner-catalogue.ts";
 import { PLANT_KNOWLEDGE_BASE } from "./plant-knowledge.ts";
 import { retrieveKnowledge, buildRetrievalContext } from "../_shared/rag.ts";
 import { ANSWER_QUALITY_DIRECTIVES, composeSystemPrompt, promptTraceHeaders } from "../_shared/prompt-registry.ts";
@@ -742,6 +743,7 @@ serve(async (req) => {
       { name: 'plants', content: PLANT_KNOWLEDGE_BASE },
       { name: 'wikipedia', content: WIKIPEDIA_KNOWLEDGE_BASE },
       { name: 'strain_matching', content: STRAIN_MATCHING_KNOWLEDGE },
+      { name: 'partner_catalogue', content: PARTNER_CATALOGUE_KNOWLEDGE },
     ].filter((s) => keepSection(s.name));
 
     const specialistTools = toolsFor([...specialist.tools]);
