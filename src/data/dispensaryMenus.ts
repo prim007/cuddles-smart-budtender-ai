@@ -17,8 +17,17 @@ export interface DispensaryMenu {
   aliases: string[];        // lowercase name variants (without "menu")
   contact?: string;         // phone / WhatsApp
   disclaimer?: string;
+  /** Tel number the "Order now" button dials (digits only, no spaces). */
+  orderPhone?: string;
+  /** Embedded catalogue PDF shown inline in chat. */
+  pdfUrl?: string;
+  /** Hide numeric prices (e.g. confidential wholesale pricing). */
+  hidePrices?: boolean;
+  /** Shown in place of prices when hidePrices is on. */
+  priceNote?: string;
   items: MenuItem[];
 }
+
 
 export const DISPENSARY_MENUS: DispensaryMenu[] = [
   {
