@@ -28,12 +28,13 @@ const ALL_KNOWLEDGE = [
   "plants",
   "wikipedia",
   "strain_matching",
+  "partner_catalogue",
 ];
 
 export const SPECIALISTS: Record<SpecialistRole, Specialist> = {
   budtender: {
     role: "budtender",
-    sections: ["strain_matching", "encyclopedia", "research"],
+    sections: ["strain_matching", "encyclopedia", "research", "partner_catalogue"],
     tools: ["search_strains", "get_user_memory", "save_user_preference", "update_user_memory"],
     directive:
       "You are operating as the BUDTENDER specialist: match the person to a strain or product using effects, terpenes, tolerance and their remembered preferences. Recommend 1-3 options, explain why, and keep the education-only framing.",
@@ -41,12 +42,13 @@ export const SPECIALISTS: Record<SpecialistRole, Specialist> = {
   },
   inventory: {
     role: "inventory",
-    sections: ["strain_matching"],
+    sections: ["strain_matching", "partner_catalogue"],
     tools: ["search_strains", "find_dispensaries", "start_checkout", "get_user_memory"],
     directive:
-      "You are operating as the INVENTORY specialist: answer about real stock, prices, menus and where to buy. Always ground answers in tool results — never invent stock or prices. If nothing is in stock, say so plainly.",
+      "You are operating as the INVENTORY specialist: answer about real stock, menus, specials and where to buy. Always ground answers in tool results or the partner catalogue — never invent stock. If someone asks about specials, deals or this month's catalogue, point them to the LëF Labs September 2026 catalogue shown in the chat and its Order now button (071 806 5754), without quoting confidential wholesale prices.",
     maxSteps: 3,
   },
+
   educator: {
     role: "educator",
     sections: ALL_KNOWLEDGE,
@@ -76,7 +78,7 @@ export const SPECIALISTS: Record<SpecialistRole, Specialist> = {
 // Fast keyword pre-pass — avoids spending a gateway call on obvious turns.
 const RULES: Array<{ role: SpecialistRole; re: RegExp }> = [
   { role: "smalltalk", re: /^(hi|hey|hello|yo|sup|howzit|thanks|thank you|ok|okay|cool|great|bye|good (morning|afternoon|evening))\b[\s!.?]*$/i },
-  { role: "inventory", re: /\b(price|prices|cost|how much|in stock|stock|menu|buy|purchase|order|checkout|deliver|delivery|dispensar(y|ies)|shop|store|near me|nearby|for sale)\b/i },
+  { role: "inventory", re: /\b(price|prices|cost|how much|in stock|stock|menu|specials?|deals?|promos?|catalogue|catalog|wholesale|bulk|buy|purchase|order|checkout|deliver|delivery|dispensar(y|ies)|shop|store|near me|nearby|for sale)\b/i },
   { role: "grow_coach", re: /\b(grow|growing|germinat|seedling|clone|soil|nutrient|npk|repot|water(ing)?|light schedule|veg stage|flower(ing)? stage|harvest|cure|drying|pest|spider mite|root rot|houseplant|monstera|succulent|herb garden|fertilis|fertiliz)\b/i },
   { role: "educator", re: /\b(what is|why does|how does|explain|science|research|study|studies|legal|law|history|endocannabinoid|terpene|cannabinoid|cbd|cbn|cbg|metaboli|drug test|interaction|side effect|evidence|label|coa|certificate of analysis)\b/i },
   { role: "budtender", re: /\b(recommend|suggest|best for|which strain|strain for|help me (sleep|relax|focus)|for (sleep|anxiety|pain|focus|energy|creativity|stress)|indica|sativa|hybrid|dose|dosage|tolerance|dagga|zol|skyf)\b/i },
