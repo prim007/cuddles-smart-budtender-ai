@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, Phone, FileText, ChevronDown, ChevronUp } from "lucide-react";
 import type { DispensaryMenu } from "@/data/dispensaryMenus";
 
 interface Props {
@@ -7,6 +8,8 @@ interface Props {
 }
 
 const ChatMenuCard = ({ menu }: Props) => {
+  const [showPdf, setShowPdf] = useState(true);
+
   // Group items by category
   const groups = menu.items.reduce<Record<string, typeof menu.items>>((acc, item) => {
     const key = item.category || "Menu";
@@ -14,7 +17,18 @@ const ChatMenuCard = ({ menu }: Props) => {
     return acc;
   }, {});
 
+  const priceLabel = (price?: number) => {
+    if (menu.hidePrices || typeof price !== "number") return menu.priceNote ?? "On request";
+    return `${menu.currency}${price}`;
+  };
+
   const downloadPdf = async () => {
+    // Partner-supplied catalogue: hand over the original document.
+    if (menu.pdfUrl) {
+      window.open(menu.pdfUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+
     const { jsPDF } = await import("jspdf");
     const doc = new jsPDF({ unit: "pt", format: "a4" });
     const pageW = doc.internal.pageSize.getWidth();
@@ -49,9 +63,8 @@ const ChatMenuCard = ({ menu }: Props) => {
       items.forEach((it) => {
         if (y > 780) { doc.addPage(); y = 48; }
         const left = `${it.name}${it.size ? "  ·  " + it.size : ""}`;
-        const right = `${menu.currency}${it.price}`;
         doc.text(left, 40, y);
-        doc.text(right, pageW - 40, y, { align: "right" });
+        doc.text(priceLabel(it.price), pageW - 40, y, { align: "right" });
         if (it.notes) {
           y += 12;
           doc.setTextColor(120);
@@ -75,12 +88,61 @@ const ChatMenuCard = ({ menu }: Props) => {
 
   return (
     <div className="mt-3 rounded-xl overflow-hidden border border-border bg-background/70 shadow-soft">
-      <div className="flex items-center justify-between gap-2 px-3 py-2 bg-muted/60">
-        <p className="text-sm font-semibold text-foreground truncate">📋 {menu.label}</p>
-        <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={downloadPdf}>
-          <Download className="w-3 h-3 mr-1" /> PDF
-        </Button>
+      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-muted/60">
+        <p className="text-sm font-semibold text-foreground min-w-0 truncate">📋 {menu.label}</p>
+        <div className="flex items-center gap-1.5">
+          {menu.pdfUrl && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-7 px-2 text-xs"
+              onClick={() => setShowPdf((v) => !v)}
+              aria-expanded={showPdf}
+            >
+              <FileText className="w-3 h-3 mr-1" />
+              Catalogue
+              {showPdf ? <ChevronUp className="w-3 h-3 ml-1" /> : <ChevronDown className="w-3 h-3 ml-1" />}
+            </Button>
+          )}
+          <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={downloadPdf}>
+            <Download className="w-3 h-3 mr-1" /> PDF
+          </Button>
+        </div>
       </div>
+
+      {menu.pdfUrl && showPdf && (
+        <div className="border-b border-border bg-muted/30">
+          <object
+            data={menu.pdfUrl}
+            type="application/pdf"
+            className="w-full h-[380px] sm:h-[460px]"
+            aria-label={`${menu.label} catalogue`}
+          >
+            <div className="p-4 text-sm text-muted-foreground">
+              Your device can't show the catalogue here.{" "}
+              <a href={menu.pdfUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                Open the catalogue
+              </a>
+              .
+            </div>
+          </object>
+        </div>
+      )}
+
+      {menu.orderPhone && (
+        <div className="px-3 py-2.5 border-b border-border bg-background/60">
+          <Button asChild size="sm" className="w-full">
+            <a href={`tel:${menu.orderPhone}`} aria-label={`Call ${menu.label} to order`}>
+              <Phone className="w-4 h-4 mr-2" /> Order now · {menu.contact?.match(/0\d{2}\s?\d{3}\s?\d{4}/)?.[0] ?? menu.orderPhone}
+            </a>
+          </Button>
+          {menu.hidePrices && (
+            <p className="mt-1.5 text-[11px] text-muted-foreground text-center">
+              Pricing, volume breaks and COAs shared on the call.
+            </p>
+          )}
+        </div>
+      )}
 
       <div className="p-3 max-h-[420px] overflow-y-auto text-sm">
         {Object.entries(groups).map(([cat, items]) => (
@@ -98,8 +160,8 @@ const ChatMenuCard = ({ menu }: Props) => {
                       <div className="text-xs text-muted-foreground">{it.notes}</div>
                     )}
                   </div>
-                  <span className="font-semibold text-foreground shrink-0">
-                    {menu.currency}{it.price}
+                  <span className="font-semibold text-foreground shrink-0 text-xs">
+                    {priceLabel(it.price)}
                   </span>
                 </li>
               ))}
@@ -107,6 +169,10 @@ const ChatMenuCard = ({ menu }: Props) => {
           </div>
         ))}
       </div>
+
+      {menu.disclaimer && (
+        <p className="px-3 pb-3 text-[11px] text-muted-foreground">{menu.disclaimer}</p>
+      )}
     </div>
   );
 };
