@@ -6,7 +6,7 @@ export interface MenuItem {
   name: string;
   category?: string;   // e.g. "Flower", "Edibles", "Concentrates"
   size?: string;       // e.g. "1g", "3.5g", "100mg"
-  price: number;       // numeric price
+  price?: number;      // numeric price (omitted when pricing is on request)
   notes?: string;      // optional short note (THC%, effect)
 }
 
