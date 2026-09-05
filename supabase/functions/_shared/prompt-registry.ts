@@ -6,7 +6,7 @@
 // stamped on responses (X-Cuddles-Prompt-Version) and logged with block
 // sizes, so traces can be attributed to an exact prompt build.
 
-export const PROMPT_VERSION = "2026-09-03.1";
+export const PROMPT_VERSION = "2026-09-05.1";
 
 /** Named block that can be toggled/ordered when composing a system prompt. */
 export type PromptBlock = { name: string; content: string };
