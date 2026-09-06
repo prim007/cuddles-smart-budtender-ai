@@ -230,8 +230,24 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
 
 // Any "what specials / deals / promos are around?" question surfaces the
 // current partner catalogue (LëF Labs September 2026).
-const SPECIALS_RE =
-  /\b(specials?|deals?|promos?|promotions?|discounts?|offers?|catalogue|catalog|price\s*list|wholesale|bulk|what'?s\s+(on|new|hot)\s+(special|this month)?)\b/;
+// Only fire on clearly commercial phrasing — bare words like "deals" or
+// "offers" show up in ordinary questions ("how does CBD deal with pain?").
+const SPECIALS_RE = new RegExp(
+  [
+    // "any specials", "any deals on", "got any promos"
+    /\b(any|got|have|show|see|what)\b[^.?!]{0,30}\b(specials?|deals?|promos?|promotions?|discounts?)\b/
+      .source,
+    // "specials this month", "deals right now", "on special"
+    /\b(specials?|deals?|promos?|discounts?)\b[^.?!]{0,20}\b(this\s+(month|week)|right\s+now|today|available|on\s+offer)\b/
+      .source,
+    /\bon\s+(special|sale|promo)\b/.source,
+    // catalogue / wholesale / price list are unambiguous commerce terms
+    /\b(catalogue|catalog|price\s*list|wholesale|bulk\s+(order|pricing|price|buy|deal)s?)\b/
+      .source,
+    /\bwhat'?s\s+(on\s+special|new\s+in\s+stock|hot\s+this\s+month)\b/.source,
+  ].join("|"),
+  "i"
+);
 
 export const SPECIALS_MENU_ID = "leaf-labs";
 
@@ -246,6 +262,7 @@ export function matchMenuIntent(text: string): DispensaryMenu | null {
   if (SPECIALS_RE.test(lower)) {
     return DISPENSARY_MENUS.find((m) => m.id === SPECIALS_MENU_ID) ?? null;
   }
+
 
   // If the user is asking for a location/hours ("where is …", "near me",
   // "open", "hours", "address", etc.) let the dispensary handler answer
