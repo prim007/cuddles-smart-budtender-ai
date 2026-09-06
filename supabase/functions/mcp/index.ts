@@ -194,6 +194,19 @@ var DISPENSARY_MENUS = [
     ]
   }
 ];
+var SPECIALS_RE = new RegExp(
+  [
+    // "any specials", "any deals on", "got any promos"
+    /\b(any|got|have|show|see|what)\b[^.?!]{0,30}\b(specials?|deals?|promos?|promotions?|discounts?)\b/.source,
+    // "specials this month", "deals right now", "on special"
+    /\b(specials?|deals?|promos?|discounts?)\b[^.?!]{0,20}\b(this\s+(month|week)|right\s+now|today|available|on\s+offer)\b/.source,
+    /\bon\s+(special|sale|promo)\b/.source,
+    // catalogue / wholesale / price list are unambiguous commerce terms
+    /\b(catalogue|catalog|price\s*list|wholesale|bulk\s+(order|pricing|price|buy|deal)s?)\b/.source,
+    /\bwhat'?s\s+(on\s+special|new\s+in\s+stock|hot\s+this\s+month)\b/.source
+  ].join("|"),
+  "i"
+);
 
 // src/lib/mcp/tools/list-dispensary-menus.ts
 var list_dispensary_menus_default = defineTool({
