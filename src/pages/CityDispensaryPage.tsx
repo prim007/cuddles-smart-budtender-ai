@@ -12,9 +12,12 @@ const CityDispensaryPage = () => {
 
   if (!cityInfo) return <Navigate to="/" replace />;
 
-  const title = `Dispensary Near Me ${cityInfo.name} | Cuddles AI Budtender`;
-  const description = `Find legal cannabis dispensaries and clubs near you in ${cityInfo.name}, ${cityInfo.province}. Chat with Cuddles AI for instant strain matches and delivery options.`;
+  const title = cityInfo.metaTitle ?? `Dispensary Near Me ${cityInfo.name} | Cuddles AI Budtender`;
+  const description =
+    cityInfo.metaDescription ??
+    `Find legal cannabis dispensaries and clubs near you in ${cityInfo.name}, ${cityInfo.province}. Chat with Cuddles AI for instant strain matches and delivery options.`;
   const url = `/dispensary-near-me/${cityInfo.slug}`;
+
 
   const structuredData = {
     "@context": "https://schema.org",
