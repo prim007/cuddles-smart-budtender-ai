@@ -77,6 +77,10 @@ const CityDispensaryPage = () => {
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
             {cityInfo.blurb} Cuddles AI helps you find the closest legal cannabis dispensary, club or lounge in {cityInfo.name} — and matches you to the right strain in seconds.
           </p>
+          {cityInfo.localIntro && (
+            <p className="mt-4 max-w-2xl text-base text-muted-foreground">{cityInfo.localIntro}</p>
+          )}
+
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Button size="lg" onClick={scrollToChat} className="gap-2 bg-gradient-to-r from-hippie-coral to-hippie-pink text-white">
