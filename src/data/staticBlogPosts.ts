@@ -12,6 +12,102 @@ export interface StaticBlogPost {
 
 export const staticBlogPosts: StaticBlogPost[] = [
   {
+    id: "static-sa-cannabis-750g-limit-2026",
+    title: "750 Grams — Roughly 1,500 Joints: What South Africa's New Draft Cannabis Rules Actually Say",
+    slug: "sa-cannabis-750g-possession-limit-2026",
+    excerpt:
+      "The headline says you'll be allowed enough dagga for about 1,500 joints. The draft regulations published on 2 February 2026 do propose a 750 gram limit — plus five plants and strict transport rules. Here's what's real, what's still only a proposal, and what hasn't changed at all.",
+    content: `### 750 Grams — Roughly 1,500 Joints: What South Africa's New Draft Cannabis Rules Actually Say
+
+*Educational only. This is a plain-language summary of published government documents, not legal advice. Adults 18+ only.*
+
+You've probably seen the headline: South Africans will soon be allowed to keep enough cannabis for well over a thousand joints. It's a great headline. It's also only half the story.
+
+Here is the half that matters.
+
+---
+
+### What actually happened
+
+On **2 February 2026** the Department of Justice and Constitutional Development published **draft** regulations under the Cannabis for Private Purposes Act 7 of 2024, and invited the public to comment by **5 March 2026** [1](https://www.justice.gov.za/m_statements/2026/20260203-CannabisDraftRegulations-Min.html).
+
+The Act itself has been law since 2024. What it never contained was numbers — how much is "private use"? The Constitutional Court deliberately left that to Parliament, and the Act hands the job to the Minister of Justice, to be set by regulation [1](https://www.justice.gov.za/m_statements/2026/20260203-CannabisDraftRegulations-Min.html). These draft regulations are the first time those numbers exist on paper.
+
+---
+
+### The numbers in the draft
+
+Straight from the gazetted text:
+
+| What | Proposed limit |
+| --- | --- |
+| Possession in a **private** place, per adult | 750 g at any time in a single day |
+| Possession in a **public** place, per adult | 750 g at any time in a single day |
+| Plants grown at home, per adult | 5 plants, any size or strain |
+| Amount you may transport | 750 g cumulatively in a single day |
+
+Where does "1,500 joints" come from? Pure arithmetic. At roughly half a gram of flower per joint, 750 g works out to about 1,500 — at a third of a gram, closer to 2,000. It's a way of picturing the number, not something written in the regulation.
+
+And to be blunt: 750 g is a large amount for personal use. Most people who use cannabis regularly will never come near it.
+
+---
+
+### The part nobody puts in the headline: transport
+
+The draft is far stricter about moving cannabis around than about having it. If you're driving with it, the proposal says:
+
+- It must be **out of sight** — boot, back, or an enclosed compartment. If that's not possible, a container that fully conceals it.
+- You may **not handle, hold or inspect** it while transporting it.
+- You may **not mix it** with any other substance on a public road.
+- You may **not let on** to anyone outside the vehicle that cannabis is on board.
+- A driver carrying cannabis must **tell passengers before they get in**, and a passenger bringing cannabis along must let the driver check the amount.
+
+Those rules are where ordinary people are most likely to trip up — not the gram limit.
+
+---
+
+### What has not changed
+
+**Selling is still not legal.** The Constitutional Court's 2018 Prince judgment covered private use and possession by adults, and expressly did not extend to buying and selling [1](https://www.justice.gov.za/m_statements/2026/20260203-CannabisDraftRegulations-Min.html). Nothing in these draft regulations changes that. The "club" and delivery models operating in South Africa sit in a grey area the law has not resolved.
+
+**Under-18s are excluded, completely.** The Act applies to adults only.
+
+**It's private, not public-facing.** Use is for a private place and a private purpose. Smoking in public remains an offence.
+
+---
+
+### When does it become real?
+
+Not yet. The sequence from here is: comments close, the Department considers them, the limits are finalised, and then the proposed limits go to **Parliament for approval before they come into effect** [1](https://www.justice.gov.za/m_statements/2026/20260203-CannabisDraftRegulations-Min.html). Numbers can change along the way — that is the entire point of a comment period.
+
+So if someone tells you the 750 g limit is the law today, they've read the headline and not the notice.
+
+---
+
+### What to do now
+
+- **Don't change your behaviour based on a draft.** Until Parliament approves the limits, they are a proposal.
+- **If you grow, five plants is the number to plan around** — that's the draft figure, and it's more generous than most people expect.
+- **Treat transport as the risky bit.** Concealed, untouched, unannounced. That's the whole rule.
+- **Don't assume buying is covered.** It isn't.
+
+---
+
+### Why this matters beyond the gram count
+
+South Africa has spent eight years in a strange in-between: legal to use, illegal to trade, undefined in quantity. These regulations are the first serious attempt to close that gap, and the transport and cultivation detail suggests the drafters were thinking about real households rather than headlines.
+
+The commercial question — licensed retail, clubs, delivery — is still untouched. That's the next fight, and it isn't in this document.
+
+---
+
+*Sources: Ministry of Justice and Constitutional Development media statement, 3 February 2026, and the draft Cannabis for Private Purposes Regulations published in Government Gazette No. 54061 of 2 February 2026. Educational content only — for advice about your own situation, speak to a qualified attorney.*`,
+    author: "Cuddles AI",
+    tags: ["South Africa", "Law & Policy", "Cannabis Regulation", "News"],
+    published_at: "2026-09-07T08:00:00Z",
+    featured_image: "/blog/sa-cannabis-possession-limits-2026.jpg",
+  },
+  {
     id: "static-thc-vapes-explained",
     title: "THC Vapes, Explained: What's Actually Inside the Pen — and How to Buy One You Can Trust",
     slug: "thc-vapes-explained",
