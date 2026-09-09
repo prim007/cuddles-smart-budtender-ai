@@ -3,9 +3,13 @@ import { ExternalLink, Store, UserPlus, Send, MessageCircle, Download } from "lu
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { toast } from "sonner";
-import Cuddles3D from "@/components/Cuddles3D";
+
+// Heavy 3D scene: loaded only once the banner is on screen so it never blocks
+// first paint or interaction. Height is reserved to avoid any layout shift.
+const Cuddles3D = lazy(() => import("@/components/Cuddles3D"));
+const CUDDLES_3D_HEIGHT = "h-[320px] w-full sm:h-[540px] lg:h-[640px]";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -26,6 +30,34 @@ const Hero = () => {
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const [showScene, setShowScene] = useState(false);
+
+  // Only build the 3D scene when it is actually visible (and not on
+  // reduced-motion / data-saver setups).
+  useEffect(() => {
+    const el = sceneRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if ((navigator as any).connection?.saveData) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          observer.disconnect();
+          const start = () => setShowScene(true);
+          if ("requestIdleCallback" in window) {
+            (window as any).requestIdleCallback(start, { timeout: 2000 });
+          } else {
+            setTimeout(start, 300);
+          }
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -254,8 +286,14 @@ const Hero = () => {
               💬 24/7 budtender
             </div>
 
-            <div className="relative w-full max-w-[560px]">
-              <Cuddles3D />
+            <div ref={sceneRef} className="relative w-full max-w-[560px]">
+              {showScene ? (
+                <Suspense fallback={<div className={CUDDLES_3D_HEIGHT} aria-hidden="true" />}>
+                  <Cuddles3D />
+                </Suspense>
+              ) : (
+                <div className={CUDDLES_3D_HEIGHT} aria-hidden="true" />
+              )}
             </div>
 
           </div>
