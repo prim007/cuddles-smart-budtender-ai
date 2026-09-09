@@ -1,16 +1,23 @@
 import { Helmet } from "react-helmet-async";
+import { Suspense, lazy } from "react";
 import Hero from "@/components/Hero";
-import CuddlesFeatures from "@/components/CuddlesFeatures";
-import HowItWorks from "@/components/HowItWorks";
-import ChatDemo from "@/components/ChatDemo";
-import FAQSection from "@/components/FAQSection";
 import SEO from "@/components/SEO";
-import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
-import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
-import SignupCTA from "@/components/SignupCTA";
 
-import ComplianceSection from "@/components/ComplianceSection";
+// Everything below the banner loads after first paint. Each placeholder keeps
+// the same height as its section so nothing jumps around while loading.
+const ChatDemo = lazy(() => import("@/components/ChatDemo"));
+const HowItWorks = lazy(() => import("@/components/HowItWorks"));
+const CuddlesFeatures = lazy(() => import("@/components/CuddlesFeatures"));
+const FeaturedBlogPosts = lazy(() => import("@/components/FeaturedBlogPosts"));
+const FAQSection = lazy(() => import("@/components/FAQSection"));
+const ComplianceSection = lazy(() => import("@/components/ComplianceSection"));
+const SignupCTA = lazy(() => import("@/components/SignupCTA"));
+const Footer = lazy(() => import("@/components/Footer"));
+
+const Placeholder = ({ height }: { height: string }) => (
+  <div style={{ minHeight: height }} aria-hidden="true" />
+);
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
@@ -128,16 +135,22 @@ const Index = () => {
       <Hero />
       <main>
         <div id="chat-demo">
-          <ChatDemo />
+          <Suspense fallback={<Placeholder height="600px" />}>
+            <ChatDemo />
+          </Suspense>
         </div>
-        <HowItWorks />
-        <CuddlesFeatures />
-        <FeaturedBlogPosts />
-        <FAQSection />
-        <ComplianceSection />
-        <SignupCTA />
+        <Suspense fallback={<Placeholder height="700px" />}>
+          <HowItWorks />
+          <CuddlesFeatures />
+          <FeaturedBlogPosts />
+          <FAQSection />
+          <ComplianceSection />
+          <SignupCTA />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={<Placeholder height="400px" />}>
+        <Footer />
+      </Suspense>
     </div>
   );
 };
