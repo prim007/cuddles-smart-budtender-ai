@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Store, UserPlus, Send, MessageCircle, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
+import cuddlesWalker from "@/assets/cuddles-walker.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { toast } from "sonner";
@@ -10,6 +11,18 @@ import { toast } from "sonner";
 // first paint or interaction. Height is reserved to avoid any layout shift.
 const Cuddles3D = lazy(() => import("@/components/Cuddles3D"));
 const CUDDLES_3D_HEIGHT = "h-[320px] w-full sm:h-[540px] lg:h-[640px]";
+
+const CuddlesStatic = () => (
+  <div className={`${CUDDLES_3D_HEIGHT} flex items-center justify-center`} aria-hidden="true">
+    <img
+      src={cuddlesWalker}
+      alt=""
+      width="275"
+      height="320"
+      className="h-auto max-h-[88%] w-auto max-w-[88%] object-contain"
+    />
+  </div>
+);
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -288,11 +301,11 @@ const Hero = () => {
 
             <div ref={sceneRef} className="relative w-full max-w-[560px]">
               {showScene ? (
-                <Suspense fallback={<div className={CUDDLES_3D_HEIGHT} aria-hidden="true" />}>
+                <Suspense fallback={<CuddlesStatic />}>
                   <Cuddles3D />
                 </Suspense>
               ) : (
-                <div className={CUDDLES_3D_HEIGHT} aria-hidden="true" />
+                <CuddlesStatic />
               )}
             </div>
 
