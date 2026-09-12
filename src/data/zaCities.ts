@@ -25,11 +25,13 @@ export const ZA_CITIES: ZaCity[] = [
     province: "KwaZulu-Natal",
     lat: -29.8587,
     lng: 31.0218,
-    blurb: "Home of the legendary Durban Poison landrace, with private clubs from the Berea and Glenwood through to Umhlanga and the Bluff.",
-    metaTitle: "Cannabis Clubs & Weed Delivery in Durban — Open Near You Today",
-    metaDescription: "Find private cannabis clubs and same-day weed delivery in Durban, from Umhlanga and Berea to the Bluff. Ask Cuddles AI what's open near you and which strain fits.",
+    blurb:
+      "Home of the legendary Durban Poison landrace, with private cannabis clubs and same-day delivery from Umhlanga and the Berea through Westville, Pinetown and the Bluff.",
+    metaTitle: "Weed Dispensary Durban — Clubs & Same-Day Delivery Near You",
+    metaDescription:
+      "Looking for a weed dispensary in Durban? Find private cannabis clubs in Umhlanga, Berea, Westville & the Bluff, plus same-day delivery. Ask Cuddles AI what's open near you.",
     localIntro:
-      "Durban's scene runs on private members' clubs rather than open shopfronts, so the closest option depends on the suburb you're in. Tell Cuddles where you are — Umhlanga, Berea, Glenwood, Musgrave, Westville, Pinetown, Chatsworth or the Bluff — and it will point you at the nearest clubs, who delivers the same day, and which local strains (Durban Poison included) suit what you're after.",
+      "Durban's scene runs on private members' clubs rather than open shopfronts, so the closest option depends on the suburb you're in. Tell Cuddles where you are — Umhlanga, Berea, Glenwood, Musgrave, Westville, Pinetown, Chatsworth or the Bluff — and it will point you at the nearest clubs, who delivers the same day, and which local strains (Durban Poison included) suit what you're after. Membership sign-up is usually quick and done at the club or online, and many clubs keep menus updated daily, so it's worth asking what's in stock before you head out. If you're new to the scene, ask Cuddles to explain how private clubs work, what ID you'll need, and which strains suit the effect you want.",
   },
 
   { slug: "pretoria", name: "Pretoria", province: "Gauteng", lat: -25.7479, lng: 28.2293, blurb: "Capital city with a fast-growing legal cannabis lounge scene." },
