@@ -63,7 +63,13 @@ const CityDispensaryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={title} description={description} url={url} structuredData={structuredData} />
+      <SEO
+        title={title}
+        description={description}
+        url={url}
+        structuredData={structuredData}
+        keywords={`weed dispensary ${cityInfo.name.toLowerCase()}, dispensary near me ${cityInfo.name.toLowerCase()}, cannabis club ${cityInfo.name.toLowerCase()}, weed delivery ${cityInfo.name.toLowerCase()}, buy cannabis ${cityInfo.name.toLowerCase()}, ${cityInfo.province} cannabis`}
+      />
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-hippie-coral/10 via-background to-hippie-sage/10 py-16 md:py-24">
