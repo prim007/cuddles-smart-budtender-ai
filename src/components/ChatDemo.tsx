@@ -61,6 +61,16 @@ const hasBuyIntent = (content: string) =>
   BUY_INTENT_RE.test(content) || (LOOSE_FIND_RE.test(content) && COMMERCE_CONTEXT_RE.test(content));
 const LOCATION_TROUBLE_RE = /\b(location|gps|map|maps|near\s*me|closest)\b.{0,40}\b(not\s+working|isn'?t\s+working|doesn'?t\s+work|broken|failed|unavailable|can'?t|cannot)\b|\b(not\s+working|broken|failed|unavailable)\b.{0,40}\b(location|gps|map|maps|near\s*me|closest)\b/i;
 
+// --- Context guards: keep the shop/finder reflex from hijacking non-shopping talk ---
+// The word "dispensary" (and friends) can appear in medical, legal, academic or
+// meta conversation. Those turns must reach the model, not the canned finder.
+const NON_COMMERCIAL_CONTEXT_RE = /\b(tcup|medical\s+(cannabis|programme|program|protocol|prescription|scheme)|prescription|prescribed|pharmac(y|ist|eutical)|sahpra|section\s*21|clinical|clinic|doctor|physician|study|studies|research|paper|thesis|policy|legislation|legal(ise|ize|isation|ization)?|law|bill|regulation|licens(e|ing|ed)|history|compare|difference|definition|means?|meaning|what\s+is\s+a|what\s+does|how\s+do(es)?\s+(a\s+)?dispensar|business|open(ing)?\s+a|start(ing)?\s+a|my\s+(club|dispensary|shop)|abroad|overseas|in\s+(canada|thailand|germany|the\s+us|america|europe))\b/i;
+// The user talking *about* the trigger itself, or asking us to stop the reflex.
+const REFLEX_OPT_OUT_RE = /\b((stop|don'?t|do\s+not|quit|no\s+more)\b.{0,40}\b(redirect|link|shop|store|finder|dispensar|promot|advertis|sell)|ignore\s+(the\s+)?(word|keyword|d-?word|trigger)|d-?word|keyword\s+trigger|stop\s+triggering|without\s+(the\s+)?(shop|link|redirect))\b/i;
+const REFLEX_OPT_IN_RE = /\b(where\s+can\s+i\s+buy|show\s+me\s+(the\s+)?(shop|menu|dispensar)|find\s+(me\s+)?a\s+dispensar|order\s+now|i\s+want\s+to\s+(buy|order))\b/i;
+const COMMERCE_REFLEX_OPT_OUT_KEY = "cuddles_commerce_reflex_off";
+
+
 // --- Intent classification for analytics / funnel tagging ---
 export type ChatIntent = "advice" | "recommendation" | "dispensary" | "purchase" | "menu" | "general" | "ui" | "other";
 export function classifyIntent(content: string): ChatIntent {
@@ -142,6 +152,18 @@ const ChatDemo = () => {
   const awaitingDispensaryLocation = useRef(false);
   // Strain/product the user is hunting for, carried across the location follow-up
   const pendingProduct = useRef<string | null>(null);
+  // Honours a user's request to stop the shop/finder reflex for this session.
+  const commerceReflexOff = useRef<boolean>(
+    typeof window !== "undefined" && sessionStorage.getItem(COMMERCE_REFLEX_OPT_OUT_KEY) === "1",
+  );
+  const setCommerceReflex = (off: boolean) => {
+    commerceReflexOff.current = off;
+    try {
+      if (off) sessionStorage.setItem(COMMERCE_REFLEX_OPT_OUT_KEY, "1");
+      else sessionStorage.removeItem(COMMERCE_REFLEX_OPT_OUT_KEY);
+    } catch { /* storage unavailable */ }
+  };
+
 
 
 
@@ -307,6 +329,28 @@ const ChatDemo = () => {
 
   // Returns true if the message was handled as a dispensary intent and AI call should be skipped
   const tryHandleDispensaryIntent = async (content: string): Promise<boolean> => {
+    // 0) Respect the user's own instruction about this reflex before anything else.
+    if (REFLEX_OPT_OUT_RE.test(content)) {
+      setCommerceReflex(true);
+      awaitingDispensaryLocation.current = false;
+      pendingProduct.current = null;
+      return false; // let the model answer naturally, with no canned script
+    }
+    if (commerceReflexOff.current) {
+      if (REFLEX_OPT_IN_RE.test(content)) {
+        setCommerceReflex(false); // user clearly wants shopping help again
+      } else {
+        awaitingDispensaryLocation.current = false;
+        return false;
+      }
+    }
+
+    // 1) Context guard: medical, legal, academic or meta talk goes to the model.
+    if (NON_COMMERCIAL_CONTEXT_RE.test(content) && !REFLEX_OPT_IN_RE.test(content)) {
+      awaitingDispensaryLocation.current = false;
+      return false;
+    }
+
     if (LOCATION_TROUBLE_RE.test(content)) {
       awaitingDispensaryLocation.current = true;
       setMessages((prev) => [
@@ -324,6 +368,7 @@ const ChatDemo = () => {
     const isFollowUpCity = awaitingDispensaryLocation.current;
     const isExplicitIntent = DISPENSARY_INTENT_RE.test(content) || hasBuyIntent(content);
     if (!isExplicitIntent && !isFollowUpCity) return false;
+
 
     // Follow-up: treat whole message as the address
     if (isFollowUpCity && !isExplicitIntent) {
