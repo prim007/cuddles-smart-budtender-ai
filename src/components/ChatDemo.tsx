@@ -61,6 +61,16 @@ const hasBuyIntent = (content: string) =>
   BUY_INTENT_RE.test(content) || (LOOSE_FIND_RE.test(content) && COMMERCE_CONTEXT_RE.test(content));
 const LOCATION_TROUBLE_RE = /\b(location|gps|map|maps|near\s*me|closest)\b.{0,40}\b(not\s+working|isn'?t\s+working|doesn'?t\s+work|broken|failed|unavailable|can'?t|cannot)\b|\b(not\s+working|broken|failed|unavailable)\b.{0,40}\b(location|gps|map|maps|near\s*me|closest)\b/i;
 
+// --- Context guards: keep the shop/finder reflex from hijacking non-shopping talk ---
+// The word "dispensary" (and friends) can appear in medical, legal, academic or
+// meta conversation. Those turns must reach the model, not the canned finder.
+const NON_COMMERCIAL_CONTEXT_RE = /\b(tcup|medical\s+(cannabis|programme|program|protocol|prescription|scheme)|prescription|prescribed|pharmac(y|ist|eutical)|sahpra|section\s*21|clinical|clinic|doctor|physician|study|studies|research|paper|thesis|policy|legislation|legal(ise|ize|isation|ization)?|law|bill|regulation|licens(e|ing|ed)|history|compare|difference|definition|means?|meaning|what\s+is\s+a|what\s+does|how\s+do(es)?\s+(a\s+)?dispensar|business|open(ing)?\s+a|start(ing)?\s+a|my\s+(club|dispensary|shop)|abroad|overseas|in\s+(canada|thailand|germany|the\s+us|america|europe))\b/i;
+// The user talking *about* the trigger itself, or asking us to stop the reflex.
+const REFLEX_OPT_OUT_RE = /\b((stop|don'?t|do\s+not|quit|no\s+more)\b.{0,40}\b(redirect|link|shop|store|finder|dispensar|promot|advertis|sell)|ignore\s+(the\s+)?(word|keyword|d-?word|trigger)|d-?word|keyword\s+trigger|stop\s+triggering|without\s+(the\s+)?(shop|link|redirect))\b/i;
+const REFLEX_OPT_IN_RE = /\b(where\s+can\s+i\s+buy|show\s+me\s+(the\s+)?(shop|menu|dispensar)|find\s+(me\s+)?a\s+dispensar|order\s+now|i\s+want\s+to\s+(buy|order))\b/i;
+const COMMERCE_REFLEX_OPT_OUT_KEY = "cuddles_commerce_reflex_off";
+
+
 // --- Intent classification for analytics / funnel tagging ---
 export type ChatIntent = "advice" | "recommendation" | "dispensary" | "purchase" | "menu" | "general" | "ui" | "other";
 export function classifyIntent(content: string): ChatIntent {
