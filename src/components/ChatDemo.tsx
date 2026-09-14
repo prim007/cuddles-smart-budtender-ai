@@ -329,6 +329,28 @@ const ChatDemo = () => {
 
   // Returns true if the message was handled as a dispensary intent and AI call should be skipped
   const tryHandleDispensaryIntent = async (content: string): Promise<boolean> => {
+    // 0) Respect the user's own instruction about this reflex before anything else.
+    if (REFLEX_OPT_OUT_RE.test(content)) {
+      setCommerceReflex(true);
+      awaitingDispensaryLocation.current = false;
+      pendingProduct.current = null;
+      return false; // let the model answer naturally, with no canned script
+    }
+    if (commerceReflexOff.current) {
+      if (REFLEX_OPT_IN_RE.test(content)) {
+        setCommerceReflex(false); // user clearly wants shopping help again
+      } else {
+        awaitingDispensaryLocation.current = false;
+        return false;
+      }
+    }
+
+    // 1) Context guard: medical, legal, academic or meta talk goes to the model.
+    if (NON_COMMERCIAL_CONTEXT_RE.test(content) && !REFLEX_OPT_IN_RE.test(content)) {
+      awaitingDispensaryLocation.current = false;
+      return false;
+    }
+
     if (LOCATION_TROUBLE_RE.test(content)) {
       awaitingDispensaryLocation.current = true;
       setMessages((prev) => [
@@ -346,6 +368,7 @@ const ChatDemo = () => {
     const isFollowUpCity = awaitingDispensaryLocation.current;
     const isExplicitIntent = DISPENSARY_INTENT_RE.test(content) || hasBuyIntent(content);
     if (!isExplicitIntent && !isFollowUpCity) return false;
+
 
     // Follow-up: treat whole message as the address
     if (isFollowUpCity && !isExplicitIntent) {
