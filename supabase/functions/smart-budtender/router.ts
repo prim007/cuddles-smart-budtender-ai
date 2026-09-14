@@ -84,12 +84,25 @@ const RULES: Array<{ role: SpecialistRole; re: RegExp }> = [
   { role: "budtender", re: /\b(recommend|suggest|best for|which strain|strain for|help me (sleep|relax|focus)|for (sleep|anxiety|pain|focus|energy|creativity|stress)|indica|sativa|hybrid|dose|dosage|tolerance|dagga|zol|skyf)\b/i },
 ];
 
+// Keyword rules must never override obvious non-commercial context: medical
+// programmes (e.g. TCUP), law, research, business or meta talk about the bot's
+// own behaviour belong with the educator, even if they mention "dispensary".
+const NON_COMMERCIAL_CONTEXT =
+  /\b(tcup|medical (cannabis|programme|program|protocol|prescription|scheme)|prescription|prescribed|pharmac(y|ist|eutical)|sahpra|section ?21|clinical|doctor|physician|stud(y|ies)|research|thesis|policy|legislation|legal(ise|ize|isation|ization)?|law|bill|regulation|licens(e|ing|ed)|history|definition|meaning|what is a|what does|open(ing)? a|start(ing)? a)\b/i;
+const META_REFLEX =
+  /\b((stop|don'?t|do not|quit|no more)\b.{0,40}\b(redirect|link|shop|store|promot|advertis|sell)|ignore (the )?(word|keyword|d-?word|trigger)|d-?word|keyword trigger|stop triggering)\b/i;
+
 export function ruleRoute(message: string): SpecialistRole | null {
+  if (META_REFLEX.test(message)) return "educator";
+  const nonCommercial = NON_COMMERCIAL_CONTEXT.test(message);
   for (const { role, re } of RULES) {
-    if (re.test(message)) return role;
+    if (!re.test(message)) continue;
+    if (role === "inventory" && nonCommercial) return "educator";
+    return role;
   }
   return null;
 }
+
 
 const TRIAGE_MODEL = "google/gemini-2.5-flash-lite";
 
