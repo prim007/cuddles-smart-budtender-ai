@@ -152,6 +152,18 @@ const ChatDemo = () => {
   const awaitingDispensaryLocation = useRef(false);
   // Strain/product the user is hunting for, carried across the location follow-up
   const pendingProduct = useRef<string | null>(null);
+  // Honours a user's request to stop the shop/finder reflex for this session.
+  const commerceReflexOff = useRef<boolean>(
+    typeof window !== "undefined" && sessionStorage.getItem(COMMERCE_REFLEX_OPT_OUT_KEY) === "1",
+  );
+  const setCommerceReflex = (off: boolean) => {
+    commerceReflexOff.current = off;
+    try {
+      if (off) sessionStorage.setItem(COMMERCE_REFLEX_OPT_OUT_KEY, "1");
+      else sessionStorage.removeItem(COMMERCE_REFLEX_OPT_OUT_KEY);
+    } catch { /* storage unavailable */ }
+  };
+
 
 
 
