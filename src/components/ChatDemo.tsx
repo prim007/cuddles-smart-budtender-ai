@@ -66,8 +66,13 @@ const LOCATION_TROUBLE_RE = /\b(location|gps|map|maps|near\s*me|closest)\b.{0,40
 // meta conversation. Those turns must reach the model, not the canned finder.
 const NON_COMMERCIAL_CONTEXT_RE = /\b(tcup|medical\s+(cannabis|programme|program|protocol|prescription|scheme)|prescription|prescribed|pharmac(y|ist|eutical)|sahpra|section\s*21|clinical|clinic|doctor|physician|study|studies|research|paper|thesis|policy|legislation|legal(ise|ize|isation|ization)?|law|bill|regulation|licens(e|ing|ed)|history|compare|difference|definition|means?|meaning|what\s+is\s+a|what\s+does|how\s+do(es)?\s+(a\s+)?dispensar|business|open(ing)?\s+a|start(ing)?\s+a|my\s+(club|dispensary|shop)|abroad|overseas|in\s+(canada|thailand|germany|the\s+us|america|europe))\b/i;
 // The user talking *about* the trigger itself, or asking us to stop the reflex.
-const REFLEX_OPT_OUT_RE = /\b((stop|don'?t|do\s+not|quit|no\s+more)\b.{0,40}\b(redirect|link|shop|store|finder|dispensar|promot|advertis|sell)|ignore\s+(the\s+)?(word|keyword|d-?word|trigger)|d-?word|keyword\s+trigger|stop\s+triggering|without\s+(the\s+)?(shop|link|redirect))\b/i;
-const REFLEX_OPT_IN_RE = /\b(where\s+can\s+i\s+buy|show\s+me\s+(the\s+)?(shop|menu|dispensar)|find\s+(me\s+)?a\s+dispensar|order\s+now|i\s+want\s+to\s+(buy|order))\b/i;
+// Deliberately narrow: it must be a complaint about being *pushed* somewhere
+// ("stop redirecting me to the shop"), not any sentence with "don't" near "store".
+const REFLEX_OPT_OUT_RE = /\b((stop|don'?t|do\s+not|quit|no\s+more)\b[^.?!]{0,40}\b(redirect(ing)?|promot(e|ing|ion)|advertis(e|ing)|push(ing)?\s+(me\s+)?(the\s+)?(shop|store|link)|(send|sending|point(ing)?)\s+me\s+(to\s+)?(the\s+)?(shop|store|link)|(shop|store|dispensary)\s+link)|ignore\s+(the\s+)?(word|keyword|d-?word|trigger)|d-?word|keyword\s+trigger|stop\s+triggering)\b/i;
+// Unambiguous shopping intent. Overrides both the opt-out state and the
+// non-commercial context guard, so "show me legal dispensaries near me" works.
+const COMMERCE_OVERRIDE_RE = /\b(where\s+can\s+i\s+(buy|order|get\s+some)|i\s+want\s+to\s+(buy|order)|order\s+now|show\s+me\s+(the\s+)?(shop|menu|dispensar)|find\s+(me\s+)?(a|the)\s+[a-z\s]{0,20}?dispensar|(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store)|shops?|stores?)[^.?!]{0,25}\b(near\s*me|nearby|close\s*by|around\s*me|closest|nearest|in\s+stock)|\b(near\s*me|nearby|closest|nearest)[^.?!]{0,25}\b(dispensar(y|ies)|weed\s*shop|cannabis\s*(shop|store))|(closest|nearest|local)\s+dispensar|dispensar(y|ies)\s+(near|in|around)\b)/i;
+const REFLEX_OPT_IN_RE = COMMERCE_OVERRIDE_RE;
 const COMMERCE_REFLEX_OPT_OUT_KEY = "cuddles_commerce_reflex_off";
 
 
@@ -329,15 +334,19 @@ const ChatDemo = () => {
 
   // Returns true if the message was handled as a dispensary intent and AI call should be skipped
   const tryHandleDispensaryIntent = async (content: string): Promise<boolean> => {
+    // Clear shopping intent always wins — it never trips the opt-out and it
+    // re-enables the finder if it was switched off earlier in the session.
+    const wantsShopping = COMMERCE_OVERRIDE_RE.test(content) || hasBuyIntent(content);
+
     // 0) Respect the user's own instruction about this reflex before anything else.
-    if (REFLEX_OPT_OUT_RE.test(content)) {
+    if (!wantsShopping && REFLEX_OPT_OUT_RE.test(content)) {
       setCommerceReflex(true);
       awaitingDispensaryLocation.current = false;
       pendingProduct.current = null;
       return false; // let the model answer naturally, with no canned script
     }
     if (commerceReflexOff.current) {
-      if (REFLEX_OPT_IN_RE.test(content)) {
+      if (wantsShopping) {
         setCommerceReflex(false); // user clearly wants shopping help again
       } else {
         awaitingDispensaryLocation.current = false;
@@ -346,10 +355,11 @@ const ChatDemo = () => {
     }
 
     // 1) Context guard: medical, legal, academic or meta talk goes to the model.
-    if (NON_COMMERCIAL_CONTEXT_RE.test(content) && !REFLEX_OPT_IN_RE.test(content)) {
+    if (NON_COMMERCIAL_CONTEXT_RE.test(content) && !wantsShopping) {
       awaitingDispensaryLocation.current = false;
       return false;
     }
+
 
     if (LOCATION_TROUBLE_RE.test(content)) {
       awaitingDispensaryLocation.current = true;
