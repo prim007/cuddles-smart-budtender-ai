@@ -90,16 +90,17 @@ const RULES: Array<{ role: SpecialistRole; re: RegExp }> = [
 const NON_COMMERCIAL_CONTEXT =
   /\b(tcup|medical (cannabis|programme|program|protocol|prescription|scheme)|prescription|prescribed|pharmac(y|ist|eutical)|sahpra|section ?21|clinical|doctor|physician|stud(y|ies)|research|thesis|policy|legislation|legal(ise|ize|isation|ization)?|law|bill|regulation|licens(e|ing|ed)|history|definition|meaning|what is a|what does|open(ing)? a|start(ing)? a)\b/i;
 const META_REFLEX =
-  /\b((stop|don'?t|do not|quit|no more)\b[^.?!]{0,40}\b(redirect(ing)?|promot(e|ing|ion)|advertis(e|ing)|push(ing)? (me )?(the )?(shop|store|link)|(shop|store|dispensary) link)|ignore (the )?(word|keyword|d-?word|trigger)|d-?word|keyword trigger|stop triggering)\b/i;
+  /\b((stop|don'?t|do not|quit|no more)\b[^.?!]{0,40}\b(redirect(ing)?|promot(e|ing|ion)|advertis(e|ing)|(push(ing)?|send(ing)?|show(ing)?|point(ing)?|recommend(ing)?|suggest(ing)?|list(ing)?) (me )?[a-z\s]{0,20}?(shop|store|link|dispensar)|(shop|store|dispensary) link)|ignore (the )?(word|keyword|d-?word|trigger)|d-?word|keyword trigger|stop triggering)/i;
 
 // Unambiguous buying intent — must keep the inventory tools even when the same
 // sentence mentions "legal", "licensed" or "prescription".
 const COMMERCE_OVERRIDE =
-  /\b(where can i (buy|order)|i want to (buy|order)|order now|add to (cart|basket)|check ?out|how much (is|are|does|do)|(price|prices|cost)\b[^.?!]{0,30}\b(gram|g\b|strain|edible|vape|pre-?roll|flower|weed|cannabis|it)|in stock|out of stock|stock levels?|your (menu|catalogue|catalog|prices|stock)|show me (the )?(menu|shop|catalogue|catalog|dispensar)|deliver(y|ies)? (to|near|available)|specials?|deals?|(dispensar(y|ies)|shops?|stores?)[^.?!]{0,25}\b(near me|nearby|close by|around me|closest|nearest)|\b(near me|nearby|closest|nearest)[^.?!]{0,25}\b(dispensar(y|ies)|shops?|stores?)|(closest|nearest|local) dispensar|dispensar(y|ies) (near|in|around)\b)/i;
+  /\b(where can i (buy|order)|i want to (buy|order)|order now|add to (cart|basket)|how much (is|are|does|do)\b[^.?!]{0,30}\b(gram|g\b|strain|edible|vape|pre-?roll|flower|weed|cannabis|product|it) (cost|is|are)?|(price|prices|cost)\b[^.?!]{0,30}\b(gram|g\b|strain|edible|vape|pre-?roll|flower|weed|cannabis|it)|in stock|out of stock|stock levels?|your (menu|catalogue|catalog|prices|stock|specials?|deals?)|show me (the )?(menu|shop|catalogue|catalog|dispensar)|deliver(y|ies)? (to|near|available)|any (specials?|deals?)|(specials?|deals?) (on|for|this|near|available)|(dispensar(y|ies)|shops?|stores?)[^.?!]{0,25}\b(near me|nearby|close by|around me|closest|nearest)|\b(near me|nearby|closest|nearest)[^.?!]{0,25}\b(dispensar(y|ies)|shops?|stores?)|(closest|nearest|local) dispensar|dispensar(y|ies) (near|in|around)\b)/i;
 
 export function ruleRoute(message: string): SpecialistRole | null {
+  // A complaint about being pushed to the shop wins, even if it names a shop.
+  if (META_REFLEX.test(message)) return "educator";
   const commerce = COMMERCE_OVERRIDE.test(message);
-  if (META_REFLEX.test(message) && !commerce) return "educator";
   const nonCommercial = NON_COMMERCIAL_CONTEXT.test(message);
   for (const { role, re } of RULES) {
     if (!re.test(message)) continue;
