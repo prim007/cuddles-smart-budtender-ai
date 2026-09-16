@@ -98,8 +98,9 @@ const COMMERCE_OVERRIDE =
   /\b(where can i (buy|order)|i want to (buy|order)|order now|add to (cart|basket)|how much (is|are|does|do)\b[^.?!]{0,30}\b(gram|g\b|strain|edible|vape|pre-?roll|flower|weed|cannabis|product|it) (cost|is|are)?|(price|prices|cost)\b[^.?!]{0,30}\b(gram|g\b|strain|edible|vape|pre-?roll|flower|weed|cannabis|it)|in stock|out of stock|stock levels?|your (menu|catalogue|catalog|prices|stock|specials?|deals?)|show me (the )?(menu|shop|catalogue|catalog|dispensar)|deliver(y|ies)? (to|near|available)|any (specials?|deals?)|(specials?|deals?) (on|for|this|near|available)|(dispensar(y|ies)|shops?|stores?)[^.?!]{0,25}\b(near me|nearby|close by|around me|closest|nearest)|\b(near me|nearby|closest|nearest)[^.?!]{0,25}\b(dispensar(y|ies)|shops?|stores?)|(closest|nearest|local) dispensar|dispensar(y|ies) (near|in|around)\b)/i;
 
 export function ruleRoute(message: string): SpecialistRole | null {
+  // A complaint about being pushed to the shop wins, even if it names a shop.
+  if (META_REFLEX.test(message)) return "educator";
   const commerce = COMMERCE_OVERRIDE.test(message);
-  if (META_REFLEX.test(message) && !commerce) return "educator";
   const nonCommercial = NON_COMMERCIAL_CONTEXT.test(message);
   for (const { role, re } of RULES) {
     if (!re.test(message)) continue;
