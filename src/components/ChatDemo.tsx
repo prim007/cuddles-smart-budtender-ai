@@ -334,12 +334,15 @@ const ChatDemo = () => {
 
   // Returns true if the message was handled as a dispensary intent and AI call should be skipped
   const tryHandleDispensaryIntent = async (content: string): Promise<boolean> => {
-    // Clear shopping intent always wins — it never trips the opt-out and it
-    // re-enables the finder if it was switched off earlier in the session.
-    const wantsShopping = COMMERCE_OVERRIDE_RE.test(content) || hasBuyIntent(content);
+    // A complaint about being pushed to shops always wins, even when it names a
+    // dispensary ("stop sending me the nearest dispensary").
+    const complains = REFLEX_OPT_OUT_RE.test(content);
+    // Clear shopping intent re-enables the finder if it was switched off earlier.
+    const wantsShopping =
+      !complains && (COMMERCE_OVERRIDE_RE.test(content) || hasBuyIntent(content));
 
     // 0) Respect the user's own instruction about this reflex before anything else.
-    if (!wantsShopping && REFLEX_OPT_OUT_RE.test(content)) {
+    if (complains) {
       setCommerceReflex(true);
       awaitingDispensaryLocation.current = false;
       pendingProduct.current = null;
