@@ -90,7 +90,7 @@ const RULES: Array<{ role: SpecialistRole; re: RegExp }> = [
 const NON_COMMERCIAL_CONTEXT =
   /\b(tcup|medical (cannabis|programme|program|protocol|prescription|scheme)|prescription|prescribed|pharmac(y|ist|eutical)|sahpra|section ?21|clinical|doctor|physician|stud(y|ies)|research|thesis|policy|legislation|legal(ise|ize|isation|ization)?|law|bill|regulation|licens(e|ing|ed)|history|definition|meaning|what is a|what does|open(ing)? a|start(ing)? a)\b/i;
 const META_REFLEX =
-  /\b((stop|don'?t|do not|quit|no more)\b[^.?!]{0,40}\b(redirect(ing)?|promot(e|ing|ion)|advertis(e|ing)|push(ing)? (me )?(the )?(shop|store|link)|(shop|store|dispensary) link)|ignore (the )?(word|keyword|d-?word|trigger)|d-?word|keyword trigger|stop triggering)\b/i;
+  /\b((stop|don'?t|do not|quit|no more)\b[^.?!]{0,40}\b(redirect(ing)?|promot(e|ing|ion)|advertis(e|ing)|(push(ing)?|send(ing)?|show(ing)?|point(ing)?|recommend(ing)?|suggest(ing)?|list(ing)?) (me )?[a-z\s]{0,20}?(shop|store|link|dispensar)|(shop|store|dispensary) link)|ignore (the )?(word|keyword|d-?word|trigger)|d-?word|keyword trigger|stop triggering)/i;
 
 // Unambiguous buying intent — must keep the inventory tools even when the same
 // sentence mentions "legal", "licensed" or "prescription".
