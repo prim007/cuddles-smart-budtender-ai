@@ -89,8 +89,11 @@ const RULES: Array<{ role: SpecialistRole; re: RegExp }> = [
 // own behaviour belong with the educator, even if they mention "dispensary".
 const NON_COMMERCIAL_CONTEXT =
   /\b(tcup|medical (cannabis|programme|program|protocol|prescription|scheme)|prescription|prescribed|pharmac(y|ist|eutical)|sahpra|section ?21|clinical|doctor|physician|stud(y|ies)|research|thesis|policy|legislation|legal(ise|ize|isation|ization)?|law|bill|regulation|licens(e|ing|ed)|history|definition|meaning|what is a|what does|open(ing)? a|start(ing)? a)\b/i;
+// The negation must sit directly before the pushing verb, otherwise ordinary
+// requests ("I don't have a car, can you show me a dispensary near me?") would
+// be misread as a complaint and lose shop help.
 const META_REFLEX =
-  /\b((stop|don'?t|do not|quit|no more)\b[^.?!]{0,40}\b(redirect(ing)?|promot(e|ing|ion)|advertis(e|ing)|(push(ing)?|send(ing)?|show(ing)?|point(ing)?|recommend(ing)?|suggest(ing)?|list(ing)?) (me )?[a-z\s]{0,20}?(shop|store|link|dispensar)|(shop|store|dispensary) link)|ignore (the )?(word|keyword|d-?word|trigger)|d-?word|keyword trigger|stop triggering)/i;
+  /\b(?:(?:stop|quit|no\s+more|don'?t|do\s+not)\s+(?:[a-z]{1,12}\s+){0,2}(?:redirect|promot|advertis|push|send|show|point|recommend|suggest|list)(?:ing|e|es|s)?\s+(?:me\s+)?(?:[a-z]{1,10}\s+){0,3}(?:shop|store|link|dispensar)|ignore\s+(?:the\s+)?(?:word|keyword|d-?word|trigger)|d-?word|keyword\s+trigger|stop\s+triggering|(?:stop|no\s+more)\s+(?:with\s+)?(?:the\s+)?(?:shop|store|dispensary)\s+link)/i;
 
 // Unambiguous buying intent — must keep the inventory tools even when the same
 // sentence mentions "legal", "licensed" or "prescription".
