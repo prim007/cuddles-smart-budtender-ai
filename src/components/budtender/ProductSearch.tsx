@@ -112,10 +112,9 @@ const ProductSearch = () => {
   });
 
   const results = useMemo<Result[]>(() => {
-    if (!data) return [];
     const byName = new Map<string, Result>();
 
-    for (const p of data.library) {
+    for (const p of data?.library ?? []) {
       const key = p.strain_name.toLowerCase();
       const effects = Array.isArray(p.effects) ? (p.effects as unknown[]) : [];
       byName.set(key, {
@@ -129,10 +128,24 @@ const ProductSearch = () => {
         description: p.short_description ?? null,
         shopId: null,
         price: null,
+        partner: null,
       });
     }
 
-    for (const s of data.shop) {
+    // Partner catalogues (e.g. LëF Labs) — searchable, ordered by phone.
+    for (const item of PARTNER_ITEMS) {
+      const existing = byName.get(item.key);
+      byName.set(item.key, {
+        ...item,
+        slug: existing?.slug ?? item.slug,
+        type: existing?.type ?? item.type,
+        effect: existing?.effect ?? item.effect,
+        thc: existing?.thc ?? item.thc,
+        description: existing?.description ?? item.description,
+      });
+    }
+
+    for (const s of data?.shop ?? []) {
       const key = s.strain_name.toLowerCase();
       const existing = byName.get(key);
       const thc =
@@ -148,11 +161,13 @@ const ProductSearch = () => {
         description: existing?.description ?? s.notes ?? null,
         shopId: s.in_stock && s.price != null ? s.id : existing?.shopId ?? null,
         price: s.in_stock && s.price != null ? Number(s.price) : existing?.price ?? null,
+        partner: existing?.partner ?? null,
       };
       byName.set(key, merged);
     }
 
     const q = search.trim().toLowerCase();
+    const stocked = (r: Result) => r.shopId != null || r.partner != null;
     return [...byName.values()]
       .filter((r) => {
         const matchesText =
@@ -160,17 +175,20 @@ const ProductSearch = () => {
           r.name.toLowerCase().includes(q) ||
           (r.effect || "").toLowerCase().includes(q) ||
           (r.terpene || "").toLowerCase().includes(q) ||
+          (r.partner?.tier || "").toLowerCase().includes(q) ||
           (r.description || "").toLowerCase().includes(q);
         const matchesFilter =
           filter === "all" ||
-          (filter === "in stock" ? r.shopId != null : r.type.toLowerCase() === filter);
+          (filter === "in stock" ? stocked(r) : r.type.toLowerCase() === filter);
         return matchesText && matchesFilter;
       })
       .sort((a, b) => {
-        if ((b.shopId ? 1 : 0) !== (a.shopId ? 1 : 0)) return (b.shopId ? 1 : 0) - (a.shopId ? 1 : 0);
+        const rank = (r: Result) => (r.shopId ? 2 : r.partner ? 1 : 0);
+        if (rank(b) !== rank(a)) return rank(b) - rank(a);
         return a.name.localeCompare(b.name);
       });
   }, [data, search, filter]);
+
 
   const inCart = (id: string | null) => !!id && items.some((i) => i.strainId === id);
 
