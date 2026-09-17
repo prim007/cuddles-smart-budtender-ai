@@ -3,10 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
+import { DISPENSARY_MENUS } from "@/data/dispensaryMenus";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Plus, Check, ArrowRight, Leaf } from "lucide-react";
+import { Search, Plus, Check, ArrowRight, Leaf, Phone } from "lucide-react";
 
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -22,6 +23,25 @@ const typeColor = (type?: string | null) => {
   }
 };
 
+/** Reads "Indica-leaning · berry" style notes into a plain strain type. */
+const typeFromNotes = (notes?: string) => {
+  const n = (notes || "").toLowerCase();
+  if (n.includes("sativa")) return "Sativa";
+  if (n.includes("indica")) return "Indica";
+  return "Hybrid";
+};
+
+interface PartnerStock {
+  /** Partner shop name, e.g. "LëF Labs". */
+  label: string;
+  /** Tel number the Order button dials. */
+  phone?: string;
+  /** Menu tier / category the item sits in. */
+  tier?: string;
+  /** Shown in place of a price when the partner keeps pricing private. */
+  priceNote?: string;
+}
+
 interface Result {
   key: string;
   name: string;
@@ -34,10 +54,37 @@ interface Result {
   /** Present only when a partner shop actually stocks it */
   shopId: string | null;
   price: number | null;
+  /** Present when a partner catalogue lists it (phone orders) */
+  partner: PartnerStock | null;
 }
+
+/** Every strain listed on a partner catalogue, flattened for search. */
+const PARTNER_ITEMS: Result[] = DISPENSARY_MENUS.flatMap((menu) =>
+  menu.items
+    .filter((item) => !/pre-?roll|gumm|chocolate|cartridge|tincture|oil|hash|resin|joint/i.test(item.name))
+    .map((item) => ({
+      key: item.name.toLowerCase(),
+      name: item.name,
+      slug: slugify(item.name),
+      type: typeFromNotes(item.notes),
+      effect: null,
+      terpene: null,
+      thc: null,
+      description: item.notes ?? null,
+      shopId: null,
+      price: menu.hidePrices ? null : item.price ?? null,
+      partner: {
+        label: menu.label.split("·")[0].trim(),
+        phone: menu.orderPhone,
+        tier: item.category,
+        priceNote: menu.hidePrices ? menu.priceNote ?? "On request" : undefined,
+      },
+    })),
+);
 
 const FILTERS = ["all", "indica", "sativa", "hybrid", "in stock"] as const;
 type Filter = (typeof FILTERS)[number];
+
 
 const ProductSearch = () => {
   const [search, setSearch] = useState("");
