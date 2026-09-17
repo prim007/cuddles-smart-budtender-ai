@@ -322,6 +322,14 @@ const ProductSearch = () => {
                       )}
                     </Button>
                   )}
+                  {!r.shopId && r.partner?.phone && (
+                    <Button asChild size="sm" className="flex-1">
+                      <a href={`tel:${r.partner.phone}`}>
+                        <Phone className="mr-1 h-3.5 w-3.5" /> Order
+                      </a>
+                    </Button>
+                  )}
+
                 </div>
               </div>
             ))}
