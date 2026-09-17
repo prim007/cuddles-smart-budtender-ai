@@ -244,8 +244,14 @@ const ProductSearch = () => {
               >
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="font-display text-lg font-semibold text-foreground">{r.name}</h3>
-                  {r.price != null && (
+                  {r.price != null ? (
                     <span className="shrink-0 font-semibold text-primary">R{r.price.toFixed(0)}</span>
+                  ) : (
+                    r.partner?.priceNote && (
+                      <span className="shrink-0 text-sm font-medium text-muted-foreground">
+                        {r.partner.priceNote}
+                      </span>
+                    )
                   )}
                 </div>
 
@@ -262,6 +268,10 @@ const ProductSearch = () => {
                     <Badge variant="outline" className="border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
                       In stock
                     </Badge>
+                  ) : r.partner ? (
+                    <Badge variant="outline" className="border-primary/20 bg-primary/10 text-primary">
+                      At {r.partner.label}
+                    </Badge>
                   ) : (
                     <Badge variant="outline" className="bg-muted/50 text-muted-foreground">
                       Guide only
@@ -269,15 +279,18 @@ const ProductSearch = () => {
                   )}
                 </div>
 
-                {(r.thc || r.terpene) && (
+                {(r.thc || r.terpene || r.partner?.tier) && (
                   <p className="mt-3 text-sm text-muted-foreground">
                     <Leaf className="mr-1 inline h-3.5 w-3.5" />
-                    {[r.terpene, r.thc ? `THC ${r.thc}` : null].filter(Boolean).join(" · ")}
+                    {[r.terpene, r.thc ? `THC ${r.thc}` : null, r.partner?.tier]
+                      .filter(Boolean)
+                      .join(" · ")}
                   </p>
                 )}
                 {r.description && (
                   <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{r.description}</p>
                 )}
+
 
                 <div className="mt-4 flex items-center gap-2 pt-1">
                   <Button asChild variant="outline" size="sm" className="flex-1">
