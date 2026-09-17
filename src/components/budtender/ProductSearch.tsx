@@ -3,10 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
+import { DISPENSARY_MENUS } from "@/data/dispensaryMenus";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Plus, Check, ArrowRight, Leaf } from "lucide-react";
+import { Search, Plus, Check, ArrowRight, Leaf, Phone } from "lucide-react";
 
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -22,6 +23,25 @@ const typeColor = (type?: string | null) => {
   }
 };
 
+/** Reads "Indica-leaning · berry" style notes into a plain strain type. */
+const typeFromNotes = (notes?: string) => {
+  const n = (notes || "").toLowerCase();
+  if (n.includes("sativa")) return "Sativa";
+  if (n.includes("indica")) return "Indica";
+  return "Hybrid";
+};
+
+interface PartnerStock {
+  /** Partner shop name, e.g. "LëF Labs". */
+  label: string;
+  /** Tel number the Order button dials. */
+  phone?: string;
+  /** Menu tier / category the item sits in. */
+  tier?: string;
+  /** Shown in place of a price when the partner keeps pricing private. */
+  priceNote?: string;
+}
+
 interface Result {
   key: string;
   name: string;
@@ -34,10 +54,37 @@ interface Result {
   /** Present only when a partner shop actually stocks it */
   shopId: string | null;
   price: number | null;
+  /** Present when a partner catalogue lists it (phone orders) */
+  partner: PartnerStock | null;
 }
+
+/** Every strain listed on a partner catalogue, flattened for search. */
+const PARTNER_ITEMS: Result[] = DISPENSARY_MENUS.flatMap((menu) =>
+  menu.items
+    .filter((item) => !/pre-?roll|gumm|chocolate|cartridge|tincture|oil|hash|resin|joint/i.test(item.name))
+    .map((item) => ({
+      key: item.name.toLowerCase(),
+      name: item.name,
+      slug: slugify(item.name),
+      type: typeFromNotes(item.notes),
+      effect: null,
+      terpene: null,
+      thc: null,
+      description: item.notes ?? null,
+      shopId: null,
+      price: menu.hidePrices ? null : item.price ?? null,
+      partner: {
+        label: menu.label.split("·")[0].trim(),
+        phone: menu.orderPhone,
+        tier: item.category,
+        priceNote: menu.hidePrices ? menu.priceNote ?? "On request" : undefined,
+      },
+    })),
+);
 
 const FILTERS = ["all", "indica", "sativa", "hybrid", "in stock"] as const;
 type Filter = (typeof FILTERS)[number];
+
 
 const ProductSearch = () => {
   const [search, setSearch] = useState("");
@@ -65,10 +112,9 @@ const ProductSearch = () => {
   });
 
   const results = useMemo<Result[]>(() => {
-    if (!data) return [];
     const byName = new Map<string, Result>();
 
-    for (const p of data.library) {
+    for (const p of data?.library ?? []) {
       const key = p.strain_name.toLowerCase();
       const effects = Array.isArray(p.effects) ? (p.effects as unknown[]) : [];
       byName.set(key, {
@@ -82,10 +128,24 @@ const ProductSearch = () => {
         description: p.short_description ?? null,
         shopId: null,
         price: null,
+        partner: null,
       });
     }
 
-    for (const s of data.shop) {
+    // Partner catalogues (e.g. LëF Labs) — searchable, ordered by phone.
+    for (const item of PARTNER_ITEMS) {
+      const existing = byName.get(item.key);
+      byName.set(item.key, {
+        ...item,
+        slug: existing?.slug ?? item.slug,
+        type: existing?.type ?? item.type,
+        effect: existing?.effect ?? item.effect,
+        thc: existing?.thc ?? item.thc,
+        description: existing?.description ?? item.description,
+      });
+    }
+
+    for (const s of data?.shop ?? []) {
       const key = s.strain_name.toLowerCase();
       const existing = byName.get(key);
       const thc =
@@ -101,11 +161,13 @@ const ProductSearch = () => {
         description: existing?.description ?? s.notes ?? null,
         shopId: s.in_stock && s.price != null ? s.id : existing?.shopId ?? null,
         price: s.in_stock && s.price != null ? Number(s.price) : existing?.price ?? null,
+        partner: existing?.partner ?? null,
       };
       byName.set(key, merged);
     }
 
     const q = search.trim().toLowerCase();
+    const stocked = (r: Result) => r.shopId != null || r.partner != null;
     return [...byName.values()]
       .filter((r) => {
         const matchesText =
@@ -113,17 +175,20 @@ const ProductSearch = () => {
           r.name.toLowerCase().includes(q) ||
           (r.effect || "").toLowerCase().includes(q) ||
           (r.terpene || "").toLowerCase().includes(q) ||
+          (r.partner?.tier || "").toLowerCase().includes(q) ||
           (r.description || "").toLowerCase().includes(q);
         const matchesFilter =
           filter === "all" ||
-          (filter === "in stock" ? r.shopId != null : r.type.toLowerCase() === filter);
+          (filter === "in stock" ? stocked(r) : r.type.toLowerCase() === filter);
         return matchesText && matchesFilter;
       })
       .sort((a, b) => {
-        if ((b.shopId ? 1 : 0) !== (a.shopId ? 1 : 0)) return (b.shopId ? 1 : 0) - (a.shopId ? 1 : 0);
+        const rank = (r: Result) => (r.shopId ? 2 : r.partner ? 1 : 0);
+        if (rank(b) !== rank(a)) return rank(b) - rank(a);
         return a.name.localeCompare(b.name);
       });
   }, [data, search, filter]);
+
 
   const inCart = (id: string | null) => !!id && items.some((i) => i.strainId === id);
 
@@ -179,8 +244,14 @@ const ProductSearch = () => {
               >
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="font-display text-lg font-semibold text-foreground">{r.name}</h3>
-                  {r.price != null && (
+                  {r.price != null ? (
                     <span className="shrink-0 font-semibold text-primary">R{r.price.toFixed(0)}</span>
+                  ) : (
+                    r.partner?.priceNote && (
+                      <span className="shrink-0 text-sm font-medium text-muted-foreground">
+                        {r.partner.priceNote}
+                      </span>
+                    )
                   )}
                 </div>
 
@@ -197,6 +268,10 @@ const ProductSearch = () => {
                     <Badge variant="outline" className="border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
                       In stock
                     </Badge>
+                  ) : r.partner ? (
+                    <Badge variant="outline" className="border-primary/20 bg-primary/10 text-primary">
+                      At {r.partner.label}
+                    </Badge>
                   ) : (
                     <Badge variant="outline" className="bg-muted/50 text-muted-foreground">
                       Guide only
@@ -204,15 +279,18 @@ const ProductSearch = () => {
                   )}
                 </div>
 
-                {(r.thc || r.terpene) && (
+                {(r.thc || r.terpene || r.partner?.tier) && (
                   <p className="mt-3 text-sm text-muted-foreground">
                     <Leaf className="mr-1 inline h-3.5 w-3.5" />
-                    {[r.terpene, r.thc ? `THC ${r.thc}` : null].filter(Boolean).join(" · ")}
+                    {[r.terpene, r.thc ? `THC ${r.thc}` : null, r.partner?.tier]
+                      .filter(Boolean)
+                      .join(" · ")}
                   </p>
                 )}
                 {r.description && (
                   <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{r.description}</p>
                 )}
+
 
                 <div className="mt-4 flex items-center gap-2 pt-1">
                   <Button asChild variant="outline" size="sm" className="flex-1">
@@ -244,6 +322,14 @@ const ProductSearch = () => {
                       )}
                     </Button>
                   )}
+                  {!r.shopId && r.partner?.phone && (
+                    <Button asChild size="sm" className="flex-1">
+                      <a href={`tel:${r.partner.phone}`}>
+                        <Phone className="mr-1 h-3.5 w-3.5" /> Order
+                      </a>
+                    </Button>
+                  )}
+
                 </div>
               </div>
             ))}
