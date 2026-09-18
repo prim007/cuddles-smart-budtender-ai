@@ -41,6 +41,7 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
     currency: "R",
     aliases: ["tripple444", "tripple 444", "triple444", "triple 444", "tripple four", "triple four"],
     contact: "WhatsApp 064 543 6734 · tripplefourshophub.online",
+    orderPhone: "0645436734",
     disclaimer: "Prices in ZAR. Delivery calculated at checkout. Not medical advice.",
     items: [
       { category: "Flower", name: "Runtz",             size: "1g",   price: 180, notes: "Hybrid · sweet" },
@@ -216,6 +217,7 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
       "dirty vapes catalogue",
     ],
     contact: "074 262 4491 · dirtyvapessa@gmail.com · tripplefourshophub.online/partners/dirty-vapes",
+    orderPhone: "0742624491",
     disclaimer: "Prices in ZAR (May 2026). 18+ only. Not medical advice.",
     items: [
       { category: "Edibles", name: "Dirty Vapes Edibles Tub", size: "100mg",  price: 150 },

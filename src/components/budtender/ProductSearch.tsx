@@ -59,7 +59,7 @@ interface Result {
 }
 
 /** Every strain listed on a partner catalogue, flattened for search. */
-const PARTNER_ITEMS: Result[] = DISPENSARY_MENUS.flatMap((menu) =>
+const PARTNER_ITEMS: Result[] = DISPENSARY_MENUS.filter((menu) => !!menu.orderPhone).flatMap((menu) =>
   menu.items
     .filter((item) => !/pre-?roll|gumm|chocolate|cartridge|tincture|oil|hash|resin|joint/i.test(item.name))
     .map((item) => ({
@@ -74,7 +74,11 @@ const PARTNER_ITEMS: Result[] = DISPENSARY_MENUS.flatMap((menu) =>
       shopId: null,
       price: menu.hidePrices ? null : item.price ?? null,
       partner: {
-        label: menu.label.split("·")[0].trim(),
+        label: menu.label
+          .split("·")[0]
+          .replace(/\b(shop\s+)?menu\b/i, "")
+          .replace(/\s{2,}/g, " ")
+          .trim(),
         phone: menu.orderPhone,
         tier: item.category,
         priceNote: menu.hidePrices ? menu.priceNote ?? "On request" : undefined,
