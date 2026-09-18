@@ -74,7 +74,11 @@ const PARTNER_ITEMS: Result[] = DISPENSARY_MENUS.filter((menu) => !!menu.orderPh
       shopId: null,
       price: menu.hidePrices ? null : item.price ?? null,
       partner: {
-        label: menu.label.split("·")[0].trim(),
+        label: menu.label
+          .split("·")[0]
+          .replace(/\b(shop\s+)?menu\b/i, "")
+          .replace(/\s{2,}/g, " ")
+          .trim(),
         phone: menu.orderPhone,
         tier: item.category,
         priceNote: menu.hidePrices ? menu.priceNote ?? "On request" : undefined,
