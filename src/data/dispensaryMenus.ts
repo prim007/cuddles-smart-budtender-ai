@@ -41,6 +41,7 @@ export const DISPENSARY_MENUS: DispensaryMenu[] = [
     currency: "R",
     aliases: ["tripple444", "tripple 444", "triple444", "triple 444", "tripple four", "triple four"],
     contact: "WhatsApp 064 543 6734 · tripplefourshophub.online",
+    orderPhone: "0645436734",
     disclaimer: "Prices in ZAR. Delivery calculated at checkout. Not medical advice.",
     items: [
       { category: "Flower", name: "Runtz",             size: "1g",   price: 180, notes: "Hybrid · sweet" },
