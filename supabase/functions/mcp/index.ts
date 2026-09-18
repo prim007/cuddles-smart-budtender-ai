@@ -186,6 +186,7 @@ var DISPENSARY_MENUS = [
       "dirty vapes catalogue"
     ],
     contact: "074 262 4491 \xB7 dirtyvapessa@gmail.com \xB7 tripplefourshophub.online/partners/dirty-vapes",
+    orderPhone: "0742624491",
     disclaimer: "Prices in ZAR (May 2026). 18+ only. Not medical advice.",
     items: [
       { category: "Edibles", name: "Dirty Vapes Edibles Tub", size: "100mg", price: 150 },
