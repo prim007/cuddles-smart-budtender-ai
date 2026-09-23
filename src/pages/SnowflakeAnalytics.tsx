@@ -34,9 +34,8 @@ const SnowflakeAnalytics = () => {
   const [warehouse, setWarehouse] = useState("");
   const [database, setDatabase] = useState("CUDDLES_ANALYTICS");
   const [schema, setSchema] = useState("PUBLIC");
-  const [statement, setStatement] = useState(
-    "SELECT * FROM CUDDLES_ANALYTICS.PUBLIC.CUDDLES_CHAT_CONVERSATIONS LIMIT 20",
-  );
+  const [queryTable, setQueryTable] = useState("chat_conversations");
+  const [rowLimit, setRowLimit] = useState(50);
   const [result, setResult] = useState<QueryResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
