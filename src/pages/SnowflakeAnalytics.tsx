@@ -84,7 +84,14 @@ const SnowflakeAnalytics = () => {
     if (!warehouse) return toast.error("Pick a warehouse first");
     setRunning(true);
     try {
-      const data = await call({ action: "query", warehouse, statement });
+      const data = await call({
+        action: "query",
+        warehouse,
+        table: queryTable,
+        database,
+        schema,
+        limit: rowLimit,
+      });
       setResult(data as QueryResult);
     } catch (err) {
       toast.error("Query failed", { description: err instanceof Error ? err.message : undefined });
