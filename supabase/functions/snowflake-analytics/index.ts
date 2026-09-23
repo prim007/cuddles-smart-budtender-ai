@@ -76,8 +76,6 @@ async function snowflake(body: Record<string, unknown>) {
 }
 
 const IDENT_RE = /^[A-Za-z_][A-Za-z0-9_$]*$/;
-const READ_ONLY_RE = /^\s*(select|with|show|describe|desc|explain)\b/i;
-const FORBIDDEN_RE = /\b(drop|delete|truncate|alter|grant|revoke|insert|update|merge|copy)\b/i;
 
 function literal(value: unknown): string {
   if (value === null || value === undefined) return "NULL";
