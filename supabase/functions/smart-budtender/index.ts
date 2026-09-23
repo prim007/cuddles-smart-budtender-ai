@@ -733,6 +733,25 @@ serve(async (req) => {
       }
     }
 
+    // Anonymous visitors keep free access, but their paid-AI spend is capped
+    // per day and is much tighter when the request does not come from one of
+    // our own surfaces (scripted/off-site callers).
+    if (!userId) {
+      const knownSurface = isKnownSurface(req);
+      const dailyLimit = knownSurface ? ANON_DAILY_LIMIT : UNKNOWN_ORIGIN_DAILY_LIMIT;
+      if (!checkAnonDailyLimit(`${clientIP}|${knownSurface ? 'web' : 'other'}`, dailyLimit)) {
+        console.warn('Anonymous daily AI limit reached', { ip: clientIP, knownSurface });
+        return new Response(
+          JSON.stringify({
+            error: 'You have reached today\'s free chat limit. Sign in to keep chatting with Cuddles.',
+          }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+        );
+      }
+    }
+
+
+
     // Fetch user history if authenticated
     let userHistory: UserHistoryData | null = null;
     if (userId) {
