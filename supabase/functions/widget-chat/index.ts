@@ -285,7 +285,7 @@ serve(async (req) => {
         model: 'google/gemini-3-flash-preview',
         messages: [
           { role: 'system', content: systemPrompt },
-          ...messages,
+          ...serverOwnedTurns(messages as { role: string; content: string }[]),
         ],
         stream: true,
       }),
