@@ -137,7 +137,7 @@ serve(async (req) => {
 
     const { data: tenant, error: tenantErr } = await supabase
       .from('tenants')
-      .select('id, business_name, phone, branding_color, status, plan')
+      .select('id, business_name, phone, branding_color, status, plan, created_at')
       .eq('embed_key', embedKey)
       .single();
 
@@ -151,6 +151,20 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Subscription inactive' }), {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
+    }
+
+    // Entitlement is enforced here, on the server: a self-created tenant row
+    // starts as 'trial', which buys 14 days of paid AI — not unlimited access.
+    const TRIAL_DAYS = 14;
+    if (tenant.status === 'trial') {
+      const startedAt = tenant.created_at ? new Date(tenant.created_at as string).getTime() : 0;
+      const expired = !startedAt || Date.now() - startedAt > TRIAL_DAYS * 24 * 60 * 60 * 1000;
+      if (expired) {
+        return new Response(
+          JSON.stringify({ error: 'Your free trial has ended. Activate a subscription to keep the chat running.' }),
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+        );
+      }
     }
 
     // --- Tier mapping ---
@@ -175,6 +189,20 @@ serve(async (req) => {
         status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    // Per-visitor and per-tenant daily ceilings so a scripted caller cannot
+    // burn unlimited paid AI through a public widget endpoint.
+    const clientIp = req.headers.get('cf-connecting-ip') || req.headers.get('x-real-ip') || 'unknown';
+    const trialTenant = tenant.status === 'trial';
+    if (
+      !checkDailyLimit(`ip:${clientIp}`, 200) ||
+      !checkDailyLimit(`key:${embedKey}`, trialTenant ? 300 : PER_DAY)
+    ) {
+      return new Response(JSON.stringify({ error: 'Daily chat limit reached. Please try again tomorrow.' }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
 
     // Fetch tenant-specific strains (limit menu surface for free tier)
     let tenantStrainsQuery = supabase
