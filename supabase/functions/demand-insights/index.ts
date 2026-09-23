@@ -17,6 +17,10 @@ const corsHeaders = {
 };
 
 const MIN_COHORT = 3;
+// Dispensary partners see a deliberately coarse, market-level view: the
+// underlying chats belong to every visitor, not to their store, so small
+// cohorts, exact volumes and the daily series are withheld from them.
+const PARTNER_MIN_COHORT = 25;
 const MAX_ROWS = 5000;
 
 function json(body: unknown, status: number) {
@@ -67,7 +71,7 @@ const TYPE_BUCKETS: Bucket[] = [
   { label: "Hybrid", patterns: /\bhybrid\b/i },
 ];
 
-function tally(messages: string[], buckets: Bucket[]) {
+function tally(messages: string[], buckets: Bucket[], minCohort = MIN_COHORT) {
   const counts = new Map<string, number>();
   for (const msg of messages) {
     for (const b of buckets) {
@@ -75,7 +79,7 @@ function tally(messages: string[], buckets: Bucket[]) {
     }
   }
   return Array.from(counts.entries())
-    .filter(([, count]) => count >= MIN_COHORT)
+    .filter(([, count]) => count >= minCohort)
     .map(([label, count]) => ({
       label,
       count,
@@ -171,10 +175,11 @@ serve(async (req) => {
     });
     const messages = real.map((r) => String(r.user_message ?? ""));
 
-    const needs = tally(messages, NEED_BUCKETS);
-    const formats = tally(messages, FORMAT_BUCKETS);
-    const terpenes = tally(messages, TERPENE_BUCKETS);
-    const types = tally(messages, TYPE_BUCKETS);
+    const cohortFloor = isAdmin ? MIN_COHORT : PARTNER_MIN_COHORT;
+    const needs = tally(messages, NEED_BUCKETS, cohortFloor);
+    const formats = tally(messages, FORMAT_BUCKETS, cohortFloor);
+    const terpenes = tally(messages, TERPENE_BUCKETS, cohortFloor);
+    const types = tally(messages, TYPE_BUCKETS, cohortFloor);
 
     // Daily volume series
     const dayMap = new Map<string, number>();
@@ -185,7 +190,10 @@ serve(async (req) => {
       const key = new Date(r.created_at as string).toISOString().slice(0, 10);
       if (dayMap.has(key)) dayMap.set(key, (dayMap.get(key) ?? 0) + 1);
     }
-    const series = Array.from(dayMap.entries()).map(([date, count]) => ({ date, count }));
+    // Per-day volume is platform operations data — admins only.
+    const series = isAdmin
+      ? Array.from(dayMap.entries()).map(([date, count]) => ({ date, count }))
+      : [];
 
     // Stock coverage: for each demand bucket, how many of the tenant's in-stock
     // products plausibly serve that need.
@@ -213,10 +221,12 @@ serve(async (req) => {
       {
         window_days: days,
         generated_at: new Date().toISOString(),
-        min_cohort: MIN_COHORT,
-        total_conversations: real.length,
+        min_cohort: cohortFloor,
+        // Exact platform volume is withheld from partners.
+        total_conversations: isAdmin ? real.length : Math.round(real.length / 100) * 100,
         suppressed_note:
-          `Buckets with fewer than ${MIN_COHORT} conversations are withheld to protect user privacy.`,
+          `Buckets with fewer than ${cohortFloor} conversations are withheld to protect user privacy.` +
+          (isAdmin ? '' : ' Partner dashboards show market-level demand only, never per-store or per-visitor data.'),
         tenant: tenant ? { id: tenant.id, name: tenant.business_name, in_stock_skus: stockCount } : null,
         is_admin: !!isAdmin,
         needs,

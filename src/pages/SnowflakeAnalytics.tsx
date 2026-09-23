@@ -3,7 +3,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { RefreshCw, Play, Upload, Snowflake as SnowflakeIcon } from "lucide-react";
@@ -34,9 +33,8 @@ const SnowflakeAnalytics = () => {
   const [warehouse, setWarehouse] = useState("");
   const [database, setDatabase] = useState("CUDDLES_ANALYTICS");
   const [schema, setSchema] = useState("PUBLIC");
-  const [statement, setStatement] = useState(
-    "SELECT * FROM CUDDLES_ANALYTICS.PUBLIC.CUDDLES_CHAT_CONVERSATIONS LIMIT 20",
-  );
+  const [queryTable, setQueryTable] = useState("chat_conversations");
+  const [rowLimit, setRowLimit] = useState(50);
   const [result, setResult] = useState<QueryResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
@@ -85,7 +83,14 @@ const SnowflakeAnalytics = () => {
     if (!warehouse) return toast.error("Pick a warehouse first");
     setRunning(true);
     try {
-      const data = await call({ action: "query", warehouse, statement });
+      const data = await call({
+        action: "query",
+        warehouse,
+        table: queryTable,
+        database,
+        schema,
+        limit: rowLimit,
+      });
       setResult(data as QueryResult);
     } catch (err) {
       toast.error("Query failed", { description: err instanceof Error ? err.message : undefined });
@@ -180,16 +185,36 @@ const SnowflakeAnalytics = () => {
       <Card>
         <CardHeader>
           <CardTitle>Run analysis</CardTitle>
-          <CardDescription>Read-only SQL (SELECT, SHOW, DESCRIBE) against your Snowflake data.</CardDescription>
+          <CardDescription>Preview the most recent rows of an exported Cuddles table.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Textarea
-            value={statement}
-            onChange={(e) => setStatement(e.target.value)}
-            rows={4}
-            className="font-mono text-sm"
-            aria-label="SQL statement"
-          />
+          <div className="flex flex-wrap gap-3">
+            <label className="flex flex-col gap-1 text-sm">
+              Table
+              <select
+                value={queryTable}
+                onChange={(e) => setQueryTable(e.target.value)}
+                className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                aria-label="Table"
+              >
+                {(exportable.length ? exportable : [queryTable]).map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-sm">
+              Rows
+              <Input
+                type="number"
+                min={1}
+                max={1000}
+                value={rowLimit}
+                onChange={(e) => setRowLimit(Number(e.target.value) || 50)}
+                className="w-28"
+                aria-label="Row limit"
+              />
+            </label>
+          </div>
           <Button onClick={() => void handleQuery()} disabled={running}>
             <Play className="mr-2 h-4 w-4" />
             {running ? "Running…" : "Run query"}

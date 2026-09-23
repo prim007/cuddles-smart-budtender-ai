@@ -76,8 +76,6 @@ async function snowflake(body: Record<string, unknown>) {
 }
 
 const IDENT_RE = /^[A-Za-z_][A-Za-z0-9_$]*$/;
-const READ_ONLY_RE = /^\s*(select|with|show|describe|desc|explain)\b/i;
-const FORBIDDEN_RE = /\b(drop|delete|truncate|alter|grant|revoke|insert|update|merge|copy)\b/i;
 
 function literal(value: unknown): string {
   if (value === null || value === undefined) return "NULL";
@@ -135,13 +133,26 @@ serve(async (req) => {
     if (!IDENT_RE.test(warehouse)) return json({ error: "A valid warehouse is required" }, 400);
 
     if (action === "query") {
-      const statement = String(body?.statement ?? "").trim();
-      if (!statement || statement.length > 5000) return json({ error: "Invalid statement" }, 400);
-      if (!READ_ONLY_RE.test(statement) || FORBIDDEN_RE.test(statement)) {
-        return json({ error: "Only read-only statements (SELECT / SHOW / DESCRIBE) are allowed" }, 400);
+      // No caller-supplied SQL reaches Snowflake. The caller picks one of the
+      // Cuddles tables we export and a row count; the statement is built here
+      // from that allowlist, so no other data in the warehouse is reachable.
+      const table = String(body?.table ?? "").trim();
+      if (!(table in EXPORTABLE)) {
+        return json({ error: "Pick one of the exported Cuddles tables", tables: Object.keys(EXPORTABLE) }, 400);
       }
+      const database = String(body?.database ?? "CUDDLES_ANALYTICS").trim().toUpperCase();
+      const schema = String(body?.schema ?? "PUBLIC").trim().toUpperCase();
+      if (!IDENT_RE.test(database) || !IDENT_RE.test(schema)) {
+        return json({ error: "Invalid database or schema name" }, 400);
+      }
+      const limit = Math.min(Math.max(Number(body?.limit) || 50, 1), 1000);
+      const { columns, sort } = EXPORTABLE[table];
+      const target = `"${database}"."${schema}"."CUDDLES_${table.toUpperCase()}"`;
+      const statement =
+        `SELECT ${columns.map((c) => `"${c.toUpperCase()}"`).join(", ")} FROM ${target} ` +
+        `ORDER BY "${sort.toUpperCase()}" DESC LIMIT ${limit}`;
       const result = await snowflake({ statement, warehouse });
-      return json(rowsOf(result), 200);
+      return json({ ...rowsOf(result), table, statement }, 200);
     }
 
     if (action === "export") {

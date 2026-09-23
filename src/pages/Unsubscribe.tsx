@@ -18,7 +18,7 @@ export default function Unsubscribe() {
     setStatus("loading");
     try {
       const { data, error } = await supabase.functions.invoke("handle-email-unsubscribe", {
-        body: { email },
+        body: { email, token: searchParams.get("token") ?? undefined },
       });
       if (error || !data?.success) throw error ?? new Error("Unsubscribe failed");
       setStatus("success");
