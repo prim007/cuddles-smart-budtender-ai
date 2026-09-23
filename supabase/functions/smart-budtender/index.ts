@@ -76,6 +76,44 @@ function checkRateLimit(ip: string, sessionId?: string): { allowed: boolean; rea
   return { allowed: true };
 }
 
+// --- Abuse protection for anonymous visitors ---
+// The public chat must stay usable without an account, so spend is capped per
+// visitor per day and requests must come from one of our own surfaces.
+const ANON_DAILY_LIMIT = 60;
+const UNKNOWN_ORIGIN_DAILY_LIMIT = 10;
+const DAY_MS = 24 * 60 * 60 * 1000;
+const anonDailyMap = new Map<string, { count: number; resetTime: number }>();
+
+const ALLOWED_ORIGIN_RE =
+  /^(https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?|https:\/\/([a-z0-9-]+\.)*cuddles-ai\.com|https:\/\/[a-z0-9-]+\.lovable\.(app|dev)|https:\/\/[a-z0-9-]+\.lovableproject\.com|capacitor:\/\/localhost|ionic:\/\/localhost)$/i;
+
+function isKnownSurface(req: Request): boolean {
+  const origin = req.headers.get('origin');
+  if (origin) return ALLOWED_ORIGIN_RE.test(origin);
+  const referer = req.headers.get('referer');
+  if (referer) {
+    try {
+      return ALLOWED_ORIGIN_RE.test(new URL(referer).origin);
+    } catch {
+      return false;
+    }
+  }
+  // Native app shells send neither header; they fall back to the tight cap.
+  return false;
+}
+
+function checkAnonDailyLimit(key: string, limit: number): boolean {
+  const now = Date.now();
+  const record = anonDailyMap.get(key);
+  if (!record || now > record.resetTime) {
+    anonDailyMap.set(key, { count: 1, resetTime: now + DAY_MS });
+    return true;
+  }
+  if (record.count >= limit) return false;
+  record.count++;
+  return true;
+}
+
 setInterval(() => {
   const now = Date.now();
   for (const [ip, record] of rateLimitMap.entries()) {
