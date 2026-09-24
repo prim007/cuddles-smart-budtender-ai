@@ -1,0 +1,42 @@
+import * as React from 'npm:react@18.3.1'
+import {
+  Body, Container, Head, Heading, Html, Preview, Text, Button, Section
+} from 'npm:@react-email/components@0.0.22'
+import type { TemplateEntry } from './registry.ts'
+
+interface Props { unsubscribeUrl?: string }
+
+const UnsubscribeConfirmEmail = ({ unsubscribeUrl = 'https://www.cuddles-ai.com/unsubscribe' }: Props) => (
+  <Html lang="en" dir="ltr">
+    <Head />
+    <Preview>Confirm you want to stop Cuddles AI emails</Preview>
+    <Body style={main}>
+      <Container style={container}>
+        <Heading style={h1}>Stop receiving our emails?</Heading>
+        <Text style={text}>
+          Someone asked to unsubscribe this address from Cuddles AI emails. Tap the button below to confirm.
+        </Text>
+        <Section style={btnContainer}>
+          <Button style={button} href={unsubscribeUrl}>Unsubscribe me</Button>
+        </Section>
+        <Text style={text}>If this wasn't you, ignore this email and nothing will change.</Text>
+        <Text style={footer}>The Cuddles AI Team</Text>
+      </Container>
+    </Body>
+  </Html>
+)
+
+export const template = {
+  component: UnsubscribeConfirmEmail,
+  subject: 'Confirm your unsubscribe from Cuddles AI',
+  displayName: 'Unsubscribe confirmation',
+  previewData: { unsubscribeUrl: 'https://example.com' },
+} satisfies TemplateEntry
+
+const main = { backgroundColor: '#ffffff', fontFamily: 'Outfit, Arial, sans-serif' }
+const container = { padding: '20px 25px' }
+const h1 = { fontSize: '24px', fontWeight: 'bold', color: '#ff6b35', margin: '0 0 20px', fontFamily: '"Space Grotesk", Arial, sans-serif' }
+const text = { fontSize: '16px', color: '#55575d', lineHeight: '1.5', margin: '0 0 25px' }
+const btnContainer = { textAlign: 'center' as const, marginBottom: '25px' }
+const button = { backgroundColor: '#ff6b35', color: '#ffffff', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: 'bold', display: 'inline-block' }
+const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }

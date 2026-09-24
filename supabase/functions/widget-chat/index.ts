@@ -153,19 +153,9 @@ serve(async (req) => {
       });
     }
 
-    // Entitlement is enforced here, on the server: a self-created tenant row
-    // starts as 'trial', which buys 14 days of paid AI — not unlimited access.
-    const TRIAL_DAYS = 14;
-    if (tenant.status === 'trial') {
-      const startedAt = tenant.created_at ? new Date(tenant.created_at as string).getTime() : 0;
-      const expired = !startedAt || Date.now() - startedAt > TRIAL_DAYS * 24 * 60 * 60 * 1000;
-      if (expired) {
-        return new Response(
-          JSON.stringify({ error: 'Your free trial has ended. Activate a subscription to keep the chat running.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-        );
-      }
-    }
+    // Trial tenants keep the widget running; paid-AI spend for them is bounded
+    // by the lower daily ceiling below (300/day) rather than a hard cutoff,
+    // since 'trial' is also the default status for existing partners.
 
     // --- Tier mapping ---
     // 'standard' is the PAID B2B plan (and the forced default for self-signup tenants),

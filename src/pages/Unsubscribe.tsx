@@ -12,6 +12,7 @@ export default function Unsubscribe() {
   const navigate = useNavigate();
   const [email, setEmail] = useState(searchParams.get("email") ?? "");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [pending, setPending] = useState(false);
 
   async function handleUnsubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -21,6 +22,7 @@ export default function Unsubscribe() {
         body: { email, token: searchParams.get("token") ?? undefined },
       });
       if (error || !data?.success) throw error ?? new Error("Unsubscribe failed");
+      setPending(Boolean(data.pending));
       setStatus("success");
     } catch (err) {
       console.error("Unsubscribe error:", err);
@@ -45,11 +47,13 @@ export default function Unsubscribe() {
             {status === "idle" && <MailX className="w-6 h-6" />}
           </div>
           <CardTitle className="text-2xl font-space-grotesk text-primary">
-            {status === "success" ? "You're unsubscribed" : "Unsubscribe"}
+            {status === "success" ? (pending ? "Check your inbox" : "You're unsubscribed") : "Unsubscribe"}
           </CardTitle>
           <CardDescription className="text-base mt-2">
             {status === "success"
-              ? "We've removed your address from our mailing list. You won't receive further emails from us."
+              ? pending
+                ? "If that address is on our list, we've sent it a link. Tap it to confirm and you'll stop getting our emails."
+                : "We've removed your address from our mailing list. You won't receive further emails from us."
               : "Confirm your email address below to stop receiving emails from Cuddles AI."}
           </CardDescription>
         </CardHeader>

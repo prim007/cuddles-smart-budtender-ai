@@ -13,10 +13,12 @@ import { template as newsletterConfirmation } from './newsletter-confirmation.ts
 import { template as welcomeBack } from './welcome-back.tsx'
 import { template as tBreakMilestone } from './t-break-milestone.tsx'
 import { template as articleApproved } from './article-approved.tsx'
+import { template as unsubscribeConfirm } from './unsubscribe-confirm.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'newsletter-confirmation': newsletterConfirmation,
   'welcome-back': welcomeBack,
   't-break-milestone': tBreakMilestone,
   'article-approved': articleApproved,
+  'unsubscribe-confirm': unsubscribeConfirm,
 }
