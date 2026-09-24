@@ -12,6 +12,7 @@ export default function Unsubscribe() {
   const navigate = useNavigate();
   const [email, setEmail] = useState(searchParams.get("email") ?? "");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [pending, setPending] = useState(false);
 
   async function handleUnsubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -21,6 +22,7 @@ export default function Unsubscribe() {
         body: { email, token: searchParams.get("token") ?? undefined },
       });
       if (error || !data?.success) throw error ?? new Error("Unsubscribe failed");
+      setPending(Boolean(data.pending));
       setStatus("success");
     } catch (err) {
       console.error("Unsubscribe error:", err);
