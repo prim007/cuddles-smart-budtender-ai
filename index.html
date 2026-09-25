@@ -1,6 +1,27 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      // Security: remove sign-in tokens from the address bar before any
+      // analytics, extensions or history can capture them. Tokens are kept
+      // in memory only and handed to the auth client by main.tsx.
+      (function () {
+        try {
+          var h = window.location.hash || "";
+          if (/access_token=|refresh_token=|provider_token=|id_token=/i.test(h)) {
+            window.__cuddlesAuthFragment = h.slice(1);
+            window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+          }
+          var q = new URLSearchParams(window.location.search);
+          if (q.has("code") && q.get("code").length > 10) {
+            window.__cuddlesAuthCode = q.get("code");
+            q.delete("code");
+            var s = q.toString();
+            window.history.replaceState(null, document.title, window.location.pathname + (s ? "?" + s : ""));
+          }
+        } catch (e) {}
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
