@@ -107,16 +107,11 @@ Deno.serve(async (req) => {
       } catch { /* ignore */ }
     }
     if (!isAuthed) {
-      const ip = req.headers.get("cf-connecting-ip")
-        || req.headers.get("x-real-ip")
-        || "unknown";
-
-      if (!checkIpRateLimit(ip)) {
-        return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again later or sign in." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
-      }
+      // Paid AI generation is reserved for signed-in users; visitors only get cached profiles.
+      return new Response(
+        JSON.stringify({ error: "Sign in to generate a new strain profile." }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
