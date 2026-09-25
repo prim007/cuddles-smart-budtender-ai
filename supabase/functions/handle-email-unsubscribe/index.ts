@@ -15,6 +15,21 @@ async function sendConfirmation(rawEmail: string) {
     .gte('created_at', since);
   if ((count ?? 0) >= 3) return;
 
+  // Only email addresses we have actually sent mail to or that signed up — never arbitrary strangers.
+  const [sub, lead, sent] = await Promise.all([
+    admin.from('newsletter_subscribers').select('id', { count: 'exact', head: true }).eq('email', email),
+    admin.from('email_leads').select('id', { count: 'exact', head: true }).eq('email', email),
+    admin.from('email_send_log').select('id', { count: 'exact', head: true }).eq('recipient_email', email),
+  ]);
+  if (!(sub.count || lead.count || sent.count)) return;
+
+  // Global ceiling: at most 200 confirmation emails per hour across all addresses.
+  const { count: globalCount } = await admin
+    .from('email_unsubscribe_tokens')
+    .select('id', { count: 'exact', head: true })
+    .gte('created_at', since);
+  if ((globalCount ?? 0) >= 200) return;
+
   const bytes = crypto.getRandomValues(new Uint8Array(24));
   const token = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
   const { error } = await admin.from('email_unsubscribe_tokens').insert({ token, email });

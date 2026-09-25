@@ -95,6 +95,13 @@ serve(async (req) => {
           { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
+      const callerEmail = String(claimsData.claims.email ?? "").toLowerCase().trim();
+      if (!callerEmail || callerEmail !== String(lead.email ?? "").toLowerCase().trim()) {
+        return new Response(
+          JSON.stringify({ valid: false, error: "This code belongs to a different account." }),
+          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
 
       const { error: updateError } = await supabase
         .from("email_leads")
