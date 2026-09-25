@@ -13,7 +13,7 @@
             window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
           }
           var q = new URLSearchParams(window.location.search);
-          if (q.has("code") && q.get("code").length > 10) {
+          if (/^[0-9a-f-]{36}$/i.test(q.get("code") || "")) {
             window.__cuddlesAuthCode = q.get("code");
             q.delete("code");
             var s = q.toString();
