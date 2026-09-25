@@ -2,6 +2,26 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
+import { supabase } from "@/integrations/supabase/client";
+
+// Finish sign-in from tokens/code that index.html removed from the URL.
+{
+  const w = window as unknown as { __cuddlesAuthFragment?: string; __cuddlesAuthCode?: string };
+  if (w.__cuddlesAuthFragment) {
+    const p = new URLSearchParams(w.__cuddlesAuthFragment);
+    delete w.__cuddlesAuthFragment;
+    const access_token = p.get("access_token");
+    const refresh_token = p.get("refresh_token");
+    if (access_token && refresh_token) {
+      void supabase.auth.setSession({ access_token, refresh_token });
+    }
+  }
+  if (w.__cuddlesAuthCode) {
+    const code = w.__cuddlesAuthCode;
+    delete w.__cuddlesAuthCode;
+    void supabase.auth.exchangeCodeForSession(code).catch(() => undefined);
+  }
+}
 
 const STALE_MODULE_RELOAD_KEY = "cuddles:stale-module-reload";
 const STALE_MODULE_ERROR_PATTERN = /Importing a module script failed|Failed to fetch dynamically imported module|Loading chunk \d+ failed|Unable to preload CSS/i;
