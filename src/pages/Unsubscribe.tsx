@@ -75,9 +75,11 @@ export default function Unsubscribe() {
                 : unsubscribedEmail
                   ? `We've removed ${unsubscribedEmail} from our mailing list. You won't receive further emails from us.`
                   : "We've removed your address from our mailing list. You won't receive further emails from us."
-              : tokenPresent
-                ? "This unsubscribe link could not be completed. Confirm your email address below to stop receiving emails from Cuddles AI."
-                : "Confirm your email address below to stop receiving emails from Cuddles AI."}
+              : status === "loading" && tokenPresent
+                ? "Completing your unsubscribe request…"
+                : status !== "loading" && tokenPresent
+                  ? "This unsubscribe link could not be completed. Confirm your email address below to stop receiving emails from Cuddles AI."
+                  : "Confirm your email address below to stop receiving emails from Cuddles AI."}
           </CardDescription>
         </CardHeader>
 
