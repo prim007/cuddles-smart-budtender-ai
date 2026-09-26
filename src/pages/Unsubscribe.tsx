@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -13,21 +13,40 @@ export default function Unsubscribe() {
   const [email, setEmail] = useState(searchParams.get("email") ?? "");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [pending, setPending] = useState(false);
+  const [unsubscribedEmail, setUnsubscribedEmail] = useState<string | null>(null);
+  const autoRanRef = useRef(false);
+  const tokenPresent = Boolean(searchParams.get("token"));
 
-  async function handleUnsubscribe(e: React.FormEvent) {
-    e.preventDefault();
+  async function performUnsubscribe(opts: { email?: string; token?: string }) {
     setStatus("loading");
     try {
       const { data, error } = await supabase.functions.invoke("handle-email-unsubscribe", {
-        body: { email, token: searchParams.get("token") ?? undefined },
+        body: { email: opts.email, token: opts.token },
       });
       if (error || !data?.success) throw error ?? new Error("Unsubscribe failed");
+      setUnsubscribedEmail(typeof data.email === "string" ? data.email : null);
       setPending(Boolean(data.pending));
       setStatus("success");
     } catch (err) {
       console.error("Unsubscribe error:", err);
       setStatus("error");
     }
+  }
+
+  // A confirmation link carries a one-time token that is valid proof on its
+  // own — finish the opt-out automatically instead of asking for the address.
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token && !autoRanRef.current) {
+      autoRanRef.current = true;
+      performUnsubscribe({ token });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function handleUnsubscribe(e: React.FormEvent) {
+    e.preventDefault();
+    performUnsubscribe({ email });
   }
 
   return (
@@ -53,8 +72,14 @@ export default function Unsubscribe() {
             {status === "success"
               ? pending
                 ? "If that address is on our list, we've sent it a link. Tap it to confirm and you'll stop getting our emails."
-                : "We've removed your address from our mailing list. You won't receive further emails from us."
-              : "Confirm your email address below to stop receiving emails from Cuddles AI."}
+                : unsubscribedEmail
+                  ? `We've removed ${unsubscribedEmail} from our mailing list. You won't receive further emails from us.`
+                  : "We've removed your address from our mailing list. You won't receive further emails from us."
+              : status === "loading" && tokenPresent
+                ? "Completing your unsubscribe request…"
+                : status !== "loading" && tokenPresent
+                  ? "This unsubscribe link could not be completed. Confirm your email address below to stop receiving emails from Cuddles AI."
+                  : "Confirm your email address below to stop receiving emails from Cuddles AI."}
           </CardDescription>
         </CardHeader>
 
