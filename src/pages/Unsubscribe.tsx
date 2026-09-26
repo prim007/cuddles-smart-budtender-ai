@@ -15,6 +15,7 @@ export default function Unsubscribe() {
   const [pending, setPending] = useState(false);
   const [unsubscribedEmail, setUnsubscribedEmail] = useState<string | null>(null);
   const autoRanRef = useRef(false);
+  const tokenPresent = Boolean(searchParams.get("token"));
 
   async function performUnsubscribe(opts: { email?: string; token?: string }) {
     setStatus("loading");
