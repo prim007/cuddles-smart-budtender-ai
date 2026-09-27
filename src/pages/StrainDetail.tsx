@@ -198,6 +198,14 @@ const StrainDetail = () => {
           </div>
         )}
 
+        {/* Loading state for AI generation */}
+        {(profileLoading || generating) && !profile && (
+          <div className="flex items-center justify-center gap-3 py-12 rounded-2xl border border-dashed border-border bg-muted/20 mb-8">
+            <Loader2 className="w-5 h-5 animate-spin text-primary" />
+            <span className="text-sm text-muted-foreground">Generating in-depth profile with AI...</span>
+          </div>
+        )}
+
         {/* Unavailable: new generation requires signing in */}
         {!profile && !profileLoading && !generating && genFailed && (
           <div className="flex flex-col items-center gap-2 py-10 px-6 rounded-2xl border border-dashed border-border bg-muted/20 mb-8 text-center">
