@@ -23,6 +23,7 @@ const titleCase = (slug: string) =>
 const StrainDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [generating, setGenerating] = useState(false);
+  const [genFailed, setGenFailed] = useState(false);
 
   // Tenant strain (optional — for in-stock pricing)
   const { data: tenantStrain } = useQuery({
@@ -51,21 +52,32 @@ const StrainDetail = () => {
     staleTime: 1000 * 60 * 60,
   });
 
-  // Auto-generate if no profile exists
+  // Auto-generate if no profile exists — one attempt per slug, never a retry loop
   useEffect(() => {
-    if (profileLoading || profile || generating || !slug) return;
+    if (profileLoading || profile || generating || genFailed || !slug) return;
     setGenerating(true);
     (async () => {
       try {
         const name = tenantStrain?.strain_name || titleCase(slug);
-        await supabase.functions.invoke("generate-strain-profile", {
+        const { error } = await supabase.functions.invoke("generate-strain-profile", {
           body: { strain_name: name },
         });
-        await refetchProfile();
-      } catch (e) { console.error("Profile gen failed", e); }
-      finally { setGenerating(false); }
+        // invoke returns the error instead of throwing (e.g. 401 for signed-out visitors)
+        if (error) {
+          console.warn("Profile gen unavailable:", error.message);
+          setGenFailed(true);
+        } else {
+          await refetchProfile();
+        }
+      } catch (e) {
+        console.error("Profile gen failed", e);
+        setGenFailed(true);
+      } finally { setGenerating(false); }
     })();
-  }, [profile, profileLoading, slug, tenantStrain, generating, refetchProfile]);
+  }, [profile, profileLoading, slug, tenantStrain, generating, genFailed, refetchProfile]);
+
+  // Fresh attempt allowed if the visitor navigates to a different strain
+  useEffect(() => { setGenFailed(false); }, [slug]);
 
   const displayName = profile?.strain_name || tenantStrain?.strain_name || (slug ? titleCase(slug) : "Strain");
   const displayType = profile?.strain_type || tenantStrain?.strain_type || "Hybrid";
@@ -186,13 +198,17 @@ const StrainDetail = () => {
           </div>
         )}
 
-        {/* Loading state for AI generation */}
-        {(profileLoading || generating) && !profile && (
-          <div className="flex items-center justify-center gap-3 py-12 rounded-2xl border border-dashed border-border bg-muted/20 mb-8">
-            <Loader2 className="w-5 h-5 animate-spin text-primary" />
-            <span className="text-sm text-muted-foreground">Generating in-depth profile with AI...</span>
+        {/* Unavailable: new generation requires signing in */}
+        {!profile && !profileLoading && !generating && genFailed && (
+          <div className="flex flex-col items-center gap-2 py-10 px-6 rounded-2xl border border-dashed border-border bg-muted/20 mb-8 text-center">
+            <Sparkles className="w-5 h-5 text-primary" />
+            <span className="text-sm text-muted-foreground max-w-md">
+              We haven't written an in-depth profile for {displayName} yet.
+              Sign in and ask Cuddles — it will generate one for you.
+            </span>
           </div>
         )}
+
 
         {/* Long description */}
         {profile?.long_description && (
