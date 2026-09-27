@@ -47,6 +47,7 @@ const pickWeekly = (weekStart: string, count = 10): WeeklyEntry[] => {
 
 const FeaturedStrains = () => {
   const [generating, setGenerating] = useState(false);
+  const [failedSlugs, setFailedSlugs] = useState<string[]>([]);
 
   // Compute this week's rotation client-side (deterministic by week)
   const { data: weekly, refetch } = useQuery({
@@ -76,11 +77,15 @@ const FeaturedStrains = () => {
     enabled: slugs.length > 0,
   });
 
-  // Auto-generate any missing profiles (sequentially, friendly to rate limits)
+  // Auto-generate any missing profiles (sequentially, friendly to rate limits).
+  // One attempt per strain — invoke returns errors instead of throwing, so we
+  // track failures to avoid firing the same 401 over and over.
   useEffect(() => {
     if (!weekly || !profiles) return;
     const cachedSlugs = new Set(profiles.map((p) => p.strain_slug));
-    const missing = weekly.strains.filter((s) => !cachedSlugs.has(s.slug));
+    const missing = weekly.strains.filter(
+      (s) => !cachedSlugs.has(s.slug) && !failedSlugs.includes(s.slug)
+    );
     if (missing.length === 0 || generating) return;
 
     let cancelled = false;
@@ -89,10 +94,16 @@ const FeaturedStrains = () => {
       for (const s of missing.slice(0, 3)) {
         if (cancelled) break;
         try {
-          await supabase.functions.invoke("generate-strain-profile", {
+          const { error } = await supabase.functions.invoke("generate-strain-profile", {
             body: { strain_name: s.name },
           });
-        } catch (e) { console.warn("gen failed", s.name, e); }
+          if (error && !cancelled) {
+            setFailedSlugs((prev) => [...prev, s.slug]);
+          }
+        } catch (e) {
+          console.warn("gen failed", s.name, e);
+          if (!cancelled) setFailedSlugs((prev) => [...prev, s.slug]);
+        }
       }
       if (!cancelled) {
         await refetchProfiles();
@@ -100,7 +111,10 @@ const FeaturedStrains = () => {
       }
     })();
     return () => { cancelled = true; };
-  }, [weekly, profiles, generating, refetchProfiles]);
+  }, [weekly, profiles, generating, failedSlugs, refetchProfiles]);
+
+  // Fresh attempts allowed when the weekly rotation changes
+  useEffect(() => { setFailedSlugs([]); }, [weekly?.week_start]);
 
   const profileMap = new Map((profiles || []).map((p) => [p.strain_slug, p]));
 
@@ -199,6 +213,10 @@ const FeaturedStrains = () => {
                           </div>
                         )}
                       </>
+                    ) : failedSlugs.includes(s.slug) ? (
+                      <p className="text-xs text-muted-foreground italic pt-1">
+                        Profile coming soon — sign in and ask Cuddles to generate it.
+                      </p>
                     ) : (
                       <div className="space-y-2 py-2">
                         <div className="h-3 bg-muted rounded animate-pulse" />
