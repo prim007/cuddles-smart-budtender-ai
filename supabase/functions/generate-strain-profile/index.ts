@@ -56,11 +56,12 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // For force_refresh (cache bypass = paid AI call), require authenticated user
+    // force_refresh overwrites a shared, globally visible profile — restrict it
+    // to admins. Non-admin callers are silently downgraded to cache-only.
     let effectiveForceRefresh = force_refresh;
     if (force_refresh) {
       const authHeader = req.headers.get("Authorization");
-      let authed = false;
+      let isAdmin = false;
       if (authHeader?.startsWith("Bearer ")) {
         try {
           const authClient = createClient(
@@ -69,11 +70,17 @@ Deno.serve(async (req) => {
           );
           const token = authHeader.replace("Bearer ", "");
           const { data, error } = await authClient.auth.getClaims(token);
-          if (!error && data?.claims) authed = true;
+          const userId = data?.claims?.sub;
+          if (!error && typeof userId === "string" && userId) {
+            const { data: hasRole } = await supabase.rpc("has_role", {
+              _user_id: userId,
+              _role: "admin",
+            });
+            isAdmin = hasRole === true;
+          }
         } catch { /* ignore */ }
       }
-      if (!authed) {
-        // Silently downgrade: serve from cache only for anonymous callers
+      if (!isAdmin) {
         effectiveForceRefresh = false;
       }
     }
