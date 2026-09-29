@@ -98,16 +98,32 @@ serve(async (req) => {
     let promoCode = existing.promo_code;
 
     if (!promoCode) {
-      // Generate unique code
+      // Generate unique code. The update is guarded by .is("promo_code", null)
+      // so an existing code can never be overwritten by another request, and
+      // the code is only ever delivered to the lead's own inbox — it is never
+      // returned in the API response.
       promoCode = generatePromoCode();
-      const { error: updateError } = await supabase
+      const { data: updated, error: updateError } = await supabase
         .from("email_leads")
         .update({ promo_code: promoCode })
-        .eq("id", existing.id);
+        .eq("id", existing.id)
+        .is("promo_code", null)
+        .select("promo_code")
+        .maybeSingle();
 
       if (updateError) {
         console.error("Failed to save promo code:", updateError);
         throw new Error("Failed to save promo code");
+      }
+      // Another request assigned a code concurrently — use the stored one.
+      if (!updated) {
+        const { data: refreshed } = await supabase
+          .from("email_leads")
+          .select("promo_code")
+          .eq("id", existing.id)
+          .maybeSingle();
+        promoCode = refreshed?.promo_code;
+        if (!promoCode) throw new Error("Failed to save promo code");
       }
     }
 
