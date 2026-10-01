@@ -80,7 +80,10 @@ serve(async (req) => {
       return json({ error: "Failed to delete account. Please contact support." }, 500);
     }
 
-    return json({ success: true, partial_errors: errors });
+    if (Object.keys(errors).length > 0) {
+      console.error("delete-account partial cleanup errors:", errors);
+    }
+    return json({ success: true, partial_cleanup: Object.keys(errors).length > 0 });
   } catch (e) {
     console.error("delete-account error", e);
     return json({ error: "Internal error" }, 500);
