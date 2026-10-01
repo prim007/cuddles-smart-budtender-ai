@@ -247,6 +247,14 @@ serve(async (req) => {
       const { data: subs } = await admin.from("newsletter_subscribers").select("email, status").limit(5000);
       for (const r of subs ?? []) if (r.status === "confirmed") emails.delete(String(r.email).toLowerCase());
 
+      // Test mode: send to a single address only, regardless of the collected set.
+      const testEmail = String(body?.testEmail ?? "").trim().toLowerCase();
+      if (testEmail) {
+        if (!EMAIL_RE.test(testEmail)) return json({ error: "Invalid testEmail" }, 400);
+        emails.clear();
+        emails.add(testEmail);
+      }
+
       const redirectionUrl = "https://cuddles-ai.com/?newsletter=confirmed";
       let sent = 0, failed = 0;
       for (const email of [...emails].slice(0, maxSends)) {
