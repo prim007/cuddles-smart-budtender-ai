@@ -203,26 +203,27 @@ serve(async (req) => {
 
       // Find or create the opt-in template (Brevo requires tag "optin" + {{ doubleoptin }} link).
       const TEMPLATE_NAME = "Cuddles AI newsletter invite";
+      const templateBody = {
+        templateName: TEMPLATE_NAME,
+        tag: "optin",
+        isActive: true,
+        sender: { email: sender.email, name: "Cuddles AI" },
+        subject: "Would you like the Cuddles AI newsletter? 🌿",
+        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#3d2f45;line-height:1.6">
+ <h1 style="color:#d94a64;font-size:24px">Hi from Cuddles AI 👋</h1>
+ <p>Thank you for signing up to Cuddles AI. We send a short, free newsletter with plant and strain guides, South African cannabis law updates and partner specials.</p>
+ <p><strong>Would you like to receive it?</strong></p>
+ <p><a href="{{ doubleoptin }}" style="display:inline-block;background:#d94a64;color:#fff;padding:14px 26px;border-radius:12px;text-decoration:none;font-weight:bold">Yes, subscribe me</a></p>
+ <p style="font-size:13px;color:#888">Not interested? Just ignore this email — you won't be added. Education only, not medical advice.</p>
+ <p>Stay lifted,<br/>The Cuddles AI Team</p></div>`,
+      };
       const tpls = await brevo("/smtp/templates?limit=100&offset=0", { method: "GET" });
       let templateId = (tpls?.templates ?? []).find((t: { name: string }) => t.name === TEMPLATE_NAME)?.id;
-      if (!templateId) {
-        const created = await brevo("/smtp/templates", {
-          method: "POST",
-          body: {
-            templateName: TEMPLATE_NAME,
-            tag: "optin",
-            isActive: true,
-            sender: { email: sender.email, name: "Cuddles AI" },
-            subject: "Would you like the Cuddles AI newsletter? 🌿",
-            htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#3d2f45;line-height:1.6">
-<h1 style="color:#d94a64;font-size:24px">Hi from Cuddles AI 👋</h1>
-<p>Thank you for signing up to Cuddles AI. We send a short, free newsletter with plant and strain guides, South African cannabis law updates and partner specials.</p>
-<p><strong>Would you like to receive it?</strong></p>
-<p><a href="{{ doubleoptin }}" style="display:inline-block;background:#d94a64;color:#fff;padding:14px 26px;border-radius:12px;text-decoration:none;font-weight:bold">Yes, subscribe me</a></p>
-<p style="font-size:13px;color:#888">Not interested? Just ignore this email — you won't be added. Education only, not medical advice.</p>
-<p>Stay lifted,<br/>Primrose Maseko, Cuddles AI</p></div>`,
-          },
-        });
+      if (templateId) {
+        // Keep the existing template in sync with the code above (sender name, copy).
+        await brevo(`/smtp/templates/${templateId}`, { method: "PUT", body: templateBody });
+      } else {
+        const created = await brevo("/smtp/templates", { method: "POST", body: templateBody });
         templateId = created?.id;
       }
       if (!templateId) return json({ error: "Could not create the invite template in Brevo" }, 500);
@@ -245,6 +246,14 @@ serve(async (req) => {
       for (const r of logged ?? []) emails.delete(String(r.recipient_email).toLowerCase());
       const { data: subs } = await admin.from("newsletter_subscribers").select("email, status").limit(5000);
       for (const r of subs ?? []) if (r.status === "confirmed") emails.delete(String(r.email).toLowerCase());
+
+      // Test mode: send to a single address only, regardless of the collected set.
+      const testEmail = String(body?.testEmail ?? "").trim().toLowerCase();
+      if (testEmail) {
+        if (!EMAIL_RE.test(testEmail)) return json({ error: "Invalid testEmail" }, 400);
+        emails.clear();
+        emails.add(testEmail);
+      }
 
       const redirectionUrl = "https://cuddles-ai.com/?newsletter=confirmed";
       let sent = 0, failed = 0;
