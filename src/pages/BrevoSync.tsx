@@ -98,6 +98,21 @@ const BrevoSync = () => {
     }
   };
 
+  const handleInvite = async (listId: number) => {
+    if (!confirm("Email every signed-up user asking if they want the newsletter? (up to 250 per day, already-invited people are skipped)")) return;
+    setSyncing(-listId);
+    try {
+      const data = await call({ action: "invite_optin", listId });
+      toast.success(`Invites sent: ${data.sent}`, {
+        description: `${data.failed} failed · ${data.remaining} left for tomorrow. People who click "Yes" join this list.`,
+      });
+    } catch (err) {
+      toast.error("Invite failed", { description: err instanceof Error ? err.message : undefined });
+    } finally {
+      setSyncing(null);
+    }
+  };
+
   const copyText = async (text: string, label: string) => {
     await navigator.clipboard.writeText(text);
     toast.success(`${label} copied`);
@@ -150,10 +165,15 @@ const BrevoSync = () => {
                   <Badge variant="secondary" className="ml-2">ID {list.id}</Badge>
                 </p>
               </div>
-              <Button size="sm" onClick={() => void handleSync(list.id)} disabled={syncing !== null}>
-                <Upload className={`h-4 w-4 mr-2 ${syncing === list.id ? "animate-pulse" : ""}`} />
-                {syncing === list.id ? "Syncing…" : "Sync contacts"}
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" variant="outline" onClick={() => void handleInvite(list.id)} disabled={syncing !== null}>
+                  {syncing === -list.id ? "Sending…" : "Invite sign-ups"}
+                </Button>
+                <Button size="sm" onClick={() => void handleSync(list.id)} disabled={syncing !== null}>
+                  <Upload className={`h-4 w-4 mr-2 ${syncing === list.id ? "animate-pulse" : ""}`} />
+                  {syncing === list.id ? "Syncing…" : "Sync contacts"}
+                </Button>
+              </div>
             </div>
           ))}
 
