@@ -190,6 +190,82 @@ serve(async (req) => {
       return json({ synced: entries.length, batches, listId }, 200);
     }
 
+    if (action === "invite_optin") {
+      // Brevo double opt-in: Brevo emails each person a "Do you want the newsletter?"
+      // message; only people who click the confirm button are added to the list.
+      const listId = Number(body?.listId);
+      if (!Number.isFinite(listId) || listId <= 0) return json({ error: "Invalid listId" }, 400);
+      const maxSends = Math.min(Math.max(Number(body?.limit) || 250, 1), 280); // Brevo free = 300/day
+
+      const senders = await brevo("/senders", { method: "GET" });
+      const sender = (senders?.senders ?? []).find((s: { active?: boolean }) => s.active);
+      if (!sender) return json({ error: "No verified sender in Brevo. Add and verify a sender email in Brevo first." }, 400);
+
+      // Find or create the opt-in template (Brevo requires tag "optin" + {{ doubleoptin }} link).
+      const TEMPLATE_NAME = "Cuddles AI newsletter invite";
+      const tpls = await brevo("/smtp/templates?limit=100&offset=0", { method: "GET" });
+      let templateId = (tpls?.templates ?? []).find((t: { name: string }) => t.name === TEMPLATE_NAME)?.id;
+      if (!templateId) {
+        const created = await brevo("/smtp/templates", {
+          method: "POST",
+          body: {
+            templateName: TEMPLATE_NAME,
+            tag: "optin",
+            isActive: true,
+            sender: { email: sender.email, name: "Cuddles AI" },
+            subject: "Would you like the Cuddles AI newsletter? 🌿",
+            htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#3d2f45;line-height:1.6">
+<h1 style="color:#d94a64;font-size:24px">Hi from Cuddles AI 👋</h1>
+<p>Thank you for signing up to Cuddles AI. We send a short, free newsletter with plant and strain guides, South African cannabis law updates and partner specials.</p>
+<p><strong>Would you like to receive it?</strong></p>
+<p><a href="{{ doubleoptin }}" style="display:inline-block;background:#d94a64;color:#fff;padding:14px 26px;border-radius:12px;text-decoration:none;font-weight:bold">Yes, subscribe me</a></p>
+<p style="font-size:13px;color:#888">Not interested? Just ignore this email — you won't be added. Education only, not medical advice.</p>
+<p>Stay lifted,<br/>Primrose Maseko, Cuddles AI</p></div>`,
+          },
+        });
+        templateId = created?.id;
+      }
+      if (!templateId) return json({ error: "Could not create the invite template in Brevo" }, 500);
+
+      const emails = new Set<string>();
+      for (let page = 1; page <= 50; page++) {
+        const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 100 });
+        if (error) break;
+        for (const u of data?.users ?? []) {
+          const e = String(u.email ?? "").trim().toLowerCase();
+          if (EMAIL_RE.test(e)) emails.add(e);
+        }
+        if ((data?.users ?? []).length < 100) break;
+      }
+      const { data: suppressed } = await admin.from("suppressed_emails").select("email").limit(5000);
+      for (const r of suppressed ?? []) emails.delete(String(r.email).toLowerCase());
+      // Skip people already subscribed or already invited.
+      const { data: logged } = await admin.from("email_send_log").select("recipient_email")
+        .eq("template_name", "brevo-newsletter-invite").limit(5000);
+      for (const r of logged ?? []) emails.delete(String(r.recipient_email).toLowerCase());
+      const { data: subs } = await admin.from("newsletter_subscribers").select("email, status").limit(5000);
+      for (const r of subs ?? []) if (r.status === "confirmed") emails.delete(String(r.email).toLowerCase());
+
+      const redirectionUrl = "https://cuddles-ai.com/?newsletter=confirmed";
+      let sent = 0, failed = 0;
+      for (const email of [...emails].slice(0, maxSends)) {
+        try {
+          await brevo("/contacts/doubleOptinConfirmation", {
+            method: "POST",
+            body: { email, includeListIds: [listId], templateId, redirectionUrl, attributes: { SOURCE: "app_signup" } },
+          });
+          await admin.from("email_send_log").insert({
+            template_name: "brevo-newsletter-invite", recipient_email: email, status: "sent",
+          });
+          sent++;
+        } catch (e) {
+          console.error("brevo-sync invite failed", email, e instanceof Error ? e.message : e);
+          failed++;
+        }
+      }
+      return json({ sent, failed, remaining: Math.max(emails.size - sent - failed, 0), listId }, 200);
+    }
+
     return json({ error: "Unknown action" }, 400);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unexpected error";
