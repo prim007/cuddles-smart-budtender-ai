@@ -229,7 +229,14 @@ serve(async (req) => {
       if (!templateId) return json({ error: "Could not create the invite template in Brevo" }, 500);
 
       const emails = new Set<string>();
-      for (let page = 1; page <= 50; page++) {
+      const provided = Array.isArray(body?.emails) ? body.emails.slice(0, 1000) : null;
+      if (provided) {
+        for (const raw of provided) {
+          const e = String(raw ?? "").trim().toLowerCase();
+          if (EMAIL_RE.test(e)) emails.add(e);
+        }
+      }
+      if (!provided) for (let page = 1; page <= 50; page++) {
         const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 100 });
         if (error) break;
         for (const u of data?.users ?? []) {
