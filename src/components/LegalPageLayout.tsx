@@ -60,7 +60,21 @@ export default function LegalPageLayout({
 
         <div className="container mx-auto grid max-w-5xl gap-10 px-4 py-10 md:grid-cols-[220px_minmax(0,1fr)] md:py-14">
           <aside>
-            <nav aria-label="On this page" className="md:sticky md:top-24">
+            <details className="rounded-lg border border-border bg-card p-4 md:hidden">
+              <summary className="cursor-pointer text-sm font-semibold text-foreground">On this page</summary>
+              <nav aria-label="On this page" className="mt-3">
+                <ol className="space-y-1 border-l border-border">
+                  {sections.map((section) => (
+                    <li key={section.id}>
+                      <a href={`#${section.id}`} className="block py-1.5 pl-4 text-sm text-muted-foreground hover:text-foreground">
+                        {section.label}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </details>
+            <nav aria-label="On this page" className="hidden md:sticky md:top-24 md:block">
               <p className="mb-3 text-sm font-semibold text-foreground">On this page</p>
               <ol className="space-y-1 border-l border-border">
                 {sections.map((section) => (
