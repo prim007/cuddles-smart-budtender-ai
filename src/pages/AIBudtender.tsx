@@ -174,6 +174,47 @@ const AIBudtender = () => {
         </div>
       </section>
 
+      {/* Partner proof — real deployments, no invented quotes */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="font-display text-3xl font-bold text-foreground text-center mb-4">
+            Already Running in South African Shops
+          </h2>
+          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
+            Cuddles is live today with real partner menus — not a demo. Here is what a deployment looks like.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="p-6">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-2">LëF Labs</h3>
+              <p className="text-muted-foreground text-sm">
+                Their full September 2026 catalogue — over 100 strains across 28 tiers — is searchable in the
+                Cuddles budtender, with an embedded menu PDF and one-tap phone ordering straight from the chat.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-2">Tripple444</h3>
+              <p className="text-muted-foreground text-sm">
+                Their flower menu is live in the recommendation engine, so customers asking for effects like
+                "relaxed" or "creative" get matched to actual Tripple444 stock with direct order routing.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-display text-lg font-semibold text-foreground mb-2">Dirty Vapes</h3>
+              <p className="text-muted-foreground text-sm">
+                Vape and cartridge listings with confirmed pricing are surfaced by the budtender, with
+                click-to-call ordering — no website rebuild, no POS migration.
+              </p>
+            </Card>
+          </div>
+          <p className="text-sm text-muted-foreground text-center mt-8">
+            Want your shop listed next?{" "}
+            <Link to="/dispensary-onboarding" className="text-primary hover:underline">Onboard your dispensary</Link>
+            {" "}or{" "}
+            <Link to="/schedule-demo" className="text-primary hover:underline">book a demo</Link>.
+          </p>
+        </div>
+      </section>
+
       {/* How It Works */}
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto max-w-4xl">
