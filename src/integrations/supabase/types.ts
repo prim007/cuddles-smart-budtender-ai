@@ -1446,6 +1446,7 @@ export type Database = {
         Returns: boolean
       }
       increment_review_helpful: { Args: { p_review_id: string }; Returns: Json }
+      is_public_tenant: { Args: { _tenant_id: string }; Returns: boolean }
       log_audit_event: {
         Args: {
           _action: string
