@@ -407,7 +407,7 @@ const Checkout = () => {
                 </Button>
                 {deliveryFee == null && (
                   <p className="text-xs text-muted-foreground text-center">
-                    Confirm your location to see the delivery fee and total
+                    Confirm your location or choose your delivery area to see the fee and total
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground text-center">
