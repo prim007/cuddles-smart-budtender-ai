@@ -109,7 +109,7 @@ const Checkout = () => {
     // If we can't get one we say so — we never guess a fee, distance or ETA.
     if (!("geolocation" in navigator)) {
       setDeliveryError(
-        "Your browser can't share a location, so we can't work out your delivery distance or fee. Please contact us to arrange delivery manually."
+        "Your browser can't share a location. Choose your delivery area below instead — the fee is the same."
       );
       return;
     }
@@ -128,8 +128,8 @@ const Checkout = () => {
         setIsCalculating(false);
         setDeliveryError(
           err.code === err.PERMISSION_DENIED
-            ? "Location access is blocked, so we can't calculate your delivery fee. Enable location for this site and try again."
-            : "We couldn't confirm your location, so we can't calculate a delivery fee right now. Please try again in a moment."
+            ? "Location access is blocked. Choose your delivery area below instead — the fee is the same."
+            : "We couldn't confirm your location. Choose your delivery area below instead — the fee is the same."
         );
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
@@ -331,9 +331,25 @@ const Checkout = () => {
                   {isCalculating ? "Confirming location..." : "Calculate Delivery Fee"}
                 </Button>
                 {deliveryError && (
-                  <p role="alert" className="text-sm text-destructive">
-                    {deliveryError}
-                  </p>
+                  <div className="space-y-2">
+                    <p role="alert" className="text-sm text-destructive">
+                      {deliveryError}
+                    </p>
+                    <div className="grid gap-2" role="group" aria-label="Choose your delivery area">
+                      {DELIVERY_BANDS.map((band, i) => (
+                        <Button
+                          key={band.label}
+                          type="button"
+                          variant={manualBand === i ? "default" : "outline"}
+                          className="rounded-xl justify-between h-auto py-3"
+                          onClick={() => selectManualBand(i)}
+                        >
+                          <span className="text-left text-sm">{band.label}</span>
+                          <span className="font-semibold ml-3">R{band.fee}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
                 )}
                 <Textarea
                   placeholder="Driver notes (optional — gate code, landmarks, etc.)"
