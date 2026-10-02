@@ -66,6 +66,7 @@ const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
 const Licensing = lazyWithReload(() => import("./pages/Licensing"));
 const Partners = lazyWithReload(() => import("./pages/Partners"));
 const Install = lazyWithReload(() => import("./pages/Install"));
+const Newsletter = lazyWithReload(() => import("./pages/Newsletter"));
 const ConfirmNewsletter = lazyWithReload(() => import("./pages/ConfirmNewsletter"));
 const Unsubscribe = lazyWithReload(() => import("./pages/Unsubscribe"));
 const Trust = lazyWithReload(() => import("./pages/Trust"));
@@ -213,6 +214,7 @@ const App = () => (
                 <Route path="/licensing" element={<Suspense fallback={<PageLoader />}><Licensing /></Suspense>} />
                 <Route path="/partners" element={<Suspense fallback={<PageLoader />}><Partners /></Suspense>} />
                 <Route path="/install" element={<Suspense fallback={<PageLoader />}><Install /></Suspense>} />
+                <Route path="/newsletter" element={<Suspense fallback={<PageLoader />}><Newsletter /></Suspense>} />
                 <Route path="/newsletter/confirm" element={<Suspense fallback={<PageLoader />}><ConfirmNewsletter /></Suspense>} />
                 <Route path="/unsubscribe" element={<Suspense fallback={<PageLoader />}><Unsubscribe /></Suspense>} />
                 <Route path="/trust" element={<Suspense fallback={<PageLoader />}><Trust /></Suspense>} />
