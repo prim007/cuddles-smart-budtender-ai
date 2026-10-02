@@ -1,0 +1,39 @@
+import { Link } from "react-router-dom";
+import SEO from "@/components/SEO";
+import LegalPageLayout from "@/components/LegalPageLayout";
+
+export default function Terms() {
+  return (
+    <>
+      <SEO
+        title="Terms and Conditions | Cuddles AI"
+        description="Terms for using Cuddles AI, including accounts, AI education, subscriptions, partner shops, acceptable use and business services."
+        url="/terms"
+        structuredData={{ "@context": "https://schema.org", "@type": "WebPage", name: "Cuddles AI Terms and Conditions", url: "https://cuddles-ai.com/terms", dateModified: "2026-10-02" }}
+      />
+      <LegalPageLayout
+        eyebrow="Using Cuddles AI"
+        title="Terms and Conditions"
+        summary="These terms explain the rules that apply when you use the Cuddles AI website, apps, AI tools, business widgets and related services."
+        updated="2 October 2026"
+        notice={<p>Please read these terms before using Cuddles. They contain important limits about AI-generated information and cannabis-related content. Nothing on Cuddles is medical advice.</p>}
+        sections={[
+          { id: "agreement", label: "Agreement and operator", content: <p>Cuddles AI is operated by Tripple444. By accessing or using Cuddles, you agree to these terms and our <Link to="/privacy-policy">Privacy Policy</Link>. If you use Cuddles for a business, you confirm that you are authorised to bind that business. If you do not agree, do not use the service.</p> },
+          { id: "eligibility", label: "Eligibility and legal use", content: <p>You must be legally capable of accepting these terms. Cannabis-related features are for adults who meet the legal age in their jurisdiction. You are responsible for knowing and following the laws that apply where you live. General plant-care features do not carry a cannabis age restriction.</p> },
+          { id: "education", label: "Education, AI and cannabis safety", content: <><p>Cuddles provides general education, plant-care help and product discovery. AI-generated answers can be inaccurate, incomplete or out of date. They are not medical, legal, financial or other professional advice, diagnosis or treatment.</p><p>Do not use Cuddles for emergencies. Consult a qualified healthcare professional before using cannabis for a health reason, especially if you take medication, are pregnant or breastfeeding, or manage a physical or mental-health condition. Never drive or operate machinery while impaired, and keep cannabis away from children and pets.</p></> },
+          { id: "accounts", label: "Accounts and security", content: <p>You must provide accurate account information and protect your sign-in details. Tell us promptly if you suspect unauthorised access. You are responsible for activity under your account unless caused by our failure to use reasonable safeguards. We may require verification before changing or releasing account information.</p> },
+          { id: "acceptable-use", label: "Acceptable use", content: <><p>You may not use Cuddles to:</p><ul><li>break the law, facilitate unlawful cannabis sales, or misrepresent a licence or legal status;</li><li>harm, threaten, harass or exploit another person;</li><li>upload malware, probe security, bypass limits, scrape at scale or disrupt the service;</li><li>impersonate others, submit content you do not have rights to use, or generate deceptive claims;</li><li>extract Cuddles data or outputs to build or train a competing service without written permission.</li></ul></> },
+          { id: "user-content", label: "Your content and feedback", content: <p>You keep ownership of content you submit. You give us a limited, worldwide licence to host, process, reproduce and display it only as needed to operate, secure and improve the service and provide requested features. You confirm you have the rights and permissions needed to submit it. If you send feedback, we may use it without an obligation to pay you.</p> },
+          { id: "subscriptions", label: "Subscriptions and payments", content: <p>Paid features, billing period, currency, taxes and price are shown before purchase. Payments may be completed on a third-party hosted checkout. Subscriptions continue for the period shown at checkout and may renew if that was clearly disclosed and authorised. You may cancel future renewal through the available account or support channel. Except where law requires otherwise, fees already charged for a completed billing period are not automatically refundable. Separate business terms or an order form take priority where they conflict with this section.</p> },
+          { id: "partners", label: "Partner shops and third-party services", content: <p>Cuddles does not itself sell or deliver cannabis. Menus, availability, prices and contact details may belong to independent shops and can change. A partner is responsible for age checks, licensing, stock, fulfilment, product quality, refunds and legal compliance. Links, phone actions, payment pages and external services are governed by their providers' terms and privacy practices.</p> },
+          { id: "business", label: "Business widgets and licences", content: <p>Dispensaries and other businesses using the widget, catalogue tools or APIs must keep their business, stock and compliance information accurate, protect issued access keys, and use the service only for their authorised business. Additional terms appear in our <Link to="/licensing">Licensing page</Link>, applicable order form and <Link to="/legal/dpa">Data Processing Addendum</Link>.</p> },
+          { id: "intellectual-property", label: "Intellectual property", content: <p>Cuddles software, design, branding, original content and service materials are owned by Tripple444 or its licensors and protected by applicable law. These terms give you permission to use the service; they do not transfer ownership. Open-source components remain subject to their own licences.</p> },
+          { id: "availability", label: "Availability and changes", content: <p>We work to keep Cuddles available and useful but do not guarantee uninterrupted or error-free operation. Features may change, be limited or be withdrawn for security, legal, technical or business reasons. We may suspend access to protect users or the service, investigate misuse, or comply with law.</p> },
+          { id: "liability", label: "Warranties and liability", content: <p>To the fullest extent permitted by law, Cuddles is provided “as is” and “as available”. We do not guarantee AI output, partner information, availability or a particular outcome. Tripple444 is not liable for indirect, incidental or consequential loss arising from use of Cuddles. Nothing in these terms excludes liability or consumer rights that cannot lawfully be excluded under South African law.</p> },
+          { id: "termination", label: "Suspension and termination", content: <p>You may stop using Cuddles at any time. We may suspend or close access where these terms are materially breached, payment is overdue, use creates a security or legal risk, or law requires it. Provisions that naturally continue—such as ownership, disclaimers, liability and dispute terms—survive termination.</p> },
+          { id: "law-contact", label: "Governing law, changes and contact", content: <><p>These terms are governed by the laws of the Republic of South Africa. Courts with lawful jurisdiction in South Africa may hear disputes, subject to any mandatory consumer rights or agreed business dispute process.</p><p>We may update these terms and will change the date above. Material changes will receive reasonable notice where appropriate. Questions can be sent to <a href="mailto:admin@cuddles-ai.com">admin@cuddles-ai.com</a>. These terms are general legal information and should be reviewed by your legal adviser if you rely on them for business use.</p></> },
+        ]}
+      />
+    </>
+  );
+}
