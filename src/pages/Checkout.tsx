@@ -67,12 +67,34 @@ const Checkout = () => {
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [deliveryError, setDeliveryError] = useState<string | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [manualBand, setManualBand] = useState<number | null>(null);
+
+  // Same fee schedule as the GPS calculation, offered as a manual fallback
+  // when the browser can't or won't share a location.
+  const DELIVERY_BANDS = [
+    { label: "Within 5 km of Cape Town city centre", fee: 30, km: 2.5, eta: 20 },
+    { label: "5–10 km from Cape Town city centre", fee: 50, km: 7.5, eta: 35 },
+    { label: "10–20 km from Cape Town city centre", fee: 80, km: 15, eta: 50 },
+    { label: "20–40 km from Cape Town city centre", fee: 120, km: 30, eta: 75 },
+    { label: "More than 40 km away", fee: 180, km: 45, eta: 75 },
+  ];
 
   const resetDelivery = () => {
     setDeliveryFee(null);
     setDistanceKm(null);
     setEstimatedTime(null);
     setCoords(null);
+    setManualBand(null);
+  };
+
+  const selectManualBand = (index: number) => {
+    const band = DELIVERY_BANDS[index];
+    setManualBand(index);
+    setCoords(null);
+    setDistanceKm(band.km);
+    setDeliveryFee(band.fee);
+    setEstimatedTime(band.eta);
+    setDeliveryError(null);
   };
 
   const calculateDelivery = () => {
