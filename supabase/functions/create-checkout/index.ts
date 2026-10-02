@@ -62,9 +62,8 @@ serve(async (req) => {
     const customerId = customers.data[0]?.id;
 
     const rawOrigin = req.headers.get("origin") || "";
-    const origin = ALLOWED_ORIGINS.includes(rawOrigin)
-      ? rawOrigin
-      : (/^https:\/\/[a-z0-9-]+\.lovable\.app$/i.test(rawOrigin) ? rawOrigin : DEFAULT_ORIGIN);
+    // Only explicitly approved origins; anything else returns to the main site.
+    const origin = ALLOWED_ORIGINS.includes(rawOrigin) ? rawOrigin : DEFAULT_ORIGIN;
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
