@@ -152,8 +152,8 @@ const Checkout = () => {
       toast({ title: "Empty cart", description: "Add items to your cart first.", variant: "destructive" });
       return;
     }
-    if (deliveryFee == null || distanceKm == null || estimatedTime == null || coords == null || total == null) {
-      toast({ title: "Delivery fee required", description: "Confirm your location before placing the order.", variant: "destructive" });
+    if (deliveryFee == null || distanceKm == null || estimatedTime == null || total == null) {
+      toast({ title: "Delivery fee required", description: "Confirm your location or choose your delivery area before placing the order.", variant: "destructive" });
       return;
     }
 
@@ -164,8 +164,8 @@ const Checkout = () => {
         .insert({
           user_id: user.id,
           delivery_address: address,
-          delivery_lat: coords.lat,
-          delivery_lng: coords.lng,
+          delivery_lat: coords?.lat ?? null,
+          delivery_lng: coords?.lng ?? null,
           delivery_fee: deliveryFee,
           subtotal,
           total,
