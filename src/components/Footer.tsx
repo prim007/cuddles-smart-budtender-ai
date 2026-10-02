@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import cuddlesImage from "@/assets/cuddles.png";
 import { BookOpen, Camera, Heart, Home, MessageCircle, FileText, ShoppingBag, Sprout, Download, MapPin } from "lucide-react";
 import { NewsletterSignup } from "./NewsletterSignup";
-import { ZA_CITIES } from "@/data/zaCities";
+import FooterDispensaryPicker from "./FooterDispensaryPicker";
 
 const WIDGET_SRC = "https://daggaspot.co.za/assets/widget/widget.js";
 
@@ -153,23 +153,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Find a dispensary — programmatic SEO */}
-        <div className="pt-6 border-t border-border">
-          <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-            <MapPin className="w-4 h-4" /> Find a dispensary near you
-          </h4>
-          <div className="flex flex-wrap gap-2 mb-6">
-            {ZA_CITIES.map((c) => (
-              <Link
-                key={c.slug}
-                to={`/dispensary-near-me/${c.slug}`}
-                className="text-xs text-muted-foreground hover:text-foreground rounded-full border border-border bg-card px-3 py-1 transition-colors"
-              >
-                {c.name}
-              </Link>
-            ))}
-          </div>
-        </div>
+        <FooterDispensaryPicker />
 
         {/* SEO-rich text with internal links */}
         <div className="pt-6 border-t border-border">
