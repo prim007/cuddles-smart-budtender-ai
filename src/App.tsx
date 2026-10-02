@@ -63,6 +63,8 @@ const AgentTraces = lazyWithReload(() => import("./pages/AgentTraces"));
 const PipelineHealth = lazyWithReload(() => import("./pages/PipelineHealth"));
 const InternationalMarket = lazyWithReload(() => import("./pages/InternationalMarket"));
 const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
+const Terms = lazyWithReload(() => import("./pages/Terms"));
+const Popia = lazyWithReload(() => import("./pages/Popia"));
 const Licensing = lazyWithReload(() => import("./pages/Licensing"));
 const Partners = lazyWithReload(() => import("./pages/Partners"));
 const Install = lazyWithReload(() => import("./pages/Install"));
@@ -211,6 +213,8 @@ const App = () => (
 
                 <Route path="/international-market" element={<Suspense fallback={<PageLoader />}><InternationalMarket /></Suspense>} />
                 <Route path="/privacy-policy" element={<Suspense fallback={<PageLoader />}><PrivacyPolicy /></Suspense>} />
+                <Route path="/terms" element={<Suspense fallback={<PageLoader />}><Terms /></Suspense>} />
+                <Route path="/popia" element={<Suspense fallback={<PageLoader />}><Popia /></Suspense>} />
                 <Route path="/licensing" element={<Suspense fallback={<PageLoader />}><Licensing /></Suspense>} />
                 <Route path="/partners" element={<Suspense fallback={<PageLoader />}><Partners /></Suspense>} />
                 <Route path="/install" element={<Suspense fallback={<PageLoader />}><Install /></Suspense>} />

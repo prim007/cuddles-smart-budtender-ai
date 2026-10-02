@@ -118,6 +118,15 @@ const Footer = () => {
               <Link to="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Privacy Policy
               </Link>
+              <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Terms &amp; Conditions
+              </Link>
+              <Link to="/popia" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                POPIA &amp; Data Rights
+              </Link>
+              <Link to="/trust" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Trust &amp; Security
+              </Link>
               <Link to="/licensing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Licensing
               </Link>
@@ -179,7 +188,7 @@ const Footer = () => {
             />
           </div>
           <div className="text-center text-sm text-muted-foreground">
-            © 2025 Cuddles AI. All rights reserved.
+            © 2026 Cuddles AI. All rights reserved.
           </div>
         </div>
       </div>
