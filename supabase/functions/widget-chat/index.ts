@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { consumeQuotas, hashKey, DAY_SECONDS, HOUR_SECONDS } from "../_shared/ai-quota.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -47,6 +48,8 @@ const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
 const PER_MINUTE = 30;
 const PER_DAY = 1500;
+// Ceiling on paid AI spend across all partner widgets per day.
+const WIDGET_GLOBAL_DAILY_LIMIT = 6000;
 
 function checkRateLimit(key: string): boolean {
   const now = Date.now();
@@ -192,6 +195,23 @@ serve(async (req) => {
         status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    // Shared, database-backed ceilings that survive cold starts and hold
+    // across every server replica.
+    const ipHash = await hashKey(clientIp);
+    const exhausted = await consumeQuotas([
+      { bucket: `wc:ip-hour:${ipHash}`, limit: 60, windowSeconds: HOUR_SECONDS },
+      { bucket: `wc:ip-day:${ipHash}`, limit: 200, windowSeconds: DAY_SECONDS },
+      { bucket: `wc:tenant-day:${tenant.id}`, limit: trialTenant ? 300 : PER_DAY, windowSeconds: DAY_SECONDS },
+      { bucket: 'wc:total', limit: WIDGET_GLOBAL_DAILY_LIMIT, windowSeconds: DAY_SECONDS },
+    ]);
+    if (exhausted) {
+      return new Response(JSON.stringify({ error: 'Daily chat limit reached. Please try again tomorrow.' }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+
 
 
     // Fetch tenant-specific strains (limit menu surface for free tier)

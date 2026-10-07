@@ -5,7 +5,7 @@
 // These counters live in public.ai_usage_quota (service-role only) and are
 // incremented atomically by public.consume_ai_quota().
 
-import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.57.2";
 
 let client: SupabaseClient | null = null;
 function admin(): SupabaseClient {

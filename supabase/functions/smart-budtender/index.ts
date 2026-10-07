@@ -11,6 +11,7 @@ import { retrieveKnowledge, buildRetrievalContext } from "../_shared/rag.ts";
 import { ANSWER_QUALITY_DIRECTIVES, composeSystemPrompt, promptTraceHeaders } from "../_shared/prompt-registry.ts";
 import { toolsFor, runTool, createToolClient, APPROVAL_REQUIRED } from "./tools.ts";
 import { routeTurn } from "./router.ts";
+import { consumeQuotas, hashKey, DAY_SECONDS, HOUR_SECONDS, type QuotaRule } from "../_shared/ai-quota.ts";
 
 
 
