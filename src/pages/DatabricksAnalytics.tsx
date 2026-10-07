@@ -179,44 +179,10 @@ const DatabricksAnalytics = () => {
       <Card>
         <CardHeader>
           <CardTitle>Run analysis</CardTitle>
-          <CardDescription>Read-only SQL (SELECT, SHOW, DESCRIBE) against your lakehouse.</CardDescription>
+          <CardDescription>
+            Custom queries are turned off for security. Explore exported tables directly in your Databricks workspace.
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Textarea
-            value={statement}
-            onChange={(e) => setStatement(e.target.value)}
-            rows={4}
-            className="font-mono text-sm"
-            aria-label="SQL statement"
-          />
-          <Button onClick={() => void handleQuery()} disabled={running}>
-            <Play className="mr-2 h-4 w-4" />
-            {running ? "Running…" : "Run query"}
-          </Button>
-
-          {result && (
-            <div className="overflow-x-auto rounded-lg border">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/50">
-                  <tr>
-                    {result.columns.map((c) => (
-                      <th key={c} className="px-3 py-2 text-left font-medium">{c}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {(result.rows ?? []).map((row, i) => (
-                    <tr key={i} className="border-t">
-                      {row.map((cell, j) => (
-                        <td key={j} className="max-w-xs truncate px-3 py-2">{cell ?? "—"}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
       </Card>
     </main>
   );

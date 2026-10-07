@@ -134,20 +134,9 @@ serve(async (req) => {
     if (!warehouseId) return json({ error: "warehouse_id is required" }, 400);
 
     if (action === "query") {
-      const statement = String(body?.statement ?? "").trim();
-      if (!statement || statement.length > 5000) return json({ error: "Invalid statement" }, 400);
-      if (!READ_ONLY_RE.test(statement) || FORBIDDEN_RE.test(statement)) {
-        return json({ error: "Only read-only statements (SELECT / SHOW / DESCRIBE) are allowed" }, 400);
-      }
-      const result = await runSql(warehouseId, statement);
-      return json(
-        {
-          columns: (result?.manifest?.schema?.columns ?? []).map((c: { name: string }) => c.name),
-          rows: result?.result?.data_array ?? [],
-          row_count: result?.manifest?.total_row_count ?? 0,
-        },
-        200,
-      );
+      // Free-form SQL was removed: callers may not supply statements. Only the
+      // allowlisted export below runs server-built SQL.
+      return json({ error: "Custom queries are disabled. Use export instead." }, 400);
     }
 
     if (action === "export") {
