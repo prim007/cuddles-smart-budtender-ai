@@ -11,6 +11,7 @@ import { retrieveKnowledge, buildRetrievalContext } from "../_shared/rag.ts";
 import { ANSWER_QUALITY_DIRECTIVES, composeSystemPrompt, promptTraceHeaders } from "../_shared/prompt-registry.ts";
 import { toolsFor, runTool, createToolClient, APPROVAL_REQUIRED } from "./tools.ts";
 import { routeTurn } from "./router.ts";
+import { consumeQuotas, hashKey, DAY_SECONDS, HOUR_SECONDS, type QuotaRule } from "../_shared/ai-quota.ts";
 
 
 
@@ -81,6 +82,11 @@ function checkRateLimit(ip: string, sessionId?: string): { allowed: boolean; rea
 // visitor per day and requests must come from one of our own surfaces.
 const ANON_DAILY_LIMIT = 60;
 const UNKNOWN_ORIGIN_DAILY_LIMIT = 10;
+const ANON_HOURLY_LIMIT = 30;
+const SIGNED_IN_DAILY_LIMIT = 300;
+// Site-wide ceilings on anonymous paid-AI spend per day.
+const ANON_GLOBAL_DAILY_LIMIT = 4000;
+const OFFSITE_GLOBAL_DAILY_LIMIT = 300;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const anonDailyMap = new Map<string, { count: number; resetTime: number }>();
 
@@ -749,6 +755,44 @@ serve(async (req) => {
         );
       }
     }
+
+    // Shared, database-backed ceilings that hold across every server replica
+    // and cold start, so spend cannot be multiplied by spreading requests.
+    {
+      const ipHash = await hashKey(clientIP);
+      const knownSurface = isKnownSurface(req);
+      const rules: QuotaRule[] = userId
+        ? [{ bucket: `sb:user:${userId}`, limit: SIGNED_IN_DAILY_LIMIT, windowSeconds: DAY_SECONDS }]
+        : [
+            { bucket: `sb:anon:ip-hour:${ipHash}`, limit: ANON_HOURLY_LIMIT, windowSeconds: HOUR_SECONDS },
+            {
+              bucket: `sb:anon:ip-day:${ipHash}:${knownSurface ? 'web' : 'other'}`,
+              limit: knownSurface ? ANON_DAILY_LIMIT : UNKNOWN_ORIGIN_DAILY_LIMIT,
+              windowSeconds: DAY_SECONDS,
+            },
+            ...(knownSurface
+              ? []
+              : [{ bucket: 'sb:anon:offsite-total', limit: OFFSITE_GLOBAL_DAILY_LIMIT, windowSeconds: DAY_SECONDS }]),
+            { bucket: 'sb:anon:total', limit: ANON_GLOBAL_DAILY_LIMIT, windowSeconds: DAY_SECONDS },
+          ];
+      const exhausted = await consumeQuotas(rules);
+      if (exhausted) {
+        console.warn('Persistent AI quota reached', { bucket: exhausted.bucket.split(':').slice(0, 3).join(':') });
+        const isGlobal = exhausted.bucket.endsWith('total');
+        return new Response(
+          JSON.stringify({
+            error: isGlobal
+              ? 'Cuddles is very busy right now. Please sign in or try again a little later.'
+              : userId
+                ? 'You have reached today\'s chat limit. Please try again tomorrow.'
+                : 'You have reached today\'s free chat limit. Sign in to keep chatting with Cuddles.',
+          }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+        );
+      }
+    }
+
+
 
 
 

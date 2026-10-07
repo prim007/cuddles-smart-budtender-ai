@@ -125,6 +125,24 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_usage_quota: {
+        Row: {
+          bucket: string
+          count: number
+          window_start: string
+        }
+        Insert: {
+          bucket: string
+          count?: number
+          window_start: string
+        }
+        Update: {
+          bucket?: string
+          count?: number
+          window_start?: string
+        }
+        Relationships: []
+      }
       article_submissions: {
         Row: {
           author_email: string
@@ -1525,6 +1543,10 @@ export type Database = {
       check_email_rate_limit: { Args: { p_email: string }; Returns: boolean }
       check_newsletter_rate_limit: {
         Args: { p_email: string }
+        Returns: boolean
+      }
+      consume_ai_quota: {
+        Args: { p_bucket: string; p_limit: number; p_window_seconds: number }
         Returns: boolean
       }
       get_email_queue_metrics: {
