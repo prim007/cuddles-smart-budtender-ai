@@ -227,6 +227,14 @@ const FeatureNav = () => {
               <span className="font-medium">Sign In</span>
             </Link>
           ) : (
+            <>
+            <Link
+              to="/dashboard"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl border border-primary/30 hover:bg-primary/5 transition-all duration-200"
+            >
+              <span className="font-medium">My Dashboard</span>
+            </Link>
             <button
               onClick={handleSignOut}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-hippie-coral/30 hover:bg-hippie-coral/5 transition-all duration-200"
@@ -316,6 +324,13 @@ const FeatureNav = () => {
                   Sign In
                 </Link>
               ) : (
+                <>
+                <Link
+                  to="/dashboard"
+                  className="whitespace-nowrap px-4 py-2 rounded-2xl text-sm font-semibold bg-gradient-to-br from-hippie-coral to-hippie-peach text-white hover:scale-[1.03] transition-transform"
+                >
+                  My Dashboard
+                </Link>
                 <button
                   onClick={handleSignOut}
                   className="px-4 py-2 rounded-2xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all flex items-center gap-2"
@@ -323,6 +338,7 @@ const FeatureNav = () => {
                   <LogOut className="w-4 h-4" />
                   Sign Out
                 </button>
+                </>
               )}
             </>
           );
