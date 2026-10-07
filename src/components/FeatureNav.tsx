@@ -244,6 +244,7 @@ const FeatureNav = () => {
               </div>
               <span className="font-medium">Sign Out</span>
             </button>
+            </>
           )}
         </div>
       </div>
