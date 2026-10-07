@@ -299,6 +299,33 @@ export type Database = {
         }
         Relationships: []
       }
+      connections: {
+        Row: {
+          addressee_id: string
+          created_at: string
+          id: string
+          requester_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          addressee_id: string
+          created_at?: string
+          id?: string
+          requester_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          addressee_id?: string
+          created_at?: string
+          id?: string
+          requester_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       delivery_order_items: {
         Row: {
           created_at: string
@@ -786,6 +813,42 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          discoverable: boolean
+          display_name: string
+          favourite_strains: string[]
+          liked_effects: string[]
+          liked_flavours: string[]
+          liked_topics: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          discoverable?: boolean
+          display_name?: string
+          favourite_strains?: string[]
+          liked_effects?: string[]
+          liked_flavours?: string[]
+          liked_topics?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          discoverable?: boolean
+          display_name?: string
+          favourite_strains?: string[]
+          liked_effects?: string[]
+          liked_flavours?: string[]
+          liked_topics?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       review_votes: {
         Row: {
           created_at: string | null
@@ -821,6 +884,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      shared_items: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          item_slug: string
+          item_title: string
+          item_type: string
+          note: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          item_slug: string
+          item_title: string
+          item_type: string
+          note?: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          item_slug?: string
+          item_title?: string
+          item_type?: string
+          note?: string | null
+          recipient_id?: string
+          sender_id?: string
+        }
+        Relationships: []
       }
       strain_journal: {
         Row: {
@@ -1416,6 +1515,7 @@ export type Database = {
       }
     }
     Functions: {
+      are_connected: { Args: { _a: string; _b: string }; Returns: boolean }
       check_article_rate_limit: { Args: { p_email: string }; Returns: boolean }
       check_chat_rate_limit: {
         Args: { p_session_id: string }

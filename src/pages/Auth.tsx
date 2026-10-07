@@ -39,7 +39,7 @@ const Auth = () => {
 
   // Sanitize `next` — only same-origin relative paths starting with a single slash.
   const rawNext = searchParams.get("next") ?? "";
-  const nextPath = /^\/(?!\/)[^\s]*$/.test(rawNext) ? rawNext : "/";
+  const nextPath = /^\/(?!\/)[^\s]*$/.test(rawNext) ? rawNext : "/dashboard";
 
   const handleGoogleSignIn = async () => {
     const { error } = await lovable.auth.signInWithOAuth("google", {
