@@ -103,7 +103,7 @@ const Dashboard = () => {
 
   const matches = useMemo(() => {
     if (!me) return [];
-    const exclude = new Set(conns.map(otherId));
+    const exclude = new Set(conns.filter((c) => c.status !== "declined").map(otherId));
     return rankMatches(me, others.filter((o) => o.discoverable), exclude).slice(0, 8);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [me, others, conns]);
@@ -114,7 +114,10 @@ const Dashboard = () => {
     else { toast({ title: "Invite sent 🌿" }); load(); }
   };
   const respond = async (id: string, status: "accepted" | "declined") => {
-    await supabase.from("connections").update({ status }).eq("id", id);
+    // Declining removes the row so either person can invite again later;
+    // the pair unique index would otherwise block them forever.
+    if (status === "declined") await supabase.from("connections").delete().eq("id", id);
+    else await supabase.from("connections").update({ status }).eq("id", id);
     load();
   };
   const remove = async (id: string) => { await supabase.from("connections").delete().eq("id", id); load(); };
