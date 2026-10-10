@@ -116,9 +116,9 @@ const Claim = () => {
             <div className="mx-auto w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-2">
               <Gift className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle asChild className="text-2xl font-bold"><h1>
+            <h1 className="text-2xl font-bold leading-none tracking-tight">
               Claim your account
-            </h1></CardTitle>
+            </h1>
             <CardDescription className="text-base">
               {promoCode ? (
                 <>Your <strong>15% discount code</strong> is ready — create your free account in one tap.</>
