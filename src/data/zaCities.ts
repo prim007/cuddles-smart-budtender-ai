@@ -36,7 +36,7 @@ export const ZA_CITIES: ZaCity[] = [
 
   { slug: "pretoria", name: "Pretoria", province: "Gauteng", lat: -25.7479, lng: 28.2293, blurb: "Capital city with a fast-growing legal cannabis lounge scene." },
   { slug: "port-elizabeth", name: "Port Elizabeth", province: "Eastern Cape", lat: -33.9608, lng: 25.6022, blurb: "Friendly coastal city with several established dispensaries." },
-  { slug: "bloemfontein", name: "Bloemfontein", province: "Free State", lat: -29.0852, lng: 26.1596, blurb: "Central-South Africa hub with a tight-knit cannabis community." },
+  { slug: "bloemfontein", name: "Bloemfontein", province: "Free State", lat: -29.0852, lng: 26.1596, blurb: "Central-South Africa hub with a tight-knit cannabis community.", metaTitle: "Dispensary Near Me Bloemfontein | Clubs, Stock & Delivery", metaDescription: "Find cannabis clubs open now in Bloemfontein, Free State. Free AI strain matching against live stock, same-day delivery options and directions in seconds." },
   { slug: "east-london", name: "East London", province: "Eastern Cape", lat: -33.0153, lng: 27.9116, blurb: "Coastal city serving the Eastern Cape's growing legal market." },
   { slug: "polokwane", name: "Polokwane", province: "Limpopo", lat: -23.9045, lng: 29.4689, blurb: "Limpopo's largest city, gateway to northern South Africa." },
   { slug: "nelspruit", name: "Nelspruit", province: "Mpumalanga", lat: -25.4753, lng: 30.9694, blurb: "Mpumalanga's commercial hub near the Mozambique border." },

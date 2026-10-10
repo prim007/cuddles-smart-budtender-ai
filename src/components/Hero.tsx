@@ -16,7 +16,7 @@ const CuddlesStatic = () => (
   <div className={`${CUDDLES_3D_HEIGHT} flex items-center justify-center`} aria-hidden="true">
     <img
       src={cuddlesWalker}
-      alt=""
+      alt="Cuddles, the friendly AI plant expert and cannabis budtender mascot, waving hello"
       width="275"
       height="320"
       className="h-auto max-h-[88%] w-auto max-w-[88%] object-contain"

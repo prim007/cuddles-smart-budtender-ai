@@ -156,7 +156,7 @@ const Dashboard = () => {
 
   return (
     <main className="min-h-screen bg-background pt-24 pb-20">
-      <SEO title="My Dashboard | Cuddles AI" description="Your personal Cuddles space: tools, likes and friends." />
+      <SEO title="My Dashboard | Cuddles AI" description="Your personal Cuddles space: tools, likes and friends." url="/dashboard" noindex />
       <div className="container mx-auto px-4 max-w-5xl space-y-8">
         <header>
           <p className="text-primary text-sm font-medium uppercase tracking-wider">My Cuddles</p>
