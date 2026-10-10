@@ -84,7 +84,7 @@ const Newsletter = () => {
                 <div>
                   <h2 className="text-xl font-semibold">You're part of the Cuddles community!</h2>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                    {email.trim().toLowerCase()} is now subscribed. Keep an eye on your inbox for the next edition.
+                    Thanks for joining. Keep an eye on your inbox for the next edition.
                   </p>
                 </div>
               </div>

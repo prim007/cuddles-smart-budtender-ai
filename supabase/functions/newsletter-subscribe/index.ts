@@ -55,7 +55,8 @@ Deno.serve(async (req) => {
     return json({ error: 'Subscriptions are temporarily unavailable. Please try again later.' }, 503)
   }
   if (suppressed) {
-    return json({ error: 'This address previously opted out. Please contact us if you would like to rejoin.' }, 409)
+    // Same response as a normal signup so opt-out status is never revealed.
+    return json({ success: true }, 200)
   }
 
   const { error: subscriberError } = await admin
