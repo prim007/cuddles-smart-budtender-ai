@@ -82,17 +82,23 @@ serve(async (req) => {
     // Require the email to exist in email_leads (lead must have signed up)
     const { data: existing } = await supabase
       .from("email_leads")
-      .select("id, promo_code, email")
+      .select("id, promo_code, email, created_at")
       .eq("email", normalizedEmail)
       .maybeSingle();
 
-    if (!existing) {
+    // Only send once, right after a fresh signup. Existing leads (already sent
+    // a code) or older signups can't be re-targeted by anonymous callers.
+    const FRESH_WINDOW_MS = 15 * 60_000;
+    const isFresh =
+      existing?.created_at && Date.now() - new Date(existing.created_at).getTime() < FRESH_WINDOW_MS;
+    if (!existing || existing.promo_code || !isFresh) {
       // Generic response to prevent email enumeration
       return new Response(
         JSON.stringify({ success: true, message: "If this email is registered, a code will be sent." }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
 
 
     let promoCode = existing.promo_code;
