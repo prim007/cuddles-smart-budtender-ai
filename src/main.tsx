@@ -57,7 +57,9 @@ const clearStaleServiceWorkerCache = async () => {
   if ("serviceWorker" in navigator) {
     const registrations = await navigator.serviceWorker.getRegistrations();
     const unregisterResults = await Promise.allSettled(
-      registrations.map((registration) => registration.unregister())
+      registrations
+        .filter((registration) => !registration.scope.includes("/push/"))
+        .map((registration) => registration.unregister())
     );
 
     cleanupResults.push(registrations.length > 0 || unregisterResults.some((result) => result.status === "fulfilled" && result.value));

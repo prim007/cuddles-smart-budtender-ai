@@ -14,6 +14,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { differenceInDays, format, addDays } from "date-fns";
 import SEO from "@/components/SEO";
+import PushAlertsCard from "@/components/PushAlertsCard";
 
 interface DailyLog {
   day: number;
@@ -509,6 +510,8 @@ const ToleranceBreak = () => {
                   </CardContent>
                 </Card>
               )}
+
+              <PushAlertsCard />
 
               {/* Insights */}
               {activeBreak.daily_logs.length > 0 && (
