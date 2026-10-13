@@ -614,6 +614,30 @@ export type Database = {
         }
         Relationships: []
       }
+      image_gateway_state: {
+        Row: {
+          id: string
+          paused: boolean
+          reason: string | null
+          status: number | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          paused?: boolean
+          reason?: string | null
+          status?: number | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          paused?: boolean
+          reason?: string | null
+          status?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       internal_hook_secrets: {
         Row: {
           created_at: string
