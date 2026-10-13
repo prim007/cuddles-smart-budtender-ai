@@ -285,7 +285,7 @@ serve(async (req) => {
     return json({ error: "Unknown action" }, 400);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unexpected error";
-    console.error("brevo-sync: failed", message);
+    console.error("brevo-sync: failed", message.replace(/[^\s@]+@[^\s@]+/g, "[redacted]"));
     const match = /^\[(\d{3})\]: /.exec(message);
     const status = match ? Number(match[1]) : 500;
     return json({ error: "Brevo request failed", details: message }, status);
