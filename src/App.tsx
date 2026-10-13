@@ -80,6 +80,7 @@ const Dashboard = lazyWithReload(() => import("./pages/Dashboard"));
 const Invite = lazyWithReload(() => import("./pages/Invite"));
 const StrainReviews = lazyWithReload(() => import("./pages/StrainReviews"));
 const StrainScanner = lazyWithReload(() => import("./pages/StrainScanner"));
+const ImageStudio = lazyWithReload(() => import("./pages/ImageStudio"));
 // Blog
 const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
@@ -232,6 +233,7 @@ const App = () => (
                 <Route path="/journal" element={<Suspense fallback={<PageLoader />}><StrainJournal /></Suspense>} />
                 <Route path="/reviews" element={<Suspense fallback={<PageLoader />}><StrainReviews /></Suspense>} />
                 <Route path="/scanner" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><StrainScanner /></Suspense></ProtectedRoute>} />
+                <Route path="/image-studio" element={<Suspense fallback={<PageLoader />}><ImageStudio /></Suspense>} />
                 <Route path="/t-break" element={<Suspense fallback={<PageLoader />}><ToleranceBreak /></Suspense>} />
                 <Route path="/t-break-challenge" element={<Suspense fallback={<PageLoader />}><TBreakChallenge /></Suspense>} />
                 <Route path="/grow" element={<Suspense fallback={<PageLoader />}><SeedlingMonitor /></Suspense>} />

@@ -12,13 +12,14 @@ import { Label } from "@/components/ui/label";
 import SEO from "@/components/SEO";
 import { staticBlogPosts } from "@/data/staticBlogPosts";
 import { rankMatches, sharedLikes, type LikesProfile } from "@/lib/likeMatch";
-import { BookOpen, Camera, Star, Heart, Sprout, MessageCircle, Copy, Check, UserPlus, Send, X, Inbox } from "lucide-react";
+import { BookOpen, Camera, Star, Heart, Sprout, MessageCircle, Copy, Check, UserPlus, Send, X, Inbox, ImagePlus } from "lucide-react";
 
 const EFFECTS = ["Relaxed", "Creative", "Sleep", "Energy", "Focus", "Pain relief", "Happy", "Appetite"];
 const FLAVOURS = ["Citrus", "Earthy", "Sweet", "Pine", "Berry", "Diesel", "Spicy", "Floral"];
 const TOPICS = ["Growing", "Laws & news", "Health & wellness", "Plant care", "Strain guides", "Dispensaries"];
 
 const TOOLS = [
+  { icon: ImagePlus, title: "Image Studio", href: "/image-studio" },
   { icon: BookOpen, title: "My Journal", href: "/journal" },
   { icon: Camera, title: "Strain Scanner", href: "/scanner" },
   { icon: Star, title: "Reviews", href: "/reviews" },

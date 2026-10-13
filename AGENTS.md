@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Image Studio generation is authenticated and server-only, with fail-closed database spend quotas and a service-only persistent gateway pause; keep generated results private in the current page and downloadable, not in a public gallery.
+
 - Public newsletter signup must go through the `newsletter-subscribe` edge function so Brevo credentials, suppression checks, and consent records remain server-side.
 - Public legal notices share `LegalPageLayout` so navigation, readability, and compliance links stay consistent across Privacy, Terms, and POPIA pages.
 - Social features (profiles, connections, shared_items) only share display name + likes; sharing is restricted to accepted connections via `are_connected()` RLS.
