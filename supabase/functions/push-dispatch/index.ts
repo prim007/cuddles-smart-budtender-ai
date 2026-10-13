@@ -12,6 +12,13 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
+  // Only the scheduled job may trigger alerts: it sends a private token stored server-side.
+  const provided = req.headers.get("x-job-token") ?? "";
+  const { data: secret } = await admin.from("internal_job_secrets").select("token").eq("name", "push-dispatch").maybeSingle();
+  if (!secret?.token || provided.length !== secret.token.length || provided !== secret.token) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  }
+
   const { data: subs } = await admin.from("push_subscriptions").select("user_id");
   const userIds = [...new Set((subs ?? []).map((s) => s.user_id))];
   if (!userIds.length) return new Response(JSON.stringify({ sent: 0 }), { headers: corsHeaders });
