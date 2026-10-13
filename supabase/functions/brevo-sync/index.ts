@@ -44,7 +44,7 @@ async function brevo(path: string, init: { method: string; body?: unknown }) {
 
   const text = await res.text();
   if (!res.ok) {
-    console.error(`brevo-sync: gateway request failed [${res.status}] ${path}: ${text}`);
+    console.error(`brevo-sync: gateway request failed [${res.status}]`);
     throw new Error(`[${res.status}]: ${text}`);
   }
   return text ? JSON.parse(text) : {};
@@ -275,7 +275,7 @@ serve(async (req) => {
           });
           sent++;
         } catch (e) {
-          console.error("brevo-sync invite failed", email, e instanceof Error ? e.message : e);
+          console.error("brevo-sync invite failed", e instanceof Error ? e.message.replace(/[^\s@]+@[^\s@]+/g, "[redacted]") : "unknown");
           failed++;
         }
       }
