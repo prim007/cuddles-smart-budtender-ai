@@ -76,7 +76,7 @@ serve(async (req) => {
     if (!RESEND_API_KEY) {
       // Fallback: store in database if no email API key
       console.log("No RESEND_API_KEY found. Logging demo request.");
-      console.log(`Demo request from: ${name} (${email}), Company: ${company}, Phone: ${phone || "N/A"}, Message: ${message || "N/A"}`);
+      console.log("Demo request received (email provider not configured; details omitted from logs)");
 
       // Use Supabase to store the request
       const insertRes = await fetch(`${supabaseUrl}/rest/v1/demo_requests`, {
