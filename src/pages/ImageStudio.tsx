@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { streamImage } from "@/lib/streamImage";
+import { downloadImage } from "@/lib/downloadImage";
 import { useAuth } from "@/hooks/useAuth";
 import cuddles from "@/assets/cuddles.png";
 
@@ -41,7 +42,8 @@ export default function ImageStudio() {
   };
   const download = () => {
     if (!image || !final || busy) return;
-    const a = document.createElement("a"); a.href = image; a.download = `cuddles-${mode}-${Date.now()}.png`; a.click();
+    try { downloadImage(image, `cuddles-${mode}-${Date.now()}.png`); }
+    catch (e) { setError(e instanceof Error ? e.message : "This image could not be saved."); }
   };
   return <main className="min-h-screen bg-background px-5 pb-28 pt-28 text-foreground">
     <SEO title="Image Studio | Cuddles AI" description="Create original cannabis-themed images and memes from your own descriptions with Cuddles AI." url="/image-studio" />
