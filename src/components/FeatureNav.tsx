@@ -28,8 +28,8 @@ import {
   Leaf,
   ChevronDown,
   HelpCircle,
-  Code
-  , ImagePlus
+  Code,
+  ImagePlus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
