@@ -62,7 +62,18 @@ const PushAlertsCard = () => {
       const perm = await Notification.requestPermission();
       if (perm !== "granted") { setStatus(perm === "denied" ? "denied" : "off"); return; }
       const reg = await navigator.serviceWorker.register(SW_URL, { scope: SW_SCOPE });
-      await navigator.serviceWorker.ready.catch(() => undefined);
+      // navigator.serviceWorker.ready never resolves here: it only resolves for a
+      // registration whose scope covers this page, and /push/ doesn't cover /t-break.
+      // Wait for THIS registration to activate instead.
+      if (!reg.active) {
+        await new Promise<void>((resolve) => {
+          const worker = reg.installing ?? reg.waiting;
+          if (!worker || worker.state === "activated") return resolve();
+          worker.addEventListener("statechange", () => {
+            if (worker.state === "activated" || worker.state === "redundant") resolve();
+          });
+        });
+      }
       const sub = (await reg.pushManager.getSubscription()) ??
         (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY) }));
       const { error } = await supabase.functions.invoke("push-subscribe", { body: { action: "subscribe", subscription: sub.toJSON() } });
