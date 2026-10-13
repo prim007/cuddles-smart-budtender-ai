@@ -5,11 +5,11 @@ export type ImageConfig = {
   format: "openai" | "gemini-chat" | "generate-content" | "cloudflare-input";
 };
 
-export function generateImage(config: ImageConfig, prompt: string, stream = true, signal?: AbortSignal) {
+export function generateImage(config: ImageConfig, prompt: string, stream = true, signal?: AbortSignal, size = "1024x1024") {
   let input: Record<string, unknown>;
   switch (config.format) {
     case "openai":
-      input = { prompt, ...(stream ? { partial_images: 1 } : {}) };
+      input = { prompt, size, quality: "medium", ...(stream ? { partial_images: 1 } : {}) };
       break;
     case "cloudflare-input":
       input = { input: { prompt } };

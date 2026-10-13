@@ -29,6 +29,7 @@ import {
   ChevronDown,
   HelpCircle,
   Code
+  , ImagePlus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -42,6 +43,7 @@ interface Feature {
 }
 
 const features: Feature[] = [
+  { icon: ImagePlus, title: "Image Studio", href: "/image-studio", gradient: "from-hippie-sage to-hippie-teal" },
   {
     icon: Home,
     title: "Home",
