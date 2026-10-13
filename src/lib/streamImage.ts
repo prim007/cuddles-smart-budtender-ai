@@ -57,7 +57,7 @@ export async function streamImage(
         streamError = payload?.error?.message ?? "Image generation failed";
         return;
       }
-      const type = event.event || payload?.type;
+      const type = payload?.type || event.event;
       if (
         type !== "image_generation.partial_image" &&
         type !== "image_generation.completed" &&

@@ -1,6 +1,7 @@
 # Architecture rules
 
 - Image Studio generation is authenticated and server-only, with fail-closed database spend quotas and a service-only persistent gateway pause; keep generated results private in the current page and downloadable, not in a public gallery.
+- Generated image downloads convert the image data into a Blob URL and attach the download link to the document so large results download reliably without data-URL navigation.
 
 - Public newsletter signup must go through the `newsletter-subscribe` edge function so Brevo credentials, suppression checks, and consent records remain server-side.
 - Public legal notices share `LegalPageLayout` so navigation, readability, and compliance links stay consistent across Privacy, Terms, and POPIA pages.

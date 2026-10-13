@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, User, ExternalLink, Plus, Volume2, VolumeX, UserPlus, Undo2 } from "lucide-react";
+import { Send, User, ExternalLink, Plus, Volume2, VolumeX, UserPlus, Undo2, ImagePlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAccessibility } from "@/contexts/AccessibilityContext";
@@ -923,6 +923,9 @@ const ChatDemo = () => {
           </div>
 
           {/* Quick prompts */}
+          <Button asChild variant="outline" className="mb-3 min-h-11 gap-2">
+            <Link to="/image-studio"><ImagePlus className="h-4 w-4" />Create meme/image</Link>
+          </Button>
           <QuickPrompts onSelect={handleSendWithProtection} disabled={isLoading} />
 
           {/* Messages */}

@@ -1,9 +1,10 @@
 # Roadmap
 
 ## Image studio
+- [x] Add Create meme/image to chatbot options and repair generated-image downloads.
 - [x] Add signed-in cannabis image and meme creation with downloads.
 - [x] Protect image spending; verify model generation, signed-out protection, controls, and layouts.
-- [ ] Verify signed-in creation and download through the page — blocked until the user signs in to the preview (self-session mint found no matching account).
+- [x] Verify signed-in creation and download through the page — real meme downloaded with a valid PNG signature.
 
 - [x] Revise the Privacy Policy for current Cuddles AI services.
 - [x] Add Terms and Conditions and POPIA pages.
