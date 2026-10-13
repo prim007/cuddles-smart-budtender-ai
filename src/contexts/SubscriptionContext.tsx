@@ -44,18 +44,37 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
+    const invoke = (token: string) =>
+      supabase.functions.invoke("check-subscription", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    const is401 = (e: unknown) =>
+      (e as { context?: { status?: number } } | null)?.context?.status === 401;
+
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.functions.invoke("check-subscription", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      if (error) throw error;
+      let { data, error } = await invoke(accessToken);
+      if (error && is401(error)) {
+        // Cached token was expired or revoked — refresh once and retry.
+        const { data: refreshed } = await supabase.auth.refreshSession();
+        const fresh = refreshed.session?.access_token;
+        if (!fresh) {
+          // Session is no longer valid; sign out locally so the app doesn't keep failing.
+          await supabase.auth.signOut({ scope: "local" });
+          return;
+        }
+        ({ data, error } = await invoke(fresh));
+      }
+      if (error) {
+        if (is401(error)) return; // Not signed in validly; stay quiet.
+        throw error;
+      }
       setIsPremium(data?.subscribed ?? false);
       setPlan((data?.plan as Plan) ?? null);
       setSubscriptionEnd(data?.subscription_end ?? null);
     } catch (err) {
       // Transient failures should not silently downgrade a paying member.
-      console.error("Error checking subscription:", err);
+      console.warn("Subscription check unavailable:", err);
     } finally {
       setIsLoading(false);
     }
