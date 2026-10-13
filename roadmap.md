@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Image studio
+- [ ] Add Create meme/image to chatbot options and repair generated-image downloads.
 - [x] Add signed-in cannabis image and meme creation with downloads.
 - [x] Protect image spending; verify model generation, signed-out protection, controls, and layouts.
 - [ ] Verify signed-in creation and download through the page — blocked until the user signs in to the preview (self-session mint found no matching account).
