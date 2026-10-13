@@ -207,6 +207,49 @@ export const KNOWLEDGE_CORPUS: KnowledgeDoc[] = [
     content:
       "When a user's question is commercial ('where can I buy X', 'who has X in stock near me'), Cuddles switches from education to sourcing: it checks connected dispensary inventory first, then offers nearby licensed dispensary discovery. When a user asks for advice ('what helps me sleep'), Cuddles answers with the strain matching protocol and does not hijack the conversation into a location prompt.",
   },
+  // ── 2026-10 knowledge expansion ────────────────────────────────────────────
+  {
+    category: "dosing",
+    title: "Edibles: why they feel stronger and slower",
+    tags: ["edibles", "onset", "11-hydroxy-thc", "beginner"],
+    content:
+      "Summary: edibles take 30 minutes to 2 hours to start and can last 6–8 hours. Swallowed THC is turned by the liver into 11-hydroxy-THC, which many people feel more strongly. Beginners start with 2.5 mg THC and wait at least 2 hours before taking more. Most bad edible experiences come from re-dosing too early. General education, not medical advice.",
+  },
+  {
+    category: "safety",
+    title: "Too high: what to do right now",
+    tags: ["greening out", "too high", "panic", "safety"],
+    content:
+      "Summary: feeling too high is uncomfortable but passes. Move somewhere calm, sit or lie down, sip water, eat a small snack, and breathe slowly (in 4 seconds, out 6). Some people find sniffing black pepper (caryophyllene) calming — evidence is anecdotal. Get emergency help for chest pain, fainting, or if a child or pet has eaten cannabis. Not medical advice.",
+  },
+  {
+    category: "safety",
+    title: "Cannabis and alcohol or medication",
+    tags: ["alcohol", "medication", "interactions", "cyp450"],
+    content:
+      "Summary: mixing alcohol and cannabis raises dizziness and nausea risk ('the spins'). CBD and THC are processed by liver enzymes (CYP450) that also handle many medicines, including blood thinners, some antidepressants and seizure medicines. Anyone on regular medication should speak to a pharmacist or doctor first. General education, not medical advice.",
+  },
+  {
+    category: "dosing",
+    title: "Smoking vs vaping vs edibles at a glance",
+    tags: ["smoking", "vaping", "edibles", "onset", "comparison"],
+    content:
+      "Summary: smoking and vaping start within minutes and last 2–4 hours; edibles start in 30 minutes to 2 hours and last 6–8 hours; tinctures under the tongue start in 15–45 minutes. Dry-herb vaping avoids combustion smoke. Illicit THC vape cartridges carry contamination risk — buy tested products only.",
+  },
+  {
+    category: "cultivation",
+    title: "Common plant problems in plain terms",
+    tags: ["yellow leaves", "overwatering", "pests", "houseplants", "cultivation"],
+    content:
+      "Summary: most plant trouble is watering. Droopy, yellow leaves with wet soil usually mean too much water; crispy brown edges with dry soil mean too little. Check soil with a finger 2–3 cm deep before watering. Tiny webs under leaves suggest spider mites; sticky leaves suggest aphids or scale — wipe leaves and isolate the plant. Applies to houseplants, herbs, veg and cannabis alike.",
+  },
+  {
+    category: "terpene",
+    title: "Terpenes in everyday foods",
+    tags: ["terpenes", "myrcene", "limonene", "linalool", "pinene", "caryophyllene"],
+    content:
+      "Summary: terpenes are the smell molecules shared by plants. Myrcene — mango, hops (often linked to relaxing). Limonene — citrus peel (often linked to uplifted mood). Linalool — lavender (calm). Pinene — pine, rosemary (alert). Caryophyllene — black pepper, cloves (binds CB2 receptors). These links are emerging evidence, not guarantees.",
+  },
 ];
 
-export const CORPUS_VERSION = "2026-09-03-knowledge-refresh";
+export const CORPUS_VERSION = "2026-10-13-knowledge-expansion";
