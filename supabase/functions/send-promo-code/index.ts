@@ -54,7 +54,8 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { email } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const email = body?.email;
     if (!email || typeof email !== "string") {
       return new Response(JSON.stringify({ error: "Email is required" }), {
         status: 400,
@@ -79,58 +80,36 @@ serve(async (req) => {
       );
     }
 
-    // Require the email to exist in email_leads (lead must have signed up)
-    const { data: existing } = await supabase
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail) || normalizedEmail.length > 255) {
+      return new Response(JSON.stringify({ error: "Invalid email" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const ALLOWED_SOURCES = ["chat_widget", "inline_banner", "signup_promo_modal"];
+    const source = ALLOWED_SOURCES.includes(body?.source) ? body.source : "chat_widget";
+
+    // The lead row and its promo code are created together in this request.
+    // A caller can never attach a code to a lead someone else created: if the
+    // email already exists, the insert conflicts and nothing is written.
+    const promoCode = generatePromoCode();
+    const { data: created, error: insertError } = await supabase
       .from("email_leads")
-      .select("id, promo_code, email, created_at")
-      .eq("email", normalizedEmail)
+      .insert({ email: normalizedEmail, source, promo_code: promoCode })
+      .select("id")
       .maybeSingle();
 
-    // Only send once, right after a fresh signup. Existing leads (already sent
-    // a code) or older signups can't be re-targeted by anonymous callers.
-    const FRESH_WINDOW_MS = 15 * 60_000;
-    const isFresh =
-      existing?.created_at && Date.now() - new Date(existing.created_at).getTime() < FRESH_WINDOW_MS;
-    if (!existing || existing.promo_code || !isFresh) {
-      // Generic response to prevent email enumeration
+    if (insertError || !created) {
+      if (insertError && insertError.code !== "23505") {
+        console.error("Failed to create lead:", insertError.code);
+        throw new Error("Failed to create lead");
+      }
+      // Existing lead — generic response, no writes, no email.
       return new Response(
         JSON.stringify({ success: true, message: "If this email is registered, a code will be sent." }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
-    }
-
-
-
-    let promoCode = existing.promo_code;
-
-    if (!promoCode) {
-      // Generate unique code. The update is guarded by .is("promo_code", null)
-      // so an existing code can never be overwritten by another request, and
-      // the code is only ever delivered to the lead's own inbox — it is never
-      // returned in the API response.
-      promoCode = generatePromoCode();
-      const { data: updated, error: updateError } = await supabase
-        .from("email_leads")
-        .update({ promo_code: promoCode })
-        .eq("id", existing.id)
-        .is("promo_code", null)
-        .select("promo_code")
-        .maybeSingle();
-
-      if (updateError) {
-        console.error("Failed to save promo code:", updateError);
-        throw new Error("Failed to save promo code");
-      }
-      // Another request assigned a code concurrently — use the stored one.
-      if (!updated) {
-        const { data: refreshed } = await supabase
-          .from("email_leads")
-          .select("promo_code")
-          .eq("id", existing.id)
-          .maybeSingle();
-        promoCode = refreshed?.promo_code;
-        if (!promoCode) throw new Error("Failed to save promo code");
-      }
     }
 
     // Send email via the Lovable email service (verified sender domain)
