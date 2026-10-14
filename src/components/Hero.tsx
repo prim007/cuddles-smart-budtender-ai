@@ -286,9 +286,6 @@ const Hero = () => {
             <div className="absolute -right-2 top-1/3 hidden rounded-2xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-medium text-white shadow-xl backdrop-blur-md lg:block animate-fade-in-up" style={{ animationDelay: '200ms' }}>
               🏪 Find a shop near you
             </div>
-            <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 rounded-2xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-medium text-white shadow-xl backdrop-blur-md md:block animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-              🌿 All plants welcome
-            </div>
 
             <div ref={sceneRef} className="relative w-full max-w-[560px]">
               {showScene ? (
