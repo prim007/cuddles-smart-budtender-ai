@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     question: "How does Cuddles AI increase dispensary sales?",
-    answer: "Cuddles AI uses RAG (Retrieval-Augmented Generation) technology to deliver personalized, inventory-aware recommendations that increase basket size by 35%. It provides 24/7 automated customer engagement, reduces wait times by 50%, and captures after-hours web traffic that would otherwise bounce."
+    answer: "Cuddles AI uses RAG (Retrieval-Augmented Generation) technology to give shoppers personalised, inventory-aware recommendations drawn from your own catalogue, so answers always match what you actually have in stock. It keeps answering customers after hours instead of letting that traffic bounce, and logs what people ask for so you can spot the gaps in your range."
   },
   {
     question: "Is Cuddles AI available internationally?",

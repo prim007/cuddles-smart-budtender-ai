@@ -77,7 +77,7 @@ const faqSchema = {
       name: "Can I buy cannabis online in South Africa?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Cuddles AI helps you find premium cannabis products — vapes from R390, oils from R320, and curated strains — with same-day delivery in Johannesburg, Cape Town and Pretoria via our partner Tripple444.",
+        text: "Not in the way you'd buy other goods — buying and selling cannabis is still not legal in South Africa. What Cuddles AI can do is explain the current rules and point you to private clubs and licensed partners near you, including our partner Tripple444, whose catalogue you can browse and ask about directly.",
       },
     },
     {
@@ -91,10 +91,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "How fast is cannabis delivery in South Africa?",
+      name: "Can Cuddles AI find a dispensary near me?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Same-day delivery is available in Johannesburg, Cape Town and Pretoria for orders placed before cut-off. Other regions ship within 1–3 business days.",
+        text: "Yes. Tell Cuddles your city or town, or use the dispensary finder on this site, and it lists nearby clubs and shops with distances and directions so you can call ahead and ask what they have in stock.",
       },
     },
     {
@@ -107,10 +107,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "How much does a vape cost on Cuddles AI?",
+      name: "What do cannabis products cost in South Africa?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "All vapes are R390 and cannabis oils are R320 across the Tripple444 catalog, with same-day delivery in major South African cities.",
+        text: "Prices differ between shops, products and sizes, so Cuddles shows you what each partner has listed rather than one fixed price. Ask Cuddles for a product and it will tell you which partner lists it and how to contact them for the current price.",
       },
     },
   ],
@@ -121,7 +121,7 @@ const Index = () => {
     <div className="min-h-screen md:pt-20">
       <SEO
         title="Cuddles AI — Free AI Plant Expert & Cannabis Budtender"
-        description="Free AI plant companion and cannabis budtender. Plant care and grow help, personalized strain picks in seconds, photo scanning, journal and reviews. Used worldwide."
+        description="Free AI plant companion and cannabis budtender. Plant care and grow help, personalized strain picks in seconds, photo scanning, journal and reviews. Built in South Africa."
         url="/"
         keywords="AI plant expert, plant care AI, AI budtender, cannabis AI, strain recommendations, houseplant help, grow assistant, weed strain finder, indica vs sativa, terpene guide, strain scanner, cannabis journal, Cuddles AI, dispensary AI"
 
