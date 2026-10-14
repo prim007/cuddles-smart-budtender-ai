@@ -35,34 +35,16 @@ const EmailCapture = ({ variant = "inline", onClose }: EmailCaptureProps) => {
 
     setIsLoading(true);
     try {
-      const { error } = await supabase.from("email_leads").insert({
-        email: email.trim().toLowerCase(),
-        source: "chat_widget",
+      const { error } = await supabase.functions.invoke("send-promo-code", {
+        body: { email: email.trim().toLowerCase(), source: "chat_widget" },
       });
-
-      if (error) {
-        if (error.code === "23505") {
-          toast({
-            title: "Already subscribed",
-            description: "Check your inbox for your promo code!",
-          });
-          setIsSubmitted(true);
-        } else {
-          throw error;
-        }
-      } else {
-        setIsSubmitted(true);
-        trackLeadCaptured("email_capture_chat", email.trim().toLowerCase());
-        toast({
-          title: "Welcome to the tribe! ✌️",
-          description: "Check your inbox for your 15% discount code!",
-        });
-      }
-
-      // Send promo code email
-      supabase.functions.invoke("send-promo-code", {
-        body: { email: email.trim().toLowerCase() },
-      }).catch((err) => console.error("Failed to send promo email:", err));
+      if (error) throw error;
+      setIsSubmitted(true);
+      trackLeadCaptured("email_capture_chat", email.trim().toLowerCase());
+      toast({
+        title: "Welcome to the tribe! ✌️",
+        description: "Check your inbox for your 15% discount code!",
+      });
     } catch (error) {
       console.error("Error submitting email:", error);
       toast({

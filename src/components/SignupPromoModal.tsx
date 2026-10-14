@@ -97,23 +97,12 @@ const SignupPromoModal = () => {
 
     setIsLoading(true);
     try {
-      const { error } = await supabase.from("email_leads").insert({
-        email: email.trim().toLowerCase(),
-        source: "signup_promo_modal",
+      const { error } = await supabase.functions.invoke("send-promo-code", {
+        body: { email: email.trim().toLowerCase(), source: "signup_promo_modal" },
       });
-
-      if (error && error.code === "23505") {
-        toast({ title: "Already signed up!", description: "You're already on the list! Check your inbox for your code." });
-      } else if (error) {
-        throw error;
-      } else {
-        toast({ title: "You're in! 🎉", description: "Check your inbox for your 15% discount code!" });
-        trackSignupComplete("promo_modal");
-      }
-
-      supabase.functions.invoke("send-promo-code", {
-        body: { email: email.trim().toLowerCase() },
-      }).catch((err) => console.error("Failed to send promo email:", err));
+      if (error) throw error;
+      toast({ title: "You're in! 🎉", description: "Check your inbox for your 15% discount code!" });
+      trackSignupComplete("promo_modal");
 
       setSubmitted(true);
     } catch {
