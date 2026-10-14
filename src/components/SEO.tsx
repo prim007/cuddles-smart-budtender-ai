@@ -18,7 +18,7 @@ const DEFAULT_IMAGE = "https://cuddles-ai.com/og-image.jpg";
 
 const SEO = ({
   title = "Cuddles AI — Smart AI Cannabis Budtender",
-  description = "Cuddles AI is the world's smartest cannabis budtender. Personalized strain recommendations, journal, scanner, and reviews — free worldwide.",
+  description = "Cuddles AI is a free AI plant expert and cannabis budtender: strain recommendations, journal, scanner and reviews, built in South Africa.",
   image = DEFAULT_IMAGE,
   url = "/",
   type = "website",

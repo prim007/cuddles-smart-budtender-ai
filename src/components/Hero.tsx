@@ -38,7 +38,6 @@ const HERO_PROMPTS = [
 ];
 
 const Hero = () => {
-  const [liveCount, setLiveCount] = useState(12);
   const [heroInput, setHeroInput] = useState("");
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -93,13 +92,6 @@ const Hero = () => {
       });
     }
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveCount((prev) => Math.max(5, prev + Math.floor(Math.random() * 5) - 2));
-    }, 8000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -170,11 +162,10 @@ const Hero = () => {
           <div className="text-center lg:text-left">
             <div className="mb-5 inline-flex animate-fade-in items-center gap-2 rounded-full border border-green-500/30 bg-green-500/15 px-3 py-1.5">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
               </span>
               <span className="text-xs font-medium text-green-300">
-                {liveCount} people chatting right now
+                Free to chat · No signup needed
               </span>
             </div>
 
@@ -189,7 +180,7 @@ const Hero = () => {
             </h1>
 
             <p className="mx-auto mt-5 max-w-lg text-base text-white/70 md:text-lg lg:mx-0">
-              A plant expert first, cannabis specialist second — honest answers on strains, herbs, houseplants and grows, plus same-day delivery across South Africa, all in one chat.
+              A plant expert first, cannabis specialist second — honest answers on strains, herbs, houseplants and grows, plus help finding dispensaries near you, all in one chat.
             </p>
 
 
@@ -269,14 +260,14 @@ const Hero = () => {
               </a>
             </div>
 
-            <p className="mt-4 text-xs text-white/80">No signup required · Free forever · 2,500+ happy users</p>
+            <p className="mt-4 text-xs text-white/80">No signup required · Free forever</p>
 
 
             <div className="mx-auto mt-6 grid max-w-md grid-cols-3 gap-3 lg:mx-0">
               {[
-                { value: '95%', label: 'Match accuracy' },
-                { value: '<2s', label: 'Response time' },
-                { value: '4.9★', label: 'User rating' },
+                { value: 'Free', label: 'No card needed' },
+                { value: '24/7', label: 'Ask any time' },
+                { value: 'ZA', label: 'Built in South Africa' },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-xl border border-white/10 bg-white/5 p-3">
                   <div className="font-display text-xl font-bold text-white">{stat.value}</div>
@@ -290,13 +281,10 @@ const Hero = () => {
           <div className="relative flex justify-center lg:justify-end">
             {/* Floating sparkles around phone */}
             <div className="absolute left-4 top-10 hidden rounded-2xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-medium text-white shadow-xl backdrop-blur-md md:block animate-fade-in-up">
-              ✨ 95% match
+              ✨ Plain-language answers
             </div>
             <div className="absolute -right-2 top-1/3 hidden rounded-2xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-medium text-white shadow-xl backdrop-blur-md lg:block animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-              🌿 Same-day delivery
-            </div>
-            <div className="absolute bottom-16 left-0 hidden rounded-2xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-medium text-white shadow-xl backdrop-blur-md md:block animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-              💬 24/7 budtender
+              🏪 Find a shop near you
             </div>
 
             <div ref={sceneRef} className="relative w-full max-w-[560px]">

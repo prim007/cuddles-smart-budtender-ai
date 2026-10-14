@@ -13,3 +13,14 @@
 ## Phone alerts
 - [x] Web push alerts without Firebase (T-break milestones, "You made it!", daily check-in, smoke-break reminders).
 - [ ] BOOKMARK: Firebase Cloud Messaging for future Play Store / App Store apps — blocked on the Firebase service-account JSON key (Google org policy). Connect via Firebase connector with "Include web push".
+
+## Marketing (plan: /mnt/documents/marketing/plan.md, 2026-10-14)
+- [x] Home page trust claims: removed same-day delivery promise, "2,500+ happy users", "4.9★", "95% match accuracy", fake "N people chatting right now" counter, "Used worldwide"/"world's smartest", and the invented 35%/50% dispensary stats. Verified live at 5 widths.
+- [ ] Same claims still on other pages: Shop ("Order now, delivered today"), What is Cuddles (2 mentions), city pages (Durban/Bloemfontein blurbs + "same-day delivery" FAQ), Checkout metadata, Tripple444 menu note.
+- [ ] Branded SEO wording — title/copy should say "Cuddles AI cannabis budtender South Africa" (name searches currently return a Korean toy).
+- [ ] Free directory listings: THC Directory (Consultants category) and Toke.
+- [ ] Share law posts + international map in 420SA forum, r/WeedSouthAfrica, SA grower Facebook groups — education only, no selling.
+- [ ] Pitch Rolling Stoner and Cannabiz Africa (free SA AI budtender + 750 g rules explainer).
+- [ ] Localise the B2B page before approaching dispensaries: SA till systems, rand price, fix /pricing 404.
+- [ ] Ask Budbase to link back / share their guest post.
+- [ ] Tripple444 menu still shows sample prices — needs the real menu.
