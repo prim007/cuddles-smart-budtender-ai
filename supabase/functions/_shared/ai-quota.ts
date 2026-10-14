@@ -36,8 +36,8 @@ export interface QuotaRule {
 
 /**
  * Consumes one unit from every rule. Returns the first rule that is exhausted,
- * or null when the request is allowed. On database errors the request is
- * allowed (in-memory limits still apply) so the free chat never goes dark.
+ * or null when the request is allowed. Fails closed: if the quota cannot be
+ * checked, the request is refused so paid AI can never be spent unmetered.
  */
 export async function consumeQuotas(rules: QuotaRule[]): Promise<QuotaRule | null> {
   for (const rule of rules) {
@@ -49,11 +49,12 @@ export async function consumeQuotas(rules: QuotaRule[]): Promise<QuotaRule | nul
       });
       if (error) {
         console.error("AI quota check failed:", error.message);
-        continue;
+        return rule;
       }
       if (data === false) return rule;
     } catch (err) {
       console.error("AI quota check failed:", err instanceof Error ? err.message : err);
+      return rule;
     }
   }
   return null;
