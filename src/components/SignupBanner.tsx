@@ -26,23 +26,12 @@ const SignupBanner = () => {
 
     setIsLoading(true);
     try {
-      const { error } = await supabase.from("email_leads").insert({
-        email: email.trim().toLowerCase(),
-        source: "inline_banner",
+      const { error } = await supabase.functions.invoke("send-promo-code", {
+        body: { email: email.trim().toLowerCase(), source: "inline_banner" },
       });
-
-      if (error && error.code === "23505") {
-        toast({ title: "Already signed up!", description: "Check your inbox for your promo code!" });
-      } else if (error) {
-        throw error;
-      } else {
-        toast({ title: "You're in! 🎉", description: "Check your inbox for your 15% discount code!" });
-        trackSignupComplete("inline_banner");
-      }
-
-      supabase.functions.invoke("send-promo-code", {
-        body: { email: email.trim().toLowerCase() },
-      }).catch((err) => console.error("Failed to send promo email:", err));
+      if (error) throw error;
+      toast({ title: "You're in! 🎉", description: "Check your inbox for your 15% discount code!" });
+      trackSignupComplete("inline_banner");
 
       setSubmitted(true);
     } catch {
