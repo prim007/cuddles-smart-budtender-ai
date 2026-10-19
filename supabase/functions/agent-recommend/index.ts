@@ -4,6 +4,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { buildClaudeRequest, parseClaudeMessage } from "../_shared/claude.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,8 +14,8 @@ const corsHeaders = {
 const MAX_STEPS = 10;
 const BUDGET_MS = 60_000;
 // Tiered routing: fast model for tool-calling loop, pro model for planning + final synthesis
-const MODEL_FAST = "google/gemini-3-flash-preview";
-const MODEL_PRO = "google/gemini-3.1-pro-preview";
+const MODEL_FAST = "anthropic/claude-haiku-4-5";
+const MODEL_PRO = "anthropic/claude-sonnet-5";
 // Heuristic: route to PRO when query suggests deeper reasoning
 function pickModel(userMessage: string, phase: "plan" | "tool" | "final"): string {
   if (phase === "plan") return MODEL_PRO;
@@ -245,21 +246,23 @@ serve(async (req) => {
     let plan: string | null = null;
     try {
       const tPlan = Date.now();
-      const planResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const planReq = buildClaudeRequest(LOVABLE_API_KEY, {
+        model: pickModel(user_message, "plan"),
+        maxTokens: 512,
+        messages: [
+          { role: "system", content: "You are a planning module for a cannabis recommendation agent. In 3-5 short bullets, outline: (1) the user's likely intent + effect category, (2) which tools to call and in what order, (3) what to look for in the user's memory, (4) how to frame the final answer. Be concise. No prose, just bullets." },
+          { role: "user", content: user_message },
+        ],
+      });
+      const planResp = await fetch(planReq.url, {
         method: "POST",
-        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: pickModel(user_message, "plan"),
-          messages: [
-            { role: "system", content: "You are a planning module for a cannabis recommendation agent. In 3-5 short bullets, outline: (1) the user's likely intent + effect category, (2) which tools to call and in what order, (3) what to look for in the user's memory, (4) how to frame the final answer. Be concise. No prose, just bullets." },
-            { role: "user", content: user_message },
-          ],
-        }),
+        headers: planReq.headers,
+        body: JSON.stringify(planReq.body),
       });
       if (planResp.ok) {
         const pdata = await planResp.json();
-        plan = pdata.choices?.[0]?.message?.content ?? null;
-        await trace({ step_index: -2, tool_called: "plan", payload: { plan }, tokens_out: pdata.usage?.completion_tokens, latency_ms: Date.now() - tPlan });
+        plan = parseClaudeMessage(pdata).text || null;
+        await trace({ step_index: -2, tool_called: "plan", payload: { plan }, tokens_out: pdata.usage?.output_tokens, latency_ms: Date.now() - tPlan });
       }
     } catch (e) {
       console.error("plan step failed", e);
@@ -287,13 +290,17 @@ serve(async (req) => {
       const stepModel = isLikelyFinal ? pickModel(user_message, "final") : MODEL_FAST;
 
       const t0 = Date.now();
-      const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const stepReq = buildClaudeRequest(LOVABLE_API_KEY, {
+        model: stepModel,
+        messages,
+        tools: TOOLS,
+        toolChoice: "auto",
+        maxTokens: 4096,
+      });
+      const resp = await fetch(stepReq.url, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ model: stepModel, messages, tools: TOOLS, tool_choice: "auto" }),
+        headers: stepReq.headers,
+        body: JSON.stringify(stepReq.body),
       });
 
       if (!resp.ok) {
@@ -305,8 +312,9 @@ serve(async (req) => {
       }
 
       const data = await resp.json();
-      const choice = data.choices?.[0];
-      const msg = choice?.message;
+      const parsedStep = parseClaudeMessage(data);
+      const msg = { role: "assistant", content: parsedStep.text, tool_calls: parsedStep.toolCalls };
+
 
       await trace({
         step_index: step,
