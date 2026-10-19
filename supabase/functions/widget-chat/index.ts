@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { consumeQuotas, hashKey, DAY_SECONDS, HOUR_SECONDS } from "../_shared/ai-quota.ts";
+import { buildClaudeRequest, anthropicSseToOpenAiStream } from "../_shared/claude.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -285,20 +286,18 @@ serve(async (req) => {
       });
     }
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const claudeReq = buildClaudeRequest(LOVABLE_API_KEY, {
+      model: 'anthropic/claude-haiku-4-5',
+      system: systemPrompt,
+      messages: serverOwnedTurns(messages as { role: string; content: string }[]),
+      maxTokens: 2048,
+      stream: true,
+      cacheSystem: true,
+    });
+    const response = await fetch(claudeReq.url, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-3-flash-preview',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...serverOwnedTurns(messages as { role: string; content: string }[]),
-        ],
-        stream: true,
-      }),
+      headers: claudeReq.headers,
+      body: JSON.stringify(claudeReq.body),
     });
 
     if (!response.ok) {
@@ -318,7 +317,8 @@ serve(async (req) => {
       });
     }
 
-    return new Response(response.body, {
+    // Claude SSE → OpenAI chunk format the widget script already parses.
+    return new Response(anthropicSseToOpenAiStream(response.body as ReadableStream<Uint8Array>), {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/event-stream',

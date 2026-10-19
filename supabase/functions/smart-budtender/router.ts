@@ -1,6 +1,8 @@
 // Triage router: a cheap classifier picks a specialist instead of firing one
 // mega-prompt at every turn. Each specialist gets only the knowledge sections
 // and tools it actually needs — cheaper and more accurate.
+import { buildClaudeRequest, parseClaudeMessage } from "../_shared/claude.ts";
+
 
 export type SpecialistRole =
   | "budtender"
@@ -115,7 +117,7 @@ export function ruleRoute(message: string): SpecialistRole | null {
 }
 
 
-const TRIAGE_MODEL = "google/gemini-2.5-flash-lite";
+const TRIAGE_MODEL = "anthropic/claude-haiku-4-5";
 
 /**
  * Classify the turn. Tries cheap regex rules first, then a tiny triage call.
@@ -130,25 +132,26 @@ export async function routeTurn(
   if (ruled) return { specialist: SPECIALISTS[ruled], via: "rules" };
 
   try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const req = buildClaudeRequest(apiKey, {
+      model: TRIAGE_MODEL,
+      maxTokens: 8,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Classify the user's message into exactly one label and reply with the label only, nothing else. Labels: budtender (strain/product matching, effects, dosing for a person), inventory (stock, prices, menus, buying, delivery, dispensary locations), educator (science, law, history, general explanations), grow_coach (growing or caring for any plant), smalltalk (greetings, thanks, chit-chat).",
+        },
+        { role: "user", content: trimmed.slice(0, 500) },
+      ],
+    });
+    const res = await fetch(req.url, {
       method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: TRIAGE_MODEL,
-        max_tokens: 8,
-        messages: [
-          {
-            role: "system",
-            content:
-              "Classify the user's message into exactly one label and reply with the label only, nothing else. Labels: budtender (strain/product matching, effects, dosing for a person), inventory (stock, prices, menus, buying, delivery, dispensary locations), educator (science, law, history, general explanations), grow_coach (growing or caring for any plant), smalltalk (greetings, thanks, chit-chat).",
-          },
-          { role: "user", content: trimmed.slice(0, 500) },
-        ],
-      }),
+      headers: req.headers,
+      body: JSON.stringify(req.body),
     });
     if (res.ok) {
       const json = await res.json();
-      const label = String(json?.choices?.[0]?.message?.content ?? "")
+      const label = String(parseClaudeMessage(json).text ?? "")
         .toLowerCase()
         .replace(/[^a-z_]/g, "");
       if (label in SPECIALISTS) {
