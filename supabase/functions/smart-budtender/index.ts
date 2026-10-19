@@ -967,24 +967,20 @@ Never mention tools, functions or lookups to the user — just answer naturally 
     }
 
 
-    const callGateway = (model: string) => fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...conversation,
-        ],
-        stream: true,
-      }),
+    const claudeFinal = buildClaudeRequest(LOVABLE_API_KEY, {
+      model: primaryModel,
+      system: systemPrompt,
+      messages: conversation,
+      maxTokens: 4096,
+      stream: true,
+      cacheSystem: true,
     });
 
-
-    const response = await callGateway(primaryModel);
+    const response = await fetch(claudeFinal.url, {
+      method: 'POST',
+      headers: claudeFinal.headers,
+      body: JSON.stringify(claudeFinal.body),
+    });
 
 
     if (!response.ok) {
@@ -1004,8 +1000,8 @@ Never mention tools, functions or lookups to the user — just answer naturally 
         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    // Stream the response back to the client
-    return new Response(response.body, {
+    // Stream the response back to the client (Claude SSE → OpenAI chunk format)
+    return new Response(anthropicSseToOpenAiStream(response.body as ReadableStream<Uint8Array>), {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/event-stream',
