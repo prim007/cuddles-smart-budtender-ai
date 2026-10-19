@@ -11,6 +11,7 @@ import { retrieveKnowledge, buildRetrievalContext } from "../_shared/rag.ts";
 import { ANSWER_QUALITY_DIRECTIVES, composeSystemPrompt, promptTraceHeaders } from "../_shared/prompt-registry.ts";
 import { toolsFor, runTool, createToolClient, APPROVAL_REQUIRED } from "./tools.ts";
 import { routeTurn } from "./router.ts";
+import { buildClaudeRequest, parseClaudeMessage, anthropicSseToOpenAiStream } from "../_shared/claude.ts";
 import { consumeQuotas, hashKey, DAY_SECONDS, HOUR_SECONDS, type QuotaRule } from "../_shared/ai-quota.ts";
 
 
@@ -246,29 +247,35 @@ const ORCHESTRATOR_PATTERNS = [
   /\b(track|log|record|save this)\b/i,
 ];
 
+// Anthropic Claude tiers (via the Lovable AI Gateway /v1/messages endpoint).
+// lite → quick greetings, main → everyday brain, pro → deep reasoning.
+const CLAUDE_LITE = 'anthropic/claude-haiku-4-5';
+const CLAUDE_MAIN = 'anthropic/claude-sonnet-5';
+const CLAUDE_PRO = 'anthropic/claude-opus-5-5';
+
 function selectModel(messages: { role: string; content: string }[], hasUserHistory: boolean): string {
   const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
-  if (!lastUserMsg) return 'google/gemini-3-flash-preview';
+  if (!lastUserMsg) return CLAUDE_MAIN;
 
   const content = lastUserMsg.content.trim();
 
   // Short greetings / acks → cheap lite model
   if (content.length < 40 && SIMPLE_PATTERNS.some(p => p.test(content))) {
-    return 'google/gemini-2.5-flash-lite';
+    return CLAUDE_LITE;
   }
 
   // Complex scientific/medical queries → pro for deep reasoning
   if (content.length > 40 && COMPLEX_PATTERNS.some(p => p.test(content))) {
-    return 'google/gemini-2.5-pro';
+    return CLAUDE_PRO;
   }
 
   // Orchestrator queries with user history → pro for multi-tool reasoning
   if (hasUserHistory && ORCHESTRATOR_PATTERNS.some(p => p.test(content))) {
-    return 'google/gemini-2.5-pro';
+    return CLAUDE_PRO;
   }
 
-  // Everything else (educational / general chat) → flash, the real brain
-  return 'google/gemini-3-flash-preview';
+  // Everything else (educational / general chat) → main, the real brain
+  return CLAUDE_MAIN;
 }
 
 // ═══════════════════════════════════════
@@ -919,26 +926,30 @@ Never mention tools, functions or lookups to the user — just answer naturally 
         agentRole: specialist.role,
       };
       for (let step = 0; step < specialist.maxSteps; step++) {
-        const planRes = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        const claudePlan = buildClaudeRequest(LOVABLE_API_KEY, {
+          model: primaryModel,
+          system: systemPrompt,
+          messages: conversation,
+          tools: specialistTools,
+          toolChoice: 'auto',
+          maxTokens: 2048,
+          cacheSystem: true,
+        });
+        const planRes = await fetch(claudePlan.url, {
           method: 'POST',
-          headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: primaryModel,
-            messages: [{ role: 'system', content: systemPrompt }, ...conversation],
-            tools: specialistTools,
-            tool_choice: 'auto',
-          }),
+          headers: claudePlan.headers,
+          body: JSON.stringify(claudePlan.body),
         });
         if (!planRes.ok) {
           console.warn('Tool planning step failed:', planRes.status);
           break;
         }
         const planJson = await planRes.json();
-        const msg = planJson?.choices?.[0]?.message;
-        const calls = msg?.tool_calls;
+        const parsedPlan = parseClaudeMessage(planJson);
+        const calls = parsedPlan.toolCalls;
         if (!Array.isArray(calls) || calls.length === 0) break;
 
-        conversation.push({ role: 'assistant', content: msg.content ?? '', tool_calls: calls });
+        conversation.push({ role: 'assistant', content: parsedPlan.text, tool_calls: calls });
         for (const call of calls.slice(0, 4)) {
           const name = call?.function?.name ?? '';
           toolsUsed.push(name);
@@ -956,24 +967,20 @@ Never mention tools, functions or lookups to the user — just answer naturally 
     }
 
 
-    const callGateway = (model: string) => fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...conversation,
-        ],
-        stream: true,
-      }),
+    const claudeFinal = buildClaudeRequest(LOVABLE_API_KEY, {
+      model: primaryModel,
+      system: systemPrompt,
+      messages: conversation,
+      maxTokens: 4096,
+      stream: true,
+      cacheSystem: true,
     });
 
-
-    const response = await callGateway(primaryModel);
+    const response = await fetch(claudeFinal.url, {
+      method: 'POST',
+      headers: claudeFinal.headers,
+      body: JSON.stringify(claudeFinal.body),
+    });
 
 
     if (!response.ok) {
@@ -993,8 +1000,8 @@ Never mention tools, functions or lookups to the user — just answer naturally 
         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    // Stream the response back to the client
-    return new Response(response.body, {
+    // Stream the response back to the client (Claude SSE → OpenAI chunk format)
+    return new Response(anthropicSseToOpenAiStream(response.body as ReadableStream<Uint8Array>), {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/event-stream',
