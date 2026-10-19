@@ -144,9 +144,12 @@ export function buildClaudeRequest(
   return { url: MESSAGES_URL, headers: claudeHeaders(apiKey), body };
 }
 
+export type ParsedClaudeToolCall = { id: string; function: { name: string; arguments: string } };
+
 export type ParsedClaudeMessage = {
   text: string;
-  toolCalls: { id: string; name: string; arguments: string }[];
+  /** OpenAI-shaped tool calls so downstream tool loops need no changes. */
+  toolCalls: ParsedClaudeToolCall[];
   stopReason: string | null;
 };
 
@@ -154,14 +157,16 @@ export type ParsedClaudeMessage = {
 export function parseClaudeMessage(data: unknown): ParsedClaudeMessage {
   const d = data as { content?: Array<Record<string, unknown>>; stop_reason?: string } | null;
   const text: string[] = [];
-  const toolCalls: ParsedClaudeMessage["toolCalls"] = [];
+  const toolCalls: ParsedClaudeToolCall[] = [];
   for (const block of d?.content ?? []) {
     if (block?.type === "text" && typeof block.text === "string") text.push(block.text);
     else if (block?.type === "tool_use") {
       toolCalls.push({
         id: String(block.id ?? ""),
-        name: String(block.name ?? ""),
-        arguments: JSON.stringify(block.input ?? {}),
+        function: {
+          name: String(block.name ?? ""),
+          arguments: JSON.stringify(block.input ?? {}),
+        },
       });
     }
   }
