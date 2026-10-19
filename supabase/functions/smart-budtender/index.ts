@@ -246,29 +246,35 @@ const ORCHESTRATOR_PATTERNS = [
   /\b(track|log|record|save this)\b/i,
 ];
 
+// Anthropic Claude tiers (via the Lovable AI Gateway /v1/messages endpoint).
+// lite → quick greetings, main → everyday brain, pro → deep reasoning.
+const CLAUDE_LITE = 'anthropic/claude-haiku-4-5';
+const CLAUDE_MAIN = 'anthropic/claude-sonnet-5';
+const CLAUDE_PRO = 'anthropic/claude-opus-5-5';
+
 function selectModel(messages: { role: string; content: string }[], hasUserHistory: boolean): string {
   const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
-  if (!lastUserMsg) return 'google/gemini-3-flash-preview';
+  if (!lastUserMsg) return CLAUDE_MAIN;
 
   const content = lastUserMsg.content.trim();
 
   // Short greetings / acks → cheap lite model
   if (content.length < 40 && SIMPLE_PATTERNS.some(p => p.test(content))) {
-    return 'google/gemini-2.5-flash-lite';
+    return CLAUDE_LITE;
   }
 
   // Complex scientific/medical queries → pro for deep reasoning
   if (content.length > 40 && COMPLEX_PATTERNS.some(p => p.test(content))) {
-    return 'google/gemini-2.5-pro';
+    return CLAUDE_PRO;
   }
 
   // Orchestrator queries with user history → pro for multi-tool reasoning
   if (hasUserHistory && ORCHESTRATOR_PATTERNS.some(p => p.test(content))) {
-    return 'google/gemini-2.5-pro';
+    return CLAUDE_PRO;
   }
 
-  // Everything else (educational / general chat) → flash, the real brain
-  return 'google/gemini-3-flash-preview';
+  // Everything else (educational / general chat) → main, the real brain
+  return CLAUDE_MAIN;
 }
 
 // ═══════════════════════════════════════
