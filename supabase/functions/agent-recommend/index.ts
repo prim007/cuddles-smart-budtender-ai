@@ -319,8 +319,8 @@ serve(async (req) => {
       await trace({
         step_index: step,
         payload: { tool_calls: msg?.tool_calls?.map((tc: any) => tc.function?.name) ?? [] },
-        tokens_in: data.usage?.prompt_tokens,
-        tokens_out: data.usage?.completion_tokens,
+        tokens_in: data.usage?.input_tokens,
+        tokens_out: data.usage?.output_tokens,
         latency_ms: Date.now() - t0,
       });
 
@@ -439,18 +439,20 @@ Keep the friendly tone. 2-3 strain picks max.`;
           { role: "user", content: revisionInstructions },
         ];
 
-        const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        const revisionReq = buildClaudeRequest(LOVABLE_API_KEY, {
+          model: pickModel(user_message, "final"),
+          messages: revisionMessages,
+          maxTokens: 4096,
+        });
+        const resp = await fetch(revisionReq.url, {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ model: pickModel(user_message, "final"), messages: revisionMessages }),
+          headers: revisionReq.headers,
+          body: JSON.stringify(revisionReq.body),
         });
 
         if (resp.ok) {
           const rdata = await resp.json();
-          const revisedText = rdata.choices?.[0]?.message?.content;
+          const revisedText = parseClaudeMessage(rdata).text;
           if (revisedText) {
             finalAnswer = revisedText;
             revised = true;
