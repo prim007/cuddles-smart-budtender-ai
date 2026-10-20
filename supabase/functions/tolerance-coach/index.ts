@@ -207,19 +207,18 @@ Use emojis sparingly to add warmth. Never be preachy or judgmental.`;
         userMessage = `I'm on day ${dayNumber} of a ${targetDays}-day tolerance break. Give me some general encouragement.`;
     }
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const claudeReq = buildClaudeRequest(LOVABLE_API_KEY, {
+      model: "anthropic/claude-haiku-4-5",
+      maxTokens: 1500,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage }
+      ],
+    });
+    const response = await fetch(claudeReq.url, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userMessage }
-        ],
-      }),
+      headers: claudeReq.headers,
+      body: JSON.stringify(claudeReq.body),
     });
 
     if (!response.ok) {
@@ -239,7 +238,7 @@ Use emojis sparingly to add warmth. Never be preachy or judgmental.`;
     }
 
     const data = await response.json();
-    const message = data.choices?.[0]?.message?.content || "Keep going! You're doing great! 💪";
+    const message = parseClaudeMessage(data).text || "Keep going! You're doing great! 💪";
 
     console.log("Tolerance coach response generated for action:", action);
 
