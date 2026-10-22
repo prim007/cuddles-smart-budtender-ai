@@ -29,6 +29,13 @@
       "when": 1791899271369,
       "tag": "0003_image_studio_access_state",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792656133358,
+      "tag": "0004_derive_order_subtotal_from_items",
+      "breakpoints": true
     }
   ]
 }
