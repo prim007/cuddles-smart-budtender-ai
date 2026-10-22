@@ -992,7 +992,10 @@ Never mention tools, functions or lookups to the user — just answer naturally 
       } catch {
         gatewayMessage = errorText;
       }
-      const message = gatewayMessage || 'The AI service could not complete this request. Please try again later.';
+      // Never forward raw gateway text (e.g. billing/credit errors) to visitors.
+      const message = response.status === 402
+        ? 'Cuddles is being upgraded right now. Please try again soon.'
+        : 'The AI service could not complete this request. Please try again later.';
       console.error('AI gateway error:', { status: response.status, error: errorText, timestamp: new Date().toISOString() });
 
       // Preserve the gateway status and message so unavailable AI is never presented as a successful answer.
