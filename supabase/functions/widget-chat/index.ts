@@ -186,9 +186,20 @@ serve(async (req) => {
     }
 
 
-    // Trial tenants keep the widget running; paid-AI spend for them is bounded
-    // by the lower daily ceiling below (300/day) rather than a hard cutoff,
-    // since 'trial' is also the default status for existing partners.
+    // Trials for shops signed up from TRIAL_CUTOFF_START onward end after 14 days.
+    // Earlier partners are grandfathered and stay bounded by the 300/day trial ceiling.
+    const TRIAL_CUTOFF_START = Date.parse('2026-10-22T00:00:00Z');
+    const TRIAL_DAYS = 14;
+    const createdAt = Date.parse(tenant.created_at);
+    if (
+      tenant.status === 'trial' &&
+      createdAt >= TRIAL_CUTOFF_START &&
+      Date.now() - createdAt > TRIAL_DAYS * DAY_SECONDS * 1000
+    ) {
+      return new Response(JSON.stringify({ error: 'Free trial ended. Please subscribe to keep using the Cuddles chat.' }), {
+        status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     // --- Tier mapping ---
     // 'standard' is the PAID B2B plan (and the forced default for self-signup tenants),
