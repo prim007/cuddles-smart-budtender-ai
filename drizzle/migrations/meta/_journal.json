@@ -36,6 +36,13 @@
       "when": 1792656133358,
       "tag": "0004_derive_order_subtotal_from_items",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792656243865,
+      "tag": "0005_email_leads_server_only_insert",
+      "breakpoints": true
     }
   ]
 }
