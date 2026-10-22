@@ -9,6 +9,27 @@ const corsHeaders = {
   'Access-Control-Expose-Headers': 'X-Cuddles-Widget-Tier, X-Cuddles-Widget-Plan, X-Cuddles-Widget-Limit',
 };
 
+const CUDDLES_HOSTS = ['cuddles-ai.com', 'cuddles-ai.lovable.app'];
+
+function hostOf(value: string | null | undefined): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(/^https?:\/\//i.test(value.trim()) ? value.trim() : `https://${value.trim()}`);
+    return url.hostname.toLowerCase().replace(/^www\./, '');
+  } catch {
+    return null;
+  }
+}
+
+function isAllowedOrigin(origin: string | null, website: string | null): boolean {
+  const host = hostOf(origin);
+  if (!host) return false;
+  if (CUDDLES_HOSTS.includes(host) || host.endsWith('.cuddles-ai.com')) return true;
+  if (host === 'id-preview--16082a8c-a109-49a8-a05d-987a18f90c7d.lovable.app') return true;
+  const shopHost = hostOf(website);
+  return !!shopHost && (host === shopHost || host.endsWith(`.${shopHost}`));
+}
+
 // --- Input validation ---
 function validateMessages(messages: unknown): { valid: boolean; error?: string } {
   if (!Array.isArray(messages)) return { valid: false, error: 'Messages must be an array' };
@@ -141,9 +162,9 @@ serve(async (req) => {
 
     const { data: tenant, error: tenantErr } = await supabase
       .from('tenants')
-      .select('id, business_name, phone, branding_color, status, plan, created_at')
+      .select('id, business_name, phone, branding_color, status, plan, created_at, website')
       .eq('embed_key', embedKey)
-      .single();
+      .maybeSingle();
 
     if (tenantErr || !tenant) {
       return new Response(JSON.stringify({ error: 'Invalid embed key' }), {
@@ -156,6 +177,14 @@ serve(async (req) => {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    // Only answer on the shop's own registered website (plus Cuddles' own domains).
+    if (!isAllowedOrigin(req.headers.get('origin'), tenant.website)) {
+      return new Response(JSON.stringify({ error: 'This chat box only works on the shop’s own website' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
 
     // Trial tenants keep the widget running; paid-AI spend for them is bounded
     // by the lower daily ceiling below (300/day) rather than a hard cutoff,
