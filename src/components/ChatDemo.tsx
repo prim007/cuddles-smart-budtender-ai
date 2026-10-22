@@ -766,9 +766,9 @@ const ChatDemo = () => {
           title: "Cuddles is under re-engineering 🛠️",
           description: "We're upgrading Cuddles right now — she'll be back soon. Please try again in a little while.",
         });
+        alert("Cuddles could not complete that request. Please try again.");
       }
       cue("error");
-      alert("Cuddles could not complete that request. Please try again.");
 
     } finally {
       abortControllerRef.current = null;
