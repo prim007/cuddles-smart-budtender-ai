@@ -141,9 +141,9 @@ serve(async (req) => {
 
     const { data: tenant, error: tenantErr } = await supabase
       .from('tenants')
-      .select('id, business_name, phone, branding_color, status, plan, created_at')
+      .select('id, business_name, phone, branding_color, status, plan, created_at, website')
       .eq('embed_key', embedKey)
-      .single();
+      .maybeSingle();
 
     if (tenantErr || !tenant) {
       return new Response(JSON.stringify({ error: 'Invalid embed key' }), {
@@ -156,6 +156,14 @@ serve(async (req) => {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    // Only answer on the shop's own registered website (plus Cuddles' own domains).
+    if (!isAllowedOrigin(req.headers.get('origin'), tenant.website)) {
+      return new Response(JSON.stringify({ error: 'This chat box only works on the shop’s own website' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
 
     // Trial tenants keep the widget running; paid-AI spend for them is bounded
     // by the lower daily ceiling below (300/day) rather than a hard cutoff,
