@@ -568,7 +568,7 @@ const ChatDemo = () => {
 
       if (!resp.ok) {
         const errData = await resp.json().catch(() => ({}));
-        throw new Error(errData.error || `Request failed (${resp.status})`);
+        throw new Error(`${errData.error || "Request failed"} (${resp.status})`);
       }
 
       if (!resp.body) throw new Error("No response stream");
@@ -758,17 +758,17 @@ const ChatDemo = () => {
         toast({ title: "Slow down", description: "Too many requests. Please wait a moment and try again." });
       } else if (errorMsg.includes("402") || errorMsg.toLowerCase().includes("credits") || errorMsg.toLowerCase().includes("top up")) {
         toast({
-          title: "Cuddles' AI credits are low 🤖💳",
-          description: "The workspace owner needs to top up Lovable AI credits to keep the chat going. Please try again once credits are restored.",
+          title: "Our groovy engineers are cooking up something 🛠️🌿",
+          description: "Apologies — Cuddles will be back shortly. Please try again in a little while.",
         });
       } else {
         toast({
           title: "Cuddles is under re-engineering 🛠️",
           description: "We're upgrading Cuddles right now — she'll be back soon. Please try again in a little while.",
         });
+        alert("Cuddles could not complete that request. Please try again.");
       }
       cue("error");
-      alert("Cuddles could not complete that request. Please try again.");
 
     } finally {
       abortControllerRef.current = null;
