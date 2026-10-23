@@ -41,10 +41,10 @@ const CityDispensaryPage = () => {
       },
       {
         "@type": "Question",
-        "name": `Can I get same-day cannabis delivery in ${cityInfo.name}?`,
+        "name": `Can I get cannabis delivered in ${cityInfo.name}?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `Yes — many ${cityInfo.name} clubs offer same-day delivery for members. Ask Cuddles for the closest delivery-enabled partners.`,
+          "text": `Selling cannabis is still not legal in South Africa, so delivery depends on each private club's own member rules. Some ${cityInfo.name} clubs deliver to members and others don't — call the club first to check.`,
         },
       },
     ],
@@ -94,7 +94,7 @@ const CityDispensaryPage = () => {
             </Button>
             <Link to="/shop">
               <Button size="lg" variant="outline" className="gap-2">
-                Browse strains for delivery
+                Browse strains
               </Button>
             </Link>
           </div>
@@ -109,9 +109,9 @@ const CityDispensaryPage = () => {
           </h2>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
-              { icon: MapPin, title: "Closest first", text: `We rank ${cityInfo.name} dispensaries by distance from where you are right now.` },
-              { icon: Sparkles, title: "Stock-aware", text: "Cuddles only suggests clubs that actually carry the strain you want." },
-              { icon: ShieldCheck, title: "Legal & verified", text: "Every listed club operates within South Africa's private-use framework." },
+              { icon: MapPin, title: "Closest first", text: `The dispensary finder lists ${cityInfo.name} clubs with distances and directions.` },
+              { icon: Sparkles, title: "Know what to ask for", text: "Cuddles explains which strains and terpenes suit the effect you want, in plain language." },
+              { icon: ShieldCheck, title: "Straight answers on the law", text: "Cuddles explains South Africa's private-use rules so you know where you stand." },
             ].map((b) => (
               <Card key={b.title} className="p-5">
                 <b.icon className="h-6 w-6 text-primary" />
