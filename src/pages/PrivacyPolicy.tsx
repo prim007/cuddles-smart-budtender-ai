@@ -45,7 +45,7 @@ export default function PrivacyPolicy() {
                   <li><strong>Account details:</strong> name, email address, securely stored sign-in credentials, profile preferences and subscription status.</li>
                   <li><strong>AI and plant-care activity:</strong> questions, chat history, feedback, saved preferences, journal entries and images you choose to upload for identification.</li>
                   <li><strong>Orders and business activity:</strong> cart contents, delivery details, order status, demo requests, business contact details and catalogue information.</li>
-                  <li><strong>Newsletter and communications:</strong> email address, consent status, confirmation, unsubscribe and email-delivery events. Newsletter contacts are managed with Brevo.</li>
+                  <li><strong>Newsletter and communications:</strong> email address, consent status, confirmation, unsubscribe and email-delivery events. Newsletter contacts are managed by our email delivery provider.</li>
                   <li><strong>Location:</strong> approximate or precise location only when you allow it for nearby shops or delivery estimates. You may use available manual location choices instead.</li>
                   <li><strong>Technical and usage data:</strong> IP address, device and browser details, pages viewed, interactions, error information, cookies and similar storage.</li>
                 </ul>
@@ -89,7 +89,7 @@ export default function PrivacyPolicy() {
               <>
                 <p>We do not sell personal information. We share only what is reasonably needed with contracted providers that support hosting, data storage, authentication, AI processing, email delivery, analytics, maps and payments.</p>
                 <p>If you choose to contact or order from an independent partner shop, information needed to handle that request may go to that partner. The partner is responsible for its own privacy practices. We may also disclose information where law requires it, to protect people or the service, or as part of a legitimate business restructuring subject to continued safeguards.</p>
-                <p>Current provider categories and locations are listed on our <Link to="/trust">Trust &amp; Security page</Link>. Business customers can review our <Link to="/legal/dpa">Data Processing Addendum</Link>.</p>
+                <p>Business customers can review our <Link to="/legal/dpa">Data Processing Addendum</Link>, which describes the safeguards we apply to customer data.</p>
               </>
             ),
           },
