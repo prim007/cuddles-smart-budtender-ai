@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { Card } from "@/components/ui/card";
-import { Shield, Lock, Database, Users, Mail, FileText } from "lucide-react";
+import { Shield, Lock, Database, Mail, FileText } from "lucide-react";
 
 export default function Trust() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
         title="Trust & Security | Cuddles AI"
-        description="Security practices, subprocessors, and data handling for Cuddles AI. POPIA-aligned, encrypted in transit and at rest."
+        description="Security practices and data handling for Cuddles AI. POPIA-aligned, encrypted in transit and at rest."
         url="/trust"
       />
 
@@ -56,41 +56,6 @@ export default function Trust() {
               </Link>
               .
             </p>
-          </Card>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="mb-4 flex items-center gap-2 text-2xl font-semibold">
-            <Users className="h-5 w-5 text-primary" /> Subprocessors
-          </h2>
-          <Card className="overflow-hidden p-0 text-sm">
-            <table className="w-full">
-              <thead className="bg-muted/50 text-left">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Provider</th>
-                  <th className="px-4 py-3 font-medium">Purpose</th>
-                  <th className="px-4 py-3 font-medium">Location</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {[
-                  ["Lovable", "Application hosting & build platform", "EU/US"],
-                  ["Supabase", "Database, auth, edge functions, storage", "EU"],
-                  ["Stripe", "Payments (Premium subscription)", "US/EU"],
-                  ["PayFast", "ZAR payment processing", "South Africa"],
-                  ["Resend", "Transactional & marketing email", "US/EU"],
-                  ["Google (Gemini, Maps, Analytics)", "AI inference, maps, analytics", "US/EU"],
-                  ["ElevenLabs", "Voice synthesis (optional)", "US"],
-                  ["Microsoft Clarity", "Anonymous UX analytics", "US/EU"],
-                ].map(([p, u, l]) => (
-                  <tr key={p}>
-                    <td className="px-4 py-3 font-medium">{p}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{u}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{l}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </Card>
         </section>
 
