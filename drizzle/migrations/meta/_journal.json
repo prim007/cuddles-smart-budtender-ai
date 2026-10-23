@@ -43,6 +43,13 @@
       "when": 1792656243865,
       "tag": "0005_email_leads_server_only_insert",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792763348012,
+      "tag": "0006_shared_items_require_active_connection",
+      "breakpoints": true
     }
   ]
 }
