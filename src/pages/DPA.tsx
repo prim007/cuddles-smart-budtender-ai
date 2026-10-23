@@ -71,17 +71,7 @@ export default function DPA() {
           </section>
 
           <section>
-            <h2 className="mb-2 text-lg font-semibold">6. Subprocessors</h2>
-            <p>
-              The Controller authorises the use of the subprocessors listed at{" "}
-              <Link to="/trust" className="text-primary underline">/trust</Link>. The Processor
-              will give the Controller at least 30 days' notice of any new subprocessor and a
-              reasonable opportunity to object.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-2 text-lg font-semibold">7. Data subject rights</h2>
+            <h2 className="mb-2 text-lg font-semibold">6. Data subject rights</h2>
             <p>
               The Processor will assist the Controller, by appropriate technical and organisational
               measures, in responding to requests from data subjects to exercise their rights of
@@ -90,7 +80,7 @@ export default function DPA() {
           </section>
 
           <section>
-            <h2 className="mb-2 text-lg font-semibold">8. Personal Information breaches</h2>
+            <h2 className="mb-2 text-lg font-semibold">7. Personal Information breaches</h2>
             <p>
               The Processor will notify the Controller without undue delay, and in any event within
               72 hours, after becoming aware of a Personal Information breach affecting the
@@ -99,7 +89,7 @@ export default function DPA() {
           </section>
 
           <section>
-            <h2 className="mb-2 text-lg font-semibold">9. International transfers</h2>
+            <h2 className="mb-2 text-lg font-semibold">8. International transfers</h2>
             <p>
               Where Personal Information is transferred outside the Republic of South Africa or the
               EEA, the Processor relies on appropriate transfer mechanisms (e.g. Standard
@@ -108,7 +98,7 @@ export default function DPA() {
           </section>
 
           <section>
-            <h2 className="mb-2 text-lg font-semibold">10. Deletion or return of data</h2>
+            <h2 className="mb-2 text-lg font-semibold">9. Deletion or return of data</h2>
             <p>
               On termination of the services, the Processor will delete or return all Personal
               Information to the Controller within 30 days, except where retention is required by
@@ -117,7 +107,7 @@ export default function DPA() {
           </section>
 
           <section>
-            <h2 className="mb-2 text-lg font-semibold">11. Audit</h2>
+            <h2 className="mb-2 text-lg font-semibold">10. Audit</h2>
             <p>
               The Processor will make available to the Controller information reasonably necessary
               to demonstrate compliance with this Addendum, and will allow for audits, including
@@ -127,7 +117,7 @@ export default function DPA() {
           </section>
 
           <section>
-            <h2 className="mb-2 text-lg font-semibold">12. Governing law</h2>
+            <h2 className="mb-2 text-lg font-semibold">11. Governing law</h2>
             <p>
               This Addendum is governed by the laws of the Republic of South Africa. Where GDPR
               applies, the parties additionally comply with the laws of the European Union and the
