@@ -147,6 +147,12 @@
   <url><loc>https://cuddles-ai.com/plants/cannabis</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://cuddles-ai.com/plants/lavender</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://cuddles-ai.com/plants/string-of-pearls</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url>
+    <loc>https://cuddles-ai.com/blog/cannabis-news-roundup-october-2026</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
 
 
