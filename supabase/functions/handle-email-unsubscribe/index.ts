@@ -114,11 +114,18 @@ async function resolveEmail(
       .maybeSingle();
 
     if (!row) return { error: 'This unsubscribe link is not valid or has expired.', status: 403 };
-    if (!row.used_at) {
-      await admin
-        .from('email_unsubscribe_tokens')
-        .update({ used_at: new Date().toISOString() })
-        .eq('token', token);
+    if (row.used_at) {
+      return { error: 'This unsubscribe link has already been used. You are unsubscribed.', status: 410 };
+    }
+    const { data: claimed } = await admin
+      .from('email_unsubscribe_tokens')
+      .update({ used_at: new Date().toISOString() })
+      .eq('token', token)
+      .is('used_at', null)
+      .select('token')
+      .maybeSingle();
+    if (!claimed) {
+      return { error: 'This unsubscribe link has already been used. You are unsubscribed.', status: 410 };
     }
     return { email: String(row.email) };
   }
