@@ -82,9 +82,9 @@ const Newsletter = () => {
                   <Check className="h-5 w-5" />
                 </span>
                 <div>
-                  <h2 className="text-xl font-semibold">You're part of the Cuddles community!</h2>
+                  <h2 className="text-xl font-semibold">Almost there — check your inbox!</h2>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                    Thanks for joining. Keep an eye on your inbox for the next edition.
+                    We sent you a confirmation email. Click the link inside to join the newsletter.
                   </p>
                 </div>
               </div>

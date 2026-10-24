@@ -26,6 +26,12 @@ const SignupBanner = () => {
 
     setIsLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({ title: "Sign in to get your code", description: "Your 15% code is sent to your account email." });
+        window.location.href = `/auth?next=${encodeURIComponent(window.location.pathname)}`;
+        return;
+      }
       const { error } = await supabase.functions.invoke("send-promo-code", {
         body: { email: email.trim().toLowerCase(), source: "inline_banner" },
       });

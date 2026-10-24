@@ -59,37 +59,22 @@ Deno.serve(async (req) => {
     return json({ success: true }, 200)
   }
 
+  // Double opt-in: the address is stored as pending and only joins the
+  // newsletter list after its owner clicks the confirmation email.
+  const { data: existing } = await admin
+    .from('newsletter_subscribers').select('status').eq('email', email).maybeSingle()
+  if (existing?.status === 'confirmed') return json({ success: true, pending: true }, 200)
+
   const { error: subscriberError } = await admin
     .from('newsletter_subscribers')
-    .upsert({ email, status: 'confirmed', updated_at: new Date().toISOString() }, { onConflict: 'email' })
-
+    .upsert({ email, status: 'pending', updated_at: new Date().toISOString() }, { onConflict: 'email' })
   if (subscriberError) {
     console.error('newsletter-subscribe: subscriber save failed', subscriberError.code)
     return json({ error: 'We could not save your subscription. Please try again.' }, 500)
   }
 
-  const response = await fetch(`${GATEWAY_URL}/contacts`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${lovableKey}`,
-      'X-Connection-Api-Key': brevoKey,
-    },
-    body: JSON.stringify({
-      email,
-      listIds: [NEWSLETTER_LIST_ID],
-      updateEnabled: true,
-      emailBlacklisted: false,
-      attributes: { SOURCE: 'newsletter_page' },
-    }),
-  })
+  const { error: sendError } = await admin.functions.invoke('send-newsletter-confirmation', { body: { email } })
+  if (sendError) console.error('newsletter-subscribe: confirmation send failed')
 
-  if (!response.ok) {
-    const details = await response.text()
-    console.error('newsletter-subscribe: Brevo contact update failed', response.status, details)
-    await admin.from('newsletter_subscribers').update({ status: 'pending' }).eq('email', email)
-    return json({ error: 'We could not finish your subscription. Please try again.' }, 502)
-  }
-
-  return json({ success: true }, 200)
+  return json({ success: true, pending: true }, 200)
 })

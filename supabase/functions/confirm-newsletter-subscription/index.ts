@@ -59,6 +59,30 @@ Deno.serve(async (req) => {
       throw updateError
     }
 
+    // Only now, after the owner confirmed, add the address to the Brevo list.
+    const { data: suppressed } = await supabase
+      .from('suppressed_emails').select('id').eq('email', subscriber.email).maybeSingle()
+    const lovableKey = Deno.env.get('LOVABLE_API_KEY')
+    const brevoKey = Deno.env.get('BREVO_API_KEY')
+    if (!suppressed && lovableKey && brevoKey) {
+      const res = await fetch('https://connector-gateway.lovable.dev/brevo/contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${lovableKey}`,
+          'X-Connection-Api-Key': brevoKey,
+        },
+        body: JSON.stringify({
+          email: subscriber.email,
+          listIds: [3],
+          updateEnabled: true,
+          emailBlacklisted: false,
+          attributes: { SOURCE: 'newsletter_page' },
+        }),
+      })
+      if (!res.ok) console.error('confirm-newsletter: Brevo contact update failed', res.status)
+    }
+
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
