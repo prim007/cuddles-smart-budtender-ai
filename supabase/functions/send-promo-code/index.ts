@@ -55,10 +55,15 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const body = await req.json().catch(() => ({}));
-    const email = body?.email;
-    if (!email || typeof email !== "string") {
-      return new Response(JSON.stringify({ error: "Email is required" }), {
-        status: 400,
+    // Sign-in required: the code is only ever sent to the caller's own
+    // account address, never to an address typed into the request.
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const jwt = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+    const { data: userData } = jwt ? await supabase.auth.getUser(jwt) : { data: { user: null } };
+    const email = userData?.user?.email;
+    if (!email) {
+      return new Response(JSON.stringify({ error: "Please sign in to get your discount code." }), {
+        status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
