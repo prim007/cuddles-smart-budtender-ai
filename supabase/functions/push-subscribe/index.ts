@@ -40,6 +40,20 @@ Deno.serve(async (req) => {
 
   try {
     if (b.action === "subscribe") {
+      // Only the browser that owns this endpoint knows its keys. An endpoint
+      // already registered to someone else may only move to the caller when
+      // they present the same keys (same device, different account).
+      const { data: existing } = await admin
+        .from("push_subscriptions")
+        .select("user_id, p256dh, auth")
+        .eq("endpoint", b.subscription.endpoint)
+        .maybeSingle();
+      if (
+        existing && existing.user_id !== userId &&
+        (existing.p256dh !== b.subscription.keys.p256dh || existing.auth !== b.subscription.keys.auth)
+      ) {
+        return json({ error: "Could not update alerts. Please try again." }, 409);
+      }
       const { error: e } = await admin.from("push_subscriptions").upsert(
         { user_id: userId, endpoint: b.subscription.endpoint, p256dh: b.subscription.keys.p256dh, auth: b.subscription.keys.auth },
         { onConflict: "endpoint" },
