@@ -12,6 +12,76 @@ export interface StaticBlogPost {
 
 export const staticBlogPosts: StaticBlogPost[] = [
   {
+    id: "static-cannabis-news-october-2026",
+    title: "This Week in Cannabis: Record Sales, a Rescheduling Fight and a Takeover Battle (October 2026)",
+    slug: "cannabis-news-roundup-october-2026",
+    excerpt:
+      "Canada just set a new monthly sales record, a US judge refused to delay the federal rescheduling hearing, and Aurora rejected Curaleaf's takeover bid again. Here's the week's cannabis news in plain language — and what it means for South Africa.",
+    content: `### This Week in Cannabis — October 2026
+
+*Educational news summary only. Not legal or medical advice.*
+
+**In short:** legal cannabis keeps growing overseas, the US rescheduling process is still slow, and big companies are fighting over who owns the market. South Africa's own rules are still being written.
+
+---
+
+### 1. Canada sets a new sales record
+
+Canada sold a record **CA$520.4 million** of legal cannabis in August 2026, beating June's high. Sales for the first eight months of the year are close to **CA$4 billion** [1](https://themarijuanaherald.com/2026/10/daily-cannabis-news-brief-for-10-23-2026/).
+
+**Why it matters:** eight years after legalising, Canada's legal market is still growing — not shrinking.
+
+---
+
+### 2. US rescheduling: no delay, but no decision yet
+
+A US Drug Enforcement Administration judge **refused** a request from opponents to reopen the hearing for more testimony. He will allow short written briefs about a government report that found "gaps" in how drugs are scheduled [2](https://www.marijuanamoment.net/dea-judge-rejects-cannabis-rescheduling-opponents-request-for-delay-newsletter-october-23-2026/).
+
+**Why it matters:** moving cannabis to a lower schedule would change research and banking in the US. The final ruling is still pending.
+
+---
+
+### 3. Aurora says no to Curaleaf — again
+
+Canadian producer Aurora rejected a revised **US$5-a-share** hostile takeover offer from Curaleaf. The offer stays open until 4 December 2026 [3](https://marketexclusive.com/weekly-roundup-on-the-cannabis-sector-psychedelic-sector-135/2026/10/).
+
+**Why it matters:** the industry is consolidating. Fewer, bigger companies may shape global prices — including for medical exports from Africa.
+
+---
+
+### 4. US states keep moving
+
+- **Minnesota** recorded about **$250 million** in its first full year of adult-use and medical sales [4](https://www.cann.dev/national-cannabis-roundup-october-2026/).
+- **Nebraska's** Supreme Court upheld voter-approved medical cannabis [4](https://www.cann.dev/national-cannabis-roundup-october-2026/).
+- **Massachusetts** lawmakers advanced a bill letting military veterans get medical cannabis without a doctor's recommendation [5](https://www.marijuanamoment.net/dea-opposes-cannabis-rescheduling-opponents-move-to-delay-hearing-newsletter-october-22-2026/).
+
+---
+
+### What this means for South Africa
+
+| Overseas | South Africa today |
+| --- | --- |
+| Legal shops and record sales | Private use and home growing only; buying and selling is still not legal |
+| Rescheduling debates | Draft private-use regulations (750 g, 5 plants) still being finalised |
+| Big company takeovers | A growing medical export sector |
+
+Want the local detail? Read [750 Grams — Roughly 1,500 Joints](/blog/sa-cannabis-750g-possession-limit-2026).
+
+---
+
+### The bottom line
+
+The world is moving towards regulated cannabis, step by step. South Africa is on the same road, just earlier on it.
+
+Did that make sense? [Ask Cuddles anything about it →](/education/chat-with-cuddles)
+
+*Cuddles provides general education, not medical or legal advice.*`,
+    author: "Cuddles AI Editorial",
+    tags: ["cannabis news", "October 2026", "Canada", "rescheduling", "industry", "South Africa"],
+    published_at: "2026-10-24T08:00:00Z",
+    featured_image: "/blog/cannabis-news-october-2026.jpg",
+  },
+  {
     id: "static-sa-cannabis-750g-limit-2026",
     title: "750 Grams — Roughly 1,500 Joints: What South Africa's New Draft Cannabis Rules Actually Say",
     slug: "sa-cannabis-750g-possession-limit-2026",
