@@ -129,8 +129,10 @@ async function searchStrains(ctx: ToolContext, args: Record<string, unknown>) {
   const limit = Math.min(Number(args.limit) || 8, 12);
   let q = ctx.admin
     .from("tenant_strains")
-    .select("strain_name, strain_type, category, price, thc_min, thc_max, cbd_min, cbd_max, primary_terpene, primary_effect, notes")
+    .select("strain_name, strain_type, category, price, thc_min, thc_max, cbd_min, cbd_max, primary_terpene, primary_effect, notes, tenants!inner(status)")
     .eq("in_stock", true)
+    // Only shops that are live (active or trial) — never inactive shops' menus.
+    .in("tenants.status", ["active", "trial"])
     .limit(limit);
 
   const query = typeof args.query === "string" ? args.query.trim().slice(0, 60) : "";
@@ -140,7 +142,10 @@ async function searchStrains(ctx: ToolContext, args: Record<string, unknown>) {
 
   const { data, error } = await q;
   if (error) return { error: "Strain lookup unavailable right now." };
-  if (data?.length) return { source: "live_inventory", results: data };
+  if (data?.length) {
+    const results = data.map(({ tenants: _t, ...rest }: Record<string, unknown>) => rest);
+    return { source: "live_inventory", results };
+  }
 
   // No partner stock — fall back to the curated strain catalogue (no prices).
   let cat = ctx.admin
