@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { streamImage } from "@/lib/streamImage";
-import { downloadImage } from "@/lib/downloadImage";
+import { downloadImage, watermarkImage } from "@/lib/downloadImage";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import { useAuth } from "@/hooks/useAuth";
 import cuddles from "@/assets/cuddles.png";
 
@@ -26,6 +27,7 @@ export default function ImageStudio() {
   const [final, setFinal] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const { isPremium } = useSubscription();
   const generate = async (e: FormEvent) => {
     e.preventDefault();
     if (busy || !user) return;
@@ -40,9 +42,9 @@ export default function ImageStudio() {
     } catch (e) { setError(e instanceof Error ? e.message : "Image creation failed."); setImage(""); setFinal(false); }
     finally { setBusy(false); }
   };
-  const download = () => {
+  const download = async () => {
     if (!image || !final || busy) return;
-    try { downloadImage(image, `cuddles-${mode}-${Date.now()}.png`); }
+    try { downloadImage(isPremium ? image : await watermarkImage(image), `cuddles-${mode}-${Date.now()}.png`); }
     catch (e) { setError(e instanceof Error ? e.message : "This image could not be saved."); }
   };
   return <main className="min-h-screen bg-background px-5 pb-28 pt-28 text-foreground">
