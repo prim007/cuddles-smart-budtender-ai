@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Plus, BookOpen, Smile, Frown, Meh, Star, Calendar, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import PremiumInsightCard from "@/components/PremiumInsightCard";
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -253,6 +254,7 @@ const StrainJournal = () => {
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent">
             Strain Journal 📓
           </h1>
+          <div className="mb-6"><PremiumInsightCard kind="journal" /></div>
 
           {loading ? (
             <div className="text-center py-8">Loading your journal...</div>
