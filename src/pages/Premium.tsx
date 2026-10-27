@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { FunctionsHttpError } from "@supabase/supabase-js";
 
 const CURRENCIES = {
   ZAR: { symbol: "R", rate: 1, label: "ZAR (R)" },
@@ -27,6 +29,23 @@ const Premium = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [currency, setCurrency] = useState<CurrencyCode>("ZAR");
+  const [paypalLoading, setPaypalLoading] = useState<"monthly" | "yearly" | null>(null);
+
+  // PayPal is only for this Premium software subscription.
+  const startPaypal = async (plan: "monthly" | "yearly") => {
+    setPaypalLoading(plan);
+    const { data, error } = await supabase.functions.invoke("paypal-create-subscription", { body: { plan } });
+    if (error || !data?.url) {
+      let msg = "PayPal checkout couldn't start. Please try again or pay by card.";
+      if (error instanceof FunctionsHttpError) {
+        try { msg = (await error.context.json()).error ?? msg; } catch { /* keep default */ }
+      }
+      toast({ title: "PayPal unavailable", description: msg, variant: "destructive" });
+      setPaypalLoading(null);
+      return;
+    }
+    window.location.href = data.url;
+  };
 
   const curr = CURRENCIES[currency];
   const convertedPrice = currency === "ZAR" ? BASE_PRICE_ZAR : Math.round(BASE_PRICE_ZAR * curr.rate * 100) / 100;
@@ -38,6 +57,17 @@ const Premium = () => {
       toast({ title: "Welcome to Premium! 🎉", description: "Your subscription is now active." });
       checkSubscription();
     }
+    const subId = searchParams.get("subscription_id");
+    if (searchParams.get("paypal") === "success" && subId) {
+      supabase.functions.invoke("paypal-confirm", { body: { subscriptionId: subId } }).then(({ data }) => {
+        if (data?.active) {
+          toast({ title: "Welcome to Premium! 🎉", description: "Your PayPal subscription is active." });
+        } else {
+          toast({ title: "Almost there", description: "PayPal is still confirming your payment. Refresh in a minute." });
+        }
+        checkSubscription();
+      });
+    }
     if (searchParams.get("canceled") === "true") {
       toast({ title: "Checkout canceled", description: "No charges were made.", variant: "destructive" });
     }
@@ -45,20 +75,19 @@ const Premium = () => {
 
   const features = {
     free: [
-      "AI budtender chat",
-      "Basic strain info",
-      "Cannabis education",
-      "Quick prompt suggestions",
+      "Unlimited AI budtender chat — always free",
+      "Strain search & dispensary finder",
+      "3 photo scans a month",
+      "5 images or memes a day",
+      "Strain journal, T-break timeline & grow logs",
     ],
     premium: [
       "Everything in Free",
-      "Save AI recommendations",
-      "Consumption journal & tracking",
-      "Advanced symptom-to-strain matching",
-      "Personalized insights from your history",
-      "VIP ordering perks via Tripple444",
-      "Early access to new strains",
-      "Priority AI responses",
+      "Unlimited photo scans",
+      "20 images or memes a day, no watermark",
+      "\"What works for me\" insights from your journal",
+      "Daily personal T-break check-ins",
+      "Personal feeding & climate schedule for your plants",
     ],
   };
 
@@ -165,8 +194,23 @@ const Premium = () => {
                   onClick={() => startCheckout()}
                   disabled={isLoading}
                 >
-                  {isLoading ? "Loading..." : "Upgrade to Premium"}
+                  {isLoading ? "Loading..." : `Pay by card · R${BASE_PRICE_ZAR}/month`}
                 </Button>
+              ) : null}
+              {!isPremium && user && (
+                <div className="mt-3 space-y-2">
+                  <p className="text-xs text-center text-muted-foreground">Or pay with PayPal (billed in US dollars)</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button variant="outline" onClick={() => startPaypal("monthly")} disabled={paypalLoading !== null}>
+                      {paypalLoading === "monthly" ? "Opening…" : "PayPal $5.49/mo"}
+                    </Button>
+                    <Button variant="outline" onClick={() => startPaypal("yearly")} disabled={paypalLoading !== null}>
+                      {paypalLoading === "yearly" ? "Opening…" : "PayPal $49/yr"}
+                    </Button>
+                  </div>
+                </div>
+              )}
+              {isPremium || user ? null : (
               ) : (
                 <Button
                   asChild
