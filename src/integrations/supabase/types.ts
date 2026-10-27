@@ -317,6 +317,92 @@ export type Database = {
         }
         Relationships: []
       }
+      companion_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          room_id: string
+          sender_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          room_id: string
+          sender_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          room_id?: string
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companion_messages_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "companion_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      companion_rooms: {
+        Row: {
+          created_at: string
+          friend_id: string | null
+          id: string
+          owner_id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          friend_id?: string | null
+          id?: string
+          owner_id: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          friend_id?: string | null
+          id?: string
+          owner_id?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      companion_tasks: {
+        Row: {
+          completed: boolean
+          created_at: string
+          due_at: string | null
+          id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       connections: {
         Row: {
           addressee_id: string
@@ -1705,6 +1791,7 @@ export type Database = {
     }
     Functions: {
       are_connected: { Args: { _a: string; _b: string }; Returns: boolean }
+      can_access_companion_room: { Args: { p_room: string }; Returns: boolean }
       check_article_rate_limit: { Args: { p_email: string }; Returns: boolean }
       check_chat_rate_limit: {
         Args: { p_session_id: string }
