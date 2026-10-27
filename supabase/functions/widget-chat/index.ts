@@ -26,6 +26,9 @@ function isAllowedOrigin(origin: string | null, website: string | null): boolean
   if (!host) return false;
   if (CUDDLES_HOSTS.includes(host) || host.endsWith('.cuddles-ai.com')) return true;
   if (host === 'id-preview--16082a8c-a109-49a8-a05d-987a18f90c7d.lovable.app') return true;
+  // Shops that never saved a website can't be locked yet; they stay usable
+  // under the per-visitor, per-shop and site-wide caps until a site is saved.
+  if (!website || !website.trim()) return true;
   const shopHost = hostOf(website);
   return !!shopHost && (host === shopHost || host.endsWith(`.${shopHost}`));
 }
