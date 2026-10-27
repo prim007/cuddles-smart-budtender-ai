@@ -135,13 +135,14 @@ const ToleranceBreak = () => {
     if (notes.includes(key)) return;
 
     try {
-      await supabase.functions.invoke("send-tbreak-milestone", {
+      const { error } = await supabase.functions.invoke("send-tbreak-milestone", {
         body: {
           breakId: brk.id,
           dayNumber,
           completed,
         },
       });
+      if (error) throw error;
 
       await supabase
         .from("tolerance_breaks")
