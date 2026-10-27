@@ -141,6 +141,24 @@ serve(async (req) => {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    // Free: 3 photo scans a month. Premium: unlimited (fair-use 300/month).
+    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const { isPremiumUser } = await import("../_shared/premium.ts");
+    const premium = await isPremiumUser(admin, data.user.id, data.user.email);
+    const { data: allowed, error: quotaError } = await admin.rpc("consume_ai_quota", {
+      p_bucket: `scans:user:${data.user.id}`, p_limit: premium ? 300 : 3, p_window_seconds: 30 * 86400,
+    });
+    if (quotaError) {
+      return new Response(JSON.stringify({ error: "Photo scanning is temporarily unavailable." }), {
+        status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (allowed !== true) {
+      return new Response(JSON.stringify({
+        error: premium ? "You've reached this month's fair-use scan limit." : "You've used your 3 free photo scans this month. Go Premium for unlimited scans.",
+        upgrade: !premium,
+      }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
   } catch {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },

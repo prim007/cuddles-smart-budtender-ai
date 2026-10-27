@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
   for (const rule of [{ bucket: `images:user:${auth.user.id}`, limit: premium ? 20 : 5 }, { bucket: "images:global", limit: 100 }]) {
     const { data: allowed, error } = await admin.rpc("consume_ai_quota", { p_bucket: rule.bucket, p_limit: rule.limit, p_window_seconds: 86400 });
     if (error) return json({ error: { message: "Image creation is temporarily unavailable." } }, 503);
-    if (allowed !== true) return json({ error: { message: `${premium ? "Today's image creation limit has been reached. Please come back tomorrow." : "You've used today's 5 free images. Come back tomorrow, or go Premium for 20 a day."}" } }, 429);
+    if (allowed !== true) return json({ error: { message: `${premium ? "Today's image creation limit has been reached. Please come back tomorrow." : "You've used today's 5 free images. Come back tomorrow, or go Premium for 20 a day."}` } }, 429);
   }
   const persistBlock = async (status: number, message: string) => {
     const { error } = await admin.from("image_gateway_state").upsert({ id: "image-studio", paused: true, status, reason: message, updated_at: new Date().toISOString() });
