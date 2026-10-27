@@ -1,6 +1,7 @@
 // Server-side Premium check shared by functions that gate extras.
 // The AI chat itself is always free and must never call this.
 import type { SupabaseClient } from "npm:@supabase/supabase-js@2";
+import Stripe from "https://esm.sh/stripe@18.5.0";
 import { ACTIVE_STATUSES, paypalFetch, paypalToken } from "./paypal.ts";
 
 export interface PaypalPremium { active: boolean; next_billing_at: string | null }
@@ -36,7 +37,7 @@ export async function paypalPremium(admin: SupabaseClient, userId: string): Prom
 }
 
 /** True when the user has an active Premium (card subscription row or PayPal). */
-export async function isPremiumUser(admin: SupabaseClient, userId: string): Promise<boolean> {
+export async function isPremiumUser(admin: SupabaseClient, userId: string, email?: string | null): Promise<boolean> {
   const { data: card } = await admin
     .from("subscriptions")
     .select("id")
@@ -45,5 +46,19 @@ export async function isPremiumUser(admin: SupabaseClient, userId: string): Prom
     .limit(1)
     .maybeSingle();
   if (card) return true;
-  return (await paypalPremium(admin, userId)).active;
+  if ((await paypalPremium(admin, userId)).active) return true;
+  const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (email && stripeKey) {
+    try {
+      const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
+      const customers = await stripe.customers.list({ email, limit: 1 });
+      if (customers.data.length) {
+        const subs = await stripe.subscriptions.list({ customer: customers.data[0].id, status: "active", limit: 1 });
+        if (subs.data.length) return true;
+      }
+    } catch (e) {
+      console.warn("[premium] Stripe check failed:", (e as Error).message);
+    }
+  }
+  return false;
 }
