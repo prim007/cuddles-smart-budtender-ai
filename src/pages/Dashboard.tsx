@@ -19,6 +19,7 @@ const FLAVOURS = ["Citrus", "Earthy", "Sweet", "Pine", "Berry", "Diesel", "Spicy
 const TOPICS = ["Growing", "Laws & news", "Health & wellness", "Plant care", "Strain guides", "Dispensaries"];
 
 const TOOLS = [
+  { icon: MessageCircle, title: "Cuddles Companion", href: "/companion" },
   { icon: ImagePlus, title: "Image Studio", href: "/image-studio" },
   { icon: BookOpen, title: "My Journal", href: "/journal" },
   { icon: Camera, title: "Strain Scanner", href: "/scanner" },
