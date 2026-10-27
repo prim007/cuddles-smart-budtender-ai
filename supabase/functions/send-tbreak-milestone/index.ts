@@ -87,8 +87,9 @@ Deno.serve(async (req) => {
   // Completion (and its reward) is decided from the saved break, never the
   // browser: the break must be marked completed and its full length elapsed.
   if (completed) {
+    // Match the app's day counting: day N starts after N-1 full days have passed.
     const elapsedDays = (Date.now() - new Date(brk.start_date).getTime()) / 86_400_000
-    const earned = brk.status === 'completed' && elapsedDays >= Number(brk.target_days)
+    const earned = brk.status === 'completed' && elapsedDays + 1 >= Number(brk.target_days)
     if (!earned) {
       return json({ error: 'This break has not been completed yet' }, 409)
     }
