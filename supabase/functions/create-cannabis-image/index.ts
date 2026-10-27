@@ -3,6 +3,7 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { z } from "npm:zod@3";
 import { createParser } from "npm:eventsource-parser@3";
 import { generateImage } from "./gateway-request.ts";
+import { isPremiumUser } from "../_shared/premium.ts";
 import { IMAGE_MODEL, shouldPause, composeImagePrompt } from "./policy.ts";
 
 const schema = z.object({
@@ -33,10 +34,12 @@ Deno.serve(async (req) => {
   if (stateError) return json({ error: { message: "Image creation is temporarily unavailable." } }, 503);
   if (state?.paused) return json({ error: { message: state.reason || "Image creation is paused. The site owner needs to restore access." } }, state.status || 403);
   // Fail closed: signed-in accounts cannot evade the shared daily spend ceiling.
-  for (const rule of [{ bucket: `images:user:${auth.user.id}`, limit: 5 }, { bucket: "images:global", limit: 100 }]) {
+  // Free: 5 images a day. Premium: 20 a day.
+  const premium = await isPremiumUser(admin, auth.user.id, auth.user.email);
+  for (const rule of [{ bucket: `images:user:${auth.user.id}`, limit: premium ? 20 : 5 }, { bucket: "images:global", limit: 100 }]) {
     const { data: allowed, error } = await admin.rpc("consume_ai_quota", { p_bucket: rule.bucket, p_limit: rule.limit, p_window_seconds: 86400 });
     if (error) return json({ error: { message: "Image creation is temporarily unavailable." } }, 503);
-    if (allowed !== true) return json({ error: { message: "Today's image creation limit has been reached. Please come back tomorrow." } }, 429);
+    if (allowed !== true) return json({ error: { message: `${premium ? "Today's image creation limit has been reached. Please come back tomorrow." : "You've used today's 5 free images. Come back tomorrow, or go Premium for 20 a day."}" } }, 429);
   }
   const persistBlock = async (status: number, message: string) => {
     const { error } = await admin.from("image_gateway_state").upsert({ id: "image-studio", paused: true, status, reason: message, updated_at: new Date().toISOString() });
