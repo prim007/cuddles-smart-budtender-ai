@@ -57,6 +57,13 @@
       "when": 1793113584735,
       "tag": "0007_delivery_fee_from_coordinates",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793113910955,
+      "tag": "0008_paypal_subscriptions",
+      "breakpoints": true
     }
   ]
 }

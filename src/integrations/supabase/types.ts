@@ -740,6 +740,60 @@ export type Database = {
         }
         Relationships: []
       }
+      paypal_plans: {
+        Row: {
+          created_at: string
+          env: string
+          key: string
+          paypal_plan_id: string
+        }
+        Insert: {
+          created_at?: string
+          env: string
+          key: string
+          paypal_plan_id: string
+        }
+        Update: {
+          created_at?: string
+          env?: string
+          key?: string
+          paypal_plan_id?: string
+        }
+        Relationships: []
+      }
+      paypal_subscriptions: {
+        Row: {
+          created_at: string
+          id: string
+          next_billing_at: string | null
+          paypal_subscription_id: string
+          plan_key: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          next_billing_at?: string | null
+          paypal_subscription_id: string
+          plan_key: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          next_billing_at?: string | null
+          paypal_subscription_id?: string
+          plan_key?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       plant_care_logs: {
         Row: {
           created_at: string
