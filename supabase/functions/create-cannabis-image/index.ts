@@ -4,6 +4,7 @@ import { z } from "npm:zod@3";
 import { createParser } from "npm:eventsource-parser@3";
 import { generateImage } from "./gateway-request.ts";
 import { isPremiumUser } from "../_shared/premium.ts";
+import { imageDailyLimit } from "../_shared/premium-limits.ts";
 import { IMAGE_MODEL, shouldPause, composeImagePrompt } from "./policy.ts";
 
 const schema = z.object({
@@ -36,7 +37,7 @@ Deno.serve(async (req) => {
   // Fail closed: signed-in accounts cannot evade the shared daily spend ceiling.
   // Free: 5 images a day. Premium: 20 a day.
   const premium = await isPremiumUser(admin, auth.user.id, auth.user.email);
-  for (const rule of [{ bucket: `images:user:${auth.user.id}`, limit: premium ? 20 : 5 }, { bucket: "images:global", limit: 100 }]) {
+  for (const rule of [{ bucket: `images:user:${auth.user.id}`, limit: imageDailyLimit(premium) }, { bucket: "images:global", limit: 100 }]) {
     const { data: allowed, error } = await admin.rpc("consume_ai_quota", { p_bucket: rule.bucket, p_limit: rule.limit, p_window_seconds: 86400 });
     if (error) return json({ error: { message: "Image creation is temporarily unavailable." } }, 503);
     if (allowed !== true) return json({ error: { message: `${premium ? "Today's image creation limit has been reached. Please come back tomorrow." : "You've used today's 5 free images. Come back tomorrow, or go Premium for 20 a day."}` } }, 429);
