@@ -2,7 +2,10 @@
 // entries in the knowledge library so Cuddles can retrieve them later.
 // Bounded batch per run; dedup by content hash; stops on 402/403.
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
-import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
 import { embedTexts, sha256Hex } from "../_shared/rag.ts";
 
 const MAX_PER_RUN = 40;
@@ -11,7 +14,7 @@ const BATCH = 20;
 const json = (b: unknown, status = 200) =>
   new Response(JSON.stringify(b), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
-export function redact(text: string): string {
+function redact(text: string): string {
   return text
     .replace(/[\w.+-]+@[\w-]+\.[\w.-]+/g, "[email]")
     .replace(/(\+?\d[\d\s-]{7,}\d)/g, "[phone]")
