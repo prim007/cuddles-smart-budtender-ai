@@ -75,13 +75,23 @@ Deno.serve(async (req) => {
   // Recipient and milestone facts come from trusted data, never the browser.
   const { data: brk, error: breakError } = await supabase
     .from('tolerance_breaks')
-    .select('id, user_id, target_days')
+    .select('id, user_id, target_days, start_date, status')
     .eq('id', breakId)
     .eq('user_id', user.id)
     .maybeSingle()
 
   if (breakError || !brk) {
     return json({ error: 'Tolerance break not found' }, 404)
+  }
+
+  // Completion (and its reward) is decided from the saved break, never the
+  // browser: the break must be marked completed and its full length elapsed.
+  if (completed) {
+    const elapsedDays = (Date.now() - new Date(brk.start_date).getTime()) / 86_400_000
+    const earned = brk.status === 'completed' && elapsedDays >= Number(brk.target_days)
+    if (!earned) {
+      return json({ error: 'This break has not been completed yet' }, 409)
+    }
   }
 
   const recipient = user.email
