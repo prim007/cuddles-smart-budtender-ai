@@ -92,7 +92,8 @@ const Checkout = () => {
     setManualBand(index);
     setCoords(null);
     setDistanceKm(band.km);
-    setDeliveryFee(band.fee);
+    // Without a location pin the order is charged the standard R180 fee.
+    setDeliveryFee(180);
     setEstimatedTime(band.eta);
     setDeliveryError(null);
   };
@@ -335,6 +336,9 @@ const Checkout = () => {
                     <p role="alert" className="text-sm text-destructive">
                       {deliveryError}
                     </p>
+                    <p className="text-sm text-muted-foreground">
+                      Without your location we charge the standard R180 delivery fee. Share your location for a lower fee if you're nearby.
+                    </p>
                     <div className="grid gap-2" role="group" aria-label="Choose your delivery area">
                       {DELIVERY_BANDS.map((band, i) => (
                         <Button
@@ -345,7 +349,7 @@ const Checkout = () => {
                           onClick={() => selectManualBand(i)}
                         >
                           <span className="text-left text-sm">{band.label}</span>
-                          <span className="font-semibold ml-3">R{band.fee}</span>
+                          <span className="font-semibold ml-3">R180</span>
                         </Button>
                       ))}
                     </div>
