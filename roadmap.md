@@ -1,5 +1,10 @@
 # Roadmap
 
+## Cuddles companion
+- [ ] Add personal helper conversations and shared conversations with accepted friends.
+- [ ] Keep private records out of shared conversations; require approval to save personal tasks.
+- [ ] Verify signed-in messaging, Cuddles replies, tasks and access restrictions.
+
 ## Image studio
 - [x] Add Create meme/image to chatbot options and repair generated-image downloads.
 - [x] Add signed-in cannabis image and meme creation with downloads.
