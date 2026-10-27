@@ -77,6 +77,7 @@ const DPA = lazyWithReload(() => import("./pages/DPA"));
 // New Cuddles features
 const StrainJournal = lazyWithReload(() => import("./pages/StrainJournal"));
 const Dashboard = lazyWithReload(() => import("./pages/Dashboard"));
+const Companion = lazyWithReload(() => import("./pages/Companion"));
 const Invite = lazyWithReload(() => import("./pages/Invite"));
 const StrainReviews = lazyWithReload(() => import("./pages/StrainReviews"));
 const StrainScanner = lazyWithReload(() => import("./pages/StrainScanner"));
@@ -229,6 +230,7 @@ const App = () => (
                 
                 {/* Cuddles Features */}
                 <Route path="/dashboard" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><Dashboard /></Suspense></ProtectedRoute>} />
+                <Route path="/companion" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><Companion /></Suspense></ProtectedRoute>} />
                 <Route path="/invite/:userId" element={<Suspense fallback={<PageLoader />}><Invite /></Suspense>} />
                 <Route path="/journal" element={<Suspense fallback={<PageLoader />}><StrainJournal /></Suspense>} />
                 <Route path="/reviews" element={<Suspense fallback={<PageLoader />}><StrainReviews /></Suspense>} />
