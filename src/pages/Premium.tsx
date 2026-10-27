@@ -211,7 +211,6 @@ const Premium = () => {
                 </div>
               )}
               {isPremium || user ? null : (
-              ) : (
                 <Button
                   asChild
                   className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-semibold"
