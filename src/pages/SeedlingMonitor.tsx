@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { toast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import PremiumInsightCard from "@/components/PremiumInsightCard";
 import SEO from "@/components/SEO";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -459,6 +460,7 @@ const SeedlingMonitor = () => {
             {/* Main content */}
             {selectedPlant && (
               <div className="lg:col-span-3 space-y-6">
+                <PremiumInsightCard kind="grow" plantId={selectedPlant.id} />
                 {/* Growth stage tracker */}
                 <Card>
                   <CardHeader className="pb-3">

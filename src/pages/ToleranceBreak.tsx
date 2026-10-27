@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { differenceInDays, format, addDays } from "date-fns";
+import PremiumInsightCard from "@/components/PremiumInsightCard";
 import SEO from "@/components/SEO";
 import PushAlertsCard from "@/components/PushAlertsCard";
 
@@ -340,6 +341,7 @@ const ToleranceBreak = () => {
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 bg-gradient-to-r from-hippie-purple via-hippie-pink to-hippie-orange bg-clip-text text-transparent text-center">
             Tolerance Break Coach 🧘
           </h1>
+          {activeBreak && <div className="mb-6"><PremiumInsightCard kind="tbreak" /></div>}
 
           {loading ? (
             <div className="text-center py-8">Loading...</div>
