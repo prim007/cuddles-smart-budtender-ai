@@ -47,8 +47,9 @@ export default function Trust() {
             <p>
               We collect the minimum needed to run Cuddles: account email, profile preferences,
               chat history with the AI budtender, and (if you opt in) location for dispensary
-              suggestions. Chat answers use context retrieval — not fine-tuning or automatic
-              learning from every chat — so your conversations do not train the AI models.
+              suggestions. To improve Cuddles, anonymised questions and answers from chats (with
+              emails, phone numbers, links and names removed) may be added to our knowledge
+              library. We don't fine-tune AI models on your chats.
               We do not sell personal data.
             </p>
             <p>

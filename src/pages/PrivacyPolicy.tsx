@@ -77,7 +77,7 @@ export default function PrivacyPolicy() {
             label: "AI chats and uploaded content",
             content: (
               <>
-                <p>Your message and relevant context may be sent to contracted AI service providers to generate a response. This is context retrieval — not fine-tuning or automatic learning from every chat. Cuddles pulls in relevant information (your saved preferences, journal entries and our strain knowledge base) at the moment you ask a question; your chats are not used to retrain the AI models. Uploaded images may also be processed for plant or strain identification. Do not include unnecessary sensitive personal information in a chat or image.</p>
+                <p>Your message and relevant context may be sent to contracted AI service providers to generate a response. Cuddles pulls in relevant information (your saved preferences, journal entries and our knowledge library) at the moment you ask a question. To improve Cuddles for everyone, we may add anonymised questions and answers from chats to our knowledge library, after removing emails, phone numbers, links and names. We do not fine-tune AI models on your chats. You can ask us to exclude your chats under POPIA. Uploaded images may also be processed for plant or strain identification. Do not include unnecessary sensitive personal information in a chat or image.</p>
                 <p>AI responses can be incomplete or wrong. They are generated for general education and product discovery and must not be treated as medical, legal or other professional advice. Important decisions should be checked with a suitably qualified person.</p>
               </>
             ),
