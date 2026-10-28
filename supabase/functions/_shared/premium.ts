@@ -17,9 +17,7 @@ export async function paypalPremium(admin: SupabaseClient, userId: string): Prom
 
   let token: string | null = null;
   for (const row of rows) {
-    // Trust a recent ACTIVE check for 6 hours to avoid hammering PayPal.
-    const fresh = Date.now() - new Date(row.updated_at).getTime() < 6 * 3600_000;
-    if (row.status === "ACTIVE" && fresh) return { active: true, next_billing_at: row.next_billing_at };
+    // Always re-verify with PayPal so cancellations take effect immediately.
     try {
       token ??= await paypalToken();
       const sub = await paypalFetch(token, `/v1/billing/subscriptions/${encodeURIComponent(row.paypal_subscription_id)}`);
@@ -30,7 +28,7 @@ export async function paypalPremium(admin: SupabaseClient, userId: string): Prom
       if (ACTIVE_STATUSES.has(sub.status) && sub.custom_id === userId) return { active: true, next_billing_at: next };
     } catch (e) {
       console.warn("[premium] PayPal check failed:", (e as Error).message);
-      if (row.status === "ACTIVE") return { active: true, next_billing_at: row.next_billing_at };
+      // Fail closed: an unverifiable subscription does not grant Premium.
     }
   }
   return { active: false, next_billing_at: null };
