@@ -120,7 +120,7 @@ const Index = () => {
   return (
     <div className="min-h-screen md:pt-20">
       <SEO
-        title="Cuddles AI — Free AI Plant Expert & Cannabis Budtender"
+        title="Cuddles AI — Cannabis Budtender South Africa | Free AI Plant Expert"
         description="Free AI plant companion and cannabis budtender. Plant care and grow help, personalized strain picks in seconds, photo scanning, journal and reviews. Built in South Africa."
         url="/"
         keywords="AI plant expert, plant care AI, AI budtender, cannabis AI, strain recommendations, houseplant help, grow assistant, weed strain finder, indica vs sativa, terpene guide, strain scanner, cannabis journal, Cuddles AI, dispensary AI"
