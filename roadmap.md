@@ -1,5 +1,9 @@
 # Roadmap
 
+## Knowledge refresh
+- [ ] Add newer published articles, the 750 g draft-law explainer and LëF Labs catalogue notes to RAG.
+- [ ] Run ingestion and verify stored embeddings and retrieval.
+
 ## Cuddles companion
 - [x] Add personal helper conversations and shared conversations with accepted friends.
 - [x] Keep private records out of shared conversations; require approval to save personal tasks.
