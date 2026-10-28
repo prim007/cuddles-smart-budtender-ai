@@ -1,5 +1,9 @@
 # Roadmap
 
+## Knowledge refresh
+- [x] Add five newer published articles (including the 750 g draft-law explainer) as 10 passages and 77 LëF Labs flower catalogue notes to RAG.
+- [x] Ingest all 87 documents; verify embeddings, real-query retrieval and live chat identifies the 750 g figure as a proposal.
+
 ## Cuddles companion
 - [x] Add personal helper conversations and shared conversations with accepted friends.
 - [x] Keep private records out of shared conversations; require approval to save personal tasks.

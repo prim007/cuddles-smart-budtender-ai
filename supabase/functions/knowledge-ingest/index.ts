@@ -6,8 +6,9 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 import { KNOWLEDGE_CORPUS, CORPUS_VERSION } from "../_shared/knowledge-corpus.ts";
 import { PLANT_CORPUS } from "../_shared/plant-corpus.ts";
+import { CONTENT_REFRESH_CORPUS } from "../_shared/content-refresh-corpus.ts";
 
-const FULL_CORPUS = [...KNOWLEDGE_CORPUS, ...PLANT_CORPUS];
+const FULL_CORPUS = [...KNOWLEDGE_CORPUS, ...PLANT_CORPUS, ...CONTENT_REFRESH_CORPUS];
 import { embedTexts, sha256Hex } from "../_shared/rag.ts";
 
 const corsHeaders = {
@@ -65,18 +66,20 @@ serve(async (req) => {
 
     const body = req.method === "POST" ? await req.json().catch(() => ({})) : {};
     const force = body?.force === true;
+    const corpus = body?.contentOnly === true ? CONTENT_REFRESH_CORPUS : FULL_CORPUS;
 
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) return json({ error: "Service temporarily unavailable" }, 503);
 
     // Existing hashes, so re-runs only embed what changed.
-    const { data: existing } = await admin
+    const { data: existing, error: existingError } = await admin
       .from("knowledge_documents")
       .select("content_hash");
+    if (existingError) return json({ error: "Unable to read existing knowledge" }, 500);
     const known = new Set((existing ?? []).map((r: { content_hash: string }) => r.content_hash));
 
     const prepared = await Promise.all(
-      FULL_CORPUS.map(async (doc) => ({
+      corpus.map(async (doc) => ({
         ...doc,
         content_hash: await sha256Hex(`${doc.title}::${doc.content}`),
       })),
@@ -94,6 +97,9 @@ serve(async (req) => {
         apiKey,
         slice.map((d) => `${d.title}. ${d.content}`),
       );
+      if (vectors.length !== slice.length || vectors.some(v => v.length !== 768 || v.some(n => !Number.isFinite(n)))) {
+        return json({ error: "Incomplete embeddings; no batch stored", inserted }, 502);
+      }
 
       const rows = slice.map((d, idx) => ({
         category: d.category,
@@ -114,6 +120,12 @@ serve(async (req) => {
         return json({ error: "Failed to store knowledge" }, 500);
       }
       inserted += rows.length;
+      // Replace outdated versions only after their new embeddings are safely stored.
+      for (const row of rows.filter(row => row.source.startsWith("https://cuddles-ai.com/"))) {
+        const { error: cleanupError } = await admin.from("knowledge_documents")
+          .delete().eq("source", row.source).neq("content_hash", row.content_hash);
+        if (cleanupError) return json({ error: "Unable to replace outdated knowledge", inserted }, 500);
+      }
     }
 
     return json({ ok: true, version: CORPUS_VERSION, inserted, total: prepared.length }, 200);
