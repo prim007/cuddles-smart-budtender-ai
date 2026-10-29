@@ -88,7 +88,7 @@ Are you a dispensary, grow club or cannabis business in South Africa? **We can d
     author: "Cuddles Team",
     tags: ["South Africa", "Gauteng", "Law", "Dispensaries", "News"],
     published_at: "2026-10-29T10:00:00Z",
-    featured_image: null,
+    featured_image: "/blog/gauteng-cannabis-shop-raids-2026.jpg",
   },
   {
     id: "static-cannabis-news-october-2026",
