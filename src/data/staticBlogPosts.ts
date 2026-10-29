@@ -12,6 +12,85 @@ export interface StaticBlogPost {
 
 export const staticBlogPosts: StaticBlogPost[] = [
   {
+    id: "static-gauteng-cannabis-shop-raids-oct-2026",
+    title: "Raids Loom for Gauteng's Cannabis Shops: What the Leaked Police Memo Means — and Why Dispensaries Should Build Online Now",
+    slug: "gauteng-cannabis-shop-raids-police-memo-october-2026",
+    excerpt:
+      "News24 reports a leaked memo from the Gauteng police commissioner's office showing police preparing to crack down on cannabis shops. Here's what the law actually says, what recent raids looked like, and why a strong, compliant online presence matters more than another shopfront.",
+    content: `### Raids Loom for Gauteng's Cannabis Shops
+
+*Educational news summary only. Not legal advice. Adults 18+ only.*
+
+**In short:** police in Gauteng appear to be preparing a crackdown on cannabis shops. Selling cannabis to the public is still not legal in South Africa, even though thousands of shops are open. Shops that rely only on a physical storefront carry the most risk.
+
+---
+
+### 1. What was reported
+
+On 28 October 2026, News24 reported that a **leaked memo from the Gauteng police commissioner's office** indicates police are gearing up to act against illegal cannabis shops in the province [1](https://www.news24.com/business/companies/raids-loom-for-gautengs-dagga-shops-leaked-police-memo-shows-20261028-1081).
+
+The full article is for subscribers, so we have not repeated details we could not confirm, such as dates or named areas.
+
+---
+
+### 2. Why shops are a target: the law
+
+- The **Cannabis for Private Purposes Act (Act 7 of 2024)** protects adults' private use, possession and growing — and it explicitly **prohibits dealing in cannabis** [2](https://lawlibrary.org.za/akn/za/act/2024/7/eng@2024-06-03).
+- News24 explained in June 2026 that, despite thousands of stores, **recreational cannabis sales are still illegal** [3](https://www.news24.com/southafrica/debunking/despite-thousands-of-weed-stores-recreational-cannabis-sales-still-illegal-in-sa-20260622-0861).
+- SAPS and SAHPRA have warned since 2019 that dispensaries, **online sites and social media pages selling cannabis** are illegal unless allowed under the Medicines Act [4](https://www.gov.za/news/media-statements/saps-joint-media-statement-illegal-trade-cannabis-05-nov-2019).
+
+---
+
+### 3. This is already happening
+
+- **Pretoria, April 2026:** SAPS and SAHPRA raided two shops in Montana near schools; two people were arrested and THC sweets and unregistered medicines were found [5](https://www.citizen.co.za/rekord/news-headlines/local-news/2026/04/18/fears-over-learner-access-spark-pretoria-cannabis-crackdown-two-arrested-2/).
+- **Durban, March 2026:** police raided four shops, arrested five people and seized cannabis valued at about R1.3 million [6](https://iol.co.za/thepost/news/2026-03-20-major-drug-bust-in-durban-cannibis-shops-targeted-in-umbilo-amanzimtoti-brighton-beach-and-montclair/).
+
+**Why it matters:** raids hit physical premises — stock, staff and rent all at once.
+
+---
+
+### 4. Why dispensaries should put online before bricks and mortar
+
+To be clear: **moving sales online does not make them legal.** The same rules apply to websites and social media [4](https://www.gov.za/news/media-statements/saps-joint-media-statement-illegal-trade-cannabis-05-nov-2019). But a business that builds its value online — instead of in an expensive shopfront — is lighter, safer and ready for when commercial rules arrive.
+
+What "online first" can mean, lawfully:
+
+- **Education and trust:** plain-language guides, strain information and safe-use content that customers search for.
+- **Community, not counters:** private-club or membership models where legal advice supports them, rather than walk-in retail.
+- **Legal product lines:** accessories, grow supplies, hemp and compliant wellness products sold through a proper online store.
+- **Lower fixed costs:** less rent and stock sitting on a shelf that can be seized.
+- **Ready for regulation:** when licensing comes, businesses with a known brand, customer list and clean records will move first.
+- **Age checks and clear disclaimers** built into every page.
+
+Always get advice from a South African lawyer before changing how you operate.
+
+---
+
+### 5. Want your own story told?
+
+Are you a dispensary, grow club or cannabis business in South Africa? **We can develop a story about your business** — your journey, your approach to compliance and what makes you different — and help you build a stronger online presence with Cuddles.
+
+👉 [Get in touch through our partners page](/partners) or [start dispensary onboarding](/dispensary-onboarding).
+
+---
+
+### Sources
+
+1. [News24 — Raids loom for Gauteng's cannabis shops, leaked police memo shows (28 Oct 2026)](https://www.news24.com/business/companies/raids-loom-for-gautengs-dagga-shops-leaked-police-memo-shows-20261028-1081)
+2. [Cannabis for Private Purposes Act, 2024 — LawLibrary](https://lawlibrary.org.za/akn/za/act/2024/7/eng@2024-06-03)
+3. [News24 — Despite thousands of weed stores, recreational sales still illegal (22 Jun 2026)](https://www.news24.com/southafrica/debunking/despite-thousands-of-weed-stores-recreational-cannabis-sales-still-illegal-in-sa-20260622-0861)
+4. [SAPS & SAHPRA joint statement on illegal cannabis trade — gov.za](https://www.gov.za/news/media-statements/saps-joint-media-statement-illegal-trade-cannabis-05-nov-2019)
+5. [Rekord — Pretoria cannabis crackdown, two arrested (18 Apr 2026)](https://www.citizen.co.za/rekord/news-headlines/local-news/2026/04/18/fears-over-learner-access-spark-pretoria-cannabis-crackdown-two-arrested-2/)
+6. [IOL — Durban cannabis shops raided (20 Mar 2026)](https://iol.co.za/thepost/news/2026-03-20-major-drug-bust-in-durban-cannibis-shops-targeted-in-umbilo-amanzimtoti-brighton-beach-and-montclair/)
+
+*Not legal or medical advice.*`,
+    author: "Cuddles Team",
+    tags: ["South Africa", "Gauteng", "Law", "Dispensaries", "News"],
+    published_at: "2026-10-29T10:00:00Z",
+    featured_image: null,
+  },
+  {
     id: "static-cannabis-news-october-2026",
     title: "This Week in Cannabis: Record Sales, a Rescheduling Fight and a Takeover Battle (October 2026)",
     slug: "cannabis-news-roundup-october-2026",
