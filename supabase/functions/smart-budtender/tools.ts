@@ -277,9 +277,10 @@ async function startCheckout(ctx: ToolContext, args: Record<string, unknown>) {
 
   const { data: match } = await ctx.admin
     .from("tenant_strains")
-    .select("id, strain_name, price, in_stock")
-    .ilike("strain_name", `%${strainName}%`)
+    .select("id, strain_name, price, in_stock, tenants!inner(status)")
+    .ilike("strain_name", `%${strainName.replace(/[%_\\]/g, (c) => `\\${c}`)}%`)
     .eq("in_stock", true)
+    .in("tenants.status", ["active", "trial"])
     .limit(1)
     .maybeSingle();
 
