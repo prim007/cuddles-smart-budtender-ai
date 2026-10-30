@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
   }
   if (suppressed) {
     // Same response as a normal signup so opt-out status is never revealed.
-    return json({ success: true }, 200)
+    return json({ success: true, pending: true }, 200)
   }
 
   // Double opt-in: the address is stored as pending and only joins the
