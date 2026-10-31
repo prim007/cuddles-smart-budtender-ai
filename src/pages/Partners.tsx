@@ -84,6 +84,13 @@ export default function Partners() {
             <Link to="/schedule-demo" className="inline-block text-primary underline underline-offset-4">
               Schedule a demo
             </Link>
+            <p className="pt-2">
+              Want your shop's story told? We write free features about South African plant and cannabis
+              businesses for the Cuddles blog.
+            </p>
+            <Link to="/share-your-story" className="inline-block text-primary underline underline-offset-4">
+              Tell us your story
+            </Link>
           </Card>
         </section>
       </main>

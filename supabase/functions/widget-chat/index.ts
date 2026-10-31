@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { consumeQuotas, hashKey, DAY_SECONDS, HOUR_SECONDS } from "../_shared/ai-quota.ts";
+import { topicsFor } from "../_shared/question-topics.ts";
 import { buildClaudeRequest, anthropicSseToOpenAiStream } from "../_shared/claude.ts";
 
 const corsHeaders = {
@@ -257,6 +258,17 @@ serve(async (req) => {
 
 
 
+
+    // Topic-only record for the shop's weekly report. Never stores message
+    // text, visitor IDs or IPs. Failure must never block the chat reply.
+    const lastUser = [...messages].reverse().find((m: { role: string }) => m.role === 'user') as
+      | { content?: unknown }
+      | undefined;
+    const askedTopics = topicsFor(typeof lastUser?.content === 'string' ? lastUser.content : '');
+    supabase
+      .from('widget_topic_events')
+      .insert({ tenant_id: tenant.id, topics: askedTopics })
+      .then(({ error }) => { if (error) console.error('widget topic record failed'); });
 
     // Fetch tenant-specific strains (limit menu surface for free tier)
     let tenantStrainsQuery = supabase

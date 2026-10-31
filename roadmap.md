@@ -34,3 +34,9 @@
 - [ ] Localise the B2B page before approaching dispensaries: SA till systems, rand price, fix /pricing 404.
 - [ ] Ask Budbase to link back / share their guest post.
 - [ ] Tripple444 menu still shows sample prices — needs the real menu.
+
+## Moat building (31 Oct 2026)
+- [x] Shops: weekly "your shop this week" report + setup checklist on /insights, fed by topic-only widget question records.
+- [x] Insight: public monthly anonymised "What South Africans asked Cuddles" report page.
+- [x] Community: tracked WhatsApp/Facebook share buttons on posts and the report; "get your shop's story written" request page.
+- [ ] Verify a shop owner sees their weekly report signed in, and topics appear after real website chats — blocked: no shop owner account available to test as.
