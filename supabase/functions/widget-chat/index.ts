@@ -259,6 +259,17 @@ serve(async (req) => {
 
 
 
+    // Topic-only record for the shop's weekly report. Never stores message
+    // text, visitor IDs or IPs. Failure must never block the chat reply.
+    const lastUser = [...messages].reverse().find((m: { role: string }) => m.role === 'user') as
+      | { content?: unknown }
+      | undefined;
+    const askedTopics = topicsFor(typeof lastUser?.content === 'string' ? lastUser.content : '');
+    supabase
+      .from('widget_topic_events')
+      .insert({ tenant_id: tenant.id, topics: askedTopics })
+      .then(({ error }) => { if (error) console.error('widget topic record failed'); });
+
     // Fetch tenant-specific strains (limit menu surface for free tier)
     let tenantStrainsQuery = supabase
       .from('tenant_strains')
