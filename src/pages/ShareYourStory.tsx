@@ -42,7 +42,7 @@ const ShareYourStory = () => {
         name: d.name,
         email: d.email.toLowerCase(),
         company: d.company,
-        phone: d.phone || "",
+        phone: d.phone || null,
         store_count: "story",
         current_systems: "Story request",
         message,
