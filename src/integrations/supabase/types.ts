@@ -1741,6 +1741,35 @@ export type Database = {
         }
         Relationships: []
       }
+      widget_topic_events: {
+        Row: {
+          created_at: string
+          id: string
+          tenant_id: string
+          topics: string[]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          tenant_id: string
+          topics?: string[]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          tenant_id?: string
+          topics?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "widget_topic_events_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       strain_reviews_public: {
