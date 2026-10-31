@@ -68,7 +68,7 @@ const ShareYourStory = () => {
         description="South African dispensaries, grow shops and plant businesses: tell us your story and we'll write a feature about you on the Cuddles AI blog."
         url="/share-your-story"
       />
-      <main className="container mx-auto max-w-2xl px-4 py-12 space-y-8">
+      <main className="container mx-auto max-w-2xl px-4 pt-28 pb-12 space-y-8">
         <header className="space-y-3 text-center">
           <PenLine className="w-10 h-10 mx-auto text-primary" />
           <h1 className="text-3xl md:text-4xl font-display font-bold">Get your shop's story written</h1>

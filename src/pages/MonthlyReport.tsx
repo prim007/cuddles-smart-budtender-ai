@@ -60,7 +60,7 @@ const MonthlyReport = () => {
         description="A free, anonymised monthly report of the plant-care, growing, cannabis and law questions South Africans asked Cuddles AI."
         url="/reports/plant-questions"
       />
-      <main className="container mx-auto max-w-4xl px-4 py-12 space-y-8">
+      <main className="container mx-auto max-w-4xl px-4 pt-28 pb-12 space-y-8">
         <header className="space-y-4">
           <p className="flex items-center gap-2 text-sm font-medium text-primary">
             <BarChart3 className="w-4 h-4" /> Cuddles monthly report
