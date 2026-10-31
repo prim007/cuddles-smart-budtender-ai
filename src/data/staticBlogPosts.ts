@@ -12,6 +12,128 @@ export interface StaticBlogPost {
 
 export const staticBlogPosts: StaticBlogPost[] = [
   {
+    id: "static-comfrey-poisonous-herbs-oct-2026",
+    title: "Comfrey: The Garden Hero You Should Never Eat — Plus 8 More Poisonous Plants to Avoid",
+    slug: "comfrey-and-poisonous-herbs-to-avoid",
+    excerpt:
+      "Comfrey is one of the best natural fertilisers you can grow, but it can seriously damage your liver if swallowed. Here's how to use it safely, and which other common herbs and garden plants South Africans should never put in a tea.",
+    content: `### Comfrey: Brilliant in the Garden, Dangerous on the Plate
+
+*Plant education only. Not medical advice. If you think someone has been poisoned, call the Poisons Information Helpline on **0861 555 777** or go to your nearest emergency unit.*
+
+**In short:** comfrey is great for your soil, but you should never eat it or drink it as tea. Several other popular "healing" herbs and common garden plants are just as risky.
+
+---
+
+### 1. What is comfrey?
+
+Comfrey (*Symphytum officinale*) is a fast-growing perennial herb known for its large, hairy leaves, bell-shaped purple or white flowers and a deep taproot.
+
+It is highly valued in gardening and permaculture as a **"dynamic accumulator."** Its deep roots — up to 2 metres — pull nutrients like potassium up from the subsoil into its leaves, making it an excellent natural fertiliser, mulch or compost activator [1](https://www.thegardener.co.za/grow-to-eat/herbs/6-reasons-to-grow-comfrey/).
+
+**Good garden uses:**
+- Chop the leaves into the compost heap to speed it up.
+- Soak leaves in water for a few weeks to make a liquid plant feed (dilute before use).
+- Lay chopped leaves around tomatoes and peppers as mulch.
+- Line planting holes with leaves as a slow-release fertiliser.
+
+---
+
+### 2. Is comfrey harmful?
+
+**Yes, if swallowed.** Comfrey contains **pyrrolizidine alkaloids (PAs)** — toxic compounds that can cause severe, sometimes irreversible liver damage, and have been linked to liver cancer [2](https://www.ncbi.nlm.nih.gov/books/NBK548370/).
+
+Comfrey was once brewed as tea or taken to heal injuries, earning it the old nickname **"knitbone."** But since 2001 the US Food and Drug Administration has warned that comfrey taken by mouth is a serious health hazard, and asked supplement makers to remove it from the market [3](http://web.archive.org/web/20080917075204/http:/www.cfsan.fda.gov/~dms/dspltr06.html). Most countries now ban or restrict comfrey that is meant to be eaten [2](https://www.ncbi.nlm.nih.gov/books/NBK548370/).
+
+**What's generally considered OK:** creams and ointments on **unbroken skin** for sprains and bruises. Never use it on open wounds.
+
+**In the garden:** wear gloves. The stiff, bristly hairs can cause minor skin irritation.
+
+> **Natural does not mean safe.** US health authorities list comfrey and kava as herbs that can seriously harm the liver [4](https://www.nccih.nih.gov/health/tips/tips-what-consumers-need-to-know-about-dietary-supplements).
+
+---
+
+### 3. A deadly look-alike: foxglove
+
+Before it flowers, **foxglove** (*Digitalis purpurea*) has leaves that look a lot like comfrey. People have made "comfrey tea" from foxglove by mistake and ended up in hospital with dangerous heart rhythm problems — some have died [5](https://doi.org/10.1016/s1726-4901(10)70009-5) [6](https://doi.org/10.1080/15563650.2017.1317350).
+
+**Lesson:** never make tea from a plant unless you are 100% sure what it is.
+
+---
+
+### 4. More poisonous plants to avoid
+
+These plants grow in South African gardens, roadsides or herb shops. **Do not eat them, drink them as tea or take them as remedies.**
+
+**Datura (malpitte, thorn apple, Jimson weed)** — *Datura stramonium*
+A common weed on roadsides and disturbed ground across South Africa. Poisonings happen when leaves are picked by mistake as wild greens, or when seeds are taken to "get high." It causes confusion, hallucinations, a racing heart and can be fatal [7](https://journals.co.za/doi/pdf/10.10520/EJC128862) [8](https://www.ajol.info/index.php/samj/article/download/171665/161066).
+
+**Senecio (ragwort, groundsels)** — *Senecio* species
+Contains the same type of liver toxins as comfrey. In South Africa, traditional remedies containing Senecio have caused serious liver disease and deaths in infants and young children [9](https://doi.org/10.1097/00007691-200006000-00011) [10](https://doi.org/10.1016/j.forsciint.2020.110680). A Senecio weed that looks like rooibos has even been found contaminating some tea harvests [11](https://doi.org/10.1016/j.sajb.2017.01.013).
+
+**Pennyroyal** — *Mentha pulegium*
+Smells like mint, but the oil is highly toxic when swallowed and has caused liver failure and deaths [12](https://ncbi.nlm.nih.gov/books/NBK548673/).
+
+**Rue** — *Ruta graveolens*
+A traditional herb with a long folk-remedy history. Swallowing it in larger amounts can cause serious harm to the liver and kidneys, especially during pregnancy [13](https://pmc.ncbi.nlm.nih.gov/articles/PMC10192026/).
+
+**Oleander** — *Nerium oleander*
+A very common hedge and garden shrub in South Africa. **Every part** — flowers, leaves, stems — is poisonous and can stop the heart [14](https://medlineplus.gov/ency/article/002884.htm) [15](https://www.ncbi.nlm.nih.gov/books/NBK536963/).
+
+**Castor oil plant** — *Ricinus communis*
+A widespread weed. Its seeds contain **ricin**, one of the most poisonous natural substances known. Keep children and pets away from the seeds [16](https://ncbi.nlm.nih.gov/books/NBK441948/).
+
+**Kava** — *Piper methysticum*
+Sold as a relaxing drink or supplement, but linked to serious liver damage [4](https://www.nccih.nih.gov/health/tips/tips-what-consumers-need-to-know-about-dietary-supplements).
+
+**Foxglove** — *Digitalis purpurea*
+See above. All parts are poisonous to the heart [15](https://www.ncbi.nlm.nih.gov/books/NBK536963/).
+
+---
+
+### 5. Simple safety rules
+
+- **Only eat plants you can identify with certainty.** If unsure, don't.
+- **Label your herb garden**, especially if comfrey grows near herbs you cook with.
+- **Wear gloves** when handling comfrey, rue, castor oil plant and oleander.
+- **Keep children and pets away** from oleander, datura and castor seeds.
+- **Buy herbal products from reputable sellers**, and tell your doctor or pharmacist about anything you take.
+- **Pregnant or breastfeeding?** Speak to a health professional before using any herbal remedy.
+- **Snap a photo** of the plant if someone swallows something — it helps the poison centre identify it [7](https://journals.co.za/doi/pdf/10.10520/EJC128862).
+
+**Emergency:** Poisons Information Helpline of South Africa — **0861 555 777** [17](https://www.su.ac.za/en/faculties/medicine/departments/medicine/clinical-pharmacology/poison-information-centre). Don't make someone vomit unless a health professional tells you to.
+
+Not sure what's growing in your garden? Ask Cuddles to help you learn about it — then confirm with a local nursery or expert before you touch, eat or brew anything.
+
+---
+
+### Sources
+
+1. [The Gardener — 6 Reasons to Grow Comfrey](https://www.thegardener.co.za/grow-to-eat/herbs/6-reasons-to-grow-comfrey/)
+2. [LiverTox (US National Institutes of Health) — Comfrey](https://www.ncbi.nlm.nih.gov/books/NBK548370/)
+3. [US FDA — Advises supplement makers to remove comfrey products (2001, archived)](http://web.archive.org/web/20080917075204/http:/www.cfsan.fda.gov/~dms/dspltr06.html)
+4. [NCCIH — What consumers need to know about dietary supplements](https://www.nccih.nih.gov/health/tips/tips-what-consumers-need-to-know-about-dietary-supplements)
+5. [Journal of the Chinese Medical Association — Outbreak of foxglove leaf poisoning (2010)](https://doi.org/10.1016/s1726-4901(10)70009-5)
+6. [Clinical Toxicology — Fatal poisoning from mistaking foxglove for comfrey (2017)](https://doi.org/10.1080/15563650.2017.1317350)
+7. [Engelbrecht & Cilliers, University of Pretoria — Poisonous plants (emergency medicine)](https://journals.co.za/doi/pdf/10.10520/EJC128862)
+8. [South African Medical Journal — Malpitte (Datura) poisoning cases (1974)](https://www.ajol.info/index.php/samj/article/download/171665/161066)
+9. [Therapeutic Drug Monitoring — Pyrrolizidine poisoning from SA traditional medicines (2000)](https://doi.org/10.1097/00007691-200006000-00011)
+10. [Forensic Science International — Fatal infant poisoning from Senecio (2020)](https://doi.org/10.1016/j.forsciint.2020.110680)
+11. [South African Journal of Botany — Senecio contamination of rooibos (2017)](https://doi.org/10.1016/j.sajb.2017.01.013)
+12. [LiverTox — Pennyroyal Oil](https://ncbi.nlm.nih.gov/books/NBK548673/)
+13. [Toxicities of Herbal Abortifacients — review (2023)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10192026/)
+14. [MedlinePlus — Oleander poisoning](https://medlineplus.gov/ency/article/002884.htm)
+15. [StatPearls — Cardioactive steroid toxicity (foxglove, oleander)](https://www.ncbi.nlm.nih.gov/books/NBK536963/)
+16. [StatPearls — Ricin toxicity (castor oil plant)](https://ncbi.nlm.nih.gov/books/NBK441948/)
+17. [Stellenbosch University — Poison Information Centre](https://www.su.ac.za/en/faculties/medicine/departments/medicine/clinical-pharmacology/poison-information-centre)
+
+*Educational content only. Not medical advice. Always consult a qualified health professional.*`,
+    author: "Cuddles Team",
+    tags: ["Herbs", "Plant Safety", "Gardening", "Poisonous Plants", "South Africa"],
+    published_at: "2026-10-31T09:00:00Z",
+    featured_image: "/blog/comfrey-poisonous-herbs-2026.jpg",
+  },
+  {
     id: "static-gauteng-cannabis-shop-raids-oct-2026",
     title: "Raids Loom for Gauteng's Cannabis Shops: What the Leaked Police Memo Means — and Why Dispensaries Should Build Online Now",
     slug: "gauteng-cannabis-shop-raids-police-memo-october-2026",
