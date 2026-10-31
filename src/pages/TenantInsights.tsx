@@ -20,6 +20,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import SEO from "@/components/SEO";
+import ShopWeeklyReport from "@/components/ShopWeeklyReport";
 
 interface Bucket {
   label: string;
@@ -198,8 +199,11 @@ const TenantInsights = () => {
           </Card>
         )}
 
+        {!authLoading && user && <ShopWeeklyReport />}
+
         {!isLoading && data && (
           <>
+            <h2 className="text-xl font-semibold pt-2">Across all Cuddles conversations</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card>
                 <CardHeader className="pb-2">

@@ -133,6 +133,12 @@ const Footer = () => {
               <Link to="/partners" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Partners
               </Link>
+              <Link to="/reports/plant-questions" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Monthly Question Report
+              </Link>
+              <Link to="/share-your-story" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Get Your Shop's Story Written
+              </Link>
               <Link to="/schedule-demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Schedule Demo
               </Link>
