@@ -10,6 +10,7 @@ import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
 import Footer from "@/components/Footer";
 import ReactMarkdown from "react-markdown";
+import ShareButtons from "@/components/ShareButtons";
 import remarkGfm from "remark-gfm";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -275,6 +276,15 @@ const BlogPost = () => {
               </p>
             </div>
           </article>
+
+          <div className="max-w-3xl mx-auto mt-8">
+            <ShareButtons
+              path={`/blog/${displayPost.slug}`}
+              campaign="blog_share"
+              text={displayPost.title}
+            />
+          </div>
+
 
           {/* Contextual AI chat prompts embedded in blog */}
           <div className="max-w-3xl mx-auto mt-16 p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10 border border-border">
