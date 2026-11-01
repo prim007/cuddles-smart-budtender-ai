@@ -190,7 +190,7 @@ const Docs = () => (
                 <a key={c.title} href={c.href} className="block">
                   <Card className="p-5 h-full hover:border-primary/50 transition-colors">
                     <c.icon className="w-6 h-6 text-primary mb-3" />
-                    <h3 className="font-semibold text-foreground mb-1">{c.title}</h3>
+                    <h3 className="text-base font-semibold font-sans text-foreground mb-1">{c.title}</h3>
                     <p className="text-sm text-muted-foreground">{c.body}</p>
                   </Card>
                 </a>
@@ -252,7 +252,7 @@ const Docs = () => (
             <div className="grid md:grid-cols-2 gap-4">
               {platforms.map((p) => (
                 <Card key={p.name} className="p-5">
-                  <h3 className="font-semibold text-foreground mb-3">{p.name}</h3>
+                  <h3 className="text-base font-semibold font-sans text-foreground mb-3">{p.name}</h3>
                   <ol className="list-decimal pl-5 space-y-1.5 text-sm text-muted-foreground">
                     {p.steps.map((s) => <li key={s}>{s}</li>)}
                   </ol>
@@ -319,7 +319,7 @@ const Docs = () => (
             </p>
             <CodeBlock code={MCP_SERVER_URL} label="AI assistant connection address" />
             <Card className="p-5">
-              <h3 className="font-semibold text-foreground mb-3">What the assistant can do</h3>
+              <h3 className="text-base font-semibold font-sans text-foreground mb-3">What the assistant can do</h3>
               <ul className="space-y-2 text-sm">
                 {mcpTools.map((t) => (
                   <li key={t.name}>
@@ -344,7 +344,7 @@ const Docs = () => (
             <div className="space-y-3">
               {problems.map((p) => (
                 <Card key={p.q} className="p-5">
-                  <h3 className="font-semibold text-foreground mb-1">{p.q}</h3>
+                  <h3 className="text-base font-semibold font-sans text-foreground mb-1">{p.q}</h3>
                   <p className="text-sm text-muted-foreground">{p.a}</p>
                 </Card>
               ))}
