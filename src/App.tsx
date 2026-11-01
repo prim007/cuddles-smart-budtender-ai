@@ -101,6 +101,7 @@ const ManageStrains = lazyWithReload(() => import("./pages/ManageStrains"));
 const TenantInsights = lazyWithReload(() => import("./pages/TenantInsights"));
 const MonthlyReport = lazyWithReload(() => import("./pages/MonthlyReport"));
 const ShareYourStory = lazyWithReload(() => import("./pages/ShareYourStory"));
+const Docs = lazyWithReload(() => import("./pages/Docs"));
 const Shop = lazyWithReload(() => import("./pages/Shop"));
 const Checkout = lazyWithReload(() => import("./pages/Checkout"));
 const OrderTracking = lazyWithReload(() => import("./pages/OrderTracking"));
@@ -226,6 +227,7 @@ const App = () => (
                 <Route path="/partners" element={<Suspense fallback={<PageLoader />}><Partners /></Suspense>} />
                 <Route path="/reports/plant-questions" element={<Suspense fallback={<PageLoader />}><MonthlyReport /></Suspense>} />
                 <Route path="/share-your-story" element={<Suspense fallback={<PageLoader />}><ShareYourStory /></Suspense>} />
+                <Route path="/docs" element={<Suspense fallback={<PageLoader />}><Docs /></Suspense>} />
                 <Route path="/install" element={<Suspense fallback={<PageLoader />}><Install /></Suspense>} />
                 <Route path="/newsletter" element={<Suspense fallback={<PageLoader />}><Newsletter /></Suspense>} />
                 <Route path="/newsletter/confirm" element={<Suspense fallback={<PageLoader />}><ConfirmNewsletter /></Suspense>} />
