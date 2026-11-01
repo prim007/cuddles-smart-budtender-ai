@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ZA_CITIES, getZaCityBySlug } from "@/data/zaCities";
 import Footer from "@/components/Footer";
+import CityClubList from "@/components/CityClubList";
 
 const CityDispensaryPage = () => {
   const { city } = useParams<{ city: string }>();
@@ -28,7 +29,7 @@ const CityDispensaryPage = () => {
         "name": `Where can I find a dispensary near me in ${cityInfo.name}?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `${cityInfo.name} has a growing number of legal private cannabis clubs and lounges. Chat with Cuddles AI and we'll match you to the closest options with stock that fits your needs.`,
+          "text": `${cityInfo.name} has private cannabis clubs and lounges rather than licensed shops. This page lists the ones in the DaggaSpot directory, closest to the city centre first, with map directions. Stock and membership rules vary, so call before you go.`,
         },
       },
       {
@@ -109,7 +110,7 @@ const CityDispensaryPage = () => {
           </h2>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
-              { icon: MapPin, title: "Closest first", text: `The dispensary finder lists ${cityInfo.name} clubs with distances and directions.` },
+              { icon: MapPin, title: "Closest first", text: `The list below shows ${cityInfo.name} clubs with distances and directions.` },
               { icon: Sparkles, title: "Know what to ask for", text: "Cuddles explains which strains and terpenes suit the effect you want, in plain language." },
               { icon: ShieldCheck, title: "Straight answers on the law", text: "Cuddles explains South Africa's private-use rules so you know where you stand." },
             ].map((b) => (
@@ -122,6 +123,31 @@ const CityDispensaryPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Live club list */}
+      <section id="clubs" className="py-16">
+        <div className="container mx-auto max-w-3xl px-4">
+          <h2 className="font-display text-2xl font-semibold text-foreground md:text-3xl">
+            Cannabis clubs listed in {cityInfo.name}
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Closest to the city centre first, with map directions. Selling cannabis is still not legal in South Africa, so being listed here doesn't mean a place is licensed.
+          </p>
+          <CityClubList cityName={cityInfo.name} lat={cityInfo.lat} lng={cityInfo.lng} />
+          {cityInfo.nextSteps && (
+            <div className="mt-8">
+              <h3 className="font-display text-lg font-semibold text-foreground">Before you go</h3>
+              <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
+                {cityInfo.nextSteps.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </div>
+      </section>
+
+
 
       {/* FAQ */}
       <section className="bg-muted/30 py-16">

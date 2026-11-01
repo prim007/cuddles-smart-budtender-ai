@@ -14,6 +14,8 @@ export interface ZaCity {
   metaDescription?: string;
   /** Optional extra paragraph shown under the hero for local search intent. */
   localIntro?: string;
+  /** Optional practical next steps shown under the club list. */
+  nextSteps?: string[];
 }
 
 export const ZA_CITIES: ZaCity[] = [
@@ -43,11 +45,18 @@ export const ZA_CITIES: ZaCity[] = [
     lat: -29.0852,
     lng: 26.1596,
     blurb: "The Free State's capital, with a small, tight-knit private cannabis club scene.",
-    metaTitle: "Dispensary Near Me Bloemfontein | Cannabis Clubs & Directions",
+    metaTitle: "Dispensary Near Me Bloemfontein | Clubs Listed With Directions",
     metaDescription:
-      "Find cannabis clubs near you in Bloemfontein, Free State, with distances and directions. Ask Cuddles AI free which strain suits the effect you want — no signup needed.",
+      "See cannabis clubs and lounges listed in Bloemfontein, from the city centre to Heuwelsig, with distances and map directions. What to check before you go, plus free strain help.",
     localIntro:
-      "Bloemfontein has no open cannabis shopfronts — buying in South Africa still runs through private members' clubs. Clubs are spread across the city, so the closest one depends on whether you're near the centre, Westdene, Brandwag, Langenhoven Park or further out. Use the dispensary finder at the bottom of this page for real listings with distances and directions, then ask Cuddles which strains suit the effect you want so you know what to ask for. Most clubs ask you to sign up as a member and show ID, and stock changes often, so call ahead before you drive over.",
+      "Bloemfontein has no licensed cannabis shops — selling cannabis is still not legal in South Africa, so places run as private members' clubs and lounges. Most listed clubs sit within about 5 km of the city centre, with others towards Heuwelsig and the eastern suburbs. Scroll down for the current list with distances and map directions, then ask Cuddles which strains suit the effect you want so you know what to ask for.",
+    nextSteps: [
+      "Pick a club from the list and tap Directions to see how far it is from where you are.",
+      "Call first. Opening hours, stock and whether they take new members change often, and Cuddles doesn't check them.",
+      "Expect to sign up as a member and show ID that proves you're 18 or older.",
+      "Ask Cuddles in the chat which strains suit the effect you want, so you know what to ask for.",
+      "Run a club in Bloemfontein that isn't listed? Get in touch through our partners page.",
+    ],
   },
   { slug: "east-london", name: "East London", province: "Eastern Cape", lat: -33.0153, lng: 27.9116, blurb: "Coastal city serving the Eastern Cape's growing legal market." },
   { slug: "polokwane", name: "Polokwane", province: "Limpopo", lat: -23.9045, lng: 29.4689, blurb: "Limpopo's largest city, gateway to northern South Africa." },
