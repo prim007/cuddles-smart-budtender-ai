@@ -175,7 +175,7 @@ const DispensaryOnboarding = () => {
   };
 
   const copyEmbedCode = () => {
-    const code = `<script src="https://cuddles-smart-budtender-ai.lovable.app/widget.js" data-key="${embedKey}" data-color="${brandingColor}"></script>`;
+    const code = buildEmbedSnippet({ key: embedKey, color: brandingColor });
     navigator.clipboard.writeText(code);
     toast.success("Embed code copied to clipboard!");
   };
@@ -408,11 +408,7 @@ const DispensaryOnboarding = () => {
               <div className="max-w-lg mx-auto">
                 <div className="relative rounded-xl bg-foreground/5 border border-border p-4">
                   <pre className="text-xs text-foreground/80 overflow-x-auto whitespace-pre-wrap break-all font-mono">
-{`<script
-  src="https://cuddles-smart-budtender-ai.lovable.app/widget.js"
-  data-key="${embedKey}"
-  data-color="${brandingColor}"
-></script>`}
+{buildEmbedSnippet({ key: embedKey, color: brandingColor })}
                   </pre>
                   <Button size="sm" variant="ghost" onClick={copyEmbedCode} className="absolute top-2 right-2">
                     <Copy className="w-4 h-4 mr-1" /> Copy

@@ -12,7 +12,7 @@
   var EMBED_KEY = script && script.getAttribute('data-key');
   var BRAND_COLOR = script && script.getAttribute('data-color') || '#10b981';
   var POSITION = script && script.getAttribute('data-position') || 'right';
-  var API_URL = 'https://rcigcarkcpinnniddxcm.supabase.co/functions/v1/widget-chat';
+  var API_URL = 'https://vfcoctqnohlljuxualwl.supabase.co/functions/v1/widget-chat';
 
   var DISPENSARY_MENUS = [
     {
