@@ -1,13 +1,22 @@
 // Agent tools for Cuddles.
 // The model decides when to call these instead of the client guessing with regexes.
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.57.2";
+import { readShopPage, searchReviews } from "./web-tools.ts";
+import { consumeQuotas, DAY_SECONDS } from "../_shared/ai-quota.ts";
 
 export interface ToolContext {
   admin: SupabaseClient;
   userId: string | null;
   sessionId?: string | null;
   agentRole?: string;
+  /** Hashed visitor key (user id or IP hash) for per-person web lookup limits. */
+  quotaKey?: string;
 }
+
+/** Web lookups cost money per call, so they have their own daily ceilings. */
+export const WEB_LOOKUPS_PER_PERSON_DAILY = 15;
+export const WEB_LOOKUPS_SITE_DAILY = 400;
+const WEB_TOOLS = new Set(["read_shop_page", "search_reviews"]);
 
 /** Tools that mutate data or spend money — never executed directly, always
  *  returned to the user as a pending approval they must confirm in chat. */
@@ -112,6 +121,39 @@ export const AGENT_TOOLS = [
           note: { type: "string", description: "Optional one-line note about the order." },
         },
         required: ["strain_name"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "read_shop_page",
+      description:
+        "Open a public web page the user pasted (usually a shop or dispensary menu) and read its text: product names, brands, types, prices, potency. Call whenever the user shares a link and asks about what's on it.",
+      parameters: {
+        type: "object",
+        properties: {
+          url: { type: "string", description: "The full web address the user gave." },
+        },
+        required: ["url"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "search_reviews",
+      description:
+        "Search what real people say about a product or brand (Reddit by default). Use after read_shop_page to compare listed products with community opinion, or when the user asks what Reddit/reviewers recommend. Make 1-2 focused searches, e.g. 'Tribal live resin cart review Ontario'.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Short search words: brand, product type, region." },
+          reddit_only: { type: "boolean", description: "Default true. Set false to include other review sites." },
+        },
+        required: ["query"],
         additionalProperties: false,
       },
     },
@@ -314,6 +356,16 @@ export async function runTool(name: string, rawArgs: string, ctx: ToolContext): 
   let result: unknown;
   let errorMsg: string | null = null;
   try {
+    if (WEB_TOOLS.has(name)) {
+      const who = ctx.quotaKey ?? "unknown";
+      const exhausted = await consumeQuotas([
+        { bucket: `web:person:${who}`, limit: WEB_LOOKUPS_PER_PERSON_DAILY, windowSeconds: DAY_SECONDS },
+        { bucket: "web:total", limit: WEB_LOOKUPS_SITE_DAILY, windowSeconds: DAY_SECONDS },
+      ]);
+      if (exhausted) {
+        return { error: "Today's limit for reading web pages has been reached. Answer from general knowledge and say so." };
+      }
+    }
     switch (name) {
       case "search_strains":
         result = await searchStrains(ctx, args); break;
@@ -327,6 +379,10 @@ export async function runTool(name: string, rawArgs: string, ctx: ToolContext): 
         result = await updateUserMemory(ctx, args); break;
       case "start_checkout":
         result = await startCheckout(ctx, args); break;
+      case "read_shop_page":
+        result = await readShopPage(args); break;
+      case "search_reviews":
+        result = await searchReviews(args); break;
       default:
         result = { error: `Unknown tool ${name}` };
     }
