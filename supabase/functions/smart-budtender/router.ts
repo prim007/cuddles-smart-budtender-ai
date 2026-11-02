@@ -9,7 +9,8 @@ export type SpecialistRole =
   | "inventory"
   | "educator"
   | "grow_coach"
-  | "smalltalk";
+  | "smalltalk"
+  | "shop_reader";
 
 export interface Specialist {
   role: SpecialistRole;
@@ -67,6 +68,14 @@ export const SPECIALISTS: Record<SpecialistRole, Specialist> = {
       "You are operating as the GROW COACH specialist: practical plant care — cannabis cultivation plus houseplants, herbs, succulents and vegetables. Give actionable, step-by-step guidance with light, water, soil and feeding specifics.",
     maxSteps: 0,
   },
+  shop_reader: {
+    role: "shop_reader",
+    sections: ["strain_matching"],
+    tools: ["read_shop_page", "search_reviews", "get_user_memory"],
+    directive:
+      "You are operating as the SHOP READER specialist: the user shared a web page (usually a shop menu) or wants to know what Reddit/reviewers recommend. First call read_shop_page for any link they gave, then call search_reviews for the brands or product types they care about (1-2 searches). Recommend 2-4 products that are actually listed on that page, with the price shown there, and explain what reviewers said — linking each source. Be honest about mixed or negative reviews and say these are opinions, not lab tests. Never claim stock beyond what the page showed, and note prices may have changed. Only for adults where cannabis is legal; general information, not medical advice.",
+    maxSteps: 3,
+  },
   smalltalk: {
     role: "smalltalk",
     sections: [],
@@ -102,7 +111,11 @@ const META_REFLEX =
 const COMMERCE_OVERRIDE =
   /\b(where can i (buy|order)|i want to (buy|order)|order now|add to (cart|basket)|how much (is|are|does|do)\b[^.?!]{0,30}\b(gram|g\b|strain|edible|vape|pre-?roll|flower|weed|cannabis|product|it) (cost|is|are)?|(price|prices|cost)\b[^.?!]{0,30}\b(gram|g\b|strain|edible|vape|pre-?roll|flower|weed|cannabis|it)|in stock|out of stock|stock levels?|your (menu|catalogue|catalog|prices|stock|specials?|deals?)|show me (the )?(menu|shop|catalogue|catalog|dispensar)|deliver(y|ies)? (to|near|available)|any (specials?|deals?)|(specials?|deals?) (on|for|this|near|available)|(dispensar(y|ies)|shops?|stores?)[^.?!]{0,25}\b(near me|nearby|close by|around me|closest|nearest)|\b(near me|nearby|closest|nearest)[^.?!]{0,25}\b(dispensar(y|ies)|shops?|stores?)|(closest|nearest|local) dispensar|dispensar(y|ies) (near|in|around)\b)/i;
 
+// A pasted web address, or asking what Reddit/reviewers say, goes to the shop reader.
+const SHOP_READER_RE = /(https?:\/\/[^\s]+|\bwww\.[a-z0-9-]+\.[a-z]{2,}|\breddit\b|\b(?:reviews?|reviewers?) (?:say|recommend|of|for|on)\b)/i;
+
 export function ruleRoute(message: string): SpecialistRole | null {
+  if (SHOP_READER_RE.test(message)) return "shop_reader";
   // A complaint about being pushed to the shop wins, even if it names a shop.
   if (META_REFLEX.test(message)) return "educator";
   const commerce = COMMERCE_OVERRIDE.test(message);
