@@ -19,55 +19,6 @@ const Placeholder = ({ height }: { height: string }) => (
   <div style={{ minHeight: height }} aria-hidden="true" />
 );
 
-const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "@id": "https://cuddles-ai.com/#business",
-  name: "Tripple444",
-  alternateName: ["Tripple 444", "Cuddles AI by Tripple444", "Tripple444 Cannabis"],
-  description:
-    "Tripple444 is a cannabis business powered by Cuddles AI — offering AI-powered strain recommendations, product catalog, and delivery via WhatsApp.",
-  url: "https://cuddles-ai.com",
-  logo: "https://cuddles-ai.com/pwa-512x512.png",
-  image: "https://cuddles-ai.com/og-image.jpg",
-  telephone: "+27645436734",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Cape Town",
-    addressRegion: "Western Cape",
-    addressCountry: "ZA",
-  },
-  geo: { "@type": "GeoCoordinates", latitude: "-33.9249", longitude: "18.4241" },
-  priceRange: "$$",
-  currenciesAccepted: "ZAR",
-  paymentAccepted: "Cash, EFT, WhatsApp Order",
-  openingHoursSpecification: {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-    opens: "08:00",
-    closes: "22:00",
-  },
-  sameAs: ["https://wa.me/c/27645436734"],
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+27645436734",
-    contactType: "sales",
-    areaServed: "ZA",
-    availableLanguage: ["English", "Afrikaans"],
-  },
-  serviceArea: { "@type": "Place", name: "Cape Town, South Africa" },
-  hasOfferCatalog: {
-    "@type": "OfferCatalog",
-    name: "Tripple444 Products & Services",
-    itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "AI Strain Recommendations by Cuddles" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cannabis Product Catalog" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "WhatsApp Ordering & Delivery" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cannabis Strain Journal & Tracking" } },
-    ],
-  },
-};
-
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -127,7 +78,6 @@ const Index = () => {
 
       />
       <Helmet>
-        <script type="application/ld+json">{JSON.stringify(localBusinessSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
       <ThemeToggle />
