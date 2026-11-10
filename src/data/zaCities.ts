@@ -28,12 +28,19 @@ export const ZA_CITIES: ZaCity[] = [
     lat: -29.8587,
     lng: 31.0218,
     blurb:
-      "Home of the legendary Durban Poison landrace, with private cannabis clubs and same-day delivery from Umhlanga and the Berea through Westville, Pinetown and the Bluff.",
-    metaTitle: "Weed Dispensary Near Me Durban — Open Now, Same-Day Delivery",
+      "Home of the Durban Poison landrace, with a private cannabis club scene from Umhlanga and the Berea to Westville, Pinetown and the Bluff.",
+    metaTitle: "Dispensary Near Me Durban | Cannabis Clubs Listed With Directions",
     metaDescription:
-      "Find weed dispensaries and cannabis clubs open near you in Durban — Umhlanga, Berea, Westville, the Bluff. Free AI strain matching, live stock and same-day delivery in minutes.",
+      "See cannabis clubs listed in Durban, from Umhlanga and the Berea to Westville and the Bluff, with distances and map directions. What to check before you go, plus free strain help.",
     localIntro:
-      "Durban's scene runs on private members' clubs rather than open shopfronts, so the closest option depends on the suburb you're in. Tell Cuddles where you are — Umhlanga, Berea, Glenwood, Musgrave, Westville, Pinetown, Chatsworth or the Bluff — and it will point you at the nearest clubs, who delivers the same day, and which local strains (Durban Poison included) suit what you're after. Membership sign-up is usually quick and done at the club or online, and many clubs keep menus updated daily, so it's worth asking what's in stock before you head out. If you're new to the scene, ask Cuddles to explain how private clubs work, what ID you'll need, and which strains suit the effect you want.",
+      "Durban has no licensed cannabis shops — selling cannabis is still not legal in South Africa, so places run as private members' clubs. Listed clubs are spread across suburbs like Umhlanga, the Berea, Glenwood, Musgrave, Westville, Pinetown and the Bluff, so the closest one depends on where you are. Scroll down for the current list with distances and map directions, then ask Cuddles which strains (Durban Poison included) suit the effect you want so you know what to ask for.",
+    nextSteps: [
+      "Pick a club from the list and tap Directions to see how far it is from where you are.",
+      "Call first. Opening hours, stock and whether they take new members change often, and Cuddles doesn't check them.",
+      "Expect to sign up as a member and show ID that proves you're 18 or older.",
+      "Ask Cuddles in the chat which strains suit the effect you want, so you know what to ask for.",
+      "Run a club in Durban that isn't listed? Get in touch through our partners page.",
+    ],
   },
 
   { slug: "pretoria", name: "Pretoria", province: "Gauteng", lat: -25.7479, lng: 28.2293, blurb: "Capital city with a fast-growing legal cannabis lounge scene." },
