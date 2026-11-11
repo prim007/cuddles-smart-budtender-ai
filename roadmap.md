@@ -2,7 +2,7 @@
 
 ## Homepage audience separation
 - [x] Add Individuals and Businesses choices using existing Cuddles styling, with static coming-soon pages and no paid integrations.
-- [ ] Verify both links and mobile layout.
+- [x] Verify both links, coming-soon headings, return navigation and mobile layout.
 
 ## Knowledge refresh
 - [x] Add five newer published articles (including the 750 g draft-law explainer) as 10 passages and 77 LëF Labs flower catalogue notes to RAG.
