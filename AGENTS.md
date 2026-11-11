@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Homepage audience choices use a shared static coming-soon page with separate URLs; they do not call paid services or replace existing tools.
+
 - Knowledge ingestion includes a generated, chunked snapshot of public blog and partner catalogue sources; regenerate with scripts/prepare-rag-refresh.ts so edge deployment shares the site's source material without treating dated catalogue stock or draft laws as current facts.
 
 - Image Studio generation is authenticated and server-only, with fail-closed database spend quotas and a service-only persistent gateway pause; keep generated results private in the current page and downloadable, not in a public gallery.

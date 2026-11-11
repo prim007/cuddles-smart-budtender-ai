@@ -22,6 +22,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
+const AudienceComingSoon = lazy(() => import("./pages/AudienceComingSoon"));
 
 const STALE_CHUNK_RELOAD_KEY = "cuddles:stale-chunk-reload";
 
@@ -164,6 +165,8 @@ const App = () => (
               <AccessibilityPanel />
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/for-individuals" element={<Suspense fallback={<PageLoader />}><AudienceComingSoon audience="individuals" /></Suspense>} />
+                <Route path="/for-businesses" element={<Suspense fallback={<PageLoader />}><AudienceComingSoon audience="businesses" /></Suspense>} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/.lovable/oauth/consent" element={<Suspense fallback={<PageLoader />}><OAuthConsent /></Suspense>} />
                 <Route path="/claim" element={<Suspense fallback={<PageLoader />}><Claim /></Suspense>} />

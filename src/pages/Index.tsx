@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 import Hero from "@/components/Hero";
 import SEO from "@/components/SEO";
 import ThemeToggle from "@/components/ThemeToggle";
+import AudienceChoices from "@/components/AudienceChoices";
 
 // Everything below the banner loads after first paint. Each placeholder keeps
 // the same height as its section so nothing jumps around while loading.
@@ -82,6 +83,7 @@ const Index = () => {
       </Helmet>
       <ThemeToggle />
 
+      <AudienceChoices />
       <Hero />
       <main>
         <div id="chat-demo">
