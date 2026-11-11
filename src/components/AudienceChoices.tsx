@@ -1,13 +1,21 @@
 import { ArrowUpRight, Building2, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import ndebelePrint from "@/assets/ndebele-print.jpeg.asset.json";
 
 export default function AudienceChoices() {
   return (
-    <section aria-labelledby="audience-heading" className="border-b border-border bg-background py-8 md:py-10">
-      <div className="container mx-auto px-4">
+    <section aria-labelledby="audience-heading" className="relative isolate overflow-hidden border-b border-border bg-background py-8 md:py-10">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 grid grid-cols-[repeat(auto-fill,minmax(225px,1fr))] opacity-30 dark:opacity-25">
+        {Array.from({ length: 24 }, (_, index) => (
+          <img key={index} src={ndebelePrint.url} alt="" width="225" height="225" className="h-[225px] w-full object-cover" />
+        ))}
+      </div>
+      <div className="container relative mx-auto px-4">
+        <div className="w-fit max-w-full rounded-lg bg-background/95 px-4 py-3">
         <h2 id="audience-heading" className="font-display text-3xl font-semibold text-foreground">Meet Cuddles AI</h2>
         <p className="mt-2 text-lg text-muted-foreground">Your intelligent plant companion.</p>
+        </div>
         <div className="mt-6 grid gap-6 pb-2 md:grid-cols-2">
           <Button asChild variant="outline" className="audience-choice h-auto min-h-32 justify-start gap-5 whitespace-normal rounded-lg px-6 py-6 text-left text-foreground hover:text-foreground">
             <Link to="/for-individuals">
