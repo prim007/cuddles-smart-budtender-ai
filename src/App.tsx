@@ -1,3 +1,4 @@
+import SitePrintOverlay from "@/components/SitePrintOverlay";
 import { Suspense, lazy, type ComponentType } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -158,6 +159,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <SitePrintOverlay />
               <GoogleAnalytics />
               <MicrosoftClarity />
               <InstallFunnelTracker />
