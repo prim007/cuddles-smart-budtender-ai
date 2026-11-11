@@ -115,6 +115,38 @@ body {
 }
 
 @layer components {
+  .audience-choice {
+    --audience-tone: var(--hippie-sage);
+    --audience-surface: linear-gradient(155deg, hsl(var(--card)), hsl(var(--audience-tone) / 0.22));
+    --audience-shadow: inset 0 2px 0 hsl(var(--background) / 0.9), 0 6px 0 hsl(var(--audience-tone) / 0.6), 0 14px 22px -8px hsl(var(--foreground) / 0.25);
+    background: var(--audience-surface);
+    border: 2px solid hsl(var(--audience-tone) / 0.6);
+    box-shadow: var(--audience-shadow);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .audience-choice-business {
+    --audience-tone: var(--primary);
+  }
+
+  .audience-choice:hover,
+  .audience-choice:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: inset 0 2px 0 hsl(var(--background) / 0.9), 0 9px 0 hsl(var(--audience-tone) / 0.6), 0 20px 28px -8px hsl(var(--foreground) / 0.3);
+  }
+
+  .audience-choice:active {
+    transform: translateY(3px);
+    box-shadow: inset 0 2px 0 hsl(var(--background) / 0.9), 0 3px 0 hsl(var(--audience-tone) / 0.6), 0 8px 14px -8px hsl(var(--foreground) / 0.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .audience-choice { transition: none; }
+    .audience-choice:hover,
+    .audience-choice:focus-visible,
+    .audience-choice:active { transform: none; }
+  }
+
   .gradient-text {
     @apply bg-gradient-to-r from-hippie-coral via-hippie-coral to-hippie-amber bg-clip-text text-transparent;
     background-image: linear-gradient(90deg, hsl(8 78% 52%), hsl(20 85% 50%), hsl(35 90% 45%));
