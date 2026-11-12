@@ -37,7 +37,9 @@ const CityDispensaryPage = () => {
         "name": `Is cannabis legal in ${cityInfo.name}, ${cityInfo.province}?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `Personal-use cannabis is legal across South Africa following the Cannabis for Private Purposes Act. Buying remains regulated through private clubs and licensed medical channels.`,
+          "text": cityInfo.slug === "durban"
+            ? "South Africa distinguishes private adult cannabis use from retail sales. Private-use rights do not automatically permit selling cannabis or make a private club's sales lawful. This directory does not verify licences or legal compliance. Not legal or medical advice."
+            : `Personal-use cannabis is legal across South Africa following the Cannabis for Private Purposes Act. Buying remains regulated through private clubs and licensed medical channels.`,
         },
       },
       {
@@ -45,7 +47,9 @@ const CityDispensaryPage = () => {
         "name": `Can I get cannabis delivered in ${cityInfo.name}?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `Selling cannabis is still not legal in South Africa, so delivery depends on each private club's own member rules. Some ${cityInfo.name} clubs deliver to members and others don't — call the club first to check.`,
+          "text": cityInfo.slug === "durban"
+            ? "Cuddles does not arrange cannabis delivery in Durban or confirm delivery availability. A club membership or directory listing is not proof that sales or delivery are lawful; confirm any legal requirements independently."
+            : `Selling cannabis is still not legal in South Africa, so delivery depends on each private club's own member rules. Some ${cityInfo.name} clubs deliver to members and others don't — call the club first to check.`,
         },
       },
     ],
