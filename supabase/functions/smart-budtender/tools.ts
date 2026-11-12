@@ -357,6 +357,9 @@ export async function runTool(name: string, rawArgs: string, ctx: ToolContext): 
   let errorMsg: string | null = null;
   try {
     if (WEB_TOOLS.has(name)) {
+      if (!ctx.userId) {
+        return { error: "Reading web pages and review searches need a free Cuddles account. Ask the user to sign in, and answer from general knowledge meanwhile." };
+      }
       const who = ctx.quotaKey ?? "unknown";
       const exhausted = await consumeQuotas([
         { bucket: `web:person:${who}`, limit: WEB_LOOKUPS_PER_PERSON_DAILY, windowSeconds: DAY_SECONDS },
