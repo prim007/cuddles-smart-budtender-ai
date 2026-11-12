@@ -82,7 +82,9 @@ const CityDispensaryPage = () => {
             Dispensary near me in <span className="gradient-text">{cityInfo.name}</span>
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            {cityInfo.blurb} Cuddles AI helps you find the closest legal cannabis dispensary, club or lounge in {cityInfo.name} — and matches you to the right strain in seconds.
+            {cityInfo.blurb} {cityInfo.slug === "durban"
+              ? "Explore listed venues and plan your visit, with free educational help from Cuddles AI."
+              : `Cuddles AI helps you explore cannabis dispensary, club and lounge listings in ${cityInfo.name}, with free strain education.`}
           </p>
           {cityInfo.localIntro && (
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">{cityInfo.localIntro}</p>
@@ -90,6 +92,11 @@ const CityDispensaryPage = () => {
 
 
           <div className="mt-8 flex flex-wrap gap-3">
+            {cityInfo.slug === "durban" && (
+              <Button size="lg" asChild className="gap-2">
+                <a href="#clubs"><MapPin className="h-4 w-4" /> View Durban listings</a>
+              </Button>
+            )}
             <Button size="lg" onClick={scrollToChat} className="gap-2 bg-gradient-to-r from-hippie-coral to-hippie-pink text-white">
               <MessageCircle className="h-4 w-4" /> Ask Cuddles where to go
             </Button>
@@ -142,6 +149,17 @@ const CityDispensaryPage = () => {
                   <li key={s}>{s}</li>
                 ))}
               </ol>
+            </div>
+          )}
+          {cityInfo.slug === "durban" && (
+            <div className="mt-6 space-y-3 text-sm text-muted-foreground">
+              <p>Directory names and location labels come from DaggaSpot. Names containing “medical” or “dispensary” are venue labels, not a Cuddles endorsement or verification.</p>
+              <p>
+                Read our <Link to="/blog/gauteng-cannabis-shop-raids-police-memo-october-2026" className="text-primary underline">South African cannabis retail law explainer</Link> before making assumptions about a club's sales or membership model. Private adult use does not automatically authorise retail sales.
+              </p>
+              <p>
+                Run a Durban venue or spotted an incorrect listing? <Link to="/partners" className="text-primary underline">Contact Cuddles through the partners page</Link> with the venue name and corrected details.
+              </p>
             </div>
           )}
         </div>
