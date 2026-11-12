@@ -28,18 +28,18 @@ export const ZA_CITIES: ZaCity[] = [
     lat: -29.8587,
     lng: 31.0218,
     blurb:
-      "Home of the Durban Poison landrace, with a private cannabis club scene from Umhlanga and the Berea to Westville, Pinetown and the Bluff.",
-    metaTitle: "Dispensary Near Me Durban | Cannabis Clubs Listed With Directions",
+      "Compare directory-listed cannabis clubs around central Durban and Berea, KwaZulu-Natal.",
+    metaTitle: "Durban Dispensary & Cannabis Club Finder | Cuddles AI",
     metaDescription:
-      "See cannabis clubs listed in Durban, from Umhlanga and the Berea to Westville and the Bluff, with distances and map directions. What to check before you go, plus free strain help.",
+      "Compare Durban and Berea cannabis club listings with distances from central Durban and map directions. Check membership, hours and stock with each venue before visiting.",
     localIntro:
-      "Durban has no licensed cannabis shops — selling cannabis is still not legal in South Africa, so places run as private members' clubs. Listed clubs are spread across suburbs like Umhlanga, the Berea, Glenwood, Musgrave, Westville, Pinetown and the Bluff, so the closest one depends on where you are. Scroll down for the current list with distances and map directions, then ask Cuddles which strains (Durban Poison included) suit the effect you want so you know what to ask for.",
+      "Looking for a dispensary in Durban? Start with the directory below: it includes central Durban venues and Berea listings, ordered by distance from the Durban city centre, not from your current location. A directory entry is not proof of licensing, lawful sales, current stock or opening hours. Use Directions to check your journey, then contact the venue directly before travelling.",
     nextSteps: [
-      "Pick a club from the list and tap Directions to see how far it is from where you are.",
-      "Call first. Opening hours, stock and whether they take new members change often, and Cuddles doesn't check them.",
-      "Expect to sign up as a member and show ID that proves you're 18 or older.",
-      "Ask Cuddles in the chat which strains suit the effect you want, so you know what to ask for.",
-      "Run a club in Durban that isn't listed? Get in touch through our partners page.",
+      "Compare the Durban and Berea location labels. The displayed distance starts at central Durban; it is not your driving distance or travel time.",
+      "Open Directions for your chosen venue and set your own starting point, especially if you are travelling from Umhlanga, Westville, Pinetown or the Bluff.",
+      "Use the venue's own contact details to confirm its address, today's opening hours, entry requirements, membership fees and ID rules. A Directions link alone does not confirm any of these.",
+      "Confirm any product availability directly. Cuddles does not verify stock, arrange cannabis delivery or certify a listed venue's legal status.",
+      "For general strain or plant-care questions, ask Cuddles for free. This is education, not medical or legal advice.",
     ],
   },
 
