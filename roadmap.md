@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Selected SEO finding (12 November 2026)
-- [ ] Improve Durban search wording and local visitor guidance using actual directory listings; verify the page and record the completed correction.
+- [x] Improve Durban search wording and local visitor guidance using actual directory listings; verified metadata, eight listings, map-button destination and mobile layout.
 
 ## Homepage audience separation
 - [x] Add Individuals and Businesses choices using existing Cuddles styling, with static coming-soon pages and no paid integrations.
