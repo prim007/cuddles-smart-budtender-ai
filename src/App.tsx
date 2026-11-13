@@ -67,6 +67,7 @@ const InternationalMarket = lazyWithReload(() => import("./pages/InternationalMa
 const PrivacyPolicy = lazyWithReload(() => import("./pages/PrivacyPolicy"));
 const Terms = lazyWithReload(() => import("./pages/Terms"));
 const Popia = lazyWithReload(() => import("./pages/Popia"));
+const Copyright = lazyWithReload(() => import("./pages/Copyright"));
 const Licensing = lazyWithReload(() => import("./pages/Licensing"));
 const Partners = lazyWithReload(() => import("./pages/Partners"));
 const Install = lazyWithReload(() => import("./pages/Install"));
@@ -228,6 +229,7 @@ const App = () => (
                 <Route path="/privacy-policy" element={<Suspense fallback={<PageLoader />}><PrivacyPolicy /></Suspense>} />
                 <Route path="/terms" element={<Suspense fallback={<PageLoader />}><Terms /></Suspense>} />
                 <Route path="/popia" element={<Suspense fallback={<PageLoader />}><Popia /></Suspense>} />
+                <Route path="/copyright" element={<Suspense fallback={<PageLoader />}><Copyright /></Suspense>} />
                 <Route path="/licensing" element={<Suspense fallback={<PageLoader />}><Licensing /></Suspense>} />
                 <Route path="/partners" element={<Suspense fallback={<PageLoader />}><Partners /></Suspense>} />
                 <Route path="/reports/plant-questions" element={<Suspense fallback={<PageLoader />}><MonthlyReport /></Suspense>} />

@@ -35,5 +35,6 @@ Cuddles AI helps consumers care for any plant and find the right cannabis strain
 ## Optional
 
 - [Investor deck](/investment-deck): Investor materials.
-- [Privacy policy](/privacy): POPIA-compliant privacy policy.
+- [Privacy policy](/privacy-policy): POPIA-compliant privacy policy.
+- [Copyright & takedown policy](/copyright): How to report infringing or unlawful material, counter-notices and repeat-infringer terms.
 - [RAG whitepaper](/technology): Technical architecture overview.

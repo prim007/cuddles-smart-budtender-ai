@@ -130,6 +130,9 @@ const Footer = () => {
               <Link to="/licensing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Licensing
               </Link>
+              <Link to="/copyright" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Copyright &amp; Takedown
+              </Link>
               <Link to="/partners" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Partners
               </Link>
