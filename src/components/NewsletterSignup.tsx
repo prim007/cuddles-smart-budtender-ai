@@ -25,35 +25,12 @@ export function NewsletterSignup({ className = "" }: NewsletterSignupProps) {
     setIsSubmitting(true);
     
     try {
-      // 1. Insert into newsletter_subscribers table
-      // Generate a UUID to use for confirmation
-      const id = crypto.randomUUID();
-      
-      const { error: insertError } = await supabase
-        .from('newsletter_subscribers')
-        .insert({
-          id,
-          email: email.toLowerCase(),
-          name: name || null,
-          status: 'pending'
-        });
-
-      if (insertError) {
-        if (insertError.code === '23505') { // Unique violation
-          toast.success("You're already on our list!");
-          setEmail("");
-          setName("");
-          return;
-        }
-        throw insertError;
-      }
-
-      // 2. Trigger the confirmation email (server-side; recipient verified there)
-      const { error: emailError } = await supabase.functions.invoke('send-newsletter-confirmation', {
+      // Signup + confirmation email are handled server-side.
+      const { error: subscribeError } = await supabase.functions.invoke('newsletter-subscribe', {
         body: { email: email.toLowerCase() },
       });
 
-      if (emailError) throw emailError;
+      if (subscribeError) throw subscribeError;
 
       toast.success("Thanks for signing up! Please check your email to confirm your subscription.");
       setEmail("");
