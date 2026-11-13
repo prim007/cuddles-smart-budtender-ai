@@ -41,6 +41,7 @@ export default function LegalPageLayout({
             <Link to="/privacy-policy" className="text-muted-foreground hover:text-foreground">Privacy</Link>
             <Link to="/terms" className="text-muted-foreground hover:text-foreground">Terms</Link>
             <Link to="/popia" className="text-muted-foreground hover:text-foreground">POPIA</Link>
+            <Link to="/copyright" className="text-muted-foreground hover:text-foreground">Copyright</Link>
           </nav>
         </div>
       </header>
