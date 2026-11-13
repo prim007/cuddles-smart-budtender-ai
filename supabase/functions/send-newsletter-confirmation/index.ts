@@ -42,6 +42,13 @@ Deno.serve(async (req) => {
     return json({ error: 'Server configuration error' }, 500)
   }
 
+  // Server-only: callable solely by newsletter-subscribe with the service key,
+  // so the public can't trigger confirmation emails to arbitrary addresses.
+  const authHeader = req.headers.get('Authorization') ?? ''
+  if (authHeader !== `Bearer ${supabaseServiceKey}`) {
+    return json({ error: 'Unauthorized' }, 401)
+  }
+
   let email: string
   try {
     const body = await req.json()
