@@ -6,6 +6,7 @@ import cuddlesWalker from "@/assets/cuddles-walker.png";
 import { trackEvent } from "@/components/GoogleAnalytics";
 import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { toast } from "sonner";
+import { OptionalVisualBoundary } from "@/components/OptionalVisualBoundary";
 
 // Heavy 3D scene: loaded only once the banner is on screen so it never blocks
 // first paint or interaction. Height is reserved to avoid any layout shift.
@@ -289,9 +290,11 @@ const Hero = () => {
 
             <div ref={sceneRef} className="relative w-full max-w-[560px]">
               {showScene ? (
-                <Suspense fallback={<CuddlesStatic />}>
-                  <Cuddles3D />
-                </Suspense>
+                <OptionalVisualBoundary fallback={<CuddlesStatic />}>
+                  <Suspense fallback={<CuddlesStatic />}>
+                    <Cuddles3D />
+                  </Suspense>
+                </OptionalVisualBoundary>
               ) : (
                 <CuddlesStatic />
               )}

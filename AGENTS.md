@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Optional lazy-loaded homepage visuals use a local error boundary with the existing static mascot fallback, so import or WebGL failures cannot blank the page.
+
 - Homepage audience choices use a shared static coming-soon page with separate URLs; they do not call paid services or replace existing tools.
 
 - Knowledge ingestion includes a generated, chunked snapshot of public blog and partner catalogue sources; regenerate with scripts/prepare-rag-refresh.ts so edge deployment shares the site's source material without treating dated catalogue stock or draft laws as current facts.
