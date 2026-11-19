@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Promo issuance derives the recipient from a server-verified, confirmed account email and rejects mismatched request addresses before any lead access; insert-only issuance never rewrites existing leads.
+
 - Email queue metrics use fixed queries for the four admin email queues and a fail-closed server-side admin/service-role check; never execute commands assembled from stored queue names.
 
 - In-app hash navigation observes lazy-loaded sections until the target exists, so cross-page chat links reach the chat instead of leaving visitors at the homepage top.

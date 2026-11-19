@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { sendLovableEmail } from "npm:@lovable.dev/email-js";
 import { rateLimitResponse } from "../_shared/rate-limit.ts";
+import { authorizePromoRecipient } from "./recipient.ts";
 
 const SITE_NAME = "cuddles-ai";
 const FROM_DOMAIN = "cuddles-ai.com";
@@ -59,16 +60,20 @@ serve(async (req) => {
     // account address, never to an address typed into the request.
     const authHeader = req.headers.get("Authorization") ?? "";
     const jwt = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
-    const { data: userData } = jwt ? await supabase.auth.getUser(jwt) : { data: { user: null } };
-    const email = userData?.user?.email;
-    if (!email) {
-      return new Response(JSON.stringify({ error: "Please sign in to get your discount code." }), {
-        status: 401,
+    const { data: userData, error: authError } = jwt
+      ? await supabase.auth.getUser(jwt)
+      : { data: { user: null }, error: null };
+    const recipient = authorizePromoRecipient(authError ? null : userData.user, body?.email);
+    if (!recipient.email) {
+      return new Response(JSON.stringify({ error: recipient.status === 403
+        ? "Discount codes can only be requested for your own account email."
+        : "Please sign in with a confirmed email to get your discount code." }), {
+        status: recipient.status,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail = recipient.email;
 
     // Rate limit per email to prevent spam / enumeration
     const { data: allowed, error: rateErr } = await supabase.rpc("check_email_rate_limit", {
