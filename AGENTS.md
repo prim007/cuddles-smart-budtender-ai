@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Email queue metrics use fixed queries for the four admin email queues and a fail-closed server-side admin/service-role check; never execute commands assembled from stored queue names.
+
 - In-app hash navigation observes lazy-loaded sections until the target exists, so cross-page chat links reach the chat instead of leaving visitors at the homepage top.
 
 - Optional lazy-loaded homepage visuals use a local error boundary with the existing static mascot fallback, so import or WebGL failures cannot blank the page.
