@@ -1,5 +1,10 @@
 # Roadmap
 
+## Visitor and signup improvements (19 November 2026)
+- [x] Repair chat anchor navigation when the homepage chat loads later.
+- [x] Add a clear optional account link on the popular education page, preserving existing chat and tracking; replace an unsupported signup user-count claim.
+- [x] Verify chat arrival and signup form navigation on desktop and mobile; prepare a tracked invitation for the owner to share. Account creation/email delivery unchanged and not tested.
+
 ## Selected SEO finding (12 November 2026)
 - [x] Improve Durban search wording and local visitor guidance using actual directory listings; verified metadata, eight listings, map-button destination and mobile layout.
 

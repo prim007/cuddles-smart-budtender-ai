@@ -4,8 +4,11 @@ import { Card } from "@/components/ui/card";
 import { MessageCircle, Sparkles, ShieldCheck, BookOpen, Clock, Heart } from "lucide-react";
 import SEO from "@/components/SEO";
 import cuddlesImage from "@/assets/cuddles.png";
+import { useAuth } from "@/hooks/useAuth";
+import { trackEvent } from "@/components/GoogleAnalytics";
 
 const ChatWithCuddles = () => {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-background">
       <SEO
@@ -51,7 +54,13 @@ const ChatWithCuddles = () => {
                   Browse Education Library
                 </Button>
               </Link>
+              {!user && (
+                <Button asChild size="lg" variant="outline">
+                  <Link to="/auth" onClick={() => trackEvent("cta_click", "signup", "education_chat")}>Create Free Account</Link>
+                </Button>
+              )}
             </div>
+            {!user && <p className="mt-4 text-sm text-muted-foreground">Keep a private plant journal and save your favourites with an account. Chat is free to start without one.</p>}
           </div>
         </div>
       </section>

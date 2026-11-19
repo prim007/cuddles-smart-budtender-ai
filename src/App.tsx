@@ -1,4 +1,5 @@
 import SitePrintOverlay from "@/components/SitePrintOverlay";
+import HashNavigation from "@/components/HashNavigation";
 import { Suspense, lazy, type ComponentType } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -160,6 +161,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <HashNavigation />
               <SitePrintOverlay />
               <GoogleAnalytics />
               <MicrosoftClarity />

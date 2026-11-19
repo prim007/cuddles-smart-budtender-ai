@@ -140,7 +140,7 @@ const Auth = () => {
         <Card className="shadow-elevated">
           <CardHeader className="text-center pb-2">
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-hippie-purple to-hippie-pink bg-clip-text text-transparent">
-              Join 2,400+ Cuddles Users 🌿
+              Welcome to Cuddles 🌿
             </CardTitle>
             <CardDescription className="text-base">
               Free forever — unlock your personal AI budtender in seconds
