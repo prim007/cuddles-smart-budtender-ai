@@ -5,6 +5,7 @@ import { Gift, Mail, CheckCircle, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { trackEvent, trackSignupComplete } from "@/components/GoogleAnalytics";
+import { promoErrorDescription } from "@/lib/promoError";
 
 const SHOP_URL = "https://tripplefourshophub.online";
 
@@ -40,8 +41,8 @@ const SignupBanner = () => {
       trackSignupComplete("inline_banner");
 
       setSubmitted(true);
-    } catch {
-      toast({ title: "Oops!", description: "Something went wrong.", variant: "destructive" });
+    } catch (error) {
+      toast({ title: "Oops!", description: await promoErrorDescription(error, "Something went wrong."), variant: "destructive" });
     } finally {
       setIsLoading(false);
     }

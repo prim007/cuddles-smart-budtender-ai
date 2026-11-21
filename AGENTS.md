@@ -1,6 +1,7 @@
 # Architecture rules
 
 - Promo issuance derives the recipient from a server-verified, confirmed account email and rejects mismatched request addresses before any lead access; insert-only issuance never rewrites existing leads.
+- Discount forms share `promoErrorDescription` to surface actionable account rejection responses while keeping internal failures generic, so ownership checks do not become unexplained failures.
 
 - Email queue metrics use fixed queries for the four admin email queues and a fail-closed server-side admin/service-role check; never execute commands assembled from stored queue names.
 

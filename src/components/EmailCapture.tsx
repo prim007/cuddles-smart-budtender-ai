@@ -6,6 +6,7 @@ import { Mail, Sparkles, X, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { trackLeadCaptured } from "@/components/GoogleAnalytics";
+import { promoErrorDescription } from "@/lib/promoError";
 
 interface EmailCaptureProps {
   variant?: "inline" | "modal";
@@ -55,7 +56,7 @@ const EmailCapture = ({ variant = "inline", onClose }: EmailCaptureProps) => {
       console.error("Error submitting email:", error);
       toast({
         title: "Oops!",
-        description: "Something went wrong. Please try again.",
+        description: await promoErrorDescription(error, "Something went wrong. Please try again."),
         variant: "destructive",
       });
     } finally {
