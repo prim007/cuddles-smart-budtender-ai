@@ -96,7 +96,7 @@ export default function Unsubscribe() {
               />
               {status === "error" && (
                 <p className="text-sm text-destructive">
-                  Something went wrong. Please try again in a moment.
+                  We couldn't confirm this address. Use the unsubscribe link in any Cuddles email, or sign in to unsubscribe your own address.
                 </p>
               )}
               <Button type="submit" className="w-full" disabled={status === "loading"}>

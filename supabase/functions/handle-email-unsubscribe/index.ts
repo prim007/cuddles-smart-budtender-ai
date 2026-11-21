@@ -1,51 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { sendTemplateEmail } from '../_shared/transactional-email-templates/send-email.ts';
 
-const SITE_URL = 'https://www.cuddles-ai.com';
-
-async function sendConfirmation(rawEmail: string) {
-  const email = rawEmail.toLowerCase().trim();
-  const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
-  // Throttle: at most 3 confirmation emails per address per hour.
-  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-  const { count } = await admin
-    .from('email_unsubscribe_tokens')
-    .select('id', { count: 'exact', head: true })
-    .eq('email', email)
-    .gte('created_at', since);
-  if ((count ?? 0) >= 3) return;
-
-  // Only email addresses we have actually sent mail to or that signed up — never arbitrary strangers.
-  const [sub, lead, sent] = await Promise.all([
-    admin.from('newsletter_subscribers').select('id', { count: 'exact', head: true }).eq('email', email),
-    admin.from('email_leads').select('id', { count: 'exact', head: true }).eq('email', email),
-    admin.from('email_send_log').select('id', { count: 'exact', head: true }).eq('recipient_email', email),
-  ]);
-  if (!(sub.count || lead.count || sent.count)) return;
-
-  // Global ceiling: at most 200 confirmation emails per hour across all addresses.
-  const { count: globalCount } = await admin
-    .from('email_unsubscribe_tokens')
-    .select('id', { count: 'exact', head: true })
-    .gte('created_at', since);
-  if ((globalCount ?? 0) >= 200) return;
-
-  const bytes = crypto.getRandomValues(new Uint8Array(24));
-  const token = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
-  const { error } = await admin.from('email_unsubscribe_tokens').insert({ token, email });
-  if (error) {
-    console.error('Failed to store unsubscribe token', error.message);
-    return;
-  }
-  try {
-    await sendTemplateEmail('unsubscribe-confirm', email, {
-      templateData: { unsubscribeUrl: `${SITE_URL}/unsubscribe?token=${token}` },
-      idempotencyKey: `unsubscribe-confirm-${token}`,
-    });
-  } catch (e) {
-    console.error('Failed to send unsubscribe confirmation', e);
-  }
-}
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -192,12 +146,6 @@ Deno.serve(async (req) => {
 
     const resolved = await resolveEmail(req, token, email);
     if ('error' in resolved) {
-      // Anonymous visitor typing an address: email that address a one-time
-      // confirmation link instead of opting it out directly.
-      if (resolved.status === 401 && email && !token) {
-        await sendConfirmation(email);
-        return json({ success: true, pending: true }, 200);
-      }
       return json({ error: resolved.error }, resolved.status);
     }
     if (!isEmail(resolved.email)) return json({ error: 'A valid email address is required' }, 400);
