@@ -11,6 +11,26 @@ function configure() {
   configured = true;
 }
 
+// Only real browser push services may receive signed push requests.
+const PUSH_HOST_SUFFIXES = [
+  "fcm.googleapis.com",
+  "android.googleapis.com",
+  "updates.push.services.mozilla.com",
+  "push.services.mozilla.com",
+  "notify.windows.com",
+  "push.apple.com",
+];
+export function isAllowedPushEndpoint(endpoint: string): boolean {
+  try {
+    const u = new URL(endpoint);
+    if (u.protocol !== "https:" || u.port) return false;
+    const h = u.hostname.toLowerCase();
+    return PUSH_HOST_SUFFIXES.some((s) => h === s || h.endsWith("." + s));
+  } catch {
+    return false;
+  }
+}
+
 export interface PushPayload {
   title: string;
   body: string;
@@ -27,6 +47,10 @@ export async function sendToUser(admin: SupabaseClient, userId: string, payload:
     .eq("user_id", userId);
   let delivered = 0;
   for (const s of subs ?? []) {
+    if (!isAllowedPushEndpoint(s.endpoint)) {
+      await admin.from("push_subscriptions").delete().eq("id", s.id);
+      continue;
+    }
     try {
       await webpush.sendNotification(
         { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },

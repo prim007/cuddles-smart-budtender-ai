@@ -27,6 +27,26 @@ serve(async (req) => {
 
     const { code, action } = await req.json();
 
+    // Every check requires the signed-in owner of the code, so nobody can
+    // probe other customers' codes or learn whether they are unused.
+    const authHeader = req.headers.get("Authorization") || "";
+    const token = authHeader.replace("Bearer ", "").trim();
+    if (!token) {
+      return new Response(
+        JSON.stringify({ valid: false, error: "Please sign in to check your promo code" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    const authClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!);
+    const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
+    const callerEmail = String(claimsData?.claims?.email ?? "").toLowerCase().trim();
+    if (claimsError || claimsData?.claims?.role !== "authenticated" || !callerEmail) {
+      return new Response(
+        JSON.stringify({ valid: false, error: "Invalid or expired session" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     if (!code || typeof code !== "string") {
       return new Response(
         JSON.stringify({ valid: false, error: "Promo code is required" }),
@@ -49,6 +69,7 @@ serve(async (req) => {
       .from("email_leads")
       .select("id, promo_code, used, used_at, email")
       .eq("promo_code", sanitizedCode)
+      .ilike("email", callerEmail.replace(/[\\%_]/g, "\\$&"))
       .maybeSingle();
 
     if (lookupError) {
@@ -70,7 +91,6 @@ serve(async (req) => {
         JSON.stringify({
           valid: false,
           error: "This promo code has already been used",
-          used_at: lead.used_at,
         }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -78,31 +98,6 @@ serve(async (req) => {
 
     // Action: "validate" just checks, "redeem" marks as used
     if (action === "redeem") {
-      // Require authenticated caller to prevent attackers from burning codes
-      const authHeader = req.headers.get("Authorization") || "";
-      const token = authHeader.replace("Bearer ", "").trim();
-      if (!token) {
-        return new Response(
-          JSON.stringify({ valid: false, error: "Authentication required to redeem" }),
-          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      const authClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? supabaseServiceKey);
-      const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
-      if (claimsError || claimsData?.claims?.role !== "authenticated") {
-        return new Response(
-          JSON.stringify({ valid: false, error: "Invalid or expired session" }),
-          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      const callerEmail = String(claimsData.claims.email ?? "").toLowerCase().trim();
-      if (!callerEmail || callerEmail !== String(lead.email ?? "").toLowerCase().trim()) {
-        return new Response(
-          JSON.stringify({ valid: false, error: "This code belongs to a different account." }),
-          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
       const { error: updateError } = await supabase
         .from("email_leads")
         .update({ used: true, used_at: new Date().toISOString() })

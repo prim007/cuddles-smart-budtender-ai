@@ -130,8 +130,12 @@ serve(async (req) => {
       return json({ warehouses: data.warehouses ?? [], exportable: Object.keys(EXPORTABLE) }, 200);
     }
 
-    const warehouseId = String(body?.warehouse_id ?? "").trim();
-    if (!warehouseId) return json({ error: "warehouse_id is required" }, 400);
+    // Export destination is fixed server-side; request-supplied warehouse,
+    // catalog and schema values are never used as the target.
+    const warehouseId = (Deno.env.get("DATABRICKS_EXPORT_WAREHOUSE_ID") ?? "").trim();
+    if (action === "export" && !warehouseId) {
+      return json({ error: "Export destination is not configured" }, 400);
+    }
 
     if (action === "query") {
       // Free-form SQL was removed: callers may not supply statements. Only the
@@ -140,10 +144,10 @@ serve(async (req) => {
     }
 
     if (action === "export") {
-      const catalog = String(body?.catalog ?? "").trim();
-      const schema = String(body?.schema ?? "").trim();
+      const catalog = (Deno.env.get("DATABRICKS_EXPORT_CATALOG") ?? "main").trim();
+      const schema = (Deno.env.get("DATABRICKS_EXPORT_SCHEMA") ?? "cuddles_ai_export").trim();
       if (!IDENT_RE.test(catalog) || !IDENT_RE.test(schema)) {
-        return json({ error: "Invalid catalog or schema name" }, 400);
+        return json({ error: "Export destination is misconfigured" }, 500);
       }
       const requested: string[] = Array.isArray(body?.tables) && body.tables.length
         ? body.tables.map(String)
