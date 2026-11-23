@@ -261,7 +261,7 @@ var get_dispensary_menu_default = defineTool2({
     }
     return {
       content: [{ type: "text", text: JSON.stringify(match, null, 2) }],
-      structuredContent: { menu: match }
+      structuredContent: { menu: JSON.parse(JSON.stringify(match)) }
     };
   }
 });
