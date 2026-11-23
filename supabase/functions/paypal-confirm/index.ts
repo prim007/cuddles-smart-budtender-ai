@@ -1,7 +1,7 @@
 // Confirms a returning PayPal subscriber by asking PayPal directly.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { z } from "npm:zod@3";
+import { z } from "npm:zod@4.6.7";
 import { paypalFetch, paypalToken } from "../_shared/paypal.ts";
 
 const schema = z.object({ subscriptionId: z.string().regex(/^I-[A-Z0-9]{6,40}$/) });

@@ -1,6 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
-import { z } from 'npm:zod@3.23.8'
+import { z } from 'npm:zod@4.6.7'
 import { rateLimitResponse } from '../_shared/rate-limit.ts'
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/brevo'

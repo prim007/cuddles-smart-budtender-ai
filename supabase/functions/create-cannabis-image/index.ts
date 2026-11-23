@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { z } from "npm:zod@3";
+import { z } from "npm:zod@4.6.7";
 import { createParser } from "npm:eventsource-parser@3";
 import { generateImage } from "./gateway-request.ts";
 import { isPremiumUser } from "../_shared/premium.ts";

@@ -2,7 +2,7 @@
 // Data comes from the signed-in user's own saved records, never the browser.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { z } from "npm:zod@3";
+import { z } from "npm:zod@4.6.7";
 import { buildClaudeRequest, parseClaudeMessage } from "../_shared/claude.ts";
 import { isPremiumUser } from "../_shared/premium.ts";
 

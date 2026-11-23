@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { z } from "npm:zod@3.23.8";
+import { z } from "npm:zod@4.6.7";
 import { sendToUser } from "../_shared/web-push.ts";
 
 const Body = z.discriminatedUnion("action", [

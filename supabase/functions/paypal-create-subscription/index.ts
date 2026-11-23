@@ -1,7 +1,7 @@
 // Creates a PayPal subscription for the Cuddles Premium software plan only.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { z } from "npm:zod@3";
+import { z } from "npm:zod@4.6.7";
 import { ensurePlan, paypalFetch, paypalToken } from "../_shared/paypal.ts";
 
 const ALLOWED_RETURN = ["https://cuddles-ai.com", "https://www.cuddles-ai.com", "https://cuddles-ai.lovable.app", "https://id-preview--16082a8c-a109-49a8-a05d-987a18f90c7d.lovable.app", "http://localhost:8080"];
