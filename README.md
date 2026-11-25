@@ -1,73 +1,40 @@
-# Welcome to your Lovable project
+# 🧸 Cuddles AI
 
-## Project info
+**Warm, thoughtful AI companionship — live at [cuddles-ai.com](https://cuddles-ai.com)**
 
-**URL**: https://lovable.dev/projects/16082a8c-a109-49a8-a05d-987a18f90c7d
+Cuddles AI is designed to make interacting with artificial intelligence feel less like talking to a terminal and more like a cozy, supportive conversation. Built with speed, accessibility, and clean design at its core, this repository houses the web application powering `cuddles-ai.com`.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ✨ What Powers Cuddles AI
 
-**Use Lovable**
+This project is crafted with a fast, modern frontend stack:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/16082a8c-a109-49a8-a05d-987a18f90c7d) and start prompting.
+- **Vite** — Lightning-fast dev server and optimized production builds
+- **TypeScript** — End-to-end type safety and cleaner developer ergonomics
+- **React** — Component-driven UI architecture
+- **shadcn-ui** — Accessible, customizable UI primitives
+- **Tailwind CSS** — Utility-first styling for responsive, polished interfaces
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ How to Edit & Contribute
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+You can work on the codebase locally or directly in your browser using any of the workflows below.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 1. Local Development (Preferred IDE)
 
-Follow these steps:
+Make sure you have **Node.js & npm** installed — if you need a version manager, [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Step 1: Clone the repository using the project's Git URL
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Step 2: Navigate to the project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
+# Step 3: Install the necessary dependencies
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server with auto-reloading and instant preview
 npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/16082a8c-a109-49a8-a05d-987a18f90c7d) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
