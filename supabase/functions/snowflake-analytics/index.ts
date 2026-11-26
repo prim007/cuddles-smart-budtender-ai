@@ -11,6 +11,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const EXPORT_DATABASE = "CUDDLES_ANALYTICS";
+const EXPORT_SCHEMA = "PUBLIC";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -140,8 +142,8 @@ serve(async (req) => {
       if (!(table in EXPORTABLE)) {
         return json({ error: "Pick one of the exported Cuddles tables", tables: Object.keys(EXPORTABLE) }, 400);
       }
-      const database = String(body?.database ?? "CUDDLES_ANALYTICS").trim().toUpperCase();
-      const schema = String(body?.schema ?? "PUBLIC").trim().toUpperCase();
+      const database = EXPORT_DATABASE;
+      const schema = EXPORT_SCHEMA;
       if (!IDENT_RE.test(database) || !IDENT_RE.test(schema)) {
         return json({ error: "Invalid database or schema name" }, 400);
       }
@@ -156,11 +158,9 @@ serve(async (req) => {
     }
 
     if (action === "export") {
-      const database = String(body?.database ?? "").trim().toUpperCase();
-      const schema = String(body?.schema ?? "").trim().toUpperCase();
-      if (!IDENT_RE.test(database) || !IDENT_RE.test(schema)) {
-        return json({ error: "Invalid database or schema name" }, 400);
-      }
+      // Fixed destination: never let the request choose where tables get truncated.
+      const database = EXPORT_DATABASE;
+      const schema = EXPORT_SCHEMA;
       const requested: string[] = Array.isArray(body?.tables) && body.tables.length
         ? body.tables.map(String)
         : Object.keys(EXPORTABLE);

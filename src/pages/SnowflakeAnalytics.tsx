@@ -155,11 +155,11 @@ const SnowflakeAnalytics = () => {
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1">
               <label className="text-sm font-medium" htmlFor="database">Database</label>
-              <Input id="database" value={database} onChange={(e) => setDatabase(e.target.value)} />
+              <Input id="database" value={database} readOnly />
             </div>
             <div className="space-y-1">
               <label className="text-sm font-medium" htmlFor="schema">Schema</label>
-              <Input id="schema" value={schema} onChange={(e) => setSchema(e.target.value)} />
+              <Input id="schema" value={schema} readOnly />
             </div>
           </div>
           <div className="flex flex-wrap gap-2">

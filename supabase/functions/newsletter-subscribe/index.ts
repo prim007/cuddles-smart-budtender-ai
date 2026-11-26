@@ -63,11 +63,14 @@ Deno.serve(async (req) => {
   // newsletter list after its owner clicks the confirmation email.
   const { data: existing } = await admin
     .from('newsletter_subscribers').select('status').eq('email', email).maybeSingle()
-  if (existing?.status === 'confirmed') return json({ success: true, pending: true }, 200)
+  // Never rewrite an existing signup: the caller has not proven they own the
+  // address, so an existing record (any status) is left untouched.
+  if (existing) return json({ success: true, pending: true }, 200)
 
   const { error: subscriberError } = await admin
     .from('newsletter_subscribers')
-    .upsert({ email, status: 'pending', updated_at: new Date().toISOString() }, { onConflict: 'email' })
+    .insert({ email, status: 'pending' })
+  if (subscriberError?.code === '23505') return json({ success: true, pending: true }, 200)
   if (subscriberError) {
     console.error('newsletter-subscribe: subscriber save failed', subscriberError.code)
     return json({ error: 'We could not save your subscription. Please try again.' }, 500)
