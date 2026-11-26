@@ -1,4 +1,4 @@
-# 🧸 Cuddles AI
+#  Cuddles AI
 
 **Warm, thoughtful AI companionship — live at [cuddles-ai.com](https://cuddles-ai.com)**
 
